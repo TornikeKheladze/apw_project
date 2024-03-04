@@ -1,0 +1,41 @@
+stages:
+  - git_pull
+  - build_and_deploy
+
+variables:
+  APP_DIR: "/var/www/test-dga-authorisation-front.apw.ge"
+  BRANCH_NAME: main
+  TAG_NAME: test-dga-authorisation-front.apw.ge
+
+git_pull:
+  stage: git_pull
+
+  tags:
+    - $TAG_NAME
+ 
+  script:
+    - cd "$APP_DIR"
+    - git checkout $BRANCH_NAME
+    - git pull
+    - echo "Master Branch Pull"
+
+  only:
+    variables:
+      - $CI_COMMIT_BRANCH == $BRANCH_NAME
+
+
+build_and_deploy:
+  stage: build_and_deploy
+
+  tags:
+    - $TAG_NAME
+ 
+  script:
+    - echo "Project Dir $APP_DIR"
+    - docker run --rm -v "$APP_DIR:/app" -w /app node:18-alpine npm install --force
+    - docker run --rm -v "$APP_DIR:/app" -w /app node:18-alpine npm run build --force
+    - echo "Master Branch Deployed"
+
+  only:
+    variables:
+      - $CI_COMMIT_BRANCH == $BRANCH_NAME
