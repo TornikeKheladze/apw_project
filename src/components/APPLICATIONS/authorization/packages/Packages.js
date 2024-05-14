@@ -27,7 +27,7 @@ const Packages = () => {
 
   const { isLoading, data: packages = [] } = useQuery({
     queryKey: ["getPackages"],
-    queryFn: getPackages().then((res) => res.data),
+    queryFn: () => getPackages().then((res) => res.data),
   });
 
   const { isLoading: createLoading, mutate: createMutate } = useMutation({

@@ -19,7 +19,7 @@ const DocumentEdit = () => {
     queryFn: () => getAllDocuments().then((res) => res.data.data),
   });
 
-  console.log(data);
+  console.log(data, columns);
 
   const loading = columnLoading;
 

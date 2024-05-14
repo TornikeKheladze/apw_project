@@ -7,6 +7,7 @@ export const idToName = (arr = [], idField) => {
       name.category_name ||
       name.currency_name ||
       name.template_name ||
-      name.column_type)
+      name.column_type ||
+      name.categoryName)
   );
 };

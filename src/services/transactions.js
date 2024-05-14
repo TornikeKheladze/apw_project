@@ -1,49 +1,63 @@
 import { instance } from "./axios";
 
-export const getServices = async () => {
+export const getServices = () => {
   return instance.get("/services");
 };
 
-export const addTransaction = async (data) => {
-  return instance.post("/transactions", data);
-};
-
-export const getTransactions = async (page) => {
+export const getTransactions = (page) => {
   return instance.get(`/transactions?page=${page}`);
 };
 
-export const filterTransactions = async (data, page) => {
+export const filterTransactions = (data, page) => {
   return instance.post(`/transactions/filter?page=${page}`, data);
 };
 
-export const getTransactionById = async (id) => {
-  return instance.get(`/transactions/${id}`);
-};
-
-export const editTransactionStatus = async (id, data) => {
+export const editTransactionStatus = (id, data) => {
   return instance.put(`/transactions/${id}`, data);
 };
 
-export const filterTransactionsWithoutPage = async (data) => {
+export const filterTransactionsWithoutPage = (data) => {
   return instance.post(`/transactions/filter/not/pagination`, data);
 };
 
-export const getPayer = async (data) => {
+export const getPayer = (data) => {
   return instance.post("/payers/search", data);
 };
 
-export const getSumData = async (data) => {
+export const getSumData = (data) => {
   return instance.post("/transactions/sum", data);
 };
 
-export const getNominalStatistic = async (data) => {
+export const getNominalStatistic = (data) => {
   return instance.post("/nominal-account", data);
 };
 
-export const getNominalForAgent = async (type, data) => {
+export const getNominalForAgent = (type, data) => {
   return instance.post(`/nominal-account/${type}`, data);
 };
 
-export const getActs = async (data) => {
+export const getActs = (data) => {
   return instance.post("acts", data);
+};
+
+//
+
+export const getTransactionsByPage = (page) => {
+  return instance.get(`/billing-java/transactions/get/${page}/50`);
+};
+
+export const searchTransactions = ({
+  data = {},
+  page,
+  sort = "transactionID,desc",
+}) => {
+  // დროებით ვაყოლებ ობიექტს რო ჯავას ერორი ავირიდო
+  return instance.post(
+    `/billing-java/transactions/search/${page}/50/${sort}`,
+    Object.keys(data).length === 0 ? { transactionID: " " } : data
+  );
+};
+
+export const getTransactionById = (id) => {
+  return instance.get(`/billing-java/transactions/id/${id}`);
 };

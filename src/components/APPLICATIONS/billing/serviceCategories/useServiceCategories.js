@@ -1,44 +1,31 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { saveServiceCategories } from "reducers/ServiceCategoryReducer";
-import {
-  deleteServiceCategory,
-  getServiceCategories,
-} from "services/serviceCategories";
+import { getCategories } from "services/serviceCategories";
+import { useQuery } from "react-query";
 
 const useServiceCategories = () => {
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const { data: categoriesArr = [{}], isLoading } = useQuery({
+    queryKey: "getCategories",
+    queryFn: () => getCategories().then((res) => res.data),
+    staleTime: Infinity,
+  });
 
-  const { serviceCategories } = useSelector((store) => store.serviceCategory);
+  const categories = categoriesArr.map((cat) => ({ ...cat, id: cat.catID }));
 
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        setLoading(true);
-        const serviceCategoriesData = await getServiceCategories();
-        dispatch(saveServiceCategories(serviceCategoriesData.data));
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    };
-    fetchInitialData();
-  }, [dispatch]);
-
-  const deleteAndUpdate = async (id) => {
-    await deleteServiceCategory(id);
-    setTimeout(() => {
-      dispatch(
-        saveServiceCategories(
-          serviceCategories.filter((service) => +service.id !== +id)
-        )
-      );
-    }, 1600);
+  const buildTreeMenu = (categories, parentId = 0) => {
+    return categories
+      .filter((category) => category.parentID === parentId)
+      .map((category) => ({
+        ...category,
+        children: buildTreeMenu(categories, category.catID),
+      }));
   };
 
-  return { loading, deleteAndUpdate, serviceCategories };
+  const categoriesTree = buildTreeMenu(categories);
+
+  return {
+    isLoading,
+    categories,
+    categoriesTree,
+  };
 };
 
 export default useServiceCategories;

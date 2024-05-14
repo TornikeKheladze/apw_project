@@ -1,13 +1,11 @@
 import LoadingSpinner from "components/icons/LoadingSpinner";
-import Table from "../table/Table";
-import { serviceCategoriesArrr } from "../formArrays/formArrays";
 import useServiceCategories from "./useServiceCategories";
 import BilHeader from "../bilHeader/BilHeader";
 import useCheckPermission from "helpers/useCheckPermission";
+import ServiceCategoryTreeMenu from "./ServiceCategoryTreeMenu";
 
 const ServiceCategories = () => {
-  const { loading, deleteAndUpdate, serviceCategories } =
-    useServiceCategories();
+  const { isLoading, categories, categoriesTree } = useServiceCategories();
   return (
     <main className="workspace overflow-hidden pb-8">
       <BilHeader
@@ -16,18 +14,13 @@ const ServiceCategories = () => {
         url={"/billing/service-categories/create"}
       />
       <div
-        className={`card p-5 w-full overflow-x-auto relative min-h-[25rem] ${
-          loading && "overflow-x-hidden"
+        className={`card p-5 mb-4 w-full overflow-x-auto relative ${
+          isLoading && "overflow-x-hidden"
         }`}
       >
-        {loading && <LoadingSpinner blur />}
-
-        <Table
-          staticArr={serviceCategoriesArrr}
-          fetchedArr={serviceCategories}
-          deleteAndUpdate={deleteAndUpdate}
-        />
-        {serviceCategories.length === 0 && !loading && (
+        {isLoading && <LoadingSpinner blur />}
+        <ServiceCategoryTreeMenu categories={categoriesTree} />
+        {categories.length === 0 && !isLoading && (
           <div className="mt-10">ინფორმაცია ვერ მოიძებნა</div>
         )}
       </div>

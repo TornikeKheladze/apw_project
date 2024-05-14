@@ -1,9 +1,11 @@
-const LoadingSpinner = ({ blur }) => {
+const LoadingSpinner = ({ blur, paginating }) => {
   return (
     <div
       className={`${
         blur
-          ? "flex items-center justify-center bg-gray-400 animate-pulse bg-opacity-40 fixed inset-0 w-full h-full z-10"
+          ? `flex items-center justify-center ${
+              paginating ? "" : "bg-gray-400 animate-pulse"
+            } bg-opacity-40 fixed inset-0 w-full h-full z-10`
           : ""
       }`}
       role="status"

@@ -1,85 +1,142 @@
+import { useQuery } from "react-query";
+import BarChart from "./BarChart";
+import { getAgentStatistic, getOwnerStatistic } from "services/statistic";
+import { getAllUsers } from "services/users";
+import { idToName } from "helpers/idToName";
+import ConfigChartJS from "config/chartjs";
+import useThemeOptions from "utilities/hooks/useThemeOptions";
+import { useParams } from "react-router-dom";
 import LoadingSpinner from "components/icons/LoadingSpinner";
-import CollapseStatistic from "./collapseStatistic/CollapseStatistic";
-import GeneralCharts from "./generalCharts/GeneralCharts";
-import { agentArr, ownerArr, serviceArr } from "../formArrays/statisticArray";
-import CustomInput from "components/form/CustomInput";
-import Button from "components/Button";
-import ExcelExport from "../table/ExcelExport";
-
-import { useStatistic } from "./useStatistic";
+import { mergeObjectsWithSimilarNames } from "helpers/sumObjectKeys";
 
 const Statistic = () => {
+  const { user } = useParams();
+  const key = user === "owner" ? "ownerId" : "agentID";
+  const queryFn = user === "owner" ? getOwnerStatistic : getAgentStatistic;
+
   const {
-    excelExporFunc,
-    handleSubmit,
-    submitHandler,
-    register,
-    loading,
-    updatedCanceledAgentData,
-    updatedAgentData,
-    serviceData,
-    ownerData,
-    agentData,
-    updatedOwnerData,
-  } = useStatistic();
+    data: statistic = [{}],
+    isLoading: statisticLoading,
+    isFetching: statisticFetching,
+  } = useQuery({
+    queryKey: ["getStatistic", user],
+    queryFn: () => queryFn().then((res) => res.data),
+  });
 
+  const {
+    data: users = [{}],
+    isLoading: usersLoading,
+    isFetching: usersFetching,
+  } = useQuery({
+    queryKey: "getAllUsers",
+    queryFn: () => getAllUsers().then((res) => res.data.users),
+  });
+
+  const { bar } = ConfigChartJS();
+  const { colors } = useThemeOptions();
+
+  const statisticData = statistic.map((s) => {
+    return {
+      ...s,
+      [key]:
+        idToName(
+          users.map((user) => ({ ...user, id: user.user_id })),
+          s[key]
+        ) || s[key],
+    };
+  });
+
+  const mergedStatisticData = mergeObjectsWithSimilarNames(
+    statisticData,
+    ["amount", "paidAmount", "transactionCount", "paidTransactionCount"],
+    key
+  );
+
+  const barOptions = (height) => {
+    return {
+      ...bar,
+      scales: {
+        y: {
+          ...bar.scales.y,
+          max: height || 20,
+          ticks: {
+            stepSize: height / 10,
+          },
+        },
+      },
+    };
+  };
+
+  const amountBarData = {
+    labels: mergedStatisticData.map((item) => item.name),
+    datasets: [
+      {
+        label: "სრული რაოდენობა",
+        data: mergedStatisticData.map((item) => item.amount),
+        backgroundColor: "rgb(" + colors.primary + "/ .1)",
+        borderColor: "rgb(" + colors.primary + ")",
+        borderWidth: 2,
+      },
+      {
+        label: "გადახდილი რაოდენობა",
+        data: mergedStatisticData.map((item) => item.paidAmount),
+        backgroundColor: "rgb(" + colors.primary + "/ .5)",
+        borderColor: "rgb(" + colors.primary + ")",
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const countsData = {
+    labels: mergedStatisticData.map((item) => item.name),
+    datasets: [
+      {
+        label: "ტრანზაქციების რაოდენობა",
+        data: mergedStatisticData.map((item) => item.transactionCount),
+        backgroundColor: "rgb(" + colors.primary + "/ .5)",
+        borderColor: "rgb(" + colors.primary + ")",
+        borderWidth: 2,
+      },
+      {
+        label: "გადახდილი ტრანზაქციების რაოდენობა",
+        data: mergedStatisticData.map((item) => item.paidTransactionCount),
+        backgroundColor: "rgb(" + colors.primary + "/ .1)",
+        borderColor: "rgb(" + colors.primary + ")",
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const loading =
+    statisticFetching || usersFetching || statisticLoading || usersLoading;
   return (
-    <main className="workspace overflow-hidden pb-8">
-      <div className="flex justify-between mb-4">
-        <h3>სტატისტიკა</h3>
-        <ExcelExport fileName={"oris"} excelExporFunc={excelExporFunc} />
-      </div>
-      <form
-        onSubmit={handleSubmit(submitHandler)}
-        className="flex gap-2 justify-end"
-      >
-        <CustomInput
-          name="execute_time_start"
-          register={register}
-          type="date"
-          className="w-40"
-        />
-        <CustomInput
-          name="execute_time_end"
-          register={register}
-          type="date"
-          className="w-40"
-        />
-        <Button className="rounded">ფილტრი</Button>
-      </form>
+    <main className="workspace overflow-hidden pb-8 relative">
       {loading && <LoadingSpinner blur />}
-      <CollapseStatistic
-        canceledData={updatedCanceledAgentData}
-        data={updatedAgentData}
-        label={"აგენტები"}
-        profitKey={"agent_profit"}
-        nameKey={"agent_name"}
-        tableHeaderArr={agentArr}
-      />
-
-      <CollapseStatistic
-        data={updatedOwnerData}
-        label={"მომწოდებლები"}
-        profitKey={"owner_profit"}
-        nameKey={"owner_name"}
-        tableHeaderArr={ownerArr}
-      />
-
-      <CollapseStatistic
-        data={serviceData}
-        ownerSum={updatedOwnerData}
-        agentSum={updatedAgentData}
-        label={"სერვისები"}
-        profitKey={"our_profit"}
-        nameKey={"services_name"}
-        tableHeaderArr={serviceArr}
-      />
-
-      <GeneralCharts
-        agentData={agentData}
-        ownerData={ownerData}
-        serviceData={serviceData}
-      />
+      <h2 className="mb-3">
+        {user === "owner" ? "ოვნერების" : "აგენტების"} სტატისტიკა
+      </h2>
+      <div className="grid lg:grid-cols-2 gap-5">
+        <div className="card p-5 min-w-0">
+          <h4 className="mb-3">თანხის რაოდენობა</h4>
+          <BarChart
+            data={amountBarData}
+            config={barOptions(
+              Math.max(...mergedStatisticData.map((item) => item.amount))
+            )}
+          />
+        </div>
+        <div className="card p-5 min-w-0">
+          <h4 className="mb-3">ტრანზაქციების რაოდენობა</h4>
+          <BarChart
+            data={countsData}
+            config={barOptions(
+              Math.max(
+                ...mergedStatisticData.map((item) => item.transactionCount)
+              )
+            )}
+          />
+        </div>
+      </div>
     </main>
   );
 };

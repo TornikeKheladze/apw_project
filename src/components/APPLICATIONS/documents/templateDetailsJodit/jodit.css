@@ -1,0 +1,13 @@
+.jodit-wysiwyg {
+  padding-left: 10px;
+}
+.jodit ul {
+  list-style: inside;
+}
+.jodit ol {
+  list-style: inside;
+  list-style-type: number;
+}
+.jodit td {
+  border: solid 1px;
+}

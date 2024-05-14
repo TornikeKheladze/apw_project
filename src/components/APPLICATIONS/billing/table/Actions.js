@@ -1,113 +1,25 @@
 import Tippy from "@tippyjs/react";
-import Alert from "components/Alert";
+import ConfirmModal from "components/customModal/ConfirmModal";
 import DeleteModal from "components/customModal/DeleteModal";
+import CheckedIcon from "components/icons/CheckedIcon";
 import DetailsIcon from "components/icons/DetailsIcon";
+import ErrorIcon from "components/icons/ErrorIcon";
 import { billingPermissionsObject } from "data/permissionsObject";
 import useCheckPermission from "helpers/useCheckPermission";
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import ConfirmModal from "../returnedTransactions/modals/ConfirmModal";
-import RejectModal from "../returnedTransactions/modals/RejectModal";
-import ReturnIcon from "components/icons/ReturnIcon";
-import { editTransactionStatus } from "services/transactions";
-import { useDispatch, useSelector } from "react-redux";
-import { saveTransactions } from "reducers/TransactionsReducer";
+import { useNavigate } from "react-router-dom";
 
-const Actions = ({ target, element, deleteAndUpdate }) => {
-  const dispatch = useDispatch();
+const Actions = ({ target, element, actions = {} }) => {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
-  const { transactions } = useSelector((state) => state.transaction);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isReturnedTransactionModalOpen, setIsReturnedTransactionModalOpen] =
-    useState(false);
-  const [afterReturnRejectModalOpen, setAfterReturnRejectModalOpen] =
-    useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const isTransactionReturnPage = pathname.split("/")[3] === "returned";
-
-  const transactionReturnHandler = async (approved) => {
-    if (approved) {
-      try {
-        setLoading(true);
-        await editTransactionStatus(element.id, {
-          // ...element,
-          status_id: 5,
-          // status_id: 2,
-        });
-
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-      setSuccessMessage("ტრანზაქცია წარმატებით დაბრუნდა");
-      setTimeout(() => {
-        setSuccessMessage("");
-        setIsReturnedTransactionModalOpen(false);
-        dispatch(
-          saveTransactions(
-            transactions?.filter((transaction) => transaction.id !== element.id)
-          )
-        );
-      }, 1500);
-    } else {
-      setAfterReturnRejectModalOpen(true);
-      setIsReturnedTransactionModalOpen(false);
-    }
-  };
-
-  const rejectSubmitHandler = async (comment) => {
-    setLoading(true);
-    await editTransactionStatus(element.id, {
-      // ...element,
-      status_id: 4,
-      comment: comment,
-    });
-
-    setLoading(false);
-    setSuccessMessage("ტრანზაქციის დაბრუნება დაიბლოკა");
-
-    setTimeout(() => {
-      setAfterReturnRejectModalOpen(false);
-      setSuccessMessage("");
-      dispatch(
-        saveTransactions(
-          transactions?.filter((transaction) => transaction.id !== element.id)
-        )
-      );
-    }, 1500);
-  };
+  const [isActivationModalOpen, setIsActivationModalOpen] = useState(false);
 
   const permissionsForTarget = billingPermissionsObject[target] || [];
 
-  const deleteHandler = async (id) => {
-    setDeleteLoading(true);
-    await deleteAndUpdate(id);
-    setSuccessMessage("წარმატებით წაიშალა");
-    setDeleteLoading(false);
-    setTimeout(() => {
-      setIsDeleteModalOpen(false);
-      setSuccessMessage("");
-    }, 1500);
-  };
-
-  const showDeleteButtonInBalanceHistory = () => {
-    if (target === "balance-history") {
-      if (element.type === 7) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return true;
-  };
   return (
     <div className="flex gap-2 justify-evenly">
-      {useCheckPermission(
+      {/* {useCheckPermission(
         permissionsForTarget?.find((p) => p.includes("id_get"))
       ) &&
         target !== "balance-history" &&
@@ -163,8 +75,7 @@ const Actions = ({ target, element, deleteAndUpdate }) => {
       {useCheckPermission(
         permissionsForTarget.find((p) => p.includes("delete"))
       ) &&
-        target !== "transactions" &&
-        showDeleteButtonInBalanceHistory() && (
+        target !== "transactions" && (
           <Tippy
             theme="light-border tooltip"
             touch={["hold", 500]}
@@ -181,8 +92,13 @@ const Actions = ({ target, element, deleteAndUpdate }) => {
               <span className="la la-trash-alt"></span>
             </button>
           </Tippy>
-        )}
-      {isTransactionReturnPage && (
+        )} */}
+
+      {/* დროებით ფერმიშენების ჩეკი გამოვრთე ეს ქვემოთ რაც წერია ეს 
+      ტიპიები შემიძლია წავშალო და ზემოთ რაცაა ამოვაკომენტარებ და იმუშავებს 
+      იმ შემთხვევაში თუ ფერმიშენები აქვს */}
+
+      {actions.details && (
         <Tippy
           theme="light-border tooltip"
           touch={["hold", 500]}
@@ -190,43 +106,123 @@ const Actions = ({ target, element, deleteAndUpdate }) => {
           interactive
           animation="scale"
           appendTo={document.body}
-          content="დაბრუნება"
+          content="დეტალები"
         >
           <button
-            onClick={() => setIsReturnedTransactionModalOpen(true)}
-            className="btn btn-icon btn_outlined btn_secondary p-1"
+            onClick={() => navigate(`/billing/${target}/details/${element.id}`)}
+            className="btn btn-icon btn_outlined btn_secondary group"
           >
-            <ReturnIcon />
+            <DetailsIcon />
           </button>
         </Tippy>
       )}
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        setIsOpen={setIsDeleteModalOpen}
-        action={() => deleteHandler(element.id)}
-        title={"წაშლა"}
-        loading={deleteLoading}
-      />
-      {isTransactionReturnPage && (
-        <ConfirmModal
-          isOpen={isReturnedTransactionModalOpen}
-          setIsOpen={setIsReturnedTransactionModalOpen}
-          action={transactionReturnHandler}
-          title={"ტრანზაქციის დაბრუნება"}
-          loading={loading}
-        />
+      {actions.edit && (
+        <Tippy
+          theme="light-border tooltip"
+          touch={["hold", 500]}
+          offset={[0, 12]}
+          interactive
+          animation="scale"
+          appendTo={document.body}
+          content="რედაქტირება"
+        >
+          <button
+            onClick={() => {
+              navigate(`/billing/${target}/edit/${element.id}`);
+            }}
+            className="btn btn-icon btn_outlined btn_secondary"
+          >
+            <span className="la la-pen-fancy"></span>
+          </button>
+        </Tippy>
       )}
-      {isTransactionReturnPage && (
-        <RejectModal
-          isOpen={afterReturnRejectModalOpen}
-          setIsOpen={setAfterReturnRejectModalOpen}
-          action={rejectSubmitHandler}
-          title={"უარყოფის მიზეზი"}
-          setSuccessMessage={setSuccessMessage}
-          loading={loading}
-        />
+      {actions.delete && (
+        <>
+          <Tippy
+            theme="light-border tooltip"
+            touch={["hold", 500]}
+            offset={[0, 12]}
+            interactive
+            animation="scale"
+            appendTo={document.body}
+            content="წაშლა"
+          >
+            <button
+              onClick={() => setIsDeleteModalOpen(true)}
+              className="btn btn-icon btn_outlined btn_danger flex justify-center items-center"
+            >
+              <span className="la la-trash-alt"></span>
+            </button>
+          </Tippy>
+          <DeleteModal
+            isOpen={isDeleteModalOpen}
+            setIsOpen={setIsDeleteModalOpen}
+            action={() => {
+              actions.delete.deleteMutate(element.id);
+              setTimeout(() => {
+                setIsDeleteModalOpen(false);
+              }, 1500);
+            }}
+            title={"წაშლა"}
+            loading={actions.delete.deleteLoading}
+          />
+        </>
       )}
-      <Alert message={successMessage} color="success" dismissable />
+
+      {actions.activation && (
+        <>
+          <Tippy
+            theme="light-border tooltip"
+            touch={["hold", 500]}
+            offset={[0, 12]}
+            interactive
+            animation="scale"
+            appendTo={document.body}
+            content={
+              actions.activation.isActive(element.id)
+                ? "დეაქტივაცია"
+                : "აქტივაცია"
+            }
+          >
+            {actions.activation.isActive(element.id) ? (
+              <button
+                onClick={() => setIsActivationModalOpen(true)}
+                className="btn btn-icon btn_outlined btn_success p-1 text-success"
+              >
+                <CheckedIcon />
+              </button>
+            ) : (
+              <button
+                onClick={() => setIsActivationModalOpen(true)}
+                className="btn btn-icon btn_outlined btn_danger bg-danger text-danger"
+              >
+                <ErrorIcon />
+              </button>
+            )}
+          </Tippy>
+          <ConfirmModal
+            text={`გსურთ ${
+              actions.activation.isActive(element.id)
+                ? "დეაქტივაცია"
+                : "აქტივაცია"
+            }?`}
+            isOpen={isActivationModalOpen}
+            setIsOpen={setIsActivationModalOpen}
+            action={() => {
+              actions.activation.activationHandler(element.id);
+              setTimeout(() => {
+                setIsActivationModalOpen(false);
+              }, 1500);
+            }}
+            title={
+              actions.activation.isActive(element.id)
+                ? "დეაქტივაცია"
+                : "აქტივაცია"
+            }
+            loading={actions.activation.updateLoading}
+          />
+        </>
+      )}
     </div>
   );
 };

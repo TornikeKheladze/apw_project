@@ -544,10 +544,10 @@ const MenuDetailDocuments = () => {
       })}
     >
       <div className="menu-detail-wrapper">
-        <NavLink to="/documents/editor" onClick={hideMenuDetail}>
+        {/* <NavLink to="/documents/editor" onClick={hideMenuDetail}>
           <DocEditIcon className="w-6 h-6 mr-2" />
           Editor
-        </NavLink>
+        </NavLink> */}
         <NavLink to="/documents/categories" onClick={hideMenuDetail}>
           <PuzzleIcon className="w-6 h-6" />
           კატეგორიები
@@ -558,7 +558,11 @@ const MenuDetailDocuments = () => {
         </NavLink>
         <NavLink to="/documents/templateColumns" onClick={hideMenuDetail}>
           <PuzzleIcon className="w-6 h-6" />
-          template columns
+          ცვლადები
+        </NavLink>
+        <NavLink to="/documents/documents" onClick={hideMenuDetail}>
+          <PuzzleIcon className="w-6 h-6" />
+          დოკუმენტები
         </NavLink>
         <hr />
       </div>
@@ -576,18 +580,8 @@ const MenuDetailBilling = () => {
       })}
     >
       <div className="menu-detail-wrapper">
-        <MenuBarCollapse icon={<TransactionIcon />} label={"ტრანზაქციები"}>
-          <NavLink to="/billing/transactions" end onClick={hideMenuDetail}>
-            ყველა
-          </NavLink>
-          <NavLink to="/billing/transactions/returned" onClick={hideMenuDetail}>
-            დაბრუნებული
-          </NavLink>
-        </MenuBarCollapse>
-        <NavLink to="/billing/customers" onClick={hideMenuDetail}>
-          {/* <AlgIcon /> */}
-          <span className="la la-users"></span>
-          მომხმარებლები
+        <NavLink to="/billing/transactions" end onClick={hideMenuDetail}>
+          <TransactionIcon /> ტრანზაქციები
         </NavLink>
         <MenuBarCollapse icon={<HeadersIcon />} label={"სერვისი"}>
           <NavLink to="/billing/services" onClick={hideMenuDetail}>
@@ -596,48 +590,46 @@ const MenuDetailBilling = () => {
           <NavLink to="/billing/service-categories" onClick={hideMenuDetail}>
             სერვისის კატეგორიები
           </NavLink>
+          <NavLink to="/billing/category-production" onClick={hideMenuDetail}>
+            category-production
+          </NavLink>
           <NavLink to="/billing/service-production" onClick={hideMenuDetail}>
             სერვისის პროდაქშენი
           </NavLink>
+          <NavLink to="/billing/service-parameters" onClick={hideMenuDetail}>
+            სერვისის პარამეტრები
+          </NavLink>
+          <NavLink
+            to="/billing/service-parameter-types"
+            onClick={hideMenuDetail}
+          >
+            პარამეტრის ტიპები
+          </NavLink>
+          <NavLink to="/billing/service-prices" onClick={hideMenuDetail}>
+            service prices
+          </NavLink>
+          <NavLink to="/billing/spec-prices" onClick={hideMenuDetail}>
+            spec prices
+          </NavLink>
         </MenuBarCollapse>
 
-        <NavLink to="/billing/currency" onClick={hideMenuDetail}>
+        <NavLink to="/billing/charges" onClick={hideMenuDetail}>
           <span className="la la-dollar"></span>
-          ვალუტა
+          charges
         </NavLink>
-        <NavLink to="/billing/our-error-list" onClick={hideMenuDetail}>
-          <span className="la la-warning"></span>
-          ჩვენი ერორები
+        <NavLink to="/billing/sales" onClick={hideMenuDetail}>
+          <span className="la la-money"></span>
+          sales
         </NavLink>
 
-        <MenuBarCollapse
-          icon={<span className="la la-money"></span>}
-          label={"ბალანსი"}
-        >
-          <Link to="/billing/balance-history" onClick={hideMenuDetail}>
-            ისტორია
-          </Link>
-          <Link to="/billing/balance/action/add" onClick={hideMenuDetail}>
-            დარიცხვა
-          </Link>
-          <Link to="/billing/balance/action/subtract" onClick={hideMenuDetail}>
-            მოკლება
-          </Link>
-          <Link to="/billing/balance/recount" onClick={hideMenuDetail}>
-            გადათვლა
-          </Link>
-          <Link to="/billing/balance/nullify" onClick={hideMenuDetail}>
-            განულება
-          </Link>
-          <Link to="/billing/balance/rates" onClick={hideMenuDetail}>
-            ვალუტის კურსები
-          </Link>
+        <MenuBarCollapse icon={<PackageIcon />} label={"პაკეტები"}>
+          <NavLink to="/billing/packages" onClick={hideMenuDetail}>
+            packages
+          </NavLink>
+          <NavLink to="/billing/package-production" onClick={hideMenuDetail}>
+            package production
+          </NavLink>
         </MenuBarCollapse>
-
-        <NavLink to="/billing/legalform" onClick={hideMenuDetail}>
-          <span className="la la-file-alt"></span>
-          ლეგალური ფორმა
-        </NavLink>
         <MenuBarCollapse
           icon={
             <span className="mr-2">
@@ -648,36 +640,33 @@ const MenuDetailBilling = () => {
         >
           <NavLink
             className="flex items-center gap-2"
-            to="/billing/statistic"
+            to="/billing/statistic/owner"
             onClick={hideMenuDetail}
           >
-            სტატისტიკა
+            ოვნერის სტატისტიკა
           </NavLink>
           <NavLink
             className="flex items-center gap-2"
-            to="/billing/nominal-balance"
+            to="/billing/statistic/agent"
             onClick={hideMenuDetail}
           >
-            ნომინალური ანგარიში
+            აგენტის სტატისტიკა
+          </NavLink>
+          <NavLink
+            className="flex items-center gap-2"
+            to="/billing/statistic/monthly/agent"
+            onClick={hideMenuDetail}
+          >
+            აგენტის თვიური სტატისტიკა
+          </NavLink>
+          <NavLink
+            className="flex items-center gap-2"
+            to="/billing/statistic/monthly/owner"
+            onClick={hideMenuDetail}
+          >
+            ოვნერის თვიური სტატისტიკა
           </NavLink>
         </MenuBarCollapse>
-
-        <NavLink
-          className="flex items-center "
-          to="/billing/current-balance"
-          onClick={hideMenuDetail}
-        >
-          <span className="la la-chart-area"></span>
-          მიმდინარე ბალანსები
-        </NavLink>
-        <NavLink
-          className="flex items-center "
-          to="/billing/comparison-act"
-          onClick={hideMenuDetail}
-        >
-          <span className="la la-file-invoice-dollar"></span>
-          შედარების აქტი
-        </NavLink>
         <hr />
       </div>
     </div>

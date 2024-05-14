@@ -1,113 +1,67 @@
 import { useCallback, useEffect, useState } from "react";
 import {
-  filterTransactions,
-  getServices,
-  getSumData,
+  getTransactionsByPage,
+  searchTransactions,
 } from "services/transactions";
-import { useDispatch, useSelector } from "react-redux";
-import { saveSumData, saveTransactions } from "reducers/TransactionsReducer";
-import { getCustomers } from "services/customers";
-import { saveCustomers } from "reducers/CustomerReducer";
-import { saveServices } from "reducers/ServiceReducer";
 import { checkStatus } from "helpers/CheckStatusForBilling";
 import { filterTransactionsWithoutPage } from "services/transactions";
-import { keyReplace } from "helpers/keyReplace";
 
 import { removeEmpty } from "helpers/removeEmpty";
 import { idToName } from "helpers/idToName";
-import { transactions } from "../formArrays/formArrays";
-import { setFilter } from "reducers/FilterReducer";
 import { convertTimestamp } from "helpers/convertTimestamp";
-import { getCurrencies } from "services/services";
-import { saveCurrencies } from "reducers/CurrencyReducer";
+import { useMutation, useQuery } from "react-query";
+import { getAllServices } from "services/services";
+import { getAllUsers } from "services/users";
+import { useSearchParams } from "react-router-dom";
 
 export const useTransactions = () => {
-  const dispatch = useDispatch();
-  const allTransactions = useSelector(
-    (state) => state.transaction.transactions
-  );
-  const customers = useSelector((state) => state.customer.customers);
-  const services = useSelector((state) => state.service.services);
-  const sumData = useSelector((state) => state.transaction.sumData);
-  const { currencies } = useSelector((store) => store.currency);
-  const { filter } = useSelector((store) => store.filter);
-  const [updatedTransactionsList, setUpdatedTransactionsList] = useState([]);
+  const [searchParam, setSearchParam] = useSearchParams();
   const [sortConfig, setSortConfig] = useState({ column: "", direction: "" });
-  const [loading, setLoading] = useState(false);
-  const [actionLoading, setActionLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalSize, setTotalSize] = useState(0);
-  const [isInitial, setIsInitial] = useState(true);
+  const [transactions, setTransactions] = useState([]);
+  const [filter, setFilter] = useState({});
+  const page = searchParam.get("page") || 1;
 
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        setLoading(true);
-        const [cust, serv, sumData, curr] = await Promise.all([
-          getCustomers(),
-          getServices(),
-          getSumData(),
-          getCurrencies(),
-        ]);
-        dispatch(saveCustomers(cust.data));
-        dispatch(saveServices(serv.data));
-        dispatch(saveSumData(sumData.data));
-        dispatch(saveCurrencies(curr.data));
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    };
-    fetchInitialData();
-  }, [dispatch]);
-
-  const fetchTransactions = useCallback(
-    async (filterObj) => {
-      try {
-        setActionLoading(true);
-        const tran = await filterTransactions(
-          removeEmpty(filterObj),
-          currentPage
-        );
-        dispatch(saveTransactions(tran.data.data));
-        setTotalSize(tran.data.total);
-        setActionLoading(false);
-      } catch (error) {
-        setActionLoading(false);
-        console.log(error);
-      }
+  const {
+    data: transactionsData = { content: [{}] },
+    isLoading: transactionsLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ["transactions", page],
+    queryFn: () => getTransactionsByPage(+page - 1).then((res) => res.data),
+    onSuccess: (data) => {
+      setTransactions(data.content);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [dispatch, currentPage]
-  );
+  });
 
-  useEffect(() => {
-    if (isInitial) {
-      fetchTransactions({});
-      setIsInitial(false);
-    } else {
-      fetchTransactions(filter);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, fetchTransactions]);
+  const { mutate: searchMutate, isLoading: searchLoading } = useMutation({
+    mutationFn: (searchObj) =>
+      searchTransactions(searchObj).then((res) => res.data),
+    onSuccess: (data) => {
+      setTransactions(data.content);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+  });
 
-  useEffect(() => {
-    const updatedTransactions = allTransactions?.map((transaction) => {
-      return {
-        ...transaction,
-        created_at: convertTimestamp(transaction.created_at),
-        owner_id: idToName(customers, transaction.owner_id),
-        agent_id: idToName(customers, transaction.agent_id),
-        service_id: idToName(services, transaction.service_id),
-        status_id: checkStatus(transaction.status_id),
-        service_currency:
-          idToName(currencies, transaction.service_currency) || "GEL",
-        agent_currency:
-          idToName(currencies, transaction.agent_currency) || "GEL",
-      };
-    });
-    setUpdatedTransactionsList(updatedTransactions);
-  }, [allTransactions, customers, services, currencies]);
+  const { data: servicesData = [{}], isLoading: servicesLoading } = useQuery({
+    queryKey: "getAllServices",
+    queryFn: () => getAllServices().then((res) => res.data),
+  });
+
+  const { data: usersData = [{}], isLoading: usersLoading } = useQuery({
+    queryKey: "getAllUsers",
+    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  });
+
+  const services = servicesData.map((service) => ({
+    ...service,
+    id: service.serviceID,
+  }));
+
+  const users = usersData.map((user) => ({
+    ...user,
+    id: user.user_id,
+  }));
 
   const sortHandler = async (name, type) => {
     if (sortConfig.column === name) {
@@ -121,39 +75,22 @@ export const useTransactions = () => {
         direction: "asc",
       });
     }
-
-    try {
-      setActionLoading(true);
-      const res = await filterTransactions(
-        {
-          sort_column: name,
-          sort_order: type,
-        },
-        1
-      );
-      dispatch(saveTransactions(res.data.data));
-      setCurrentPage(1);
-      setActionLoading(false);
-    } catch (error) {
-      console.log(error);
-      setActionLoading(false);
-    }
+    searchMutate({
+      data: removeEmpty(filter),
+      page: 0,
+      sort: `${name},${sortConfig.direction === "asc" ? "asc" : "desc"}`,
+    });
   };
+
   const filterHandler = useCallback(
-    async (filterObj) => {
-      try {
-        setActionLoading(true);
-        const tran = await filterTransactions(removeEmpty({ ...filterObj }), 1);
-        setCurrentPage(1);
-        dispatch(saveTransactions(tran.data.data));
-        setTotalSize(tran.data.total);
-        setActionLoading(false);
-      } catch (error) {
-        console.log(error);
-        setActionLoading(false);
-      }
+    (filterObj) => {
+      setSearchParam({ page: 1 });
+      searchMutate({
+        data: removeEmpty(filterObj),
+        page: 0,
+      });
     },
-    [setActionLoading, setCurrentPage, dispatch, setTotalSize]
+    [setSearchParam, searchMutate]
   );
 
   const fetchAllTransactions = async () => {
@@ -161,37 +98,15 @@ export const useTransactions = () => {
     const updatedTransactions = res.data?.map((transaction) => {
       return {
         ...transaction,
-        owner_id: idToName(customers, transaction.owner_id),
-        agent_id: idToName(customers, transaction.agent_id),
-        service_id: idToName(services, transaction.service_id),
-        status_id: checkStatus(transaction.status_id),
+        // owner_id: idToName(customers, transaction.owner_id),
+        // agent_id: idToName(customers, transaction.agent_id),
+        // service_id: idToName(services, transaction.service_id),
+        // statusid: checkStatus(transaction.status_id),
       };
     });
-    const translatedData = updatedTransactions.map((tr) =>
-      keyReplace(tr, transactions)
-    );
 
-    return translatedData;
+    return updatedTransactions;
   };
-  const { authorizedUser } = useSelector((store) => store.user);
-
-  const permCheck = (perm) => {
-    if (authorizedUser.name) {
-      if (
-        !authorizedUser.roles
-          .map((role) => role.permissions)
-          ?.flat()
-          .map(({ name }) => name.split("bil_transaction_table_")[1])
-          .includes(perm)
-      ) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  };
-
-  const columnsWithpermissions = transactions.filter((t) => permCheck(t.name));
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -205,27 +120,41 @@ export const useTransactions = () => {
     };
   }, [filter, filterHandler]);
 
-  useEffect(() => {
-    return () => {
-      dispatch(setFilter({}));
-    };
-  }, [dispatch]);
+  const updatedList = transactions.map((tr) => ({
+    ...tr,
+    id: tr.transactionID,
+    serviceID: idToName(services, tr.serviceID),
+    agentID: idToName(users, tr.agentID),
+    ownerID: idToName(users, tr.ownerID),
+  }));
+
+  const searchOptions = {
+    serviceID: services,
+    agentID: users,
+    ownerID: users,
+    status_id: [
+      { id: 1, name: "რეგისტრირებული" },
+      { id: 2, name: "მუშავდება" },
+      { id: 3, name: "წარმატებული" },
+      { id: 4, name: "გაუქმებული" },
+      { id: 5, name: "დაბრუნებული" },
+    ],
+  };
 
   return {
-    customers,
-    services,
-    updatedTransactionsList,
+    loading: servicesLoading || usersLoading,
+    actionLoading: searchLoading || isFetching,
     sortConfig,
-    loading,
-    actionLoading,
-    currentPage,
-    setCurrentPage,
-    totalSize,
     filterHandler,
     sortHandler,
-    sumData,
     fetchAllTransactions,
-    columnsWithpermissions,
-    currencies,
+    transactionsData,
+    searchParam,
+    setSearchParam,
+    transactionsLoading,
+    filter,
+    setFilter,
+    updatedList,
+    searchOptions,
   };
 };

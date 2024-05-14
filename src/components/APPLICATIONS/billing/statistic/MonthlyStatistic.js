@@ -1,0 +1,147 @@
+import { useQuery } from "react-query";
+import BarChart from "./BarChart";
+import {
+  getAgentMonthlyStatistic,
+  getOwnerMonthlyStatistic,
+} from "services/statistic";
+import { getAllUsers } from "services/users";
+import { idToName } from "helpers/idToName";
+import ConfigChartJS from "config/chartjs";
+import useThemeOptions from "utilities/hooks/useThemeOptions";
+import { useParams } from "react-router-dom";
+import LoadingSpinner from "components/icons/LoadingSpinner";
+import { mergeObjectsWithSimilarNames } from "helpers/sumObjectKeys";
+import { monthlyDummyData, months } from "helpers/dateFunctions";
+
+const MonthlyStatistic = () => {
+  const { user } = useParams();
+  const key = user === "owner" ? "ownerId" : "agentID";
+  const queryFn =
+    user === "owner" ? getOwnerMonthlyStatistic : getAgentMonthlyStatistic;
+
+  const {
+    data: statistic = [{}],
+    isLoading: statisticLoading,
+    isFetching: statisticFetching,
+  } = useQuery({
+    queryKey: ["getMonthlyStatistic", user],
+    queryFn: () => queryFn().then((res) => res.data),
+  });
+
+  const {
+    data: users = [{}],
+    isLoading: usersLoading,
+    isFetching: usersFetching,
+  } = useQuery({
+    queryKey: "getAllUsers",
+    queryFn: () => getAllUsers().then((res) => res.data.users),
+  });
+
+  const { bar } = ConfigChartJS();
+  const { colors } = useThemeOptions();
+
+  const statisticData = statistic.map((s) => ({
+    ...s,
+    [key]:
+      idToName(
+        users.map((user) => ({ ...user, id: user.user_id })),
+        s[key]
+      ) || s[key],
+  }));
+
+  const mergedStatisticData = mergeObjectsWithSimilarNames(
+    [...monthlyDummyData, ...statisticData],
+    ["amount", "paidAmount", "transactionCount", "paidTransactionCount"],
+    "yearMonth"
+  );
+
+  const barOptions = (height) => {
+    return {
+      ...bar,
+      scales: {
+        y: {
+          ...bar.scales.y,
+          max: height || 20,
+          ticks: {
+            stepSize: height / 10,
+          },
+        },
+      },
+    };
+  };
+
+  const amountBarData = {
+    labels: months.map((m) => m.name),
+    datasets: [
+      {
+        label: "სრული რაოდენობა",
+        data: mergedStatisticData.map((item) => item.amount),
+        backgroundColor: "rgb(" + colors.primary + "/ .1)",
+        borderColor: "rgb(" + colors.primary + ")",
+        borderWidth: 2,
+      },
+      {
+        label: "გადახდილი რაოდენობა",
+        data: mergedStatisticData.map((item) => item.paidAmount),
+        backgroundColor: "rgb(" + colors.primary + "/ .5)",
+        borderColor: "rgb(" + colors.primary + ")",
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const countsData = {
+    labels: months.map((m) => m.name),
+    datasets: [
+      {
+        label: "ტრანზაქციების რაოდენობა",
+        data: mergedStatisticData.map((item) => item.transactionCount),
+        backgroundColor: "rgb(" + colors.primary + "/ .5)",
+        borderColor: "rgb(" + colors.primary + ")",
+        borderWidth: 2,
+      },
+      {
+        label: "გადახდილი ტრანზაქციების რაოდენობა",
+        data: mergedStatisticData.map((item) => item.paidTransactionCount),
+        backgroundColor: "rgb(" + colors.primary + "/ .1)",
+        borderColor: "rgb(" + colors.primary + ")",
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const loading =
+    statisticFetching || usersFetching || statisticLoading || usersLoading;
+  return (
+    <main className="workspace overflow-hidden pb-8 relative">
+      {loading && <LoadingSpinner blur />}
+      <h2 className="mb-3">
+        {user === "owner" ? "ოვნერის" : "აგენტის"} თვიური სტატისტიკა
+      </h2>
+      <div className="grid lg:grid-cols-2 gap-5">
+        <div className="card p-5 min-w-0">
+          <h4 className="mb-3">თანხის რაოდენობა</h4>
+          <BarChart
+            data={amountBarData}
+            config={barOptions(
+              Math.max(...mergedStatisticData.map((item) => item.amount))
+            )}
+          />
+        </div>
+        <div className="card p-5 min-w-0">
+          <h4 className="mb-3">ტრანზაქციების რაოდენობა</h4>
+          <BarChart
+            data={countsData}
+            config={barOptions(
+              Math.max(
+                ...mergedStatisticData.map((item) => item.transactionCount)
+              )
+            )}
+          />
+        </div>
+      </div>
+    </main>
+  );
+};
+
+export default MonthlyStatistic;

@@ -79,9 +79,7 @@ const UserForm = () => {
                   </Label>
                   <CustomInput
                     id="email"
-                    disabled={
-                      action === "edit" && !isFormEditing ? true : false
-                    }
+                    disabled={action === "edit" ? true : false}
                     placeholder="example@gmail.com"
                     register={register}
                     name="email"

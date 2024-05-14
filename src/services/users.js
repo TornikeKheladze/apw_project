@@ -24,6 +24,10 @@ export const updateUserData = (data) => {
   return instance.put("/user/users", data);
 };
 
+export const updatePassword = (data) => {
+  return instance.put("update", data);
+};
+
 export const deleteUser = (id) => {
   return instance.delete("/user/users", {
     data: { id },

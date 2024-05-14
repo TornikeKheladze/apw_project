@@ -7,7 +7,14 @@ import LoadingSpinner from "components/icons/LoadingSpinner";
 import useGeneralForm from "./useGeneralForm";
 
 const GeneralForm = (props) => {
-  const { formArray, submitHandler, optionsObj, isLoading } = props;
+  const {
+    formArray,
+    submitHandler,
+    optionsObj,
+    isLoading,
+    updateDataObj = {},
+  } = props;
+
   const {
     register,
     handleSubmit,
@@ -15,7 +22,7 @@ const GeneralForm = (props) => {
     formData,
     handleFormChange,
     imageForDisplay,
-  } = useGeneralForm(formArray);
+  } = useGeneralForm(formArray, updateDataObj);
   // const navigate = useNavigate();
   // onSubmit={handleSubmit(async (data) => {
   //   await submitHandler(data);
@@ -50,13 +57,10 @@ const GeneralForm = (props) => {
                   optionsObj[name]?.map((item) => (
                     <option
                       className="p-3"
-                      key={item.id.toString() + item.name}
+                      key={item.id?.toString() + item.name}
                       value={item.id}
                     >
-                      {item.name ||
-                        item.currency_name ||
-                        item.name_geo ||
-                        item.name_ge}
+                      {item.name}
                     </option>
                   ))}
               </CustomSelect>
@@ -147,10 +151,12 @@ const GeneralForm = (props) => {
         }
       })}
       <div className="flex items-center justify-between">
-        <Button disabled={isLoading} className="w-max">
-          დადასტურება
+        <Button
+          disabled={isLoading}
+          className="w-max min-w-[135px] flex justify-center"
+        >
+          {isLoading ? <LoadingSpinner /> : "დადასტურება"}
         </Button>
-        {isLoading && <LoadingSpinner />}
       </div>
     </form>
   );

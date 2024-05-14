@@ -65,27 +65,39 @@ import DepartmentsTree from "components/APPLICATIONS/authorization/departments/D
 import { routePermissions } from "./routePermissions";
 import React from "react";
 import CheckPermission from "./CheckPermission";
-import OurErrorList from "components/APPLICATIONS/billing/errors/ourErrorList/OurErrorList";
-import OurErrorListForm from "components/APPLICATIONS/billing/errors/ourErrorList/ourErrorListForm/OurErrorListForm";
-import OwnerErrorList from "components/APPLICATIONS/billing/errors/ownerErrorList/OwnerErrorList";
-import OwnerErrorListForm from "components/APPLICATIONS/billing/errors/ownerErrorList/ownerErrorListForm/OwnerErrorListForm";
-import Payers from "components/APPLICATIONS/billing/payers/Payers";
-import Statistic from "components/APPLICATIONS/billing/statistic/Statistic";
-import CurrentBalance from "components/APPLICATIONS/billing/currentBalance/CurrentBalance";
-import Nominal from "components/APPLICATIONS/billing/nominal/Nominal";
-import ComparisonAct from "components/APPLICATIONS/billing/comparisonAct/ComparisonAct";
-import ComparisonActGenerate from "components/APPLICATIONS/billing/comparisonAct/comparisonActGenerate/ComparisonActGenerate";
-import ComparisonActDetails from "components/APPLICATIONS/billing/comparisonAct/comparisonActDetails/ComparisonActDetails";
-import BalanceRecount from "components/APPLICATIONS/billing/balance/recount/BalanceRecount";
-import BalanceNullify from "components/APPLICATIONS/billing/balance/nullify/BalanceNullify";
-import AddBalance from "components/APPLICATIONS/billing/balance/addBalance/AddBalance";
-import CurrencyRates from "components/APPLICATIONS/billing/balance/currencyRates/CurrencyRates";
 import DocEditor from "components/APPLICATIONS/documents/DocEditor";
 import Packages from "components/APPLICATIONS/authorization/packages/Packages";
 import DocCatalogs from "components/APPLICATIONS/documents/docCatalogs/DocCatalogs";
 import Templates from "components/APPLICATIONS/documents/templates/Templates";
 import TemplateColumns from "components/APPLICATIONS/documents/templateColumns/TemplateColumns";
-import TemplateDetails from "components/APPLICATIONS/documents/templateDetails/TemplateDetails";
+import TemplateDetailsJodit from "components/APPLICATIONS/documents/templateDetailsJodit/TemplateDetailsJodit";
+import ServiceParameters from "components/APPLICATIONS/billing/serviceParameters/ServiceParameters";
+import ServiceParametersDetails from "components/APPLICATIONS/billing/serviceParameters/details/ServiceParametersDetails";
+import ServiceParametersForm from "components/APPLICATIONS/billing/serviceParameters/serviceParametersForm/ServiceParametersForm";
+import ServiceParameterTypes from "components/APPLICATIONS/billing/serviceParameterTypes/ServiceParameterTypes";
+import ServiceParameterTypesForm from "components/APPLICATIONS/billing/serviceParameterTypes/serviceParameterTypesForm/ServiceParameterTypesForm";
+import ServicePrices from "components/APPLICATIONS/billing/servicePrices/ServicePrices";
+import ServicePricesForm from "components/APPLICATIONS/billing/servicePrices/servicePricesForm/ServicePricesForm";
+import SpecPrices from "components/APPLICATIONS/billing/specPrices/SpecPrices";
+import SpecPricesForm from "components/APPLICATIONS/billing/specPrices/specPricesForm/SpecPricesForm";
+import Charges from "components/APPLICATIONS/billing/charges/Charges";
+import ChargesForm from "components/APPLICATIONS/billing/charges/chargesForm/ChargesForm";
+import Sales from "components/APPLICATIONS/billing/sales/Sales";
+import SalesForm from "components/APPLICATIONS/billing/sales/salesForm/SalesForm";
+import BillingPackages from "components/APPLICATIONS/billing/billingPackages/BillingPackages";
+import BillingPackagesForm from "components/APPLICATIONS/billing/billingPackages/billingPackagesForm/BillingPackagesForm";
+import ServiceProductions from "components/APPLICATIONS/billing/serviceProductions/ServiceProductions";
+import ServiceProductionForm from "components/APPLICATIONS/billing/serviceProductions/serviceProductionForm/ServiceProductionForm";
+import ServiceProductionDetails from "components/APPLICATIONS/billing/serviceProductions/details/ServiceProductionDetails";
+import PackageProductions from "components/APPLICATIONS/billing/packageProduction/PackageProductions";
+import PackageProductionForm from "components/APPLICATIONS/billing/packageProduction/packageProductionForm/PackageProductionForm";
+import Documents from "components/APPLICATIONS/documents/documents/Documents";
+import DocumentForm from "components/APPLICATIONS/documents/documents/documentForm/DocumentForm";
+import CategoryProduction from "components/APPLICATIONS/billing/categoryProduction/CategoryProduction";
+import CategoryProductionForm from "components/APPLICATIONS/billing/categoryProduction/categoryProductionForm/CategoryProductionForm";
+import CategoryProductionDetails from "components/APPLICATIONS/billing/categoryProduction/details/CategoryProductionDetails";
+import Statistic from "components/APPLICATIONS/billing/statistic/Statistic";
+import MonthlyStatistic from "components/APPLICATIONS/billing/statistic/MonthlyStatistic";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -118,51 +130,153 @@ const Router = () => {
 
           {routes}
 
-          <Route path="/billing/statistic" element={<Statistic />} />
-          <Route path="/billing/current-balance" element={<CurrentBalance />} />
-          <Route path="/billing/nominal-balance" element={<Nominal />} />
+          <Route path="/billing/statistic/:user" element={<Statistic />} />
           <Route
-            path="/billing/balance/action/:action"
-            element={<AddBalance />}
+            path="/billing/statistic/monthly/:user"
+            element={<MonthlyStatistic />}
           />
-          <Route path="/billing/balance/rates" element={<CurrencyRates />} />
-          <Route path="/billing/balance/recount" element={<BalanceRecount />} />
-          <Route path="/billing/balance/nullify" element={<BalanceNullify />} />
-          <Route path="/billing/comparison-act" element={<ComparisonAct />} />
-
           {/*new routes for new project */}
 
           <Route path="/documents/editor" element={<DocEditor />} />
           <Route path="/documents/categories" element={<DocCatalogs />} />
           <Route path="/documents/templates" element={<Templates />} />
-          <Route
+          {/* <Route
             path="/documents/templates/:templateId"
             element={<TemplateDetails />}
+          /> */}
+          <Route
+            path="/documents/templates/:templateId"
+            element={<TemplateDetailsJodit />}
           />
           <Route
             path="/documents/templateColumns"
             element={<TemplateColumns />}
           />
+          <Route path="/documents/documents" element={<Documents />} />
+          <Route
+            path="/documents/documents/:action"
+            element={<DocumentForm />}
+          />
+
+          <Route
+            path="/billing/service-production"
+            element={<ServiceProductions />}
+          />
+          <Route
+            path="/billing/service-production/:action"
+            element={<ServiceProductionForm />}
+          />
+          <Route
+            path="/billing/service-production/:action/:id"
+            element={<ServiceProductionForm />}
+          />
+          <Route
+            path="/billing/service-production/details/:id"
+            element={<ServiceProductionDetails />}
+          />
+
+          <Route
+            path="/billing/category-production"
+            element={<CategoryProduction />}
+          />
+          <Route
+            path="/billing/category-production/:action"
+            element={<CategoryProductionForm />}
+          />
+          <Route
+            path="/billing/category-production/:action/:id"
+            element={<CategoryProductionForm />}
+          />
+          <Route
+            path="/billing/category-production/details/:id"
+            element={<CategoryProductionDetails />}
+          />
+
+          <Route
+            path="/billing/service-parameters"
+            element={<ServiceParameters />}
+          />
+          <Route
+            path="/billing/service-parameters/:action"
+            element={<ServiceParametersForm />}
+          />
+          <Route
+            path="/billing/service-parameters/:action/:id"
+            element={<ServiceParametersForm />}
+          />
+          <Route
+            path="/billing/service-parameters/details/:id"
+            element={<ServiceParametersDetails />}
+          />
+
+          <Route
+            path="/billing/service-parameter-types"
+            element={<ServiceParameterTypes />}
+          />
+          <Route
+            path="/billing/service-parameter-types/:action"
+            element={<ServiceParameterTypesForm />}
+          />
+          <Route
+            path="/billing/service-parameter-types/:action/:id"
+            element={<ServiceParameterTypesForm />}
+          />
+
+          <Route path="/billing/service-prices" element={<ServicePrices />} />
+          <Route
+            path="/billing/service-prices/:action"
+            element={<ServicePricesForm />}
+          />
+          <Route
+            path="/billing/service-prices/:action/:id"
+            element={<ServicePricesForm />}
+          />
+
+          <Route path="/billing/spec-prices" element={<SpecPrices />} />
+          <Route
+            path="/billing/spec-prices/:action"
+            element={<SpecPricesForm />}
+          />
+          <Route
+            path="/billing/spec-prices/:action/:id"
+            element={<SpecPricesForm />}
+          />
+
+          <Route path="/billing/charges" element={<Charges />} />
+          <Route path="/billing/charges/:action" element={<ChargesForm />} />
+          <Route
+            path="/billing/charges/:action/:id"
+            element={<ChargesForm />}
+          />
+
+          <Route path="/billing/sales" element={<Sales />} />
+          <Route path="/billing/sales/:action" element={<SalesForm />} />
+          <Route path="/billing/sales/:action/:id" element={<SalesForm />} />
+
+          <Route path="/billing/packages" element={<BillingPackages />} />
+          <Route
+            path="/billing/packages/:action"
+            element={<BillingPackagesForm />}
+          />
+          <Route
+            path="/billing/packages/:action/:id"
+            element={<BillingPackagesForm />}
+          />
+
+          <Route
+            path="/billing/package-production"
+            element={<PackageProductions />}
+          />
+          <Route
+            path="/billing/package-production/:action"
+            element={<PackageProductionForm />}
+          />
+          <Route
+            path="/billing/package-production/:action/:id"
+            element={<PackageProductionForm />}
+          />
 
           {/*new routes for new project end*/}
-
-          {/* error list temporary */}
-          <Route path="/billing/our-error-list" element={<OurErrorList />} />
-          <Route
-            path="/billing/our-error-list/:action/:id?"
-            element={<OurErrorListForm />}
-          />
-          <Route
-            path="/billing/owner-error-list/show/:id"
-            element={<OwnerErrorList />}
-          />
-          <Route
-            path="/billing/owner-error-list/:action/:id?"
-            element={<OwnerErrorListForm />}
-          />
-          {/* error list temporary */}
-
-          <Route path="/billing/payers/:transactionId" element={<Payers />} />
 
           {/* test routes end*/}
           <Route path="blank" element={<Blank />} />
@@ -237,15 +351,6 @@ const Router = () => {
         <Route element={<LayoutBlank />}>
           <Route path="*" element={<Error404 />} />
         </Route>
-
-        <Route
-          path="/billing/comparison-act/generate"
-          element={<ComparisonActGenerate />}
-        />
-        <Route
-          path="/billing/comparison-act/details"
-          element={<ComparisonActDetails />}
-        />
       </Routes>
     </BrowserRouter>
   );

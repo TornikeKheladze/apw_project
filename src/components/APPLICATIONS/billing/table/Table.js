@@ -17,10 +17,11 @@ const Table = ({
   fetchedArr,
   sortHandler,
   sortConfig,
-  searchSubmit,
+  searchSubmit = () => {},
   optionsObj = {},
-  deleteAndUpdate,
   excelExporFunc,
+  filter = { filter: {}, setFilter: () => {} },
+  actions,
 }) => {
   const { pathname } = useLocation();
 
@@ -139,6 +140,7 @@ const Table = ({
               return (
                 <th key={item.name + item.label}>
                   <SelectSearch
+                    filter={filter}
                     searchOnChoose={searchSubmit}
                     options={optionsObj[item.name]}
                     colName={item.name}
@@ -150,7 +152,11 @@ const Table = ({
             } else {
               return (
                 <th key={item.name + item.label}>
-                  <TableInput fieldName={item.name} type={item.filter} />
+                  <TableInput
+                    filter={filter}
+                    fieldName={item.name}
+                    type={item.filter}
+                  />
                 </th>
               );
             }
@@ -162,11 +168,7 @@ const Table = ({
         {fetchedArr?.map((row, rowIndex) => (
           <tr key={rowIndex}>
             <td>
-              <Actions
-                deleteAndUpdate={deleteAndUpdate}
-                target={target}
-                element={row}
-              />
+              <Actions target={target} element={row} actions={actions} />
             </td>
             {tableHeaders.map((value, columnIndex) => (
               <td key={columnIndex}>

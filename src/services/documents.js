@@ -113,3 +113,12 @@ export const generateDocument = (data) => {
 export const getAllCatalogTypes = () => {
   return instance.get(`document/catalog-type`);
 };
+
+export const signDocument = (data) => {
+  return instance.post("document/doc-file/html-tu-pdf", data);
+};
+
+export const downloadSignedDocument = (id) => {
+  return instance.get(`document/doc-file/html-tu-pdf-download/${id}`);
+};
+// https://test-dga-authorisation.apw.ge/api/document/doc-file/html-tu-pdf-download/662a57c16982aa213dba530a

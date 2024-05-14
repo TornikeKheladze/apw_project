@@ -1,100 +1,91 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { saveCustomers } from "reducers/CustomerReducer";
-import { getCustomers } from "services/customers";
+import { useState } from "react";
 import { removeEmpty } from "helpers/removeEmpty";
-import { deleteService, getCurrencies, getServices } from "services/services";
-import { saveServices } from "reducers/ServiceReducer";
-
-import { saveServiceCategories } from "reducers/ServiceCategoryReducer";
-import { saveCurrencies } from "reducers/CurrencyReducer";
+import { getAllServices, updateService } from "services/services";
 import { idToName } from "helpers/idToName";
-import { getServiceCategories } from "services/serviceCategories";
 import { filterArray } from "helpers/filterArray";
-import { setFilter } from "reducers/FilterReducer";
+import { useMutation, useQuery } from "react-query";
+import { getCategories } from "services/serviceCategories";
+import { useQueryClient } from "react-query";
+import { getAllUsers } from "services/users";
+import { statusBadge } from "helpers/CheckStatusForBilling";
 
 export const useServices = () => {
-  const dispatch = useDispatch();
-  const { filter } = useSelector((store) => store.filter);
-  const [loading, setLoading] = useState(false);
-  // const [actionLoading, setActionLoading] = useState(false);
-  const [updatedList, setUpdatedList] = useState([]);
+  const queryClient = useQueryClient();
+  const [filter, setFilter] = useState({});
+  const [alert, setAlert] = useState({ message: "", type: "success" });
 
-  const { services } = useSelector((store) => store.service);
-  const { serviceCategories } = useSelector((store) => store.serviceCategory);
-  const { currencies } = useSelector((store) => store.currency);
-  const { customers } = useSelector((store) => store.customer);
+  const { data: servicesData = [{}], isLoading: servicesLoading } = useQuery({
+    queryKey: "getAllServices",
+    queryFn: () => getAllServices().then((res) => res.data),
+  });
 
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        setLoading(true);
-        const [owners, serv, cat, curr] = await Promise.all([
-          getCustomers(),
-          getServices(),
-          getServiceCategories(),
-          getCurrencies(),
-        ]);
-        dispatch(saveServices(serv.data.filter(({ active }) => active === 1)));
-        dispatch(saveServiceCategories(cat.data));
-        dispatch(saveCurrencies(curr.data));
-        dispatch(saveCustomers(owners.data));
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    };
-    fetchInitialData();
-  }, [dispatch]);
+  const { data: categoriesData = [{}], isLoading: categoriesLoading } =
+    useQuery({
+      queryKey: "getCategories",
+      queryFn: () => getCategories().then((res) => res.data),
+    });
+  const { data: users = [{}], isLoading: usersLoading } = useQuery({
+    queryKey: "getAllUsers",
+    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  });
 
-  const filterHandler = () => {
-    // try {
-    //   setActionLoading(true);
-    //   const serv = await filterService(removeEmpty(filter));
-    //   dispatch(saveServices(serv.data));
-    //   setActionLoading(false);
-    // } catch (error) {
-    //   console.log(error);
-    //   setActionLoading(false);
-    // }
-    // dispatch(setFilter({}));
-  };
-  useEffect(() => {
-    const updated = filterArray(services, removeEmpty(filter))?.map(
-      (service) => {
-        return {
-          ...service,
-          category_id: idToName(serviceCategories, service.category_id),
-          owner_id: idToName(customers, service.owner_id),
-          currency_id: idToName(currencies, service.currency_id),
-        };
-      }
-    );
+  const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
+    mutationFn: (id) => updateService(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries("getAllServices");
+      setAlert({ message: "სერვისი წარმატებით შეიცვალა", type: "success" });
+      setTimeout(() => {
+        setAlert({ message: "", type: "success" });
+      }, 2500);
+    },
+  });
 
-    setUpdatedList(updated);
-  }, [services, customers, serviceCategories, currencies, filter]);
+  const services = servicesData.map((service) => ({
+    ...service,
+    id: service.serviceID,
+  }));
 
-  const deleteAndUpdate = async (id) => {
-    await deleteService(id);
-    setTimeout(() => {
-      dispatch(saveServices(services.filter((service) => +service.id !== +id)));
-    }, 1600);
+  const categories = categoriesData.map((category) => ({
+    ...category,
+    id: category.catID,
+    name: category.categoryName,
+  }));
+
+  const updatedList = filterArray(services, removeEmpty(filter))?.map(
+    (service) => {
+      return {
+        ...service,
+        categoryID: idToName(categories, service.categoryID),
+        ownerID: idToName(
+          users.map((user) => ({ ...user, id: user.user_id })),
+          service.ownerID
+        ),
+        active: statusBadge(service.active),
+      };
+    }
+  );
+
+  const activationHandler = (id) => {
+    const service = services.find((service) => service.serviceID === id);
+    updateMutate({ ...service, active: service.active === 1 ? 0 : 1 });
   };
 
-  useEffect(() => {
-    return () => {
-      dispatch(setFilter({}));
-    };
-  }, [dispatch]);
+  const isActive = (id) =>
+    services.find((service) => service.serviceID === id)?.active === 1
+      ? true
+      : false;
 
   return {
-    loading,
+    loading: servicesLoading || categoriesLoading || usersLoading,
     updatedList,
-    serviceCategories,
-    deleteAndUpdate,
-    filterHandler,
-    currencies,
-    owners: customers.filter(({ type }) => type === "owner"),
+    activation: {
+      activationHandler,
+      updateLoading,
+      isActive,
+    },
+    alert,
+    categories,
+    filter,
+    setFilter,
   };
 };

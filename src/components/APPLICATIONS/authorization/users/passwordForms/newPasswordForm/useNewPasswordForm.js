@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+import { useMutation } from "react-query";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { updateUserData } from "services/users";
+import { updatePassword } from "services/users";
 
 export const useNewPasswordForm = () => {
   const {
@@ -13,10 +13,24 @@ export const useNewPasswordForm = () => {
     setError,
   } = useForm();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const restUserData = useSelector((state) => state.user.user);
+  const { authorizedUser } = useSelector((state) => state.user);
+  const [alert, setAlert] = useState({ message: "", type: "success" });
 
-  const { id } = useParams();
+  const { mutate: updateMutate, isLoading } = useMutation({
+    mutationFn: updatePassword,
+    onSuccess: () => {
+      setAlert({ type: "success", message: "პაროლი წარმატებით შეიცვალა" });
+      setTimeout(() => {
+        setAlert({ type: "success", message: "" });
+      }, 3000);
+    },
+    onError: (data) => {
+      setAlert({ type: "danger", message: data.response.data.description });
+      setTimeout(() => {
+        setAlert({ type: "danger", message: "" });
+      }, 3000);
+    },
+  });
 
   const passwordInput = useWatch({
     name: "password",
@@ -24,7 +38,7 @@ export const useNewPasswordForm = () => {
   });
 
   const passwordConfirmInput = useWatch({
-    name: "password_confirm",
+    name: "password_confirmation",
     control: control,
   });
 
@@ -35,25 +49,7 @@ export const useNewPasswordForm = () => {
         message: "პაროლები უნდა ემთხვეოდეს",
       });
     } else {
-      const userData = {
-        name: restUserData?.name,
-        email: restUserData?.email,
-        password: data?.password,
-        oid: restUserData?.oid,
-        did: restUserData?.did,
-        pid: restUserData?.pid,
-        date_expiration: restUserData.date_expiration,
-        id,
-      };
-      try {
-        await updateUserData(userData);
-        setSuccessMessage("პაროლი წარმატებით შეიცვალა");
-        setTimeout(() => {
-          setSuccessMessage("");
-        }, 3000);
-      } catch (error) {
-        console.log(error);
-      }
+      updateMutate({ ...authorizedUser, ...data });
     }
   };
 
@@ -63,7 +59,9 @@ export const useNewPasswordForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    successMessage,
     onSubmit,
+    alert,
+    setAlert,
+    isLoading,
   };
 };

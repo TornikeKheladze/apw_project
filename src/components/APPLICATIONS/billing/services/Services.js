@@ -1,20 +1,20 @@
 import Table from "../table/Table";
 import LoadingSpinner from "components/icons/LoadingSpinner";
-import { servicesArr } from "../formArrays/formArrays";
-
 import { useServices } from "./useServices";
 import BilHeader from "../bilHeader/BilHeader";
 import useCheckPermission from "helpers/useCheckPermission";
+import { serviceArr } from "../formArrays/serviceArr";
+import Alert from "components/Alert";
 
 const Services = () => {
   const {
     loading,
     updatedList,
-    serviceCategories,
-    deleteAndUpdate,
-    filterHandler,
-    currencies,
-    owners,
+    categories,
+    alert,
+    filter,
+    setFilter,
+    activation,
   } = useServices();
 
   return (
@@ -29,23 +29,25 @@ const Services = () => {
           loading && "overflow-x-hidden"
         }`}
       >
-        {loading && <LoadingSpinner blur />}
+        {loading ? (
+          <LoadingSpinner blur />
+        ) : (
+          <Table
+            filter={{ filter, setFilter }}
+            staticArr={serviceArr}
+            fetchedArr={updatedList}
+            optionsObj={{
+              categoryID: categories,
+            }}
+            actions={{ details: true, edit: true, activation }}
+          />
+        )}
 
-        <Table
-          searchSubmit={filterHandler}
-          staticArr={servicesArr}
-          fetchedArr={updatedList}
-          deleteAndUpdate={deleteAndUpdate}
-          optionsObj={{
-            category_id: serviceCategories,
-            currency_id: currencies,
-            owner_id: owners,
-          }}
-        />
         {updatedList.length === 0 && !loading && (
           <div className="mt-10">ინფორმაცია ვერ მოიძებნა</div>
         )}
       </div>
+      <Alert dismissable color={alert.type} message={alert.message} />
     </main>
   );
 };

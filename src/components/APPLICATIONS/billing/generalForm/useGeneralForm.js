@@ -2,7 +2,7 @@ import { convertBase64 } from "helpers/convertBase64";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-const useGeneralForm = (formArray) => {
+const useGeneralForm = (formArray, updateDataObj) => {
   const [formData, setFormData] = useState({});
   const [imageForDisplay, setImageForDisplay] = useState("");
 
@@ -44,7 +44,11 @@ const useGeneralForm = (formArray) => {
   }, [formData]);
 
   useEffect(() => {
-    if (localStorage.getItem("formInputData")) {
+    if (updateDataObj) {
+      formArray.forEach((field) => {
+        setValue(field.name, updateDataObj[field.name]);
+      });
+    } else if (localStorage.getItem("formInputData")) {
       formArray.forEach((field) => {
         setValue(
           field.name,
@@ -52,7 +56,8 @@ const useGeneralForm = (formArray) => {
         );
       });
     }
-  }, [setValue, formArray]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     register,

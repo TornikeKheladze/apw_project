@@ -27,3 +27,15 @@ export const templateColumnsArr = [
   { name: "column_type_id", label: "ტიპი", type: "select" },
   { name: "template_id", label: "შაბლონი", type: "select" },
 ];
+
+export const templateColumnsInTemplatesArr = [
+  { name: "column_placeholder", label: "სახელი (placeholder)", type: "text" },
+  { name: "column_marker", label: "მარკერი", type: "text" },
+  { name: "column_type_id", label: "ტიპი", type: "select" },
+];
+
+export const documentsArr = [
+  { name: "document_name", label: "დოკუმენტის სახელი", type: "text" },
+  { name: "cat_id", label: "კატეგორია", type: "text" },
+  { name: "template_id", label: "შაბლონი", type: "select" },
+];

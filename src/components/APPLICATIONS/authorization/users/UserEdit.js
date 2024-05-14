@@ -8,12 +8,21 @@ import Tabs, {
 } from "components/Tabs";
 import UserForm from "./userForm/UserForm";
 import Button from "components/Button";
-import { useNavigate } from "react-router-dom";
-import Password from "./passwordForms/Password";
+import { useNavigate, useParams } from "react-router-dom";
 import UserRoles from "./userRoles/UserRoles";
+import { useSelector } from "react-redux";
+import SuperAdminDetails from "./userForm/SuperAdminDetails";
+import NewPasswordForm from "./passwordForms/newPasswordForm/NewPasswordForm";
 
 const UserEdit = () => {
   const navigate = useNavigate();
+  const { authorizedUser } = useSelector((store) => store.user);
+  const { action, id } = useParams();
+
+  const regularUserEditing =
+    authorizedUser.id !== undefined &&
+    action === "edit" &&
+    !((authorizedUser.superAdmin && +authorizedUser.id === +id) || false);
 
   return (
     <main className="workspace">
@@ -24,17 +33,19 @@ const UserEdit = () => {
             <TabsNavigation>
               <TabsNavigationItem index={1}>დეტალები</TabsNavigationItem>
               <TabsNavigationItem index={2}>როლები</TabsNavigationItem>
-              <TabsNavigationItem index={3}>უსაფრთხოება</TabsNavigationItem>
+              {+authorizedUser.id === +id && (
+                <TabsNavigationItem index={3}>უსაფრთხოება</TabsNavigationItem>
+              )}
             </TabsNavigation>
             <TabsContent>
               <TabsContentItem index={1}>
-                <UserForm />
+                {regularUserEditing ? <UserForm /> : <SuperAdminDetails />}
               </TabsContentItem>
               <TabsContentItem index={2}>
                 <UserRoles />
               </TabsContentItem>
               <TabsContentItem index={3}>
-                <Password />
+                <NewPasswordForm />
               </TabsContentItem>
             </TabsContent>
           </Tabs>

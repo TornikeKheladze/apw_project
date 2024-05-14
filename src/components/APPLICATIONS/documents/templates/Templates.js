@@ -9,6 +9,7 @@ import PlusIcon from "components/icons/PlusIcon";
 import { idToName } from "helpers/idToName";
 import Footer from "partials/Footer";
 import { useTemplates } from "./useTemplates";
+import { truncateText } from "helpers/truncateText";
 
 const Templates = () => {
   const {
@@ -106,6 +107,7 @@ const Templates = () => {
             fetchedArr={templates.map((item) => {
               return {
                 ...item,
+                template_code: truncateText(item?.template_code, 40),
                 org_id_displayName: idToName(organizations, item.org_id),
                 cat_id_displayName: idToName(catalogs, item.cat_id),
               };

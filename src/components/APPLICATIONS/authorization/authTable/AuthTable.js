@@ -24,9 +24,10 @@ const AuthTable = ({ staticArr, fetchedArr, actions = {} }) => {
           <tr key={rowIndex}>
             <td className="w-32">
               <Actions
-                deleteClick={actions.deleteClick}
-                editClick={actions.editClick}
-                detailClick={actions.detailClick}
+                // deleteClick={actions.deleteClick}
+                // editClick={actions.editClick}
+                // detailClick={actions.detailClick}
+                actions={actions}
                 row={row}
               />
             </td>

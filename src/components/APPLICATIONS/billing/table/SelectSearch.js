@@ -1,18 +1,17 @@
 import Input from "components/form/Input";
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { setFilter } from "reducers/FilterReducer";
 
-const SelectSearch = ({ options = [], colName, searchOnChoose }) => {
+const SelectSearch = ({
+  options = [],
+  colName,
+  searchOnChoose,
+  filter: { filter, setFilter },
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const { pathname } = useLocation();
-
-  const { filter } = useSelector((store) => store.filter);
-
-  const dispatch = useDispatch();
 
   const ref = useRef(null);
 
@@ -40,27 +39,15 @@ const SelectSearch = ({ options = [], colName, searchOnChoose }) => {
 
   const handleSelect = (selectedValue) => {
     if (selectedValue) {
-      setSearchTerm(
-        selectedValue.name ||
-          selectedValue.name_geo ||
-          selectedValue.currency_name
-      );
-      dispatch(setFilter({ ...filter, [colName]: selectedValue.id }));
-      if (
-        pathname === "/billing/transactions" ||
-        pathname === "/billing/customers" ||
-        pathname === "/billing/transactions/returned"
-      ) {
+      setSearchTerm(selectedValue.name);
+      setFilter({ ...filter, [colName]: selectedValue.id });
+      if (pathname === "/billing/transactions") {
         searchOnChoose({ ...filter, [colName]: selectedValue.id });
       }
     } else {
       setSearchTerm("");
-      dispatch(setFilter({ ...filter, [colName]: selectedValue }));
-      if (
-        pathname === "/billing/transactions" ||
-        pathname === "/billing/customers" ||
-        pathname === "/billing/transactions/returned"
-      ) {
+      setFilter({ ...filter, [colName]: selectedValue });
+      if (pathname === "/billing/transactions") {
         searchOnChoose({ ...filter, [colName]: selectedValue });
       }
     }
@@ -84,10 +71,10 @@ const SelectSearch = ({ options = [], colName, searchOnChoose }) => {
 
   useEffect(() => {
     if (!searchTerm) {
-      dispatch(setFilter({ ...filter, [colName]: null }));
+      setFilter({ ...filter, [colName]: null });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colName, dispatch, searchTerm]);
+  }, [colName, searchTerm]);
 
   return (
     <div ref={ref} className="relative inline-block text-left cursor-pointer">
@@ -109,7 +96,7 @@ const SelectSearch = ({ options = [], colName, searchOnChoose }) => {
           {filteredOptions.map((option) => (
             <li
               className="hover:bg-gray-300 text-xs font-light mb-2"
-              key={option.id}
+              key={option.id + Math.random()}
               onClick={() => handleSelect(option)}
             >
               {/* temporary name */}

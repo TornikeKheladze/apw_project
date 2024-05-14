@@ -27,7 +27,7 @@ const List = ({
             return (
               <tr
                 className="flex md:flex-row justify-between flex-col"
-                key={item.id}
+                key={item.id + Math.random()}
               >
                 <td
                   onClick={() =>
