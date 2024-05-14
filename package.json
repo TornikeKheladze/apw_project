@@ -55,7 +55,7 @@
   "scripts": {
     "dev": "npm run start",
     "start": "craco start",
-    "build": "craco build",
+    "build": "staging",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
