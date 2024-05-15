@@ -1,16 +1,5 @@
 import { instance } from "./axios";
 
-// export const getTransactions = async (page) => {
-//   return instance.get(`/transactions?page=${page}`);
-// };
-// export const filterTransactions = async (data, page) => {
-//   return instance.post(`/transactions/filter?page=${page}`, data);
-// };
-
-// export const getTransactionById = async (id) => {
-//   return instance.get(`/transactions/${id}`);
-// };
-
 export const getAllServices = () => {
   return instance.get("/billing-java/services");
 };
