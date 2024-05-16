@@ -24,6 +24,7 @@ const Toasts = (props) => {
     return () => {
       clearInterval(interval);
     };
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {

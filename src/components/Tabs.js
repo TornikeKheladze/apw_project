@@ -20,7 +20,7 @@ const Tabs = (props) => {
     if (onActiveIndexChange) {
       onActiveIndexChange(activeTab);
     }
-  }, [activeTab]);
+  }, [activeTab, onActiveIndexChange]);
 
   return (
     <TabsContext.Provider value={{ activeTab, setActiveTab }}>

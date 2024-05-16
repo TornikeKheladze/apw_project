@@ -97,7 +97,7 @@ const CustomMenuBar = () => {
     } else {
       dispatch(toggleMenu(false));
     }
-  }, [windowSize]);
+  }, [windowSize, dispatch]);
 
   return (
     <MenuBarContext.Provider value={{ isOpen, hideMenuDetail }}>
@@ -463,8 +463,6 @@ const MenuDetailApplications = () => {
 const MenuDetailMenu = () => {
   const { isOpen } = useContext(MenuBarContext);
 
-  const [menuType, switchMenuType] = useMenuType();
-
   const [menuGrandParentCollapse, setMenuGrandParentCollapse] = useState(true);
   const [menuParentCollapse, setMenuParentCollapse] = useState(true);
 
@@ -535,19 +533,19 @@ const MenuDetailMenu = () => {
         </Collapse>
         <hr />
         <h6 className="uppercase">Menu Types</h6>
-        <button onClick={() => switchMenuType("default")}>
+        <button>
           <span className="la la-hand-point-right"></span>
           Default
         </button>
-        <button onClick={() => switchMenuType("hidden")}>
+        <button>
           <span className="la la-hand-point-left"></span>
           Hidden
         </button>
-        <button onClick={() => switchMenuType("icon-only")}>
+        <button>
           <span className="la la-th-large"></span>
           Icon Only
         </button>
-        <button onClick={() => switchMenuType("wide")}>
+        <button>
           <span className="la la-arrows-alt-h"></span>
           Wide
         </button>

@@ -4,7 +4,6 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 
 import Button from "components/Button";
-import Dropdown from "components/Dropdown";
 
 import usePagination, { dots } from "utilities/hooks/usePagination";
 
@@ -18,7 +17,7 @@ const Pagination = (props) => {
     pageSize,
     className,
     onPageChange,
-    onPageSizeChange,
+    // onPageSizeChange,
   } = props;
 
   const paginationRange = usePagination({
@@ -34,7 +33,7 @@ const Pagination = (props) => {
 
   const lastPage = paginationRange[paginationRange.length - 1];
 
-  const pageSizes = [5, 10, 15];
+  // const pageSizes = [5, 10, 15];
 
   const changePage = (page) => {
     if (onPageChange) {
@@ -42,11 +41,11 @@ const Pagination = (props) => {
     }
   };
 
-  const changePagSize = (size) => {
-    if (onPageSizeChange) {
-      onPageSizeChange(size);
-    }
-  };
+  // const changePagSize = (size) => {
+  //   if (onPageSizeChange) {
+  //     onPageSizeChange(size);
+  //   }
+  // };
 
   const next = () => {
     if (onPageChange) {

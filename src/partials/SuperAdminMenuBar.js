@@ -26,9 +26,7 @@ import TransactionIcon from "components/icons/TransactionIcon";
 import StatisticIcon from "components/icons/StatisticIcon";
 import { MenuBarCollapse } from "components/collapse/Collapse";
 import DocumentIcon from "components/icons/DocumentIcon";
-import DocEditIcon from "components/icons/DocEditIcon";
 import PackageIcon from "components/icons/PackageIcon";
-import TagIcon from "components/icons/TagIcon";
 import PuzzleIcon from "components/icons/PuzzleIcon";
 
 const MenuBarContext = createContext();
@@ -782,8 +780,6 @@ const MenuDetailApplications = () => {
 const MenuDetailMenu = () => {
   const { isOpen } = useContext(MenuBarContext);
 
-  const [menuType, switchMenuType] = useMenuType();
-
   const [menuGrandParentCollapse, setMenuGrandParentCollapse] = useState(true);
   const [menuParentCollapse, setMenuParentCollapse] = useState(true);
 
@@ -854,19 +850,19 @@ const MenuDetailMenu = () => {
         </DefaultCollapse>
         <hr />
         <h6 className="uppercase">Menu Types</h6>
-        <button onClick={() => switchMenuType("default")}>
+        <button>
           <span className="la la-hand-point-right"></span>
           Default
         </button>
-        <button onClick={() => switchMenuType("hidden")}>
+        <button>
           <span className="la la-hand-point-left"></span>
           Hidden
         </button>
-        <button onClick={() => switchMenuType("icon-only")}>
+        <button>
           <span className="la la-th-large"></span>
           Icon Only
         </button>
-        <button onClick={() => switchMenuType("wide")}>
+        <button>
           <span className="la la-arrows-alt-h"></span>
           Wide
         </button>

@@ -1,7 +1,5 @@
 import Customizer from "partials/Customizer";
-import MenuBar from "partials/MenuBar";
 import TopBar from "partials/TopBar";
-import CustomMenuBar from "./CustomMenuBar";
 import SuperAdminMenuBar from "./SuperAdminMenuBar";
 import ScrollToTop from "components/icons/ScrollToTop";
 

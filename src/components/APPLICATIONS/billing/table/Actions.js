@@ -4,8 +4,6 @@ import DeleteModal from "components/customModal/DeleteModal";
 import CheckedIcon from "components/icons/CheckedIcon";
 import DetailsIcon from "components/icons/DetailsIcon";
 import ErrorIcon from "components/icons/ErrorIcon";
-import { billingPermissionsObject } from "data/permissionsObject";
-import useCheckPermission from "helpers/useCheckPermission";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -15,7 +13,7 @@ const Actions = ({ target, element, actions = {} }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isActivationModalOpen, setIsActivationModalOpen] = useState(false);
 
-  const permissionsForTarget = billingPermissionsObject[target] || [];
+  // const permissionsForTarget = billingPermissionsObject[target] || [];
 
   return (
     <div className="flex gap-2 justify-evenly">

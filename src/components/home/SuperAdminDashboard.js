@@ -14,7 +14,6 @@ import DataChartJS from "data/chartjs";
 import OrgIcon from "components/icons/OrgIcon";
 import UserIcon from "components/icons/UserIcon";
 import { Link } from "react-router-dom";
-import LoadingSpinner from "components/icons/LoadingSpinner";
 
 const SuperAdminDashboard = () => {
   // const [loading, setLoading] = useState(false);
