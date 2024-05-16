@@ -3,7 +3,7 @@ FROM nginx:1.23
 WORKDIR /usr/share/nginx
 
 COPY devops/web.conf /etc/nginx/conf.d/
-COPY build/ /usr/share/dist/
+COPY dist/ /usr/share/dist/
 
 EXPOSE 9090/tcp
 CMD ["nginx", "-g", "daemon off;"]
