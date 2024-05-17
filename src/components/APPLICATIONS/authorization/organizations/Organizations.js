@@ -9,14 +9,14 @@ import Tabs, {
 
 import Button from "components/Button";
 import useOrganization from "./useOrganization";
-import AddOrganization from "./addOrganization/AddOrganization";
-import EditOrganizationModal from "./editOrganizationModal/EditOrganizationModal";
 import Dropdown from "components/Dropdown";
 import Paths from "components/paths/Paths";
-import DeleteModal from "components/customModal/DeleteModal";
 import List from "components/list/List";
 import Alert from "components/Alert";
 import LoadingSpinner from "components/icons/LoadingSpinner";
+import Modal, { ModalBody, ModalFooter, ModalHeader } from "components/Modal";
+import AuthForm from "../authForm/AuthForm";
+import { orgArr } from "components/APPLICATIONS/billing/formArrays/authArr";
 
 const Organizations = () => {
   const {
@@ -32,21 +32,8 @@ const Organizations = () => {
       orgsLoading,
       orgTypesLoading,
     },
-    states: {
-      isEditModalOpen,
-      isDeleteModalOpen,
-      choosenOrganization,
-      successMessage,
-      choosenType,
-      input,
-    },
-    setStates: {
-      setIsEditModalOpen,
-      setIsDeleteModalOpen,
-      setChoosenOrganization,
-      setChoosenType,
-      setInput,
-    },
+    states: { choosenOrganization, successMessage, openModal },
+    setStates: { setChoosenOrganization, setOpenModal },
     mutates: { deleteMutate, updateMutate, addMutate },
   } = useOrganization();
 
@@ -93,8 +80,18 @@ const Organizations = () => {
             {!orgsLoading && !orgTypesLoading ? (
               organizations.length ? (
                 <List
-                  openDelete={setIsDeleteModalOpen}
-                  openEdit={setIsEditModalOpen}
+                  openDelete={() => {
+                    setOpenModal({
+                      open: true,
+                      action: "წაშლა",
+                    });
+                  }}
+                  openEdit={() => {
+                    setOpenModal({
+                      open: true,
+                      action: "შეცვლა",
+                    });
+                  }}
                   setChoosenItem={setChoosenOrganization}
                   items={currentOrganizations}
                   title={"ორგანიზაციის დასახელება"}
@@ -127,48 +124,89 @@ const Organizations = () => {
 
       <Alert message={successMessage} color="success" dismissable />
 
-      {/* temporary admin check */}
-      {authorizedUser.superAdmin && (
-        <AddOrganization
-          input={input}
-          setInput={setInput}
-          choosenType={choosenType}
-          setChoosenType={setChoosenType}
-          types={types}
-          add={addMutate}
-          loading={addLoading}
-        />
-      )}
-
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        setIsOpen={setIsDeleteModalOpen}
-        action={deleteMutate}
-        title={"ორგანიზაციის წაშლა"}
-        loading={deleteLoading}
-      />
-
-      <EditOrganizationModal
-        isOpen={isEditModalOpen}
-        setIsOpen={setIsEditModalOpen}
-        organization={choosenOrganization}
-        action={updateMutate}
-        loading={updateLoading}
-        types={types}
-      />
+      <Modal
+        active={openModal.open}
+        centered
+        onClose={() => {
+          setOpenModal({ open: false });
+          setChoosenOrganization({ id: "" });
+        }}
+      >
+        <ModalHeader>ორგანიზაციის {openModal.action}</ModalHeader>
+        {openModal.action === "შეცვლა" && (
+          <div className="p-5">
+            <AuthForm
+              formArray={orgArr}
+              submitHandler={updateMutate}
+              isLoading={updateLoading}
+              defaultValues={choosenOrganization}
+              optionsObj={{ type: types }}
+            />
+          </div>
+        )}
+        {openModal.action === "დამატება" && (
+          <div className="p-5">
+            <AuthForm
+              formArray={orgArr}
+              submitHandler={addMutate}
+              isLoading={addLoading}
+              optionsObj={{ type: types }}
+            />
+          </div>
+        )}
+        {openModal.action === "წაშლა" && (
+          <>
+            <ModalBody>
+              <p>ნამდვილად გსურთ წაშლა?</p>
+            </ModalBody>
+            <ModalFooter>
+              <div className="flex justify-between gap-3">
+                <Button
+                  color="secondary"
+                  onClick={() => setOpenModal({ open: false })}
+                >
+                  გაუქმება
+                </Button>
+                <Button
+                  className="min-w-[135px]"
+                  onClick={() => deleteMutate(choosenOrganization.id)}
+                >
+                  {deleteLoading ? <LoadingSpinner /> : "დადასტურება"}
+                </Button>
+              </div>
+            </ModalFooter>
+          </>
+        )}
+      </Modal>
 
       {/* temporary admin check */}
       {authorizedUser.superAdmin ? (
         <div className="card p-5">
-          <h3>ორგანიზაციები</h3>
+          <div className="flex justify-between items-center">
+            <h3>ორგანიზაციები</h3>
+            <Button
+              onClick={() =>
+                setOpenModal({
+                  open: true,
+                  action: "დამატება",
+                })
+              }
+              className="p-2 md:text-sm text-xs"
+            >
+              ორგანიზაციის შექმნა
+            </Button>
+          </div>
           <Tabs activeIndex={types.length && types[0].id} className="mt-5">
             <TabsNavigation className="flex items-center w-full justify-between border-none">
               <div className="hidden lg:flex justify-start gap-2">
                 {tabHeaders}
               </div>
               <div className="lg:hidden flex">{dropdown}</div>
-              <Button onClick={() => navigate("/organization-type-edit")}>
-                შეცვლა
+              <Button
+                className="p-1 md:text-sm text-xs"
+                onClick={() => navigate("/organization-type-edit")}
+              >
+                ტიპების ცვლილება
               </Button>
             </TabsNavigation>
             <TabsContent>{tabContents}</TabsContent>
@@ -182,8 +220,18 @@ const Organizations = () => {
             </div>
           ) : organizations?.length ? (
             <List
-              openDelete={setIsDeleteModalOpen}
-              openEdit={setIsEditModalOpen}
+              openDelete={() => {
+                setOpenModal({
+                  open: true,
+                  action: "წაშლა",
+                });
+              }}
+              openEdit={() => {
+                setOpenModal({
+                  open: true,
+                  action: "შეცვლა",
+                });
+              }}
               setChoosenItem={setChoosenOrganization}
               items={organizations}
               title={"ორგანიზაციის დასახელება"}

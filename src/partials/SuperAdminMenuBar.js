@@ -15,7 +15,7 @@ import useOnClickOutside from "utilities/hooks/useOnClickOutside";
 import useBrandedMenu from "utilities/hooks/useBrandedMenu";
 import useMenuType from "utilities/hooks/useMenuType";
 import useWindowSize from "utilities/hooks/useWindowSize";
-import HomeIcon from "components/icons/HomeIcon";
+// import HomeIcon from "components/icons/HomeIcon";
 import HeadersIcon from "components/icons/HeadersIcon";
 import AuthIcon from "components/icons/AuthIcon";
 import OrgIcon from "components/icons/OrgIcon";
@@ -154,16 +154,16 @@ const SuperAdminMenuBar = () => {
             </Link>
             <hr className="mx-8 my-4" />
           </div>
-          <Tippy content="Dashboard" singleton={target}>
+          {/* მენიუები მაქ დაკომენტარებული აქ */}
+          {/* <Tippy content="Dashboard" singleton={target}>
             <Link
               to="/"
               onClick={() => activateMenu("dashboard", false)}
               className={classNames("link", { active: isActive("dashboard") })}
             >
-              {/* <span className="icon la la-laptop"></span> */}
               <HomeIcon />
             </Link>
-          </Tippy>
+          </Tippy> */}
 
           {/* AUTH */}
           <Tippy content="AUTH" singleton={target}>
@@ -182,23 +182,6 @@ const SuperAdminMenuBar = () => {
               <MenuDetailAuth />
             </DefaultCollapse>
           ) : null}
-
-          {/* PAYMENTS */}
-          {/* <Tippy content="PAYMENTS" singleton={target}>
-            <button
-              onClick={() => activateMenu("payments")}
-              className={classNames("link", { active: isActive("payments") })}
-            >
-              <PaymentIcon />
-              <span className="title uppercase mt-1">payments</span>
-            </button>
-          </Tippy>
-          {menuType === "wide" ? (
-            <DefaultCollapse open={isActive("payments")}>
-              <MenuDetailPayments />
-            </DefaultCollapse>
-          ) : null} */}
-          {/*  */}
 
           {/*  Billing */}
           <Tippy content="BILLING" singleton={target}>
@@ -232,6 +215,7 @@ const SuperAdminMenuBar = () => {
             </DefaultCollapse>
           ) : null}
 
+          {/* 
           <Tippy content="UI" singleton={target}>
             <button
               onClick={() => activateMenu("ui")}
@@ -246,7 +230,9 @@ const SuperAdminMenuBar = () => {
               <MenuDetailUI />
             </DefaultCollapse>
           ) : null}
-          <Tippy content="Pages" singleton={target}>
+           */}
+
+          {/* <Tippy content="Pages" singleton={target}>
             <button
               onClick={() => activateMenu("pages")}
               className={classNames("link", { active: isActive("pages") })}
@@ -259,8 +245,9 @@ const SuperAdminMenuBar = () => {
             <DefaultCollapse open={isActive("pages")}>
               <MenuDetailPages />
             </DefaultCollapse>
-          ) : null}
-          <Tippy content="Applications" singleton={target}>
+          ) : null} */}
+
+          {/* <Tippy content="Applications" singleton={target}>
             <button
               onClick={() => activateMenu("applications")}
               className={classNames("link", {
@@ -275,8 +262,9 @@ const SuperAdminMenuBar = () => {
             <DefaultCollapse open={isActive("applications")}>
               <MenuDetailApplications />
             </DefaultCollapse>
-          ) : null}
-          <Tippy content="Menu" singleton={target}>
+          ) : null} */}
+
+          {/* <Tippy content="Menu" singleton={target}>
             <button
               onClick={() => activateMenu("menu")}
               className={classNames("link", { active: isActive("menu") })}
@@ -289,8 +277,9 @@ const SuperAdminMenuBar = () => {
             <DefaultCollapse open={isActive("menu")}>
               <MenuDetailMenu />
             </DefaultCollapse>
-          ) : null}
-          <Tippy content="Blank Page" singleton={target}>
+          ) : null} */}
+
+          {/* <Tippy content="Blank Page" singleton={target}>
             <Link
               to="/blank"
               onClick={() => activateMenu("blank", false)}
@@ -310,13 +299,12 @@ const SuperAdminMenuBar = () => {
               <span className="icon la la-book-open"></span>
               <span className="title">Docs</span>
             </a>
-          </Tippy>
+          </Tippy> */}
         </div>
 
         {menuType !== "wide" ? (
           <>
             <MenuDetailBilling />
-            {/* <MenuDetailPayments /> */}
             <MenuDetailDocuments />
             <MenuDetailAuth />
             <MenuDetailUI />

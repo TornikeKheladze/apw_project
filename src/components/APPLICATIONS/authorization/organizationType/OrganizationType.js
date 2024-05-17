@@ -113,7 +113,7 @@ const OrganizationType = () => {
             openEdit={setEditModalOpen}
             setChoosenItem={setCurrentType}
             items={types}
-            title={"პოზიციის დასახელება"}
+            title={"ტიპის დასახელება"}
           />
         ) : (
           <p>ტიპები არ მოიძებნა</p>

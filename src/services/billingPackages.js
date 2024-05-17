@@ -39,3 +39,15 @@ export const updateBillingPackageProduction = (data) => {
 export const deleteBillingPackageProduction = (id) => {
   return instance.delete(`/billing-java/packages-production/${id}`);
 };
+
+export const createInvoice = (data) => {
+  return instance.post("/billing-java/invoice", data);
+};
+
+export const createInvoiceDetails = (data) => {
+  return instance.post("/billing-java/invoice/details", data);
+};
+
+export const getInvoiceByNumber = (invoiceNumber) => {
+  return instance.get(`/billing-java/invoice/${invoiceNumber}`);
+};

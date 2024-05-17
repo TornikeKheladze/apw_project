@@ -76,7 +76,7 @@ const TopBar = () => {
         </Tooltip>
 
         {/* Navigations */}
-        <div className="self-stretch">
+        {/* <div className="self-stretch">
           <Dropdown
             arrow={true}
             placement="bottom"
@@ -119,10 +119,10 @@ const TopBar = () => {
           >
             <button className="flex items-center h-full ltr:ml-4 rtl:mr-4 lg:ltr:ml-1 lg:rtl:mr-1 px-2 text-2xl leading-none la la-box"></button>
           </Dropdown>
-        </div>
+        </div> */}
 
         {/* Notifications */}
-        <div className="self-stretch">
+        {/* <div className="self-stretch">
           <Dropdown
             arrow={true}
             content={
@@ -166,7 +166,7 @@ const TopBar = () => {
               </span>
             </button>
           </Dropdown>
-        </div>
+        </div> */}
 
         {/* User Menu */}
 

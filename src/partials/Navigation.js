@@ -1,4 +1,4 @@
-import Customizer from "partials/Customizer";
+// import Customizer from "partials/Customizer";
 import TopBar from "partials/TopBar";
 import SuperAdminMenuBar from "./SuperAdminMenuBar";
 import ScrollToTop from "components/icons/ScrollToTop";
@@ -10,7 +10,7 @@ const Navigation = () => {
       {/* <MenuBar /> */}
       {/* <CustomMenuBar /> */}
       <SuperAdminMenuBar className="bg-danger w-[1000px]" />
-      <Customizer />
+      {/* <Customizer /> */}
       <ScrollToTop />
     </>
   );

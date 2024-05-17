@@ -5,8 +5,8 @@ export const getOrganizations = async () => {
   return response;
 };
 
-export const addOrganization = async (name, type) => {
-  const response = await instance.post("/user/organisations", { name, type });
+export const addOrganization = async (data) => {
+  const response = await instance.post("/user/organisations", data);
   return response;
 };
 
