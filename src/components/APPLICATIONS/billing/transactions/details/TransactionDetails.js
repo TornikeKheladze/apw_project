@@ -36,18 +36,8 @@ const TransactionDetails = () => {
           }),
           transaction.serviceID
         ),
-        ownerID: idToName(
-          users.map((user) => {
-            return { ...user, id: user.user_id };
-          }),
-          transaction.ownerID
-        ),
-        agentID: idToName(
-          users.map((user) => {
-            return { ...user, id: user.user_id };
-          }),
-          transaction.agentID
-        ),
+        ownerID: idToName(users, transaction.ownerID),
+        agentID: idToName(users, transaction.agentID),
       }}
       loading={transactionLoading || categoriesLoading || usersLoading}
     />

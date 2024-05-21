@@ -47,7 +47,7 @@ export const useTransactions = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: usersData = [{}], isLoading: usersLoading } = useQuery({
+  const { data: users = [{}], isLoading: usersLoading } = useQuery({
     queryKey: "getAllUsers",
     queryFn: () => getAllUsers().then((res) => res?.data?.users),
   });
@@ -55,11 +55,6 @@ export const useTransactions = () => {
   const services = servicesData.map((service) => ({
     ...service,
     id: service.serviceID,
-  }));
-
-  const users = usersData.map((user) => ({
-    ...user,
-    id: user.user_id,
   }));
 
   const sortHandler = async (name, type) => {

@@ -38,11 +38,7 @@ const Statistic = () => {
   const statisticData = statistic.map((s) => {
     return {
       ...s,
-      [key]:
-        idToName(
-          users.map((user) => ({ ...user, id: user.user_id })),
-          s[key]
-        ) || s[key],
+      [key]: idToName(users, s[key]) || s[key],
     };
   });
 

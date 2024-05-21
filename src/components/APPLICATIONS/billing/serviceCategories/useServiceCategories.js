@@ -1,5 +1,6 @@
 import { getCategories } from "services/serviceCategories";
 import { useQuery } from "react-query";
+import { buildCategoryTree } from "helpers/treeMenuBuilder";
 
 const useServiceCategories = () => {
   const { data: categoriesArr = [{}], isLoading } = useQuery({
@@ -10,16 +11,7 @@ const useServiceCategories = () => {
 
   const categories = categoriesArr.map((cat) => ({ ...cat, id: cat.catID }));
 
-  const buildTreeMenu = (categories, parentId = 0) => {
-    return categories
-      .filter((category) => category.parentID === parentId)
-      .map((category) => ({
-        ...category,
-        children: buildTreeMenu(categories, category.catID),
-      }));
-  };
-
-  const categoriesTree = buildTreeMenu(categories);
+  const categoriesTree = buildCategoryTree(categories);
 
   return {
     isLoading,

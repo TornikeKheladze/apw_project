@@ -36,12 +36,7 @@ const ServiceDetails = () => {
           }),
           service.categoryID
         ),
-        ownerID: idToName(
-          users.map((user) => {
-            return { ...user, id: user.user_id };
-          }),
-          service.ownerID
-        ),
+        ownerID: idToName(users, service.ownerID),
       }}
       loading={serviceLoading || categoriesLoading || usersLoading}
     />

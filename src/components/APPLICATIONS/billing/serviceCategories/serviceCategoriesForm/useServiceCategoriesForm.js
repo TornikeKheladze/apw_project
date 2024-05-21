@@ -9,6 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
+import { buildCategoryTree } from "helpers/treeMenuBuilder";
 
 export const useServiceCategoriesForm = () => {
   const { action, id } = useParams();
@@ -93,16 +94,7 @@ export const useServiceCategoriesForm = () => {
     };
   }, [action]);
 
-  const buildTreeMenu = (categories, parentId = 0) => {
-    return categories
-      .filter((category) => category.parentID === parentId)
-      .map((category) => ({
-        ...category,
-        children: buildTreeMenu(categories, category.catID),
-      }));
-  };
-
-  const categoriesTree = buildTreeMenu(
+  const categoriesTree = buildCategoryTree(
     categories.filter((cat) => cat.catID !== +id)
   );
 

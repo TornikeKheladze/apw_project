@@ -36,9 +36,7 @@ const SpecPricesForm = () => {
                   id: service.serviceID,
                 };
               }),
-              agentID: users.map((user) => {
-                return { ...user, id: user.user_id };
-              }),
+              agentID: users,
             }}
             updateDataObj={action === "edit" ? specPrice : null}
             formArray={specPricesArr}

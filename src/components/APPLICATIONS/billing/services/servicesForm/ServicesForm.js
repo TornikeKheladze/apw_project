@@ -3,6 +3,8 @@ import LoadingSpinner from "components/icons/LoadingSpinner";
 import useServicesForm from "./useServicesForm";
 import GeneralForm from "../../generalForm/GeneralForm";
 import { serviceArr } from "../../formArrays/serviceArr";
+import ServiceCategoryTreeMenu from "../../serviceCategories/ServiceCategoryTreeMenu";
+import { buildCategoryTree } from "helpers/treeMenuBuilder";
 
 const ServicesForm = () => {
   const {
@@ -13,6 +15,8 @@ const ServicesForm = () => {
     service = {},
     isLoading,
     actionLoading,
+    chosenCategory,
+    setChosenCategory,
   } = useServicesForm();
 
   return (
@@ -28,21 +32,29 @@ const ServicesForm = () => {
             <LoadingSpinner blur />
           </div>
         ) : (
-          <GeneralForm
-            optionsObj={{
-              categoryID: categories,
-              active: [
-                { name: "არააქტიური", id: 0 },
-                { name: "აქტიური", id: 1 },
-              ],
-            }}
-            submitHandler={submitHandler}
-            formArray={serviceArr.filter(
-              (service) => service.name !== "ownerID"
-            )}
-            isLoading={actionLoading}
-            updateDataObj={action === "edit" ? service : null}
-          />
+          <>
+            <p className="label mb-3">აირჩიეთ კატეგორია</p>
+            <ServiceCategoryTreeMenu
+              categories={buildCategoryTree(categories)}
+              chosenItem={chosenCategory}
+              setChosenItem={setChosenCategory}
+            />
+
+            <GeneralForm
+              optionsObj={{
+                active: [
+                  { name: "არააქტიური", id: 0 },
+                  { name: "აქტიური", id: 1 },
+                ],
+              }}
+              submitHandler={submitHandler}
+              formArray={serviceArr.filter(
+                (item) => item.name !== "ownerID" && item.name !== "categoryID"
+              )}
+              isLoading={actionLoading}
+              updateDataObj={action === "edit" ? service : null}
+            />
+          </>
         )}
       </div>
     </main>

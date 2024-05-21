@@ -29,7 +29,7 @@ export const useCategoryProduction = () => {
     queryFn: () => getCategories().then((res) => res.data),
   });
 
-  const { data: usersData = [{}], isLoading: usersLoading } = useQuery({
+  const { data: users = [{}], isLoading: usersLoading } = useQuery({
     queryKey: "getAllUsers",
     queryFn: () => getAllUsers().then((res) => res?.data?.users),
   });
@@ -54,7 +54,6 @@ export const useCategoryProduction = () => {
     id: cat.catID,
     name: cat.categoryName,
   }));
-  const users = usersData.map((user) => ({ ...user, id: user.user_id }));
 
   const updatedList = filterArray(categoryProduction, removeEmpty(filter))?.map(
     (catProduction) => {

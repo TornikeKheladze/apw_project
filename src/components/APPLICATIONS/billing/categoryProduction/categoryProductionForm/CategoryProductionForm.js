@@ -3,6 +3,8 @@ import LoadingSpinner from "components/icons/LoadingSpinner";
 import GeneralForm from "../../generalForm/GeneralForm";
 import { categoryProductionArr } from "../../formArrays/serviceArr";
 import { useCategoryProductionForm } from "./useCategoryProductionForm";
+import ServiceCategoryTreeMenu from "../../serviceCategories/ServiceCategoryTreeMenu";
+import { buildCategoryTree } from "helpers/treeMenuBuilder";
 
 const CategoryProductionForm = () => {
   const {
@@ -14,6 +16,8 @@ const CategoryProductionForm = () => {
     categories,
     users,
     categoryProduction,
+    chosenCategory,
+    setChosenCategory,
   } = useCategoryProductionForm();
 
   return (
@@ -29,22 +33,29 @@ const CategoryProductionForm = () => {
             იტვირთება... <LoadingSpinner />
           </div>
         ) : (
-          <GeneralForm
-            submitHandler={submitHandler}
-            formArray={categoryProductionArr.filter(
-              (item) => item.name !== "usedQuantity"
-            )}
-            isLoading={actionLoading}
-            updateDataObj={action === "edit" ? categoryProduction : null}
-            optionsObj={{
-              agentID: users,
-              catID: categories,
-              status: [
-                { id: 1, name: "აქტიური" },
-                { id: 0, name: "არააქტიური" },
-              ],
-            }}
-          />
+          <>
+            <p className="label mb-3">აირჩიეთ კატეგორია</p>
+            <ServiceCategoryTreeMenu
+              categories={buildCategoryTree(categories)}
+              chosenItem={chosenCategory}
+              setChosenItem={setChosenCategory}
+            />
+            <GeneralForm
+              submitHandler={submitHandler}
+              formArray={categoryProductionArr.filter(
+                (item) => item.name !== "usedQuantity" && item.name !== "catID"
+              )}
+              isLoading={actionLoading}
+              updateDataObj={action === "edit" ? categoryProduction : null}
+              optionsObj={{
+                agentID: users,
+                status: [
+                  { id: 1, name: "აქტიური" },
+                  { id: 0, name: "არააქტიური" },
+                ],
+              }}
+            />
+          </>
         )}
       </div>
     </main>

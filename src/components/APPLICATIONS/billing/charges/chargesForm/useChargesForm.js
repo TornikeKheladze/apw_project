@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ export const useChargesForm = () => {
   const navigate = useNavigate();
   const { action, id } = useParams();
 
+  const [chosenCategory, setChosenCategory] = useState({});
   const [alert, setAlert] = useState({
     type: "success",
     message: "",
@@ -68,21 +69,41 @@ export const useChargesForm = () => {
     staleTime: Infinity,
   });
 
-  const { data: categories = [{}], isLoading: categoriesLoading } = useQuery({
-    queryKey: "getCategories",
-    queryFn: () => getCategories().then((res) => res.data),
-  });
+  const { data: categoriesData = [{}], isLoading: categoriesLoading } =
+    useQuery({
+      queryKey: "getCategories",
+      queryFn: () => getCategories().then((res) => res.data),
+    });
+
+  const categories = categoriesData.map((cat) => ({
+    ...cat,
+    id: cat.catID,
+    name: cat.categoryName,
+  }));
 
   const submitHandler = (data) => {
     if (action === "create") {
-      createMutate(data);
+      createMutate({ ...data, catID: chosenCategory.id });
     } else {
       updateMutate({
         ...data,
         chargeID: id,
+        catID: chosenCategory.id,
       });
     }
   };
+
+  useEffect(() => {
+    if (action === "edit")
+      setChosenCategory({
+        id: charge.catID,
+      });
+    return () => {
+      if (action === "edit") {
+        localStorage.removeItem("formInputData");
+      }
+    };
+  }, [action, charge.catID]);
 
   return {
     action,
@@ -92,5 +113,7 @@ export const useChargesForm = () => {
     alert,
     categories,
     charge,
+    chosenCategory,
+    setChosenCategory,
   };
 };

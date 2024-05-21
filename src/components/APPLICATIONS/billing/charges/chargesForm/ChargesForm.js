@@ -3,6 +3,8 @@ import LoadingSpinner from "components/icons/LoadingSpinner";
 import GeneralForm from "../../generalForm/GeneralForm";
 import { useChargesForm } from "./useChargesForm";
 import { chargesArr } from "../../formArrays/serviceArr";
+import ServiceCategoryTreeMenu from "../../serviceCategories/ServiceCategoryTreeMenu";
+import { buildCategoryTree } from "helpers/treeMenuBuilder";
 
 const ChargesForm = () => {
   const {
@@ -13,6 +15,8 @@ const ChargesForm = () => {
     alert,
     categories,
     charge,
+    chosenCategory,
+    setChosenCategory,
   } = useChargesForm();
 
   return (
@@ -26,17 +30,20 @@ const ChargesForm = () => {
             იტვირთება... <LoadingSpinner />
           </div>
         ) : (
-          <GeneralForm
-            submitHandler={submitHandler}
-            optionsObj={{
-              catID: categories.map((cat) => {
-                return { ...cat, name: cat.categoryName, id: cat.catID };
-              }),
-            }}
-            updateDataObj={action === "edit" ? charge : null}
-            formArray={chargesArr}
-            isLoading={actionLoading}
-          />
+          <>
+            <p className="label mb-3">აირჩიეთ კატეგორია</p>
+            <ServiceCategoryTreeMenu
+              categories={buildCategoryTree(categories)}
+              chosenItem={chosenCategory}
+              setChosenItem={setChosenCategory}
+            />
+            <GeneralForm
+              submitHandler={submitHandler}
+              updateDataObj={action === "edit" ? charge : null}
+              formArray={chargesArr.filter((item) => item.name !== "catID")}
+              isLoading={actionLoading}
+            />
+          </>
         )}
       </div>
       <Alert dismissable color={alert.type} message={alert.message} />

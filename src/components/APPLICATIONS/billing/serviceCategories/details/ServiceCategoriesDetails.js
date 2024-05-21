@@ -42,10 +42,7 @@ const ServiceCategoriesDetails = () => {
       categoriesArr.map((cat) => ({ ...cat, id: cat.catID })),
       serviceCategory.parentID
     ),
-    ownerID: idToName(
-      users.map((user) => ({ ...user, id: user.user_id })),
-      serviceCategory.ownerID
-    ),
+    ownerID: idToName(users, serviceCategory.ownerID),
   };
 
   const categoriesTree = buildTreeMenu(categoriesArr, +id);

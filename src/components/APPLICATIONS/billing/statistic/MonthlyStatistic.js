@@ -42,11 +42,7 @@ const MonthlyStatistic = () => {
 
   const statisticData = statistic.map((s) => ({
     ...s,
-    [key]:
-      idToName(
-        users.map((user) => ({ ...user, id: user.user_id })),
-        s[key]
-      ) || s[key],
+    [key]: idToName(users, s[key]) || s[key],
   }));
 
   const mergedStatisticData = mergeObjectsWithSimilarNames(

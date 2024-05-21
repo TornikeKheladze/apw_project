@@ -15,6 +15,7 @@ export const useCategoryProductionForm = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  const [chosenCategory, setChosenCategory] = useState({});
   const [alert, setAlert] = useState({
     message: "",
     type: "success",
@@ -46,12 +47,10 @@ export const useCategoryProductionForm = () => {
     }
   );
 
-  const { data: usersData = [{}], isLoading: usersLoading } = useQuery({
+  const { data: users = [{}], isLoading: usersLoading } = useQuery({
     queryKey: "getAllUsers",
     queryFn: () => getAllUsers().then((res) => res?.data?.users),
   });
-
-  const users = usersData.map((user) => ({ ...user, id: user.user_id }));
 
   const categories = categoriesArr.map((cat) => ({
     ...cat,
@@ -88,20 +87,25 @@ export const useCategoryProductionForm = () => {
   });
 
   useEffect(() => {
+    if (action === "edit")
+      setChosenCategory({
+        id: categoryProduction.catID,
+      });
     return () => {
       if (action === "edit") {
         localStorage.removeItem("formInputData");
       }
     };
-  }, [action]);
+  }, [action, categoryProduction.catID]);
 
   const submitHandler = (data) => {
     if (action === "create") {
-      createMutate({ ...data, usedQuantity: 0 });
+      createMutate({ ...data, usedQuantity: 0, catID: chosenCategory.id });
     } else {
       updateMutate({
         ...data,
         usedQuantity: categoryProduction.usedQuantity,
+        catID: chosenCategory.id,
         id,
       });
     }
@@ -116,5 +120,7 @@ export const useCategoryProductionForm = () => {
     categoryProduction,
     categories,
     users,
+    chosenCategory,
+    setChosenCategory,
   };
 };

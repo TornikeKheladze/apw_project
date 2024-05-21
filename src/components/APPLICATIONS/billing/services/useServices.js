@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { removeEmpty } from "helpers/removeEmpty";
 import { getAllServices, updateService } from "services/services";
 import { idToName } from "helpers/idToName";
@@ -13,6 +13,7 @@ export const useServices = () => {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState({});
   const [alert, setAlert] = useState({ message: "", type: "success" });
+  const [chosenCategory, setChosenCategory] = useState({});
 
   const { data: servicesData = [{}], isLoading: servicesLoading } = useQuery({
     queryKey: "getAllServices",
@@ -56,10 +57,7 @@ export const useServices = () => {
       return {
         ...service,
         categoryID: idToName(categories, service.categoryID),
-        ownerID: idToName(
-          users.map((user) => ({ ...user, id: user.user_id })),
-          service.ownerID
-        ),
+        ownerID: idToName(users, service.ownerID),
         active: statusBadge(service.active),
       };
     }
@@ -75,6 +73,10 @@ export const useServices = () => {
       ? true
       : false;
 
+  useEffect(() => {
+    setFilter((prevState) => ({ ...prevState, categoryID: chosenCategory.id }));
+  }, [chosenCategory]);
+
   return {
     loading: servicesLoading || categoriesLoading || usersLoading,
     updatedList,
@@ -87,5 +89,7 @@ export const useServices = () => {
     categories,
     filter,
     setFilter,
+    chosenCategory,
+    setChosenCategory,
   };
 };

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   getServiceById,
@@ -11,12 +11,12 @@ import { useNavigate } from "react-router-dom";
 import { getCategories } from "services/serviceCategories";
 
 const useServicesForm = () => {
-  const dispatch = useDispatch();
   const queryClient = useQueryClient();
-  const { action, id } = useParams();
   const navigate = useNavigate();
-  const { authorizedUser } = useSelector((store) => store.user);
+  const { action, id } = useParams();
 
+  const { authorizedUser } = useSelector((store) => store.user);
+  const [chosenCategory, setChosenCategory] = useState({});
   const [alert, setAlert] = useState({
     message: "",
     type: "success",
@@ -80,12 +80,16 @@ const useServicesForm = () => {
   });
 
   useEffect(() => {
+    if (action === "edit")
+      setChosenCategory({
+        id: service.categoryID,
+      });
     return () => {
       if (action === "edit") {
         localStorage.removeItem("formInputData");
       }
     };
-  }, [dispatch, action, id]);
+  }, [action, id, service.categoryID]);
 
   const submitHandler = async (data) => {
     const ownerID = authorizedUser.id;
@@ -93,8 +97,8 @@ const useServicesForm = () => {
       ...data,
       image: JSON.parse(localStorage.getItem("formInputData"))?.image,
       ownerID,
+      categoryID: chosenCategory.id,
     };
-
     if (action === "create") {
       createMutate({ ...requestData });
     } else {
@@ -110,6 +114,8 @@ const useServicesForm = () => {
     service,
     isLoading: categoriesLoading || isLoading || isFetching,
     actionLoading: createLoading || editLoading,
+    chosenCategory,
+    setChosenCategory,
   };
 };
 

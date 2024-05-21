@@ -5,6 +5,9 @@ import BilHeader from "../bilHeader/BilHeader";
 import useCheckPermission from "helpers/useCheckPermission";
 import { serviceArr } from "../formArrays/serviceArr";
 import Alert from "components/Alert";
+import ServiceCategoryTreeMenu from "../serviceCategories/ServiceCategoryTreeMenu";
+import { buildCategoryTree } from "helpers/treeMenuBuilder";
+import Button from "components/Button";
 
 const Services = () => {
   const {
@@ -15,10 +18,30 @@ const Services = () => {
     filter,
     setFilter,
     activation,
+    chosenCategory,
+    setChosenCategory,
   } = useServices();
 
   return (
     <main className="workspace overflow-hidden pb-8">
+      <div className="card py-3 mb-3">
+        <h4 className="ml-3">სერვისის კატეგორიები</h4>
+        <ServiceCategoryTreeMenu
+          categories={buildCategoryTree(categories)}
+          chosenItem={chosenCategory}
+          setChosenItem={setChosenCategory}
+        />
+        <Button
+          className="ml-3 p-1 text-xs"
+          onClick={() => {
+            setChosenCategory({});
+            setFilter({});
+          }}
+        >
+          ყველას ჩვენება
+        </Button>
+      </div>
+
       <BilHeader
         visible={useCheckPermission("bil_services_add_post")}
         text={"სერვისები"}

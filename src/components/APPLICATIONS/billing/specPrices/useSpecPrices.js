@@ -35,7 +35,7 @@ export const useSpecPrices = () => {
     queryKey: "getAllServices",
     queryFn: () => getAllServices().then((res) => res.data),
   });
-  const { data: usersData = [{}], isLoading: usersLoading } = useQuery({
+  const { data: users = [{}], isLoading: usersLoading } = useQuery({
     queryKey: "getAllUsers",
     queryFn: () => getAllUsers().then((res) => res.data.users),
   });
@@ -49,7 +49,6 @@ export const useSpecPrices = () => {
     ...service,
     id: service.serviceID,
   }));
-  const users = usersData.map((user) => ({ ...user, id: user.user_id }));
 
   const updatedList = filterArray(specPrices, removeEmpty(filter))?.map(
     (serParams) => {

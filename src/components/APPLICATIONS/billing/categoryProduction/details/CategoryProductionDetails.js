@@ -42,12 +42,7 @@ const CategoryProductionDetails = () => {
           }),
           categoryProduction.catID
         ),
-        agentID: idToName(
-          users.map((user) => {
-            return { ...user, id: user.user_id };
-          }),
-          categoryProduction.agentID
-        ),
+        agentID: idToName(users, categoryProduction.agentID),
         status: idToName(
           [
             { id: 1, name: "აქტიური" },

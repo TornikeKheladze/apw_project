@@ -85,7 +85,7 @@ export const usePackageProductionForm = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: usersData = [{}], isLoading: usersLoading } = useQuery({
+  const { data: users = [{}], isLoading: usersLoading } = useQuery({
     queryKey: "getAllUsers",
     queryFn: () => getAllUsers().then((res) => res?.data?.users),
   });
@@ -99,11 +99,6 @@ export const usePackageProductionForm = () => {
     ...p,
     id: p.packageID,
     name: `ფასი:${p.price}, რაოდენობა:${p.quantity}`,
-  }));
-
-  const users = usersData.map((user) => ({
-    ...user,
-    id: user.user_id,
   }));
 
   const submitHandler = (data) => {
