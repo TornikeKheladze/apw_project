@@ -425,3 +425,21 @@ export const categoryProductionArr = [
     type: "datetime-local",
   },
 ];
+
+export const apiCredentialsArr = [
+  {
+    name: "apiName",
+    label: "apiName",
+    type: "text",
+  },
+  {
+    name: "apiId",
+    label: "apiId",
+    type: "number",
+  },
+  {
+    name: "apiKey",
+    label: "apiKey",
+    type: "number",
+  },
+];

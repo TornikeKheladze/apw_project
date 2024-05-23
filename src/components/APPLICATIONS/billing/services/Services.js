@@ -8,6 +8,7 @@ import Alert from "components/Alert";
 import ServiceCategoryTreeMenu from "../serviceCategories/ServiceCategoryTreeMenu";
 import { buildCategoryTree } from "helpers/treeMenuBuilder";
 import Button from "components/Button";
+import { Link } from "react-router-dom";
 
 const Services = () => {
   const {
@@ -40,6 +41,36 @@ const Services = () => {
         >
           ყველას ჩვენება
         </Button>
+      </div>
+
+      <div className="card p-3 mb-3">
+        <h4 className="mb-2">მახასიათებლები</h4>
+        <div className="flex gap-2 flex-wrap">
+          <Link
+            to={"/billing/service-prices"}
+            className="btn btn_primary btn_outlined p-1 text-xs"
+          >
+            სერვისის ფასები
+          </Link>
+          <Link
+            to={"/billing/spec-prices"}
+            className="btn btn_primary btn_outlined p-1 text-xs"
+          >
+            სერვისის სპეც ფასები
+          </Link>
+          <Link
+            to={"/billing/service-parameters"}
+            className="btn btn_primary btn_outlined p-1 text-xs"
+          >
+            სერვისის პარამეტრები
+          </Link>
+          <Link
+            to={"/billing/service-parameter-types"}
+            className="btn btn_primary btn_outlined p-1 text-xs"
+          >
+            პარამეტრის ტიპები
+          </Link>
+        </div>
       </div>
 
       <BilHeader

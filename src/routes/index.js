@@ -101,6 +101,8 @@ import MonthlyStatistic from "components/APPLICATIONS/billing/statistic/MonthlyS
 import Services from "components/APPLICATIONS/billing/services/Services";
 import ServicesForm from "components/APPLICATIONS/billing/services/servicesForm/ServicesForm";
 import ServiceDetails from "components/APPLICATIONS/billing/services/details/ServiceDetails";
+import ApiCredentials from "components/APPLICATIONS/billing/apiCredentials/ApiCredentials";
+import ApiCredentialsForm from "components/APPLICATIONS/billing/apiCredentials/apiCredentialsForm/ApiCredentialsForm";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -161,6 +163,7 @@ const Router = () => {
             element={<DocumentForm />}
           />
 
+          {/* service */}
           <Route path="/billing/services" element={<Services />} />
           <Route
             path="/billing/services/:action/:id?"
@@ -171,6 +174,7 @@ const Router = () => {
             element={<ServiceDetails />}
           />
 
+          {/* service production */}
           <Route
             path="/billing/service-production"
             element={<ServiceProductions />}
@@ -185,16 +189,13 @@ const Router = () => {
             element={<ServiceProductionDetails />}
           />
 
+          {/* category production */}
           <Route
             path="/billing/category-production"
             element={<CategoryProduction />}
           />
           <Route
-            path="/billing/category-production/:action"
-            element={<CategoryProductionForm />}
-          />
-          <Route
-            path="/billing/category-production/:action/:id"
+            path="/billing/category-production/:action/:id?"
             element={<CategoryProductionForm />}
           />
           <Route
@@ -202,16 +203,13 @@ const Router = () => {
             element={<CategoryProductionDetails />}
           />
 
+          {/* service parameters */}
           <Route
             path="/billing/service-parameters"
             element={<ServiceParameters />}
           />
           <Route
-            path="/billing/service-parameters/:action"
-            element={<ServiceParametersForm />}
-          />
-          <Route
-            path="/billing/service-parameters/:action/:id"
+            path="/billing/service-parameters/:action/:id?"
             element={<ServiceParametersForm />}
           />
           <Route
@@ -219,70 +217,62 @@ const Router = () => {
             element={<ServiceParametersDetails />}
           />
 
+          {/* service parameter types */}
           <Route
             path="/billing/service-parameter-types"
             element={<ServiceParameterTypes />}
           />
           <Route
-            path="/billing/service-parameter-types/:action"
-            element={<ServiceParameterTypesForm />}
-          />
-          <Route
-            path="/billing/service-parameter-types/:action/:id"
+            path="/billing/service-parameter-types/:action/:id?"
             element={<ServiceParameterTypesForm />}
           />
 
+          {/* service prices */}
           <Route path="/billing/service-prices" element={<ServicePrices />} />
           <Route
-            path="/billing/service-prices/:action"
-            element={<ServicePricesForm />}
-          />
-          <Route
-            path="/billing/service-prices/:action/:id"
+            path="/billing/service-prices/:action/:id?"
             element={<ServicePricesForm />}
           />
 
+          {/* spec prices */}
           <Route path="/billing/spec-prices" element={<SpecPrices />} />
           <Route
-            path="/billing/spec-prices/:action"
-            element={<SpecPricesForm />}
-          />
-          <Route
-            path="/billing/spec-prices/:action/:id"
+            path="/billing/spec-prices/:action/:id?"
             element={<SpecPricesForm />}
           />
 
+          {/* charges */}
           <Route path="/billing/charges" element={<Charges />} />
-          <Route path="/billing/charges/:action" element={<ChargesForm />} />
           <Route
-            path="/billing/charges/:action/:id"
+            path="/billing/charges/:action/:id?"
             element={<ChargesForm />}
           />
 
-          <Route path="/billing/sales" element={<Sales />} />
-          <Route path="/billing/sales/:action" element={<SalesForm />} />
-          <Route path="/billing/sales/:action/:id" element={<SalesForm />} />
+          {/* api credentials */}
+          <Route path="/billing/api-credentials" element={<ApiCredentials />} />
+          <Route
+            path="/billing/api-credentials/:action/:id?"
+            element={<ApiCredentialsForm />}
+          />
 
+          {/* sales */}
+          <Route path="/billing/sales" element={<Sales />} />
+          <Route path="/billing/sales/:action/:id?" element={<SalesForm />} />
+
+          {/* billing packages */}
           <Route path="/billing/packages" element={<BillingPackages />} />
           <Route
-            path="/billing/packages/:action"
-            element={<BillingPackagesForm />}
-          />
-          <Route
-            path="/billing/packages/:action/:id"
+            path="/billing/packages/:action/:id?"
             element={<BillingPackagesForm />}
           />
 
+          {/* package production */}
           <Route
             path="/billing/package-production"
             element={<PackageProductions />}
           />
           <Route
-            path="/billing/package-production/:action"
-            element={<PackageProductionForm />}
-          />
-          <Route
-            path="/billing/package-production/:action/:id"
+            path="/billing/package-production/:action/:id?"
             element={<PackageProductionForm />}
           />
 

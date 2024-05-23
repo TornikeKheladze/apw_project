@@ -28,6 +28,7 @@ import { MenuBarCollapse } from "components/collapse/Collapse";
 import DocumentIcon from "components/icons/DocumentIcon";
 import PackageIcon from "components/icons/PackageIcon";
 import PuzzleIcon from "components/icons/PuzzleIcon";
+import AlgIcon from "components/icons/AlgIcon";
 
 const MenuBarContext = createContext();
 
@@ -573,29 +574,14 @@ const MenuDetailBilling = () => {
           <NavLink to="/billing/services" onClick={hideMenuDetail}>
             სერვისები
           </NavLink>
+          <NavLink to="/billing/service-production" onClick={hideMenuDetail}>
+            სერვისის პროდაქშენი
+          </NavLink>
           <NavLink to="/billing/service-categories" onClick={hideMenuDetail}>
             სერვისის კატეგორიები
           </NavLink>
           <NavLink to="/billing/category-production" onClick={hideMenuDetail}>
             category-production
-          </NavLink>
-          <NavLink to="/billing/service-production" onClick={hideMenuDetail}>
-            სერვისის პროდაქშენი
-          </NavLink>
-          <NavLink to="/billing/service-parameters" onClick={hideMenuDetail}>
-            სერვისის პარამეტრები
-          </NavLink>
-          <NavLink
-            to="/billing/service-parameter-types"
-            onClick={hideMenuDetail}
-          >
-            პარამეტრის ტიპები
-          </NavLink>
-          <NavLink to="/billing/service-prices" onClick={hideMenuDetail}>
-            service prices
-          </NavLink>
-          <NavLink to="/billing/spec-prices" onClick={hideMenuDetail}>
-            spec prices
           </NavLink>
         </MenuBarCollapse>
 
@@ -606,6 +592,10 @@ const MenuDetailBilling = () => {
         <NavLink to="/billing/sales" onClick={hideMenuDetail}>
           <span className="la la-money"></span>
           sales
+        </NavLink>
+        <NavLink to="/billing/api-credentials" onClick={hideMenuDetail}>
+          <AlgIcon />
+          API-ს რეგისტრაცია
         </NavLink>
 
         <MenuBarCollapse icon={<PackageIcon />} label={"პაკეტები"}>
