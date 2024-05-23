@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import { getAllServices } from "services/services";
@@ -11,11 +11,15 @@ import {
   updateBillingPackageProduction,
 } from "services/billingPackages";
 import { getAllUsers } from "services/users";
+import { packageProductionsArr } from "../../formArrays/serviceArr";
 
 export const usePackageProductionForm = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { action, id } = useParams();
+  const [searchParams] = useSearchParams();
+
+  const ownerID = searchParams.get("ownerID");
 
   const [alert, setAlert] = useState({
     type: "success",
@@ -104,17 +108,25 @@ export const usePackageProductionForm = () => {
   const submitHandler = (data) => {
     if (action === "create") {
       createMutate({
+        ownerID,
         ...data,
         usedTransactionQuantity: 0,
       });
     } else {
       updateMutate({
+        ownerID,
         ...data,
         usedTransactionQuantity: packageProduction.usedTransactionQuantity,
         packagesProductionID: id,
       });
     }
   };
+
+  const formFields = packageProductionsArr.filter(
+    (item) =>
+      item.name !== "usedTransactionQuantity" &&
+      (!ownerID || item.name !== "ownerID")
+  );
 
   return {
     action,
@@ -131,5 +143,6 @@ export const usePackageProductionForm = () => {
     packageProduction,
     packages,
     users,
+    formFields,
   };
 };

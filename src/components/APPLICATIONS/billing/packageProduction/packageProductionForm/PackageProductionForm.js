@@ -2,7 +2,6 @@ import Alert from "components/Alert";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import GeneralForm from "../../generalForm/GeneralForm";
 import { usePackageProductionForm } from "./usePackageProductionForm";
-import { packageProductionsArr } from "../../formArrays/serviceArr";
 
 const PackageProductionForm = () => {
   const {
@@ -15,6 +14,7 @@ const PackageProductionForm = () => {
     packageProduction,
     packages,
     users,
+    formFields,
   } = usePackageProductionForm();
 
   return (
@@ -39,9 +39,7 @@ const PackageProductionForm = () => {
               agentID: users,
             }}
             updateDataObj={action === "edit" ? packageProduction : null}
-            formArray={packageProductionsArr.filter(
-              (item) => item.name !== "usedTransactionQuantity"
-            )}
+            formArray={formFields}
             isLoading={actionLoading}
           />
         )}

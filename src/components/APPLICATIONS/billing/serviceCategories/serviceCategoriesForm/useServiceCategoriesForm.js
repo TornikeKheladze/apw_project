@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import {
   createCategory,
   getCategories,
@@ -8,15 +8,18 @@ import {
 } from "services/serviceCategories";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useSelector } from "react-redux";
 import { buildCategoryTree } from "helpers/treeMenuBuilder";
+import { serviceCategoriesArr } from "../../formArrays/serviceArr";
+import { getAllUsers } from "services/users";
 
 export const useServiceCategoriesForm = () => {
   const { action, id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
 
-  const { authorizedUser } = useSelector((store) => store.user);
+  const ownerID = searchParams.get("ownerID");
+
   const [chosenCategory, setChosenCategory] = useState({});
 
   const [alert, setAlert] = useState({
@@ -49,6 +52,10 @@ export const useServiceCategoriesForm = () => {
       queryFn: () => getCategories().then((res) => res.data),
     }
   );
+  const { data: users = [{}], isLoading: usersLoading } = useQuery({
+    queryKey: "getAllUsers",
+    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  });
 
   const categories = categoriesArr.map((cat) => {
     return { ...cat, name: cat.categoryName, id: cat.catID };
@@ -87,27 +94,30 @@ export const useServiceCategoriesForm = () => {
   });
 
   useEffect(() => {
+    if (action === "edit")
+      setChosenCategory({
+        id: category.parentID,
+      });
     return () => {
       if (action === "edit") {
         localStorage.removeItem("formInputData");
       }
     };
-  }, [action]);
+  }, [action, category.parentID]);
 
   const categoriesTree = buildCategoryTree(
     categories.filter((cat) => cat.catID !== +id)
   );
 
   const submitHandler = (data) => {
-    const ownerID = authorizedUser.id;
     const parentID = chosenCategory.catID || 0;
 
     if (action === "create") {
       createMutate({ ...data, ownerID, parentID, usedQuantity: 0 });
     } else {
       updateMutate({
-        ...data,
         ownerID,
+        ...data,
         catID: id,
         parentID,
         usedQuantity: category.usedQuantity,
@@ -115,10 +125,17 @@ export const useServiceCategoriesForm = () => {
     }
   };
 
+  const formFields = serviceCategoriesArr.filter(
+    (item) =>
+      item.name !== "usedQuantity" &&
+      item.name !== "parentID" &&
+      (!ownerID || item.name !== "ownerID")
+  );
+
   return {
     alert,
     action,
-    isLoading: isLoading || categoriesLoading,
+    isLoading: isLoading || categoriesLoading || usersLoading,
     submitHandler,
     actionLoading: createLoading || editLoading,
     category,
@@ -126,5 +143,7 @@ export const useServiceCategoriesForm = () => {
     categoriesTree,
     chosenCategory,
     setChosenCategory,
+    formFields,
+    users,
   };
 };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useParams, useSearchParams } from "react-router-dom";
 import { getAllServices } from "services/services";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -10,14 +10,16 @@ import {
   getServiceProductionById,
   updateServiceProduction,
 } from "services/serviceProduction";
+import { serviceProductionArr } from "../../formArrays/serviceArr";
 
 export const useServiceProductionForm = () => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { action, id } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { authorizedUser } = useSelector((store) => store.user);
 
+  const ownerID = searchParams.get("ownerID");
   const [alert, setAlert] = useState({
     message: "",
     type: "success",
@@ -42,7 +44,7 @@ export const useServiceProductionForm = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: usersData = [{}], isLoading: usersLoading } = useQuery({
+  const { data: users = [{}], isLoading: usersLoading } = useQuery({
     queryKey: "getAllUsers",
     queryFn: () => getAllUsers().then((res) => res?.data?.users),
   });
@@ -67,10 +69,6 @@ export const useServiceProductionForm = () => {
   };
 
   const services = servicesData.map((ser) => ({ ...ser, id: ser.serviceID }));
-  const users = usersData.map((user) => ({
-    ...user,
-    id: user.user_id,
-  }));
 
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createServiceProduction,
@@ -95,11 +93,10 @@ export const useServiceProductionForm = () => {
   }, [dispatch, action, id]);
 
   const submitHandler = async (data) => {
-    const ownerID = authorizedUser.id;
     const requestData = {
+      ownerID,
       ...data,
       image: JSON.parse(localStorage.getItem("formInputData"))?.image,
-      ownerID,
     };
 
     if (action === "create") {
@@ -113,6 +110,12 @@ export const useServiceProductionForm = () => {
     }
   };
 
+  const formFields = serviceProductionArr.filter(
+    (item) =>
+      item.name !== "usedTransactionQuantity" &&
+      (!ownerID || item.name !== "ownerID")
+  );
+
   return {
     action,
     submitHandler,
@@ -122,5 +125,6 @@ export const useServiceProductionForm = () => {
     isLoading: servicesLoading || isLoading || usersLoading || isFetching,
     actionLoading: createLoading || editLoading,
     users,
+    formFields,
   };
 };

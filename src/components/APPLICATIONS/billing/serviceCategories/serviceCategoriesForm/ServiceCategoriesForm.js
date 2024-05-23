@@ -2,7 +2,6 @@ import Alert from "components/Alert";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import { useServiceCategoriesForm } from "./useServiceCategoriesForm";
 import GeneralForm from "../../generalForm/GeneralForm";
-import { serviceCategoriesArr } from "../../formArrays/serviceArr";
 import ServiceCategoryTreeMenu from "../ServiceCategoryTreeMenu";
 
 const ServiceCategoriesForm = () => {
@@ -17,6 +16,8 @@ const ServiceCategoriesForm = () => {
     categoriesTree,
     chosenCategory,
     setChosenCategory,
+    formFields,
+    users,
   } = useServiceCategoriesForm();
 
   return (
@@ -41,15 +42,11 @@ const ServiceCategoriesForm = () => {
             />
             <GeneralForm
               submitHandler={submitHandler}
-              formArray={serviceCategoriesArr.filter(
-                (item) =>
-                  item.name !== "ownerID" &&
-                  item.name !== "parentID" &&
-                  item.name !== "usedQuantity"
-              )}
+              formArray={formFields}
               isLoading={actionLoading}
               updateDataObj={action === "edit" ? category : null}
               optionsObj={{
+                ownerID: users,
                 catType: [
                   { name: "noli", id: 0 },
                   { name: "erti", id: 1 },

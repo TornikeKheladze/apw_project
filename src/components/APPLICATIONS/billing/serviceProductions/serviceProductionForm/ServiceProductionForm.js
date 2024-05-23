@@ -2,7 +2,6 @@ import Alert from "components/Alert";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import GeneralForm from "../../generalForm/GeneralForm";
 import { useServiceProductionForm } from "./useServiceProductionForm";
-import { serviceProductionArr } from "../../formArrays/serviceArr";
 
 const ServiceProductionForm = () => {
   const {
@@ -14,6 +13,7 @@ const ServiceProductionForm = () => {
     isLoading,
     actionLoading,
     users,
+    formFields,
   } = useServiceProductionForm();
 
   return (
@@ -40,9 +40,7 @@ const ServiceProductionForm = () => {
               ],
             }}
             submitHandler={submitHandler}
-            formArray={serviceProductionArr.filter(
-              (item) => item.name !== "usedTransactionQuantity"
-            )}
+            formArray={formFields}
             isLoading={actionLoading}
             updateDataObj={action === "edit" ? serviceProduction : null}
           />

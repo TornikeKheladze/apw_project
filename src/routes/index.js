@@ -98,6 +98,9 @@ import CategoryProductionForm from "components/APPLICATIONS/billing/categoryProd
 import CategoryProductionDetails from "components/APPLICATIONS/billing/categoryProduction/details/CategoryProductionDetails";
 import Statistic from "components/APPLICATIONS/billing/statistic/Statistic";
 import MonthlyStatistic from "components/APPLICATIONS/billing/statistic/MonthlyStatistic";
+import Services from "components/APPLICATIONS/billing/services/Services";
+import ServicesForm from "components/APPLICATIONS/billing/services/servicesForm/ServicesForm";
+import ServiceDetails from "components/APPLICATIONS/billing/services/details/ServiceDetails";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -158,16 +161,23 @@ const Router = () => {
             element={<DocumentForm />}
           />
 
+          <Route path="/billing/services" element={<Services />} />
+          <Route
+            path="/billing/services/:action/:id?"
+            element={<ServicesForm />}
+          />
+          <Route
+            path="/billing/services/details/:id"
+            element={<ServiceDetails />}
+          />
+
           <Route
             path="/billing/service-production"
             element={<ServiceProductions />}
           />
+
           <Route
-            path="/billing/service-production/:action"
-            element={<ServiceProductionForm />}
-          />
-          <Route
-            path="/billing/service-production/:action/:id"
+            path="/billing/service-production/:action/:id?"
             element={<ServiceProductionForm />}
           />
           <Route

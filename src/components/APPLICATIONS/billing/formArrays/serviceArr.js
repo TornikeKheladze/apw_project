@@ -11,7 +11,6 @@ export const serviceCategoriesArr = [
     type: "number",
   },
   { name: "catType", label: "catType", type: "select" },
-
   {
     name: "chargeCalculationEndDate",
     label: "chargeCalculationEndDate",
@@ -22,7 +21,7 @@ export const serviceCategoriesArr = [
     label: "chargeCalculationStartDate",
     type: "datetime-local",
   },
-  { name: "ownerID", label: "ownerID", type: "number" },
+  { filter: "select", name: "ownerID", label: "ownerID", type: "select" },
   { name: "parentID", label: "parentID", type: "select" },
   {
     name: "usedQuantity",
@@ -77,9 +76,10 @@ export const serviceArr = [
     type: "number",
   },
   {
+    filter: "select",
     name: "ownerID",
     label: "ownerID",
-    type: "number",
+    type: "select",
   },
   {
     name: "serviceUrl",
@@ -282,6 +282,12 @@ export const serviceProductionArr = [
     filter: "select",
     name: "agentID",
     label: "agentID",
+    type: "select",
+  },
+  {
+    filter: "select",
+    name: "ownerID",
+    label: "ownerID",
     type: "select",
   },
   {

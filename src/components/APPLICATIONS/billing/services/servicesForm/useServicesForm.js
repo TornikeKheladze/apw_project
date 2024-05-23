@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import {
   getServiceById,
   updateService,
@@ -9,13 +8,17 @@ import {
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "services/serviceCategories";
+import { serviceArr } from "../../formArrays/serviceArr";
+import { getAllUsers } from "services/users";
 
 const useServicesForm = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { action, id } = useParams();
+  const [searchParams] = useSearchParams();
 
-  const { authorizedUser } = useSelector((store) => store.user);
+  const ownerID = searchParams.get("ownerID");
+
   const [chosenCategory, setChosenCategory] = useState({});
   const [alert, setAlert] = useState({
     message: "",
@@ -41,6 +44,10 @@ const useServicesForm = () => {
       queryKey: "getCategories",
       queryFn: () => getCategories().then((res) => res.data),
     });
+  const { data: users = [{}], isLoading: usersLoading } = useQuery({
+    queryKey: "getAllUsers",
+    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  });
 
   const mutateHandler = (response, message) => {
     if (response.data.message) {
@@ -92,11 +99,10 @@ const useServicesForm = () => {
   }, [action, id, service.categoryID]);
 
   const submitHandler = async (data) => {
-    const ownerID = authorizedUser.id;
     const requestData = {
+      ownerID,
       ...data,
       image: JSON.parse(localStorage.getItem("formInputData"))?.image,
-      ownerID,
       categoryID: chosenCategory.id,
     };
     if (action === "create") {
@@ -106,16 +112,23 @@ const useServicesForm = () => {
     }
   };
 
+  const formFields = serviceArr.filter(
+    (item) =>
+      item.name !== "categoryID" && (!ownerID || item.name !== "ownerID")
+  );
+
   return {
     action,
     submitHandler,
     categories,
+    users,
     alert,
     service,
-    isLoading: categoriesLoading || isLoading || isFetching,
+    isLoading: categoriesLoading || isLoading || isFetching || usersLoading,
     actionLoading: createLoading || editLoading,
     chosenCategory,
     setChosenCategory,
+    formFields,
   };
 };
 

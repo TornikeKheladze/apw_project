@@ -2,7 +2,6 @@ import Alert from "components/Alert";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import useServicesForm from "./useServicesForm";
 import GeneralForm from "../../generalForm/GeneralForm";
-import { serviceArr } from "../../formArrays/serviceArr";
 import ServiceCategoryTreeMenu from "../../serviceCategories/ServiceCategoryTreeMenu";
 import { buildCategoryTree } from "helpers/treeMenuBuilder";
 
@@ -17,6 +16,8 @@ const ServicesForm = () => {
     actionLoading,
     chosenCategory,
     setChosenCategory,
+    formFields,
+    users,
   } = useServicesForm();
 
   return (
@@ -42,15 +43,14 @@ const ServicesForm = () => {
 
             <GeneralForm
               optionsObj={{
+                ownerID: users,
                 active: [
                   { name: "არააქტიური", id: 0 },
                   { name: "აქტიური", id: 1 },
                 ],
               }}
               submitHandler={submitHandler}
-              formArray={serviceArr.filter(
-                (item) => item.name !== "ownerID" && item.name !== "categoryID"
-              )}
+              formArray={formFields}
               isLoading={actionLoading}
               updateDataObj={action === "edit" ? service : null}
             />

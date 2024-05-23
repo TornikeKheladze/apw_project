@@ -54,7 +54,7 @@ const UserList = ({ users, isLoading }) => {
             onClick={() =>
               editMutate({
                 ...selectedUser,
-                id: selectedUser.user_id,
+                id: selectedUser.id,
                 active: selectedUser.active ? 0 : 1,
               })
             }
@@ -106,7 +106,7 @@ const UserList = ({ users, isLoading }) => {
                     content="რედაქტირება"
                   >
                     <Link
-                      to={`/user/edit/${user.user_id}`}
+                      to={`/user/edit/${user.id}`}
                       className="btn btn-icon btn_outlined btn_secondary group"
                     >
                       <span className="la la-pen-fancy"></span>
