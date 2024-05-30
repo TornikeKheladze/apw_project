@@ -4,7 +4,7 @@ import { useMutation } from "react-query";
 import { useSelector } from "react-redux";
 import { updatePassword } from "services/users";
 
-export const useNewPasswordForm = () => {
+export const useNewPasswordForm = (setPasswordModal) => {
   const {
     register,
     handleSubmit,
@@ -20,6 +20,9 @@ export const useNewPasswordForm = () => {
     mutationFn: updatePassword,
     onSuccess: () => {
       setAlert({ type: "success", message: "პაროლი წარმატებით შეიცვალა" });
+      setTimeout(() => {
+        if (setPasswordModal) setPasswordModal(false);
+      }, 1500);
       setTimeout(() => {
         setAlert({ type: "success", message: "" });
       }, 3000);

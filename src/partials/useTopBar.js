@@ -38,10 +38,8 @@ export const useTopBar = () => {
       const res = await logout();
       dispatch(saveAuthorizedUser({}));
       localStorage.removeItem("token");
-      localStorage.removeItem("hash");
       // temporary navigation
       navigate("/login");
-      console.log(res);
     } catch (error) {
       console.log(error);
     }

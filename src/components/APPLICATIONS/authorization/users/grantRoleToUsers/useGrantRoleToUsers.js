@@ -1,64 +1,61 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { APPLICATIONS } from "data/applications";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
-import { saveRoles } from "reducers/RoleReducer";
-import { saveUsers } from "reducers/UserReducer";
-import {
-  getRolesAndPermissionsData,
-  getSuperAdminData,
-  setRolesToUser,
-} from "services/roles";
+import { getRolesData, setRolesToUser } from "services/roles";
 import { getUsersByTypeAndId } from "services/users";
 
 const useGrantRoleToUsers = () => {
+  const queryClient = useQueryClient();
   const [selectedRole, setSelectedRole] = useState();
-  const dispatch = useDispatch();
-  const allRoles = useSelector((state) => state.role.roles);
-  const users = useSelector((state) => state.user.users);
-  const [roleGranted, setRoleGranted] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { type, id } = useParams();
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const { authorizedUser } = useSelector((store) => store.user);
+  const [alert, setAlert] = useState({
+    type: "success",
+    message: "",
+  });
 
-  useEffect(() => {
-    const fetchRoles = async () => {
-      const fetchAndSave = async (fetchFunc) => {
-        const res = await fetchFunc();
-        dispatch(saveRoles(res.data.data.roles));
-      };
-      try {
-        setIsLoading(true);
-        if (authorizedUser.superAdmin) {
-          fetchAndSave(getSuperAdminData);
-        } else {
-          if (authorizedUser.roles?.map((role) => role.aid).includes(2)) {
-            fetchAndSave(() => getRolesAndPermissionsData("documents"));
-          }
-          if (authorizedUser.roles?.map((role) => role.aid).includes(4)) {
-            fetchAndSave(() => getRolesAndPermissionsData("billing"));
-          }
-        }
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-        console.log(error);
-      }
-    };
+  const afterRequestHandler = (message, type) => {
+    setAlert({
+      type: type,
+      message: message,
+    });
+    setTimeout(() => {
+      setAlert({
+        type: type,
+        message: "",
+      });
+    }, 2000);
+    queryClient.invalidateQueries(["getUsers", type, id]);
+    if (type === "success") {
+      setSelectedRole("");
+      setSelectedUsers([]);
+    }
+  };
 
-    fetchRoles();
-  }, [dispatch, authorizedUser]);
+  const { data: users = [], isLoading: isUsersLoading } = useQuery({
+    queryKey: ["getUsers", type, id],
+    queryFn: () =>
+      getUsersByTypeAndId(type, id).then((res) => res?.data?.users),
+  });
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const res = await getUsersByTypeAndId(type, id);
-      dispatch(saveUsers(res?.data?.users));
-    };
-    fetchUsers();
-    return () => {
-      dispatch(saveUsers([]));
-    };
-  }, [id, type, dispatch]);
+  const {
+    data: rolesData = { roles: [], permission: [] },
+    isLoading: rolesDataLoading,
+  } = useQuery({
+    queryKey: "getRolesData",
+    queryFn: () => getRolesData().then((res) => res.data.data),
+    staleTime: Infinity,
+  });
+
+  const { mutate: setRoleMutate, isLoading: setRoleMutateLoading } =
+    useMutation({
+      mutationFn: (data) => setRolesToUser(data),
+      onSuccess: () =>
+        afterRequestHandler("როლის დამატება წარმატებულია", "success"),
+      onError: () =>
+        afterRequestHandler("როლის დამატება ვერ მოხერხდა", "danger"),
+    });
 
   const roleChangeHandler = (e) => {
     setSelectedRole(+e.target.value);
@@ -77,36 +74,22 @@ const useGrantRoleToUsers = () => {
   };
 
   const submitHandler = async () => {
-    const roleData = {
-      aid: 1,
-      role_id: selectedRole,
-      user_id: selectedUsers,
-    };
-    try {
-      setIsLoading(true);
-      await setRolesToUser(roleData);
-      setIsLoading(false);
-      setRoleGranted(true);
-    } catch (error) {
-      console.log(error);
-    }
-    setTimeout(() => {
-      setRoleGranted(false);
-    }, [2000]);
-    setSelectedRole("");
-    setSelectedUsers([]);
+    const aid = rolesData.roles.find((role) => +role.id === +selectedRole).aid;
+    const url = APPLICATIONS.find((app) => +app.id === +aid).url;
+    setRoleMutate({ aid, url, role_id: selectedRole, user_id: selectedUsers });
   };
 
   return {
-    allRoles,
+    roles: rolesData.roles,
     selectedUsers,
     selectedRole,
     users,
-    roleGranted,
-    isLoading,
+    isLoading: rolesDataLoading || isUsersLoading,
     roleChangeHandler,
     submitHandler,
     handleCheckboxChange,
+    setRoleMutateLoading,
+    alert,
   };
 };
 

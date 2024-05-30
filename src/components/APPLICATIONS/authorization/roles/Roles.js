@@ -11,38 +11,47 @@ import Alert from "components/Alert";
 
 const Roles = () => {
   const {
-    add,
-    deleteRole,
-    editRole,
     roles,
+    isLoading,
+    permissions,
     isDeleteModalOpen,
     setIsDeleteModalOpen,
     isEditModalOpen,
     setIsEditModalOpen,
     choosenRole,
     setChoosenRole,
-    isLoading,
-    successMessage,
-    actionLoading,
+    createMutate,
+    alert,
+    createLoading,
+    deleteMutate,
+    deleteLoading,
+    editLoading,
+    editMutate,
   } = useRoles();
 
+  // createLoading მიწერია ყველგან
   return (
     <main className="workspace">
       <DeleteModal
         isOpen={isDeleteModalOpen}
         setIsOpen={setIsDeleteModalOpen}
-        action={deleteRole}
+        action={deleteMutate}
         title={"როლის წაშლა"}
-        loading={actionLoading}
+        loading={deleteLoading}
       />
       <EditRoleModal
         isOpen={isEditModalOpen}
         setIsOpen={setIsEditModalOpen}
         role={choosenRole}
-        action={editRole}
-        loading={actionLoading}
+        action={editMutate}
+        loading={editLoading}
+        permissions={permissions}
       />
-      <AddRole add={add} loading={actionLoading} />
+      <AddRole
+        permissions={permissions}
+        add={createMutate}
+        loading={createLoading}
+      />
 
       <div className="card p-5">
         {isLoading ? (
@@ -61,9 +70,8 @@ const Roles = () => {
           <p>როლები არ მოიძებნა</p>
         )}
       </div>
-      <Alert message={successMessage} color="success" dismissable>
-        {successMessage}
-      </Alert>
+      <Alert message={alert.message} color={alert.type} dismissable />
+
       <Footer />
     </main>
   );

@@ -7,13 +7,7 @@ import { getPositionByDepartmentId } from "services/positions";
 import { useWatch } from "react-hook-form";
 import { useQuery } from "react-query";
 
-const FormDropdowns = ({
-  setValue,
-  formObject,
-  isFormEditing,
-  action,
-  errors,
-}) => {
+const FormDropdowns = ({ setValue, formObject, errors }) => {
   const orgInput =
     useWatch({
       name: "oid",
@@ -63,23 +57,12 @@ const FormDropdowns = ({
     enabled: !!depInput?.id,
   });
 
-  const disable = () => {
-    if (!depInput) {
-      return true;
-    }
-    if (positions.length === 0) {
-      return true;
-    }
-    if (!isFormEditing && action === "edit") {
-      return true;
-    }
-    return false;
-  };
+  const disable = +!depInput || positions.length === 0;
 
   return (
     <>
       <CustomDropdown
-        disabled={!isFormEditing && action === "edit"}
+        disabled={false}
         label="აირჩიეთ ორგანიზაცია"
         list={organizations}
         active={orgInput}
@@ -88,11 +71,7 @@ const FormDropdowns = ({
       />
       <CustomDropdown
         label="აირჩიეთ დეპარტამენტი"
-        disabled={
-          departments.length === 0 || (!isFormEditing && action === "edit")
-            ? true
-            : false
-        }
+        disabled={departments.length === 0 ? true : false}
         list={departments}
         active={depInput}
         setActive={setDep}
@@ -100,7 +79,7 @@ const FormDropdowns = ({
       />
       <CustomDropdown
         label="აირჩიეთ პოზიცია"
-        disabled={disable()}
+        disabled={disable}
         list={positions}
         active={posInput}
         setActive={setPos}

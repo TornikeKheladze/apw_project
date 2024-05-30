@@ -9,18 +9,19 @@ import PlusIcon from "components/icons/PlusIcon";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
-import { updateUserData } from "services/users";
+import { deleteUser, updateUserData } from "services/users";
 
 const UserList = ({ users, isLoading }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState({ id: "" });
   const [successMessage, setSuccessMessage] = useState("");
-  const queriClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   const { isLoading: activateLoading, mutate: editMutate } = useMutation({
     mutationFn: updateUserData,
     onSuccess: () => {
-      queriClient.invalidateQueries("getUsers");
+      queryClient.invalidateQueries("getUsers");
       setSuccessMessage(
         `მომხმარებელი ${selectedUser.name} ${
           selectedUser.active ? "არა აქტიურია" : "აქტიურია"
@@ -35,13 +36,29 @@ const UserList = ({ users, isLoading }) => {
     },
   });
 
+  const { mutate: deleteMutate, isLoading: deleteLoading } = useMutation({
+    mutationFn: () => deleteUser(selectedUser.id),
+    onSuccess: () => {
+      queryClient.invalidateQueries("getUsers");
+      setSuccessMessage(
+        `მომხმარებელი ${selectedUser.name} ${selectedUser.l_name} წაიშალა`
+      );
+      setTimeout(() => {
+        setDeleteModal(false);
+      }, 1600);
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 3000);
+    },
+  });
+
   return (
     <>
       <Alert message={successMessage} color="success" dismissable />
       <Modal active={openModal} centered onClose={() => setOpenModal(false)}>
         <ModalHeader>მომხმარებლის სტატუსი</ModalHeader>
         <div className="p-5">
-          მომხმარებელი {selectedUser.name}
+          მომხმარებელი {`${selectedUser.name} ${selectedUser.l_name}`}
           {selectedUser.active ? (
             <span className="text-success"> აქტიურია</span>
           ) : (
@@ -70,6 +87,22 @@ const UserList = ({ users, isLoading }) => {
           </Button>
         </ModalFooter>
       </Modal>
+      <Modal
+        active={deleteModal}
+        centered
+        onClose={() => setDeleteModal(false)}
+      >
+        <ModalHeader>მომხმარებლის წაშლა</ModalHeader>
+        <div className="p-5">
+          გსურთ მომხმარებლის {`${selectedUser.name} ${selectedUser.l_name}`}{" "}
+          წაშლა?
+        </div>
+        <ModalFooter>
+          <Button className="w-24" onClick={deleteMutate} color="danger">
+            {deleteLoading ? <LoadingSpinner /> : "წაშლა"}
+          </Button>
+        </ModalFooter>
+      </Modal>
       <div className="flex justify-between px-2">
         <h4>მომხმარებლები</h4>
         <Link
@@ -94,7 +127,7 @@ const UserList = ({ users, isLoading }) => {
             users.map((user, index) => (
               <tr key={user.id + user.email}>
                 <td>{index + 1}</td>
-                <td className="text-base">{user.name}</td>
+                <td className="text-base">{`${user.name} ${user.l_name}`}</td>
                 <td className="flex-grow-1 justify-self-right  flex justify-end gap-2">
                   <Tippy
                     theme="light-border tooltip"
@@ -143,6 +176,25 @@ const UserList = ({ users, isLoading }) => {
                         <ErrorIcon />
                       </button>
                     )}
+                  </Tippy>
+                  <Tippy
+                    theme="light-border tooltip"
+                    touch={["hold", 500]}
+                    offset={[0, 12]}
+                    interactive
+                    animation="scale"
+                    appendTo={document.body}
+                    content="წაშლა"
+                  >
+                    <button
+                      onClick={() => {
+                        setSelectedUser(user);
+                        setDeleteModal(true);
+                      }}
+                      className="btn btn-icon btn_outlined btn_danger"
+                    >
+                      <span className="la la-trash-alt"></span>
+                    </button>
                   </Tippy>
                 </td>
               </tr>

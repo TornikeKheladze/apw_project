@@ -7,6 +7,8 @@ import Tooltip from "components/Tooltip";
 
 import CustomInput from "components/form/CustomInput";
 import { useLogin } from "./useLogin";
+import Modal, { ModalBody, ModalHeader } from "components/Modal";
+import NewPasswordForm from "../users/passwordForms/newPasswordForm/NewPasswordForm";
 
 const Login = () => {
   const {
@@ -20,12 +22,14 @@ const Login = () => {
     toggleFullscreen,
     isPasswordVisible,
     setIsPasswordVisible,
+    passwordModal,
+    setPasswordModal,
   } = useLogin();
 
   return (
     <>
       <section className="top-bar">
-        <span className="brand">Yeti</span>
+        <span className="brand">Logo</span>
         <nav className="flex items-center ltr:ml-auto rtl:mr-auto">
           <Tooltip content="Toggle Dark Mode">
             <Switch
@@ -120,6 +124,16 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <Modal
+        centered
+        active={passwordModal}
+        onClose={() => setPasswordModal(false)}
+      >
+        <ModalHeader>შეცვალეთ პაროლი</ModalHeader>
+        <ModalBody>
+          <NewPasswordForm setPasswordModal={setPasswordModal} />
+        </ModalBody>
+      </Modal>
     </>
   );
 };

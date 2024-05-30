@@ -28,8 +28,7 @@ const useUserRoles = () => {
   //       APPLICATIONS.find((app) => +app.id === +uniqueAids[0]).url
   //     ),
   // });
-  // ადრე ასე იყო რო თუ სუპერადმინია აქ უნდა გაეშვა რექვესტი,
-  // თუ არ არის სუპერადმინი მაშინ ავტორიზებულის AID-ს მიხედვით გაეშვება რექვესტი
+
   const { data: permissionsData = {}, isLoading } = useQuery({
     queryKey: "getSuperAdminData",
     queryFn: () => getSuperAdminData().then((res) => res.data.data),
@@ -44,12 +43,13 @@ const useUserRoles = () => {
     setTimeout(() => {
       setAlert({
         message: "",
+        type: "success",
       });
     }, 3000);
   };
 
   const { mutate: setRolesMutate, isLoading: setLoading } = useMutation({
-    mutationFn: (data) => setRolesToUser(data.roleData, data.appUrl),
+    mutationFn: (data) => setRolesToUser(data),
     onSuccess: () => {
       afterRequestHandler("როლის მინიჭება წარმატებულია", "success");
     },
@@ -60,7 +60,7 @@ const useUserRoles = () => {
   });
 
   const { mutate: removeRolesMutate, isLoading: removeLoading } = useMutation({
-    mutationFn: (data) => removeRolesFromUser(data.roleData, data.appUrl),
+    mutationFn: (data) => removeRolesFromUser(data),
     onSuccess: () => {
       afterRequestHandler(
         "მომხმარებლისთვის როლის წაშლა წარმატებულია",
@@ -113,25 +113,19 @@ const useUserRoles = () => {
   }, [searchQuery, availableRoles]);
 
   const roleChooseHandler = async (role) => {
-    setAlert({
-      message: "",
-    });
     setRolesMutate({
-      roleData: { role_id: role.id, user_id: [id] },
-      appUrl: APPLICATIONS.find((app) => +app.id === +role.aid).url,
+      role_id: role.id,
+      user_id: [id],
+      url: APPLICATIONS.find((app) => +app.id === +role.aid).url,
     });
   };
 
   const removeFromSelectedRoles = async (data) => {
-    setAlert({
-      message: "",
-    });
     removeRolesMutate({
-      roleData: {
-        role_id: data.id,
-        user_id: [id],
-      },
-      appUrl: APPLICATIONS.find((app) => +app.id === +data.aid).url,
+      aid: data.aid,
+      role_id: data.id,
+      user_id: [id],
+      url: APPLICATIONS.find((app) => +app.id === +data.aid).url,
     });
   };
 

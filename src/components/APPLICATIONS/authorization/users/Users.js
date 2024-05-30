@@ -5,7 +5,7 @@ import Paths from "components/paths/Paths";
 import { Link } from "react-router-dom";
 
 const Users = () => {
-  const { users, departments, header, isLoading } = useUsers();
+  const { users, departments, header, isLoading, type, id } = useUsers();
   return (
     <main className="workspace">
       {/* {users.length ?<div></div> <Paths /> : <></>} */}
@@ -18,7 +18,7 @@ const Users = () => {
       </div>
       {header()}
 
-      {users.length ? (
+      {users.length && type !== "all" && id !== "all" ? (
         <Link to={"role"} className="w-max mb-3">
           როლის მინიჭება
         </Link>

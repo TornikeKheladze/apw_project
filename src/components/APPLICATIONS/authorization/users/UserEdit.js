@@ -6,27 +6,28 @@ import Tabs, {
   TabsNavigation,
   TabsNavigationItem,
 } from "components/Tabs";
-import UserForm from "./userForm/UserForm";
 import Button from "components/Button";
 import { useNavigate, useParams } from "react-router-dom";
 import UserRoles from "./userRoles/UserRoles";
 import { useSelector } from "react-redux";
-import SuperAdminDetails from "./userForm/SuperAdminDetails";
+// import SuperAdminDetails from "./userForm/SuperAdminDetails";
 import NewPasswordForm from "./passwordForms/newPasswordForm/NewPasswordForm";
+import UserEditForm from "./userForm/UserEditForm";
 
 const UserEdit = () => {
   const navigate = useNavigate();
   const { authorizedUser } = useSelector((store) => store.user);
-  const { action, id } = useParams();
+  // const { action, id } = useParams();
+  const { id } = useParams();
 
-  const regularUserEditing =
-    authorizedUser.id !== undefined &&
-    action === "edit" &&
-    !((authorizedUser.superAdmin && +authorizedUser.id === +id) || false);
+  // const regularUserEditing =
+  //   authorizedUser.id !== undefined &&
+  //   action === "edit" &&
+  //   !((authorizedUser.superAdmin && +authorizedUser.id === +id) || false);
 
   return (
     <main className="workspace">
-      <div className="w-full flex justify-center">
+      <div className="w-full md:flex justify-center">
         <div className="card p-5 md:w-2/3">
           <Button onClick={() => navigate(-1)}>უკან</Button>
           <Tabs activeIndex={1} className="mt-5">
@@ -39,7 +40,8 @@ const UserEdit = () => {
             </TabsNavigation>
             <TabsContent>
               <TabsContentItem index={1}>
-                {regularUserEditing ? <UserForm /> : <SuperAdminDetails />}
+                {/* {regularUserEditing ? <UserForm /> : <SuperAdminDetails />} */}
+                <UserEditForm />
               </TabsContentItem>
               <TabsContentItem index={2}>
                 <UserRoles />

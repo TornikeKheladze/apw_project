@@ -5,6 +5,8 @@ import Label from "components/form/Label";
 import Radio from "components/form/Radio";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import useGeneralForm from "./useGeneralForm";
+import FormDropdowns from "components/APPLICATIONS/authorization/users/userForm/formDropdown/FormDropdowns";
+import { useEffect } from "react";
 
 const GeneralForm = (props) => {
   const {
@@ -13,6 +15,7 @@ const GeneralForm = (props) => {
     optionsObj,
     isLoading,
     updateDataObj = {},
+    externalFields,
   } = props;
 
   const {
@@ -22,12 +25,32 @@ const GeneralForm = (props) => {
     formData,
     handleFormChange,
     imageForDisplay,
+    setValue,
+    formObject,
   } = useGeneralForm(formArray, updateDataObj);
   // const navigate = useNavigate();
   // onSubmit={handleSubmit(async (data) => {
   //   await submitHandler(data);
   //   navigate(-1);
   // })}
+
+  // only for user editing
+  useEffect(() => {
+    if (externalFields) {
+      setValue("oid", {
+        name: externalFields?.o_name,
+        id: externalFields?.oid,
+      });
+      setValue("did", {
+        department_name: externalFields?.department_name,
+        id: externalFields?.did,
+      });
+      setValue("pid", {
+        position_name: externalFields?.position_name,
+        id: externalFields?.pid,
+      });
+    }
+  }, [setValue, externalFields]);
 
   return (
     <form
@@ -150,6 +173,32 @@ const GeneralForm = (props) => {
           );
         }
       })}
+
+      {/*  only for user editing */}
+      {externalFields && (
+        <>
+          <FormDropdowns
+            formObject={formObject}
+            setValue={setValue}
+            errors={errors}
+          />
+          <input
+            hidden
+            name="oid"
+            {...register("oid", { required: "სავალდებულო" })}
+          />
+          <input
+            hidden
+            name="did"
+            {...register("did", { required: "სავალდებულო" })}
+          />
+          <input
+            hidden
+            name="pid"
+            {...register("pid", { required: "სავალდებულო" })}
+          />
+        </>
+      )}
       <div className="flex items-center justify-between">
         <Button
           disabled={isLoading}

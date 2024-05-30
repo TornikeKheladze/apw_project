@@ -11,6 +11,7 @@ const useGeneralForm = (formArray, updateDataObj) => {
     handleSubmit,
     formState: { errors },
     setValue,
+    ...formObject
   } = useForm();
 
   const handleFormChange = async (e) => {
@@ -57,7 +58,7 @@ const useGeneralForm = (formArray, updateDataObj) => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [updateDataObj]);
 
   return {
     register,
@@ -67,6 +68,7 @@ const useGeneralForm = (formArray, updateDataObj) => {
     handleFormChange,
     setValue,
     imageForDisplay,
+    formObject,
   };
 };
 

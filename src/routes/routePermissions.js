@@ -8,34 +8,33 @@ export const routePermissions = [
   // transactions
   {
     route: "/billing/transactions",
-    permission: "bil_transaction_all_get",
+    permission: "bil_transactions_get",
     element: <Transactions />,
   },
   {
     route: "/billing/transactions/details/:id",
-    permission: "bil_transaction_id_get",
+    permission: "bil_payments_get_id",
     element: <TransactionDetails />,
   },
-
   // service categories
   {
     route: "/billing/service-categories",
-    permission: "bil_service_categories_all_get",
+    permission: "bil_categories_get",
     element: <ServiceCategories />,
   },
   {
     route: "/billing/service-categories/:action",
-    permission: "bil_service_categories_add_post",
+    permission: "bil_categories_post_add",
     element: <ServiceCategoriesForm />,
   },
   {
     route: "/billing/service-categories/:action/:id?",
-    permission: "bil_service_categories_id_put",
+    permission: "bil_categories_put_edit",
     element: <ServiceCategoriesForm />,
   },
   {
     route: "/billing/service-categories/details/:id",
-    permission: "bil_service_categories_id_get",
+    permission: "bil_categories_get_id",
     element: <ServiceCategoriesDetails />,
   },
 ];

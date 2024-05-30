@@ -54,7 +54,6 @@ import Organizations from "components/APPLICATIONS/authorization/organizations/O
 import Departments from "components/APPLICATIONS/authorization/departments/Departments";
 import Positions from "components/APPLICATIONS/authorization/positions/Positions";
 import Users from "components/APPLICATIONS/authorization/users/Users";
-import UserForm from "components/APPLICATIONS/authorization/users/userForm/UserForm";
 import UserEdit from "components/APPLICATIONS/authorization/users/UserEdit";
 import Roles from "components/APPLICATIONS/authorization/roles/Roles";
 import Login from "components/APPLICATIONS/authorization/login/Login";
@@ -103,6 +102,7 @@ import ServicesForm from "components/APPLICATIONS/billing/services/servicesForm/
 import ServiceDetails from "components/APPLICATIONS/billing/services/details/ServiceDetails";
 import ApiCredentials from "components/APPLICATIONS/billing/apiCredentials/ApiCredentials";
 import ApiCredentialsForm from "components/APPLICATIONS/billing/apiCredentials/apiCredentialsForm/ApiCredentialsForm";
+import UserEditForm from "components/APPLICATIONS/authorization/users/userForm/UserEditForm";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -124,7 +124,14 @@ const Router = () => {
           <Route path="positions/:oid/:did" element={<Positions />} />
           <Route path="users/:type/:id" element={<Users />} />
           <Route path="users/:type/:id/role" element={<GrantRoleToUsers />} />
-          <Route path="user/:action" element={<UserForm />} />
+          <Route
+            path="user/:action"
+            element={
+              <main className="workspace">
+                <UserEditForm />
+              </main>
+            }
+          />
           <Route path="user/:action/:id" element={<UserEdit />} />
           <Route path="roles" element={<Roles />} />
           <Route path="/department/:did/:oid" element={<Departments />} />

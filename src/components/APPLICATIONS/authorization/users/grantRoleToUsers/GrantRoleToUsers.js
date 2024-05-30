@@ -7,15 +7,16 @@ import LoadingSpinner from "components/icons/LoadingSpinner";
 
 const GrantRoleToUsers = () => {
   const {
-    allRoles,
+    roles,
     selectedUsers,
     users,
-    roleGranted,
     isLoading,
     roleChangeHandler,
     submitHandler,
     handleCheckboxChange,
     selectedRole,
+    setRoleMutateLoading,
+    alert,
   } = useGrantRoleToUsers();
 
   return (
@@ -25,20 +26,20 @@ const GrantRoleToUsers = () => {
           მომხმარებლებლები
         </h3>
         <div className="  grid gap-y-4 sm:grid-cols-3 grid-cols-1  w-full ">
-          {users.length > 0 ? (
-            users?.map((user) => (
-              <Checkbox
-                key={user.id + Math.random().toString()}
-                label={user.name}
-                checked={selectedUsers.includes(user.user_id)}
-                onChange={(event) => handleCheckboxChange(event, user.user_id)}
-              />
-            ))
-          ) : (
+          {isLoading ? (
             <div className="flex flex-col gap-2 items-center mx-auto col-span-3">
               <LoadingSpinner />
               <p>იტვირთება...</p>
             </div>
+          ) : (
+            users?.map((user) => (
+              <Checkbox
+                key={user.id + Math.random().toString()}
+                label={user.name}
+                checked={selectedUsers.includes(user.id)}
+                onChange={(event) => handleCheckboxChange(event, user.id)}
+              />
+            ))
           )}
         </div>
       </div>
@@ -46,7 +47,7 @@ const GrantRoleToUsers = () => {
         <div className="mt-5">
           <CustomSelect value={selectedRole} onChange={roleChangeHandler}>
             <option>აირჩიეთ როლი</option>
-            {allRoles?.map((role) => (
+            {roles?.map((role) => (
               <option key={role.id} value={role.id}>
                 {role.name}
               </option>
@@ -61,17 +62,13 @@ const GrantRoleToUsers = () => {
             >
               დადასტურება
             </Button>
-            {isLoading && !roleGranted && <LoadingSpinner />}
+            {setRoleMutateLoading && <LoadingSpinner />}
           </div>
         </div>
       </div>
-      {roleGranted && !isLoading && (
-        <div className="lg:w-1/2 w-full mx-auto mt-4">
-          <Alert color="success" dismissable>
-            როლი წარმატებით მიენიჭა
-          </Alert>
-        </div>
-      )}
+      <div className="lg:w-1/2 w-full mx-auto mt-4">
+        <Alert color={alert.type} message={alert.message} dismissable />
+      </div>
     </main>
   );
 };

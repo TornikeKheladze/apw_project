@@ -40,3 +40,56 @@ export const orgArr = [
     type: "select",
   },
 ];
+
+export const userArr = [
+  {
+    name: "l_name",
+    label: "გვარი",
+    type: "text",
+  },
+  {
+    name: "name",
+    label: "სახელი",
+    type: "text",
+  },
+  {
+    name: "password",
+    label: "პაროლი",
+    type: "password",
+  },
+  {
+    name: "account_type",
+    label: "ანგარიშის ტიპი",
+    type: "select",
+  },
+  {
+    name: "active",
+    label: "სტატუსი",
+    type: "select",
+  },
+  {
+    name: "address",
+    label: "მისამართი",
+    type: "text",
+  },
+  {
+    name: "date_expiration",
+    label: "ვადის გასვლის თარიღი",
+    type: "datetime-local",
+  },
+  {
+    name: "email",
+    label: "ელ-ფოსტა",
+    type: "email",
+  },
+  {
+    name: "personal_number",
+    label: "პირადი ნომერი",
+    type: "number",
+  },
+  {
+    name: "tell",
+    label: "ტელეფონი",
+    type: "number",
+  },
+];

@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   users: [],
   user: {},
-  authorizedUser: {},
+  authorizedUser: {
+    roles: [],
+  },
 };
 
 export const userSlice = createSlice({

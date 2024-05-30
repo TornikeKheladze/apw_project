@@ -1,30 +1,41 @@
 import Button from "components/Button";
 import Modal, { ModalBody, ModalFooter, ModalHeader } from "components/Modal";
 import Input from "components/form/Input";
-import { useEditRoleModal } from "./useEditRoleModal";
 import PermissionSelect from "../PermissionSelect";
 import LoadingSpinner from "components/icons/LoadingSpinner";
-let billingPermissions = require("../../../../../data/billingPermissions.json");
+import { permissionsObj } from "data/permissions";
+import { useEffect, useState } from "react";
 
-const EditRoleModal = ({ isOpen, setIsOpen, role, action, loading }) => {
-  const {
-    permissions,
-    input = "",
-    currentPermissions,
-    setCurrentPermissions,
-  } = useEditRoleModal(role);
+const EditRoleModal = ({
+  isOpen,
+  setIsOpen,
+  role,
+  action,
+  loading,
+  permissions = [],
+}) => {
+  const [currentPermissions, setCurrentPermissions] = useState([]);
+
+  useEffect(() => {
+    setCurrentPermissions(
+      role?.permissions?.map((p) => {
+        return { ...p, name: permissionsObj[p.name] };
+      })
+    );
+  }, [role]);
 
   return (
     <Modal active={isOpen} onClose={() => setIsOpen(false)}>
       <ModalHeader>როლის ცვლილება</ModalHeader>
       <ModalBody>
         {/* {loading === "isEditing" && <LoadingSpinner blur />} */}
-        <Input value={input} readOnly />
+        <Input value={role.name} readOnly />
         <h4 className="mt-5">უფლებები</h4>
         <PermissionSelect
-          options={permissions.map((p) => {
-            return { ...p, name: billingPermissions[p.name] };
-          })}
+          options={permissions.map(({ name, ...p }) => ({
+            ...p,
+            name: permissionsObj[name],
+          }))}
           selectedPermissions={currentPermissions}
           setSelectedPermissions={setCurrentPermissions}
         />
@@ -39,13 +50,13 @@ const EditRoleModal = ({ isOpen, setIsOpen, role, action, loading }) => {
             უკან დაბრუნება
           </Button>
           <Button
-            onClick={async () => {
-              await action({
-                role_name: input,
+            onClick={() => {
+              action({
+                role_name: role.name,
                 permission: currentPermissions.map(({ id }) => id),
+                id: role.id,
                 aid: role.aid,
               });
-              setIsOpen(false);
             }}
             className="ltr:ml-2 rtl:mr-2 uppercase"
           >

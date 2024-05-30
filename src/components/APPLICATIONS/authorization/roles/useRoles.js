@@ -1,177 +1,81 @@
-import { APPLICATIONS } from "data/applications";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+
 import {
-  savePermissions,
-  saveRoles,
-  saveRolesDepOnPrev,
-} from "reducers/RoleReducer";
-import {
-  addRole,
   addSuperAdminRole,
-  deleteRoleById,
   deleteSuperAdminRole,
-  getRolesAndPermissionsData,
-  getSuperAdminData,
+  getRolesData,
+  updateSuperAdminRole,
 } from "services/roles";
 
 export const useRoles = () => {
-  const dispatch = useDispatch();
-  const { authorizedUser } = useSelector((store) => store.user);
+  const queryClient = useQueryClient();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [choosenRole, setChoosenRole] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const { roles } = useSelector((store) => store.role);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [actionLoading, setActionLoading] = useState(false);
+  const [alert, setAlert] = useState({
+    message: "",
+    type: "success",
+  });
 
-  useEffect(() => {
-    const fetchInitialData = () => {
-      const fetchAndSave = async (fetchFunc) => {
-        setIsLoading(true);
-        const res = await fetchFunc();
-        dispatch(saveRolesDepOnPrev(res.data.data.roles));
-        dispatch(savePermissions(res.data.data.permission));
-        setIsLoading(false);
-      };
+  const {
+    data: rolesData = { roles: [], permission: [] },
+    isLoading: rolesDataLoading,
+  } = useQuery({
+    queryKey: "getRolesData",
+    queryFn: () => getRolesData().then((res) => res.data.data),
+  });
 
-      if (authorizedUser.id) {
-        try {
-          if (authorizedUser?.superAdmin) {
-            fetchAndSave(getSuperAdminData);
-          } else {
-            const uniqueAids = [
-              ...new Set(authorizedUser.roles.map((role) => role.aid)),
-            ];
-            uniqueAids.forEach((aid) => {
-              fetchAndSave(() =>
-                getRolesAndPermissionsData(
-                  APPLICATIONS.find((app) => app.id === aid).url
-                )
-              );
-            });
-          }
-        } catch (error) {
-          setIsLoading(false);
-          console.log(error);
-        }
-      }
-    };
-
-    fetchInitialData();
-    return () => {
-      dispatch(saveRoles([]));
-    };
-  }, [dispatch, authorizedUser]);
-
-  const editRole = async (data) => {
-    try {
-      setActionLoading("isEditing");
-      if (authorizedUser.superAdmin) {
-        const res = await addSuperAdminRole(data);
-        dispatch(
-          saveRoles(
-            roles?.map((role) =>
-              role.id === res.data.data.route.id ? res.data.data.route : role
-            )
-          )
-        );
-      } else {
-        const res = await addRole(
-          data,
-          APPLICATIONS.find((app) => +app.id === +data.aid).url
-        );
-        dispatch(
-          saveRoles(
-            roles?.map((role) =>
-              role.id === res.data.data.route.id ? res.data.data.route : role
-            )
-          )
-        );
-      }
-      setSuccessMessage("როლი წარმატებით შეიცვალა");
-      setActionLoading(false);
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 1500);
-    } catch (error) {
-      console.log(error);
-      setActionLoading(false);
-    }
+  const afterRequestHandler = (type, message) => {
+    queryClient.invalidateQueries("getRolesData");
+    setAlert({
+      message,
+      type,
+    });
+    setIsEditModalOpen(false);
+    setIsDeleteModalOpen(false);
+    setTimeout(() => {
+      setAlert({
+        message: "",
+        type,
+      });
+    }, 2500);
   };
 
-  const deleteRole = async () => {
-    const update = (id) => {
-      const updatedList = roles.filter((role) => role.id !== id);
-      dispatch(saveRoles(updatedList));
-      setIsDeleteModalOpen(false);
-      setChoosenRole({});
-    };
-    try {
-      setActionLoading("isDeleting");
-      if (authorizedUser.superAdmin) {
-        const res = await deleteSuperAdminRole({
-          role_id: choosenRole.id,
-        });
-        update(res.data.data.route.id);
-      } else {
-        const res = await deleteRoleById(
-          {
-            role_id: choosenRole.id,
-          },
-          APPLICATIONS.find((app) => +app.id === +choosenRole.aid).url
-        );
-        update(res.data.data.route.id);
-      }
-      setSuccessMessage("როლი წარმატებით წაიშალა");
-      setActionLoading(false);
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 1500);
-    } catch (error) {
-      setActionLoading(false);
-    }
-  };
+  const { mutate: createMutate, isLoading: createLoading } = useMutation({
+    mutationFn: addSuperAdminRole,
+    onSuccess: () => afterRequestHandler("success", "როლი წარმატებით შეიქმნა"),
+    onError: () => afterRequestHandler("danger", "როლის შექმნა ვერ მოხერხდა"),
+  });
 
-  const add = async (data) => {
-    try {
-      setActionLoading("isAdding");
-      if (authorizedUser.superAdmin) {
-        const res = await addSuperAdminRole(data);
-        dispatch(saveRoles([...roles, res.data.data.route]));
-      } else {
-        const res = await addRole(
-          data,
-          APPLICATIONS.find((app) => +app.id === +data.aid).url
-        );
-        dispatch(saveRoles([...roles, res.data.data.route]));
-      }
-      setSuccessMessage("როლი წარმატებით დაემატა");
-      setActionLoading(false);
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 1500);
-    } catch (error) {
-      console.log(error);
-      setActionLoading(false);
-    }
-  };
+  const { mutate: deleteMutate, isLoading: deleteLoading } = useMutation({
+    mutationFn: () => deleteSuperAdminRole({ role_id: choosenRole.id }),
+    onSuccess: () => afterRequestHandler("success", "როლი წარმატებით წაიშალა"),
+    onError: () => afterRequestHandler("danger", "როლის წაშლა ვერ მოხერხდა"),
+  });
+
+  const { mutate: editMutate, isLoading: editLoading } = useMutation({
+    mutationFn: updateSuperAdminRole,
+    onSuccess: () => afterRequestHandler("success", "როლი წარმატებით შეიცვალა"),
+    onError: () => afterRequestHandler("danger", "როლის შექმნა ვერ მოხერხდა"),
+  });
 
   return {
-    add,
-    deleteRole,
-    editRole,
-    roles,
+    roles: rolesData.roles,
+    isLoading: rolesDataLoading,
+    permissions: rolesData.permission,
     isDeleteModalOpen,
     setIsDeleteModalOpen,
     isEditModalOpen,
     setIsEditModalOpen,
     choosenRole,
     setChoosenRole,
-    dispatch,
-    isLoading,
-    successMessage,
-    actionLoading,
+    createMutate,
+    alert,
+    createLoading,
+    deleteMutate,
+    deleteLoading,
+    editMutate,
+    editLoading,
   };
 };

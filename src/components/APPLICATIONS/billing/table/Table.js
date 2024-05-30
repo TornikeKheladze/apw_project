@@ -8,8 +8,6 @@ import Dropdown from "components/Dropdown";
 import Checkbox from "components/form/Checkbox";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import useCheckPermission from "helpers/useCheckPermission";
-import { billingPermissionsObject } from "data/permissionsObject";
 import ExcelExport from "./ExcelExport";
 
 const Table = ({
@@ -114,19 +112,13 @@ const Table = ({
         >
           <th>
             <div className="flex flex-col gap-2">
-              {useCheckPermission(
-                billingPermissionsObject[target]?.find((p) =>
-                  p.includes("filter")
-                )
-              ) && (
-                <Button
-                  onClick={() => searchSubmit({})}
-                  className="rounded-lg text-white flex gap-1 px-2 py-1 text-sm font-normal justify-center"
-                >
-                  <span className="la la-search text-white"></span>
-                  <span className="text-white">ძებნა</span>
-                </Button>
-              )}
+              <Button
+                onClick={() => searchSubmit({})}
+                className="rounded-lg text-white flex gap-1 px-2 py-1 text-sm font-normal justify-center"
+              >
+                <span className="la la-search text-white"></span>
+                <span className="text-white">ძებნა</span>
+              </Button>
               {excelExporFunc && (
                 <ExcelExport excelExporFunc={excelExporFunc} fileName="dato" />
               )}

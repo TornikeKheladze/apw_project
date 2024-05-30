@@ -4,13 +4,11 @@ import Input from "components/form/Input";
 import Label from "components/form/Label";
 import { APPLICATIONS } from "data/applications";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import PermissionSelect from "../PermissionSelect";
 import LoadingSpinner from "components/icons/LoadingSpinner";
-let billingPermissions = require("../../../../../data/billingPermissions.json");
+import { permissionsObj } from "data/permissions";
 
-const AddRole = ({ add, loading }) => {
-  const { permissions } = useSelector((store) => store.role);
+const AddRole = ({ add, loading, permissions }) => {
   const [aid, setAid] = useState();
   const [input, setInput] = useState("");
 
@@ -51,7 +49,7 @@ const AddRole = ({ add, loading }) => {
       </CustomSelect>
       <PermissionSelect
         options={permissions.map((p) => {
-          return { ...p, name: billingPermissions[p.name] };
+          return { ...p, name: permissionsObj[p.name] };
         })}
         selectedPermissions={selectedPermissions}
         setSelectedPermissions={setSelectedPermissions}

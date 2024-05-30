@@ -9,6 +9,7 @@ export const useLogin = () => {
   const [darkMode, toggleDarkMode] = useDarkMode();
   const [isFullscreen, toggleFullscreen] = useFullscreen();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [passwordModal, setPasswordModal] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -20,10 +21,12 @@ export const useLogin = () => {
   const onSubmit = async (data) => {
     try {
       const res = await login(data);
-      localStorage.setItem("hash", res.data.hash);
       localStorage.setItem("token", res.data.user.token);
-      //temporary navigation
-      navigate("/organizations");
+      if (res.data.user.password_verified_at) {
+        navigate("/organizations");
+      } else {
+        setPasswordModal(true);
+      }
     } catch (error) {
       setError("email", {
         type: "custom",
@@ -44,5 +47,7 @@ export const useLogin = () => {
     toggleFullscreen,
     isPasswordVisible,
     setIsPasswordVisible,
+    passwordModal,
+    setPasswordModal,
   };
 };
