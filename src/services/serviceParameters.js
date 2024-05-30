@@ -12,6 +12,12 @@ export const getServiceParameterById = (id) => {
   return instance.get(`/billing-java/service-parameters/${id}`);
 };
 
+export const getServiceParametersByServiceID = (serviceID) => {
+  return instance.get(
+    `/billing-java/service-parameters/by-service-id/${serviceID}`
+  );
+};
+
 export const updateServiceParameter = (data) => {
   return instance.put("/billing-java/service-parameters", data);
 };

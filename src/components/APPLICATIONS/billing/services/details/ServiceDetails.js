@@ -1,11 +1,12 @@
 import DetailComponent from "../../detailComponent/DetailComponent";
 import { serviceArr } from "../../formArrays/serviceArr";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getServiceById } from "services/services";
 import { idToName } from "helpers/idToName";
 import { getCategories } from "services/serviceCategories";
 import { getAllUsers } from "services/users";
+import { getServiceParametersByServiceID } from "services/serviceParameters";
 
 const ServiceDetails = () => {
   const { id } = useParams();
@@ -23,9 +24,70 @@ const ServiceDetails = () => {
     queryKey: "getAllUsers",
     queryFn: () => getAllUsers().then((res) => res?.data?.users),
   });
+  const {
+    data: serviceParameters = [{}],
+    isLoading: serviceParametersLoading,
+  } = useQuery({
+    queryKey: ["getServiceParametersByServiceID", id],
+    queryFn: () => getServiceParametersByServiceID(id).then((res) => res.data),
+  });
 
   return (
     <DetailComponent
+      links={
+        <div className="card p-3 mb-3">
+          <h4 className="mb-2">მახასიათებლები</h4>
+          <div className="flex gap-2 flex-wrap">
+            <Link
+              to={"/billing/service-prices"}
+              className="btn btn_primary btn_outlined p-1 text-xs"
+            >
+              სერვისის ფასები
+            </Link>
+            <Link
+              to={"/billing/spec-prices"}
+              className="btn btn_primary btn_outlined p-1 text-xs"
+            >
+              სერვისის სპეც ფასები
+            </Link>
+            <Link
+              to={"/billing/service-parameters"}
+              className="btn btn_primary btn_outlined p-1 text-xs"
+            >
+              სერვისის პარამეტრები
+            </Link>
+            <Link
+              to={"/billing/service-parameter-types"}
+              className="btn btn_primary btn_outlined p-1 text-xs"
+            >
+              პარამეტრის ტიპები
+            </Link>
+          </div>
+        </div>
+      }
+      curl={
+        <div className="card p-3 mt-3">
+          <h4>curl</h4>
+          <p>--location 'http://localhost:8080/gateway/transaction'</p>
+          <p>--header 'apiID: 4'</p>
+          <p>--header 'Content-Type: application/json'</p>
+          <p>--header 'Authorization: ••••••'</p>
+          <p>--data '{"{"}</p>
+          <p className="pl-3">"agentID": აგენტის ID,</p>
+          <p className="pl-3">"serviceID": სერვისის ID,</p>
+          <p className="pl-3">"agentOperationID": აგენტის ოპერაციის ID,</p>
+          <p className="pl-3">"amount": რაოდენობა,</p>
+          <p className="pl-3">"payerParameter": "გადამხდელის ინფო",</p>
+          <p className="pl-3">"saleID": სეილის ID,</p>
+          <p className="pl-3">"reseller": რესელერი,</p>
+          {serviceParameters.map((s) => (
+            <p key={s.parameterName + s.parameterPlaceholder} className="pl-3">
+              "{s.parameterName}": {s.parameterPlaceholder},
+            </p>
+          ))}
+          <p>{"}'"}</p>
+        </div>
+      }
       title="სერვისების"
       staticArray={serviceArr}
       updatedData={{
@@ -38,7 +100,12 @@ const ServiceDetails = () => {
         ),
         ownerID: idToName(users, service.ownerID),
       }}
-      loading={serviceLoading || categoriesLoading || usersLoading}
+      loading={
+        serviceLoading ||
+        categoriesLoading ||
+        usersLoading ||
+        serviceParametersLoading
+      }
     />
   );
 };

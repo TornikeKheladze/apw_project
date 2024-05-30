@@ -1,7 +1,14 @@
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import { Link } from "react-router-dom";
 
-const DetailComponent = ({ staticArray, updatedData, title, loading }) => {
+const DetailComponent = ({
+  staticArray,
+  updatedData,
+  title,
+  loading,
+  links,
+  curl,
+}) => {
   const renderLink = () => {
     const link = {};
     if (updatedData?.contract_number) {
@@ -30,6 +37,7 @@ const DetailComponent = ({ staticArray, updatedData, title, loading }) => {
 
   return (
     <main className="workspace p-5">
+      {links && links}
       <div className="card p-5 relative">
         <div className="flex justify-between items-center">
           <h4>{title} დეტალები</h4>
@@ -70,6 +78,7 @@ const DetailComponent = ({ staticArray, updatedData, title, loading }) => {
           </table>
         )}
       </div>
+      {curl && curl}
     </main>
   );
 };
