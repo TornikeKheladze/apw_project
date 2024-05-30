@@ -35,7 +35,7 @@ export const useTopBar = () => {
 
   const logoutUser = async () => {
     try {
-      const res = await logout();
+      await logout();
       dispatch(saveAuthorizedUser({}));
       localStorage.removeItem("token");
       // temporary navigation
