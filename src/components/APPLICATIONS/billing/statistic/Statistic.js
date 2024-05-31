@@ -83,6 +83,19 @@ const Statistic = () => {
     ],
   };
 
+  const unpaidAmountBarData = {
+    labels: mergedStatisticData.map((item) => item.name),
+    datasets: [
+      {
+        label: "რაოდენობა",
+        data: mergedStatisticData.map((item) => item.amount - item.paidAmount),
+        backgroundColor: "rgb(" + colors.primary + "/ .5)",
+        borderColor: "rgb(" + colors.primary + ")",
+        borderWidth: 2,
+      },
+    ],
+  };
+
   const countsData = {
     labels: mergedStatisticData.map((item) => item.name),
     datasets: [
@@ -118,6 +131,20 @@ const Statistic = () => {
             data={amountBarData}
             config={barOptions(
               Math.max(...mergedStatisticData.map((item) => item.amount))
+            )}
+          />
+        </div>
+
+        <div className="card p-5 min-w-0">
+          <h4 className="mb-3">გადაუხდელი თანხა</h4>
+          <BarChart
+            data={unpaidAmountBarData}
+            config={barOptions(
+              Math.max(
+                ...mergedStatisticData.map(
+                  (item) => item.amount - item.paidAmount
+                )
+              )
             )}
           />
         </div>

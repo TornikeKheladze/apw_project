@@ -19,7 +19,6 @@ import useWindowSize from "utilities/hooks/useWindowSize";
 import HeadersIcon from "components/icons/HeadersIcon";
 import AuthIcon from "components/icons/AuthIcon";
 import OrgIcon from "components/icons/OrgIcon";
-import DepartmentsIcon from "components/icons/DepartmentsIcon";
 import AddUserIcon from "components/icons/AddUserIcon";
 import BillingIcon from "components/icons/BillingIcon";
 import TransactionIcon from "components/icons/TransactionIcon";
@@ -443,10 +442,6 @@ const MenuDetailAuth = () => {
           <OrgIcon className={"w-6 h-6 mr-2"} />
           ორგანიზაციები
         </NavLink>
-        <NavLink to={`/departments/${user?.oid}`} onClick={hideMenuDetail}>
-          <DepartmentsIcon className={"w-6 h-6 mr-2"} />
-          დეპარტამენტები
-        </NavLink>
         <NavLink to="/roles" onClick={hideMenuDetail}>
           <span className="la la-certificate"></span>
           როლები
@@ -643,6 +638,9 @@ const MenuDetailBilling = () => {
             ოვნერის თვიური სტატისტიკა
           </NavLink>
         </MenuBarCollapse>
+        <NavLink to="/billing/bills" onClick={hideMenuDetail}>
+          დავალიანებები
+        </NavLink>
         <hr />
       </div>
     </div>

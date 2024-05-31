@@ -8,7 +8,7 @@ import Dropdown from "components/Dropdown";
 import Checkbox from "components/form/Checkbox";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import ExcelExport from "./ExcelExport";
+// import ExcelExport from "./ExcelExport";
 
 const Table = ({
   staticArr,
@@ -119,9 +119,9 @@ const Table = ({
                 <span className="la la-search text-white"></span>
                 <span className="text-white">ძებნა</span>
               </Button>
-              {excelExporFunc && (
+              {/* {excelExporFunc && (
                 <ExcelExport excelExporFunc={excelExporFunc} fileName="dato" />
-              )}
+              )} */}
             </div>
           </th>
           {tableHeaders.map((item) => {

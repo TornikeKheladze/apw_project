@@ -56,7 +56,7 @@ const useServicesForm = () => {
         type: "danger",
       });
     } else {
-      queryClient.invalidateQueries("getCategories");
+      queryClient.invalidateQueries("getAllServices");
       setAlert({
         message: `${message} წარმატებულია`,
         type: "success",

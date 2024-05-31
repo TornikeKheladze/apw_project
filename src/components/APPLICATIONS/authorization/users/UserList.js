@@ -8,15 +8,34 @@ import LoadingSpinner from "components/icons/LoadingSpinner";
 import PlusIcon from "components/icons/PlusIcon";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { deleteUser, updateUserData } from "services/users";
 
-const UserList = ({ users, isLoading }) => {
+const UserList = ({ users, isLoading, departments }) => {
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState({ id: "" });
   const [successMessage, setSuccessMessage] = useState("");
   const queryClient = useQueryClient();
+  const { type, id } = useParams();
+
+  // console.log(departments);
+
+  // const userCreateUrl = `/user/create${type}`;
+
+  const createUserUrl = () => {
+    if (type === "organisation") {
+      return `/user/create/?oid=${id}`;
+    } else if (type === "departments") {
+      const department = departments.find((d) => +d.id === +id) || {};
+      console.log(department);
+      return `/user/create?oid=${department.oid}&did=${department.id}`;
+    } else if (type === "positions") {
+      return `/user/create`;
+    } else {
+      return `/user/create`;
+    }
+  };
 
   const { isLoading: activateLoading, mutate: editMutate } = useMutation({
     mutationFn: updateUserData,
@@ -107,7 +126,7 @@ const UserList = ({ users, isLoading }) => {
         <h4>მომხმარებლები</h4>
         <Link
           className="bg-success text-white px-2 py-2 rounded flex items-center gap-1 font-bold"
-          to="/user/create"
+          to={createUserUrl()}
         >
           <span>დამატება</span>
           <span>

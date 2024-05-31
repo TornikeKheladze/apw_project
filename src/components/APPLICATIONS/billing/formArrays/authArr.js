@@ -39,6 +39,11 @@ export const orgArr = [
     label: "ტიპი",
     type: "select",
   },
+  {
+    name: "reseller",
+    label: "რესელერი",
+    type: "select",
+  },
 ];
 
 export const userArr = [

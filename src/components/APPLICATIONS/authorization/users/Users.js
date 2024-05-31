@@ -27,7 +27,11 @@ const Users = () => {
       )}
 
       <div className="card p-5">
-        <UserList isLoading={isLoading} users={users} />
+        <UserList
+          isLoading={isLoading}
+          users={users}
+          departments={departments}
+        />
       </div>
       <Footer />
     </main>

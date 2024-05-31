@@ -6,8 +6,14 @@ import { getDepartments } from "services/departments";
 import { getPositionByDepartmentId } from "services/positions";
 import { useWatch } from "react-hook-form";
 import { useQuery } from "react-query";
+import { useSearchParams } from "react-router-dom";
 
 const FormDropdowns = ({ setValue, formObject, errors }) => {
+  const [searchParam] = useSearchParams();
+  const oid = searchParam.get("oid");
+  const did = searchParam.get("did");
+  const pid = searchParam.get("pid");
+
   const orgInput =
     useWatch({
       name: "oid",
@@ -42,12 +48,24 @@ const FormDropdowns = ({ setValue, formObject, errors }) => {
   const { data: organizations = [] } = useQuery({
     queryKey: "organizations",
     queryFn: () => getOrganizations().then((res) => res.data.data),
+    onSuccess: (data) => {
+      if (oid) {
+        const org = data.find((org) => +org.id === +oid);
+        setOrg(org);
+      }
+    },
   });
 
   const { data: departments = [] } = useQuery({
     queryKey: ["departments", orgInput?.id],
     queryFn: () => getDepartments(orgInput.id).then((res) => res.data.data),
     enabled: !!orgInput?.id,
+    onSuccess: (data) => {
+      if (oid && did) {
+        const dep = data.find((dep) => +dep.id === +did);
+        setDep(dep);
+      }
+    },
   });
 
   const { data: positions = [] } = useQuery({
@@ -55,6 +73,12 @@ const FormDropdowns = ({ setValue, formObject, errors }) => {
     queryFn: () =>
       getPositionByDepartmentId(depInput.id).then((res) => res.data.data),
     enabled: !!depInput?.id,
+    onSuccess: (data) => {
+      if (oid && did && pid) {
+        const pos = data.find((pos) => +pos.id === +pid);
+        setPos(pos);
+      }
+    },
   });
 
   const disable = +!depInput || positions.length === 0;

@@ -103,6 +103,9 @@ import ServiceDetails from "components/APPLICATIONS/billing/services/details/Ser
 import ApiCredentials from "components/APPLICATIONS/billing/apiCredentials/ApiCredentials";
 import ApiCredentialsForm from "components/APPLICATIONS/billing/apiCredentials/apiCredentialsForm/ApiCredentialsForm";
 import UserEditForm from "components/APPLICATIONS/authorization/users/userForm/UserEditForm";
+import MakeTransaction from "components/APPLICATIONS/billing/transactions/makeTransactions/MakeTransaction";
+import TransactionByCat from "components/APPLICATIONS/billing/transactions/makeTransactions/TransactionByCat";
+import Bills from "components/APPLICATIONS/billing/bills/Bills";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -143,6 +146,15 @@ const Router = () => {
           {routes}
 
           <Route path="/billing/statistic/:user" element={<Statistic />} />
+          <Route
+            path="/billing/transactions/make-transaction"
+            element={<MakeTransaction />}
+          />
+          <Route path="/billing/bills" element={<Bills />} />
+          <Route
+            path="/billing/transactions/make-transaction-by-cat"
+            element={<TransactionByCat />}
+          />
           <Route
             path="/billing/statistic/monthly/:user"
             element={<MonthlyStatistic />}

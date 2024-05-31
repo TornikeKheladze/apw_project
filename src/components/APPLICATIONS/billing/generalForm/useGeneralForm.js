@@ -1,18 +1,35 @@
 import { convertBase64 } from "helpers/convertBase64";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 const useGeneralForm = (formArray, updateDataObj) => {
   const [formData, setFormData] = useState({});
   const [imageForDisplay, setImageForDisplay] = useState("");
+
+  // eslint-disable-next-line
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { pathname } = useLocation();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    control,
     ...formObject
   } = useForm();
+
+  const serviceID = useWatch({
+    control,
+    name: "serviceID",
+  });
+  useEffect(() => {
+    // only for make transactions
+    if (serviceID && pathname === "/billing/transactions/make-transaction") {
+      setSearchParams({ serviceID });
+    }
+  }, [serviceID, pathname, setSearchParams]);
 
   const handleFormChange = async (e) => {
     if (e.target.type === "file") {

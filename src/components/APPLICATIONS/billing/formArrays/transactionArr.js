@@ -98,3 +98,12 @@ export const transactionArr = [
     type: "number",
   },
 ];
+
+export const makeTransactionsArr = [
+  { name: "agentID", label: "agentID", type: "select" },
+  { name: "serviceID", label: "serviceID", type: "select" },
+  { name: "agentOperationID", label: "agentOperationID", type: "number" },
+  { name: "amount", label: "amount", type: "number" },
+  { name: "payerParameter", label: "payerParameter", type: "text" },
+  { name: "saleID", label: "saleID", type: "select" },
+];

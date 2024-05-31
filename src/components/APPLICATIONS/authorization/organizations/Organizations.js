@@ -140,7 +140,19 @@ const Organizations = () => {
               submitHandler={updateMutate}
               isLoading={updateLoading}
               defaultValues={choosenOrganization}
-              optionsObj={{ type: types }}
+              optionsObj={{
+                type: types,
+                reseller: [
+                  {
+                    name: "არის რესელერი",
+                    id: 1,
+                  },
+                  {
+                    name: "არ არის რესელერი",
+                    id: 0,
+                  },
+                ],
+              }}
             />
           </div>
         )}
@@ -150,7 +162,19 @@ const Organizations = () => {
               formArray={orgArr}
               submitHandler={addMutate}
               isLoading={addLoading}
-              optionsObj={{ type: types }}
+              optionsObj={{
+                type: types,
+                reseller: [
+                  {
+                    name: "არის რესელერი",
+                    id: 1,
+                  },
+                  {
+                    name: "არ არის რესელერი",
+                    id: 0,
+                  },
+                ],
+              }}
             />
           </div>
         )}

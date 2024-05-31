@@ -15,3 +15,17 @@ export const getAgentMonthlyStatistic = () => {
 export const getOwnerMonthlyStatistic = () => {
   return instance.get("/billing-java/monthly-statistics");
 };
+
+export const agentTransactionSum = (data) => {
+  return instance.get(
+    "/billing-java/agent-statistic/sum-transactionCount",
+    data
+  );
+};
+
+export const paidTransactionSum = (data) => {
+  return instance.get(
+    "/billing-java/agent-statistic/sum-paid-transactionCount",
+    data
+  );
+};

@@ -43,10 +43,7 @@ const List = ({
                     item.position_name ||
                     item.department_name ||
                     item.api_name ||
-                    item.key ||
-                    item.our_tag ||
-                    item.owner_tag ||
-                    item.agent_tag}
+                    item.key}
                 </td>
 
                 <td className="flex gap-1 items-center justify-between">

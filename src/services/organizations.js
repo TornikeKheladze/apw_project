@@ -22,7 +22,5 @@ export const deleteOrganization = async (id) => {
   return response;
 };
 
-export const getOrganizationById = async (id) => {
-  const response = await instance.get(`/user/organisations/get/${id}`);
-  return response;
-};
+export const getOrganizationById = (id) =>
+  instance.get(`/user/organisations/get/${id}`);

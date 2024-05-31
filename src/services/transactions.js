@@ -20,10 +20,6 @@ export const filterTransactionsWithoutPage = (data) => {
   return instance.post(`/transactions/filter/not/pagination`, data);
 };
 
-export const getPayer = (data) => {
-  return instance.post("/payers/search", data);
-};
-
 export const getSumData = (data) => {
   return instance.post("/transactions/sum", data);
 };
@@ -60,4 +56,19 @@ export const searchTransactions = ({
 
 export const getTransactionById = (id) => {
   return instance.get(`/billing-java/transactions/id/${id}`);
+};
+
+export const makeTransaction = (data) => {
+  return instance.post("/billing-java/transactions/gateway/transaction", data);
+};
+
+export const makeTransactionByCategory = (data) => {
+  return instance.post(
+    "/billing-java/transactions/gateway/transaction-by-category",
+    data
+  );
+};
+
+export const getTransactionSumAmount = (userID) => {
+  return instance.get(`/billing-java/transactions/sum-amount/${userID}`);
 };
