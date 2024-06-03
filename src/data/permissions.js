@@ -1,7 +1,7 @@
 export const permissionsObj = {
   bil_payments_get: "გადახდების წამოღება",
   bil_payments_get_id: "გადახდების წამოღება ID-ით",
-  bil_payments_post: "გადახდების დამატება",
+  bil_payments_post: "ტრანზაქციის გატარება",
   bil_payments_post_transaction: "გადახდის ტრანზაქციის დამატება",
   bil_payments_put: "გადახდების განახლება",
   bil_payments_put_edit_transactions: "გადახდის ტრანზაქციების განახლება",

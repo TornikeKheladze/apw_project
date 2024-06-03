@@ -81,11 +81,7 @@ import SpecPrices from "components/APPLICATIONS/billing/specPrices/SpecPrices";
 import SpecPricesForm from "components/APPLICATIONS/billing/specPrices/specPricesForm/SpecPricesForm";
 import Documents from "components/APPLICATIONS/documents/documents/Documents";
 import DocumentForm from "components/APPLICATIONS/documents/documents/documentForm/DocumentForm";
-import Statistic from "components/APPLICATIONS/billing/statistic/Statistic";
-import MonthlyStatistic from "components/APPLICATIONS/billing/statistic/MonthlyStatistic";
 import UserEditForm from "components/APPLICATIONS/authorization/users/userForm/UserEditForm";
-import MakeTransaction from "components/APPLICATIONS/billing/transactions/makeTransactions/MakeTransaction";
-import TransactionByCat from "components/APPLICATIONS/billing/transactions/makeTransactions/TransactionByCat";
 import Bills from "components/APPLICATIONS/billing/bills/Bills";
 
 const Router = () => {
@@ -126,20 +122,7 @@ const Router = () => {
 
           {routes}
 
-          <Route path="/billing/statistic/:user" element={<Statistic />} />
-          <Route
-            path="/billing/statistic/monthly/:user"
-            element={<MonthlyStatistic />}
-          />
-          <Route
-            path="/billing/transactions/make-transaction"
-            element={<MakeTransaction />}
-          />
           <Route path="/billing/bills" element={<Bills />} />
-          <Route
-            path="/billing/transactions/make-transaction-by-cat"
-            element={<TransactionByCat />}
-          />
 
           {/*new routes for new project */}
 

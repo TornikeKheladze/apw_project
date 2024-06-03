@@ -20,8 +20,12 @@ import ServiceProductionForm from "components/APPLICATIONS/billing/serviceProduc
 import Services from "components/APPLICATIONS/billing/services/Services";
 import ServiceDetails from "components/APPLICATIONS/billing/services/details/ServiceDetails";
 import ServicesForm from "components/APPLICATIONS/billing/services/servicesForm/ServicesForm";
+import MonthlyStatistic from "components/APPLICATIONS/billing/statistic/MonthlyStatistic";
+import Statistic from "components/APPLICATIONS/billing/statistic/Statistic";
 import Transactions from "components/APPLICATIONS/billing/transactions/Transactions";
 import TransactionDetails from "components/APPLICATIONS/billing/transactions/details/TransactionDetails";
+import MakeTransaction from "components/APPLICATIONS/billing/transactions/makeTransactions/MakeTransaction";
+import TransactionByCat from "components/APPLICATIONS/billing/transactions/makeTransactions/TransactionByCat";
 
 export const routePermissions = [
   // transactions
@@ -203,5 +207,27 @@ export const routePermissions = [
     route: "/billing/package-production/:action/:id?",
     permission: "bil_packages_production_put_edit",
     element: <PackageProductionForm />,
+  },
+  // STATISTICS
+  {
+    route: "/billing/statistic/:user",
+    permission: "bil_statistic_get",
+    element: <Statistic />,
+  },
+  {
+    route: "/billing/statistic/monthly/:user",
+    permission: "bil_monthly_statistic_get",
+    element: <MonthlyStatistic />,
+  },
+  // MAKE TRANSACTIONS
+  {
+    route: "/billing/transactions/make-transaction",
+    permission: "bil_payments_post",
+    element: <MakeTransaction />,
+  },
+  {
+    route: "/billing/transactions/make-transaction-by-cat",
+    permission: "bil_payments_post",
+    element: <TransactionByCat />,
   },
 ];
