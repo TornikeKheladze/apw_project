@@ -76,7 +76,7 @@ function Collapse({ label, children, mainInfo }) {
 
 export default Collapse;
 
-export const MenuBarCollapse = ({ label, children, icon }) => {
+export const MenuBarCollapse = ({ label, children, icon, className }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleCollapse = () => {
@@ -86,7 +86,7 @@ export const MenuBarCollapse = ({ label, children, icon }) => {
   const h = children.length * 40 + "px";
 
   return (
-    <div>
+    <div className={className || ""}>
       <button
         onClick={toggleCollapse}
         className="flex items-center focus:outline-none"

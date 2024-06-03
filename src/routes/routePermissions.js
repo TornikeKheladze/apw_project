@@ -2,6 +2,7 @@ import ApiCredentials from "components/APPLICATIONS/billing/apiCredentials/ApiCr
 import ApiCredentialsForm from "components/APPLICATIONS/billing/apiCredentials/apiCredentialsForm/ApiCredentialsForm";
 import BillingPackages from "components/APPLICATIONS/billing/billingPackages/BillingPackages";
 import BillingPackagesForm from "components/APPLICATIONS/billing/billingPackages/billingPackagesForm/BillingPackagesForm";
+import Bills from "components/APPLICATIONS/billing/bills/Bills";
 import CategoryProduction from "components/APPLICATIONS/billing/categoryProduction/CategoryProduction";
 import CategoryProductionForm from "components/APPLICATIONS/billing/categoryProduction/categoryProductionForm/CategoryProductionForm";
 import CategoryProductionDetails from "components/APPLICATIONS/billing/categoryProduction/details/CategoryProductionDetails";
@@ -158,24 +159,6 @@ export const routePermissions = [
     permission: "dga_admin",
     element: <SalesForm />,
   },
-
-  // {/* billing packages */}
-  // <Route path="/billing/packages" element={<BillingPackages />} />
-  // <Route
-  //   path="/billing/packages/:action/:id?"
-  //   element={<BillingPackagesForm />}
-  // />
-
-  // {/* package production */}
-  // <Route
-  //   path="/billing/package-production"
-  //   element={<PackageProductions />}
-  // />
-  // <Route
-  //   path="/billing/package-production/:action/:id?"
-  //   element={<PackageProductionForm />}
-  // />
-
   // BILLING PACKAGES
   {
     route: "/billing/packages",
@@ -229,5 +212,11 @@ export const routePermissions = [
     route: "/billing/transactions/make-transaction-by-cat",
     permission: "bil_payments_post",
     element: <TransactionByCat />,
+  },
+  // BILLS
+  {
+    route: "/billing/bills",
+    permission: "bil_transactions_get_sum_amount",
+    element: <Bills />,
   },
 ];

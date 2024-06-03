@@ -82,7 +82,6 @@ import SpecPricesForm from "components/APPLICATIONS/billing/specPrices/specPrice
 import Documents from "components/APPLICATIONS/documents/documents/Documents";
 import DocumentForm from "components/APPLICATIONS/documents/documents/documentForm/DocumentForm";
 import UserEditForm from "components/APPLICATIONS/authorization/users/userForm/UserEditForm";
-import Bills from "components/APPLICATIONS/billing/bills/Bills";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -121,8 +120,6 @@ const Router = () => {
           <Route path="/packages" element={<Packages />} />
 
           {routes}
-
-          <Route path="/billing/bills" element={<Bills />} />
 
           {/*new routes for new project */}
 

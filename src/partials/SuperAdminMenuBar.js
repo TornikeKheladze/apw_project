@@ -28,6 +28,7 @@ import DocumentIcon from "components/icons/DocumentIcon";
 import PackageIcon from "components/icons/PackageIcon";
 import PuzzleIcon from "components/icons/PuzzleIcon";
 import AlgIcon from "components/icons/AlgIcon";
+import useCheckPermission from "helpers/useCheckPermission";
 
 const MenuBarContext = createContext();
 
@@ -562,45 +563,71 @@ const MenuDetailBilling = () => {
       })}
     >
       <div className="menu-detail-wrapper">
-        <NavLink to="/billing/transactions" end onClick={hideMenuDetail}>
-          <TransactionIcon /> ტრანზაქციები
-        </NavLink>
-        <MenuBarCollapse icon={<HeadersIcon />} label={"სერვისი"}>
+        {useCheckPermission("bil_transactions_get") && (
+          <NavLink to="/billing/transactions" end onClick={hideMenuDetail}>
+            <TransactionIcon /> ტრანზაქციები
+          </NavLink>
+        )}
+
+        <MenuBarCollapse
+          className={useCheckPermission("bil_services_get") ? "" : "hidden"}
+          icon={<HeadersIcon />}
+          label={"სერვისი"}
+        >
           <NavLink to="/billing/services" onClick={hideMenuDetail}>
             სერვისები
           </NavLink>
-          <NavLink to="/billing/service-production" onClick={hideMenuDetail}>
-            სერვისის პროდაქშენი
-          </NavLink>
-          <NavLink to="/billing/service-categories" onClick={hideMenuDetail}>
-            სერვისის კატეგორიები
-          </NavLink>
-          <NavLink to="/billing/category-production" onClick={hideMenuDetail}>
-            category-production
-          </NavLink>
+          {useCheckPermission("bil_categories_get") && (
+            <NavLink to="/billing/service-categories" onClick={hideMenuDetail}>
+              სერვისის კატეგორიები
+            </NavLink>
+          )}
+          {useCheckPermission("bil_service_production_get") && (
+            <NavLink to="/billing/service-productions" onClick={hideMenuDetail}>
+              სერვისის პროდაქშენი
+            </NavLink>
+          )}
+          {useCheckPermission("bil_category_production_get") && (
+            <NavLink to="/billing/category-production" onClick={hideMenuDetail}>
+              category-production
+            </NavLink>
+          )}
         </MenuBarCollapse>
 
-        <NavLink to="/billing/charges" onClick={hideMenuDetail}>
-          <span className="la la-dollar"></span>
-          charges
-        </NavLink>
-        <NavLink to="/billing/sales" onClick={hideMenuDetail}>
-          <span className="la la-money"></span>
-          sales
-        </NavLink>
-        <NavLink to="/billing/api-credentials" onClick={hideMenuDetail}>
-          <AlgIcon />
-          API-ს რეგისტრაცია
-        </NavLink>
+        {useCheckPermission("dga_admin") && (
+          <>
+            <NavLink to="/billing/charges" onClick={hideMenuDetail}>
+              <span className="la la-dollar"></span>
+              charges
+            </NavLink>
+            <NavLink to="/billing/sales" onClick={hideMenuDetail}>
+              <span className="la la-money"></span>
+              sales
+            </NavLink>
+            <NavLink to="/billing/api-credentials" onClick={hideMenuDetail}>
+              <AlgIcon />
+              API-ს რეგისტრაცია
+            </NavLink>
+          </>
+        )}
 
-        <MenuBarCollapse icon={<PackageIcon />} label={"პაკეტები"}>
-          <NavLink to="/billing/packages" onClick={hideMenuDetail}>
-            packages
-          </NavLink>
-          <NavLink to="/billing/package-production" onClick={hideMenuDetail}>
-            package production
-          </NavLink>
+        <MenuBarCollapse
+          className={useCheckPermission("bil_packages_get") ? "" : "hidden"}
+          icon={<PackageIcon />}
+          label={"პაკეტები"}
+        >
+          {useCheckPermission("bil_packages_get") && (
+            <NavLink to="/billing/packages" onClick={hideMenuDetail}>
+              packages
+            </NavLink>
+          )}
+          {useCheckPermission("bil_packages_production_get") && (
+            <NavLink to="/billing/package-production" onClick={hideMenuDetail}>
+              package production
+            </NavLink>
+          )}
         </MenuBarCollapse>
+
         <MenuBarCollapse
           icon={
             <span className="mr-2">
@@ -608,6 +635,7 @@ const MenuDetailBilling = () => {
             </span>
           }
           label={"სტატისტიკა"}
+          className={useCheckPermission("bil_statistic_get") ? "" : "hidden"}
         >
           <NavLink
             className="flex items-center gap-2"
@@ -638,9 +666,13 @@ const MenuDetailBilling = () => {
             ოვნერის თვიური სტატისტიკა
           </NavLink>
         </MenuBarCollapse>
-        <NavLink to="/billing/bills" onClick={hideMenuDetail}>
-          დავალიანებები
-        </NavLink>
+        {useCheckPermission("bil_transactions_get_sum_amount") && (
+          <NavLink to="/billing/bills" onClick={hideMenuDetail}>
+            <span className="la la-dollar"></span>
+            დავალიანებები
+          </NavLink>
+        )}
+
         <hr />
       </div>
     </div>
