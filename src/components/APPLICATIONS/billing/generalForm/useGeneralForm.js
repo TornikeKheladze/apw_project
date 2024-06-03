@@ -85,7 +85,7 @@ const useGeneralForm = (formArray, updateDataObj) => {
     handleFormChange,
     setValue,
     imageForDisplay,
-    formObject,
+    formObject: { ...formObject, control },
   };
 };
 

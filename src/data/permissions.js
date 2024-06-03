@@ -167,4 +167,21 @@ export const permissionsObj = {
   doc_template_columns_type_get_id: "შაბლონის სვეტების ტიპის წამოღება ID-ით",
   doc_doc_file_post_html_tu_pdf: "HTML-ის PDF-ად კონვერტაცია",
   doc_doc_file_get_html_tu_pdf_download_id: "PDF-ის ჩამოტვირთვა HTML-ით ID-ით",
+  doc_permissions_role_post: "doc_permissions_role_post",
+  doc_permissions_user_pas_permission_post:
+    "doc_permissions_user_pas_permission_post",
+  doc_permissions_user_pas_permission_remove_post:
+    "doc_permissions_user_pas_permission_remove_post",
+  bil_permissions_role_post: "bil_permissions_role_post",
+  bil_permissions_user_pas_permission_post:
+    "bil_permissions_user_pas_permission_post",
+  bil_permissions_user_pas_permission_remove_post:
+    "bil_permissions_user_pas_permission_remove_post",
+  bil_transactions_post_transaction_by_categor:
+    "bil_transactions_post_transaction_by_categor",
+  bil_agent_statistic_get_sum_transactionCount:
+    "bil_agent_statistic_get_sum_transactionCount",
+  bil_agent_statistic_get_sum_paid_transactionCount:
+    "bil_agent_statistic_get_sum_paid_transactionCount",
+  bil_transactions_get_sum_amount: "bil_transactions_get_sum_amount",
 };
