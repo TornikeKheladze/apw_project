@@ -15,7 +15,7 @@ const CheckPermission = ({ perm, children }) => {
           .map(({ name }) => name)
           .includes(perm)
       ) {
-        navigate(-1);
+        navigate("/404-not-found");
       }
     }
   }, [navigate, authorizedUser, perm]);

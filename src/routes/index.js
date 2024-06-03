@@ -79,29 +79,10 @@ import ServicePrices from "components/APPLICATIONS/billing/servicePrices/Service
 import ServicePricesForm from "components/APPLICATIONS/billing/servicePrices/servicePricesForm/ServicePricesForm";
 import SpecPrices from "components/APPLICATIONS/billing/specPrices/SpecPrices";
 import SpecPricesForm from "components/APPLICATIONS/billing/specPrices/specPricesForm/SpecPricesForm";
-import Charges from "components/APPLICATIONS/billing/charges/Charges";
-import ChargesForm from "components/APPLICATIONS/billing/charges/chargesForm/ChargesForm";
-import Sales from "components/APPLICATIONS/billing/sales/Sales";
-import SalesForm from "components/APPLICATIONS/billing/sales/salesForm/SalesForm";
-import BillingPackages from "components/APPLICATIONS/billing/billingPackages/BillingPackages";
-import BillingPackagesForm from "components/APPLICATIONS/billing/billingPackages/billingPackagesForm/BillingPackagesForm";
-import ServiceProductions from "components/APPLICATIONS/billing/serviceProductions/ServiceProductions";
-import ServiceProductionForm from "components/APPLICATIONS/billing/serviceProductions/serviceProductionForm/ServiceProductionForm";
-import ServiceProductionDetails from "components/APPLICATIONS/billing/serviceProductions/details/ServiceProductionDetails";
-import PackageProductions from "components/APPLICATIONS/billing/packageProduction/PackageProductions";
-import PackageProductionForm from "components/APPLICATIONS/billing/packageProduction/packageProductionForm/PackageProductionForm";
 import Documents from "components/APPLICATIONS/documents/documents/Documents";
 import DocumentForm from "components/APPLICATIONS/documents/documents/documentForm/DocumentForm";
-import CategoryProduction from "components/APPLICATIONS/billing/categoryProduction/CategoryProduction";
-import CategoryProductionForm from "components/APPLICATIONS/billing/categoryProduction/categoryProductionForm/CategoryProductionForm";
-import CategoryProductionDetails from "components/APPLICATIONS/billing/categoryProduction/details/CategoryProductionDetails";
 import Statistic from "components/APPLICATIONS/billing/statistic/Statistic";
 import MonthlyStatistic from "components/APPLICATIONS/billing/statistic/MonthlyStatistic";
-import Services from "components/APPLICATIONS/billing/services/Services";
-import ServicesForm from "components/APPLICATIONS/billing/services/servicesForm/ServicesForm";
-import ServiceDetails from "components/APPLICATIONS/billing/services/details/ServiceDetails";
-import ApiCredentials from "components/APPLICATIONS/billing/apiCredentials/ApiCredentials";
-import ApiCredentialsForm from "components/APPLICATIONS/billing/apiCredentials/apiCredentialsForm/ApiCredentialsForm";
 import UserEditForm from "components/APPLICATIONS/authorization/users/userForm/UserEditForm";
 import MakeTransaction from "components/APPLICATIONS/billing/transactions/makeTransactions/MakeTransaction";
 import TransactionByCat from "components/APPLICATIONS/billing/transactions/makeTransactions/TransactionByCat";
@@ -147,6 +128,10 @@ const Router = () => {
 
           <Route path="/billing/statistic/:user" element={<Statistic />} />
           <Route
+            path="/billing/statistic/monthly/:user"
+            element={<MonthlyStatistic />}
+          />
+          <Route
             path="/billing/transactions/make-transaction"
             element={<MakeTransaction />}
           />
@@ -155,10 +140,7 @@ const Router = () => {
             path="/billing/transactions/make-transaction-by-cat"
             element={<TransactionByCat />}
           />
-          <Route
-            path="/billing/statistic/monthly/:user"
-            element={<MonthlyStatistic />}
-          />
+
           {/*new routes for new project */}
 
           <Route path="/documents/editor" element={<DocEditor />} />
@@ -180,46 +162,6 @@ const Router = () => {
           <Route
             path="/documents/documents/:action"
             element={<DocumentForm />}
-          />
-
-          {/* service */}
-          <Route path="/billing/services" element={<Services />} />
-          <Route
-            path="/billing/services/:action/:id?"
-            element={<ServicesForm />}
-          />
-          <Route
-            path="/billing/services/details/:id"
-            element={<ServiceDetails />}
-          />
-
-          {/* service production */}
-          <Route
-            path="/billing/service-production"
-            element={<ServiceProductions />}
-          />
-
-          <Route
-            path="/billing/service-production/:action/:id?"
-            element={<ServiceProductionForm />}
-          />
-          <Route
-            path="/billing/service-production/details/:id"
-            element={<ServiceProductionDetails />}
-          />
-
-          {/* category production */}
-          <Route
-            path="/billing/category-production"
-            element={<CategoryProduction />}
-          />
-          <Route
-            path="/billing/category-production/:action/:id?"
-            element={<CategoryProductionForm />}
-          />
-          <Route
-            path="/billing/category-production/details/:id"
-            element={<CategoryProductionDetails />}
           />
 
           {/* service parameters */}
@@ -259,42 +201,6 @@ const Router = () => {
             path="/billing/spec-prices/:action/:id?"
             element={<SpecPricesForm />}
           />
-
-          {/* charges */}
-          <Route path="/billing/charges" element={<Charges />} />
-          <Route
-            path="/billing/charges/:action/:id?"
-            element={<ChargesForm />}
-          />
-
-          {/* api credentials */}
-          <Route path="/billing/api-credentials" element={<ApiCredentials />} />
-          <Route
-            path="/billing/api-credentials/:action/:id?"
-            element={<ApiCredentialsForm />}
-          />
-
-          {/* sales */}
-          <Route path="/billing/sales" element={<Sales />} />
-          <Route path="/billing/sales/:action/:id?" element={<SalesForm />} />
-
-          {/* billing packages */}
-          <Route path="/billing/packages" element={<BillingPackages />} />
-          <Route
-            path="/billing/packages/:action/:id?"
-            element={<BillingPackagesForm />}
-          />
-
-          {/* package production */}
-          <Route
-            path="/billing/package-production"
-            element={<PackageProductions />}
-          />
-          <Route
-            path="/billing/package-production/:action/:id?"
-            element={<PackageProductionForm />}
-          />
-
           {/*new routes for new project end*/}
 
           {/* test routes end*/}
