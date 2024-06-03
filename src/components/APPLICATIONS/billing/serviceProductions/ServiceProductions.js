@@ -22,7 +22,7 @@ const ServiceProductions = () => {
       <BilHeader
         visible={true}
         text={"service productions"}
-        url={"/billing/service-production/create"}
+        url={"/billing/service-productions/create"}
       />
       <div
         className={`card p-5 w-full overflow-x-auto relative min-h-[25rem] ${

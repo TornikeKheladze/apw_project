@@ -63,22 +63,22 @@ export const routePermissions = [
   },
   //   SERVICE PRODUCTION
   {
-    route: "/billing/service-production",
+    route: "/billing/service-productions",
     permission: "bil_service_production_get",
     element: <ServiceProductions />,
   },
   {
-    route: "/billing/service-production/:action",
+    route: "/billing/service-productions/:action",
     permission: "bil_service_production_post_add",
     element: <ServiceProductionForm />,
   },
   {
-    route: "/billing/service-production/:action/:id?",
+    route: "/billing/service-productions/:action/:id?",
     permission: "bil_service_production_put_edit",
     element: <ServiceProductionForm />,
   },
   {
-    route: "/billing/service-production/details/:id",
+    route: "/billing/service-productions/details/:id",
     permission: "bil_service_production_get_id",
     element: <ServiceProductionDetails />,
   },
