@@ -27,6 +27,10 @@ import Transactions from "components/APPLICATIONS/billing/transactions/Transacti
 import TransactionDetails from "components/APPLICATIONS/billing/transactions/details/TransactionDetails";
 import MakeTransaction from "components/APPLICATIONS/billing/transactions/makeTransactions/MakeTransaction";
 import TransactionByCat from "components/APPLICATIONS/billing/transactions/makeTransactions/TransactionByCat";
+import DocCatalogs from "components/APPLICATIONS/documents/docCatalogs/DocCatalogs";
+import Documents from "components/APPLICATIONS/documents/documents/Documents";
+import TemplateColumns from "components/APPLICATIONS/documents/templateColumns/TemplateColumns";
+import Templates from "components/APPLICATIONS/documents/templates/Templates";
 
 export const routePermissions = [
   // transactions
@@ -218,5 +222,29 @@ export const routePermissions = [
     route: "/billing/bills",
     permission: "bil_transactions_get_sum_amount",
     element: <Bills />,
+  },
+  // DOCUMENTS
+  {
+    route: "/documents/documents",
+    permission: "doc_documents_get",
+    element: <Documents />,
+  },
+  // DOC CATEGORIES
+  {
+    route: "/documents/categories",
+    permission: "doc_catalog_get",
+    element: <DocCatalogs />,
+  },
+  // TEMPLATES
+  {
+    route: "/documents/templates",
+    permission: "doc_templates_get",
+    element: <Templates />,
+  },
+  // TEMPLATE COLUMNS
+  {
+    route: "/documents/templateColumns",
+    permission: "doc_template_columns_get",
+    element: <TemplateColumns />,
   },
 ];

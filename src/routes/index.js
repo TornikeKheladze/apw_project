@@ -64,11 +64,7 @@ import DepartmentsTree from "components/APPLICATIONS/authorization/departments/D
 import { routePermissions } from "./routePermissions";
 import React from "react";
 import CheckPermission from "./CheckPermission";
-import DocEditor from "components/APPLICATIONS/documents/DocEditor";
 import Packages from "components/APPLICATIONS/authorization/packages/Packages";
-import DocCatalogs from "components/APPLICATIONS/documents/docCatalogs/DocCatalogs";
-import Templates from "components/APPLICATIONS/documents/templates/Templates";
-import TemplateColumns from "components/APPLICATIONS/documents/templateColumns/TemplateColumns";
 import TemplateDetailsJodit from "components/APPLICATIONS/documents/templateDetailsJodit/TemplateDetailsJodit";
 import ServiceParameters from "components/APPLICATIONS/billing/serviceParameters/ServiceParameters";
 import ServiceParametersDetails from "components/APPLICATIONS/billing/serviceParameters/details/ServiceParametersDetails";
@@ -79,7 +75,6 @@ import ServicePrices from "components/APPLICATIONS/billing/servicePrices/Service
 import ServicePricesForm from "components/APPLICATIONS/billing/servicePrices/servicePricesForm/ServicePricesForm";
 import SpecPrices from "components/APPLICATIONS/billing/specPrices/SpecPrices";
 import SpecPricesForm from "components/APPLICATIONS/billing/specPrices/specPricesForm/SpecPricesForm";
-import Documents from "components/APPLICATIONS/documents/documents/Documents";
 import DocumentForm from "components/APPLICATIONS/documents/documents/documentForm/DocumentForm";
 import UserEditForm from "components/APPLICATIONS/authorization/users/userForm/UserEditForm";
 
@@ -123,9 +118,6 @@ const Router = () => {
 
           {/*new routes for new project */}
 
-          <Route path="/documents/editor" element={<DocEditor />} />
-          <Route path="/documents/categories" element={<DocCatalogs />} />
-          <Route path="/documents/templates" element={<Templates />} />
           {/* <Route
             path="/documents/templates/:templateId"
             element={<TemplateDetails />}
@@ -134,11 +126,7 @@ const Router = () => {
             path="/documents/templates/:templateId"
             element={<TemplateDetailsJodit />}
           />
-          <Route
-            path="/documents/templateColumns"
-            element={<TemplateColumns />}
-          />
-          <Route path="/documents/documents" element={<Documents />} />
+
           <Route
             path="/documents/documents/:action"
             element={<DocumentForm />}

@@ -527,26 +527,30 @@ const MenuDetailDocuments = () => {
       })}
     >
       <div className="menu-detail-wrapper">
-        {/* <NavLink to="/documents/editor" onClick={hideMenuDetail}>
-          <DocEditIcon className="w-6 h-6 mr-2" />
-          Editor
-        </NavLink> */}
-        <NavLink to="/documents/categories" onClick={hideMenuDetail}>
-          <PuzzleIcon className="w-6 h-6" />
-          კატეგორიები
-        </NavLink>
-        <NavLink to="/documents/templates" onClick={hideMenuDetail}>
-          <PuzzleIcon className="w-6 h-6" />
-          შაბლონები
-        </NavLink>
-        <NavLink to="/documents/templateColumns" onClick={hideMenuDetail}>
-          <PuzzleIcon className="w-6 h-6" />
-          ცვლადები
-        </NavLink>
-        <NavLink to="/documents/documents" onClick={hideMenuDetail}>
-          <PuzzleIcon className="w-6 h-6" />
-          დოკუმენტები
-        </NavLink>
+        {useCheckPermission("doc_catalog_get") && (
+          <NavLink to="/documents/categories" onClick={hideMenuDetail}>
+            <PuzzleIcon className="w-6 h-6" />
+            კატეგორიები
+          </NavLink>
+        )}
+        {useCheckPermission("doc_templates_get") && (
+          <NavLink to="/documents/templates" onClick={hideMenuDetail}>
+            <PuzzleIcon className="w-6 h-6" />
+            შაბლონები
+          </NavLink>
+        )}
+        {useCheckPermission("doc_template_columns_get") && (
+          <NavLink to="/documents/templateColumns" onClick={hideMenuDetail}>
+            <PuzzleIcon className="w-6 h-6" />
+            ცვლადები
+          </NavLink>
+        )}
+        {useCheckPermission("doc_documents_get") && (
+          <NavLink to="/documents/documents" onClick={hideMenuDetail}>
+            <PuzzleIcon className="w-6 h-6" />
+            დოკუმენტები
+          </NavLink>
+        )}
         <hr />
       </div>
     </div>
