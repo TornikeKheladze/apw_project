@@ -98,7 +98,7 @@ export const useMakeTransaction = () => {
   const selectOptions = {
     agentID: users,
     serviceID: services,
-    saleID: sales,
+    saleID: [{ id: 0, name: "სეილის გარეშე" }, ...sales],
   };
 
   const submitHandler = async (data) => {

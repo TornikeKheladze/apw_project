@@ -1,3 +1,4 @@
+import Button from "components/Button";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
@@ -22,6 +23,7 @@ const Bills = () => {
   return (
     <main className="workspace overflow-hidden pb-8 relative">
       <div className="card p-5">
+        <h4>დავალიანება</h4>
         {loading ? (
           <LoadingSpinner blur />
         ) : !loading && data.length === 0 ? (
@@ -39,6 +41,9 @@ const Bills = () => {
             </div>
           ))
         )}
+      </div>
+      <div className="card p-5 mt-3">
+        <Button>ანგარიშსწორება</Button>
       </div>
     </main>
   );

@@ -9,7 +9,7 @@ const ServiceCategories = () => {
   return (
     <main className="workspace overflow-hidden pb-8">
       <BilHeader
-        visible={useCheckPermission("bil_service_categories_add_post")}
+        visible={useCheckPermission("bil_categories_get")}
         text={"სერვისის კატეგორიები"}
         url={"/billing/service-categories/create"}
       />

@@ -108,18 +108,10 @@ export const useTransactionByCat = () => {
     };
   }, []);
 
-  // "agentID": 11,
-  // "serviceID": 1,
-  // "agentOperationID": 1234,
-  // "amount": 100,
-  // "payerParameter": "payer_info",
-  // "saleID": 0,
-  // "reseller": 0,
-
   const selectOptions = {
     agentID: users,
     serviceID: services,
-    saleID: sales,
+    saleID: [{ id: 0, name: "სეილის გარეშე" }, ...sales],
   };
 
   const submitHandler = async (data) => {
