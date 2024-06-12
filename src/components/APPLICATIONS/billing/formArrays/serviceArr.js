@@ -104,6 +104,12 @@ export const serviceParametersArr = [
     type: "text",
   },
   {
+    filter: "select",
+    name: "serviceID",
+    label: "serviceID",
+    type: "select",
+  },
+  {
     name: "parameterLength",
     label: "parameterLength",
     type: "number",
@@ -112,12 +118,6 @@ export const serviceParametersArr = [
     filter: "select",
     name: "parameterTypeID",
     label: "parameterTypeID",
-    type: "select",
-  },
-  {
-    filter: "select",
-    name: "serviceID",
-    label: "serviceID",
     type: "select",
   },
   { filter: "select", name: "catID", label: "catID", type: "select" },

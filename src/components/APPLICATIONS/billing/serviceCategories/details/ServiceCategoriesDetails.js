@@ -49,11 +49,13 @@ const ServiceCategoriesDetails = () => {
 
   return (
     <main className="workspace">
-      <div className="mb-3 flex justify-between">
-        <h2>კატეგორია: {updatedData.categoryName}</h2>
+      <div className="mb-3 flex justify-between items-center">
+        <h2>
+          კატეგორია: <br className="sm:hidden" /> {updatedData.categoryName}
+        </h2>
         <Link
           to={`/billing/service-categories/edit/${id}`}
-          className="btn btn_primary"
+          className="btn btn_primary h-10"
         >
           ცვლილება
         </Link>
@@ -66,6 +68,13 @@ const ServiceCategoriesDetails = () => {
           <ServiceCategoryTreeMenu categories={categoriesTree} />
         )}
       </div>
+
+      <Link
+        className="btn btn_primary mb-3 w-48"
+        to={`/billing/services/create?categoryID=${id}`}
+      >
+        სერვისის დამატება
+      </Link>
 
       <div className="card p-5 relative">
         <div className="flex justify-between items-center">

@@ -18,6 +18,7 @@ const useServicesForm = () => {
   const [searchParams] = useSearchParams();
 
   const ownerID = searchParams.get("ownerID");
+  const categoryID = searchParams.get("categoryID");
 
   const [chosenCategory, setChosenCategory] = useState({});
   const [alert, setAlert] = useState({
@@ -98,6 +99,14 @@ const useServicesForm = () => {
     };
   }, [action, id, service.categoryID]);
 
+  useEffect(() => {
+    if (categoryID) {
+      setChosenCategory({
+        id: +categoryID,
+      });
+    }
+  }, [categoryID]);
+
   const submitHandler = async (data) => {
     const requestData = {
       ownerID,
@@ -105,6 +114,14 @@ const useServicesForm = () => {
       image: JSON.parse(localStorage.getItem("formInputData"))?.image,
       categoryID: chosenCategory.id,
     };
+    if (!chosenCategory.id) {
+      setAlert({
+        message: "აირჩიეთ კატეგორია",
+        type: "danger",
+      });
+      return;
+    }
+
     if (action === "create") {
       createMutate({ ...requestData });
     } else {
