@@ -39,25 +39,25 @@ const ServiceDetails = () => {
           <h4 className="mb-2">მახასიათებლები</h4>
           <div className="flex gap-2 flex-wrap">
             <Link
-              to={"/billing/service-prices"}
+              to={`/billing/service-prices?serviceID=${id}`}
               className="btn btn_primary btn_outlined p-1 text-xs"
             >
               სერვისის ფასები
             </Link>
             <Link
-              to={"/billing/spec-prices"}
+              to={`/billing/spec-prices?serviceID=${id}`}
               className="btn btn_primary btn_outlined p-1 text-xs"
             >
               სერვისის სპეც ფასები
             </Link>
             <Link
-              to={"/billing/service-parameters"}
+              to={`/billing/service-parameters?serviceID=${id}`}
               className="btn btn_primary btn_outlined p-1 text-xs"
             >
               სერვისის პარამეტრები
             </Link>
             <Link
-              to={"/billing/service-parameter-types"}
+              to={`/billing/service-parameter-types?serviceID=${id}`}
               className="btn btn_primary btn_outlined p-1 text-xs"
             >
               პარამეტრის ტიპები

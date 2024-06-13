@@ -5,9 +5,13 @@ import { getAllServices } from "services/services";
 import { filterArray } from "helpers/filterArray";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deletePrice, getPrices } from "services/servicePrices";
+import { useSearchParams } from "react-router-dom";
 
 const useServicePrices = () => {
   const queryClient = useQueryClient();
+  const [searchParam] = useSearchParams();
+  const serviceID = searchParam.get("serviceID");
+
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [filter, setFilter] = useState({});
 
@@ -16,7 +20,7 @@ const useServicePrices = () => {
     onSuccess: () => {
       queryClient.invalidateQueries("getPrices");
       setAlert({
-        message: "სერვისის price წარმატებით წაიშალა",
+        message: "სერვისის ფასი წარმატებით წაიშალა",
         type: "success",
       });
       setTimeout(() => {
@@ -35,15 +39,21 @@ const useServicePrices = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const prices = pricesData.map((price) => ({
-    ...price,
-    id: price.priceID,
-  }));
+  // ვფილტრავ იმიტორო მხოლოდ ერთი სერვისის ფასი აჩვენოს
+  const prices = pricesData
+    .map((price) => ({
+      ...price,
+      id: price.priceID,
+    }))
+    .filter((price) => +price.serviceID === +serviceID);
 
   const services = servicesData.map((service) => ({
     ...service,
     id: service.serviceID,
   }));
+
+  const service =
+    services.find((service) => +service.serviceID === +serviceID) || {};
 
   const updatedList = filterArray(prices, removeEmpty(filter))?.map(
     (serParams) => {
@@ -62,6 +72,7 @@ const useServicePrices = () => {
     filter,
     setFilter,
     deleteItem: { deleteMutate, deleteLoading },
+    service,
   };
 };
 

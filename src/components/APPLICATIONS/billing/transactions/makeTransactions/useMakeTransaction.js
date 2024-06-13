@@ -54,12 +54,7 @@ export const useMakeTransaction = () => {
   });
 
   const afterRequestHandler = (response, message) => {
-    if (response.data.message) {
-      setAlert({
-        message: `${response.data.message}`,
-        type: "danger",
-      });
-    } else {
+    if (response.data.message === "ok") {
       queryClient.invalidateQueries(["transactions"]);
       setAlert({
         message: `${message} წარმატებულია`,
@@ -68,6 +63,11 @@ export const useMakeTransaction = () => {
       setTimeout(() => {
         navigate(-1);
       }, 1500);
+    } else {
+      setAlert({
+        message: `${response.data.message}`,
+        type: "danger",
+      });
     }
   };
 

@@ -10,9 +10,13 @@ import {
   getServiceParameters,
 } from "services/serviceParameters";
 import { getCategories } from "services/serviceCategories";
+import { useSearchParams } from "react-router-dom";
 
 const useServiceParameters = () => {
   const queryClient = useQueryClient();
+  const [searchParam] = useSearchParams();
+  const serviceID = searchParam.get("serviceID");
+
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [filter, setFilter] = useState({});
 
@@ -58,11 +62,13 @@ const useServiceParameters = () => {
     }
   );
 
-  const serviceParameters = serviceParametersData.map((parameter) => ({
-    ...parameter,
-    id: parameter.serviceParameterID,
-    name: parameter.parameterName,
-  }));
+  const serviceParameters = serviceParametersData
+    .map((parameter) => ({
+      ...parameter,
+      id: parameter.serviceParameterID,
+      name: parameter.parameterName,
+    }))
+    .filter((sp) => +sp.serviceID === +serviceID);
 
   const categories = categoriesArr.map((category) => ({
     ...category,
@@ -74,6 +80,9 @@ const useServiceParameters = () => {
     ...service,
     id: service.serviceID,
   }));
+
+  const service =
+    services.find((service) => +service.serviceID === +serviceID) || {};
 
   const serviceParameterTypes = serviceParameterTypesData.map((spt) => ({
     ...spt,
@@ -97,7 +106,7 @@ const useServiceParameters = () => {
 
   const selectOptions = {
     catID: categories,
-    serviceID: services,
+    // serviceID: services,
     parameterTypeID: serviceParameterTypes,
   };
   return {
@@ -112,6 +121,7 @@ const useServiceParameters = () => {
     filter,
     setFilter,
     selectOptions,
+    service,
   };
 };
 

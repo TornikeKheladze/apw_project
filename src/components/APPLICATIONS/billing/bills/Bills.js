@@ -1,7 +1,8 @@
 import Button from "components/Button";
 import LoadingSpinner from "components/icons/LoadingSpinner";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import { createInvoice } from "services/billingPackages";
 import { getTransactionSumAmount } from "services/transactions";
 import { getAllUsers } from "services/users";
 
@@ -19,6 +20,13 @@ const Bills = () => {
     queryFn: () => getAllUsers().then((res) => res?.data?.users),
   });
 
+  const { mutate: invoiceMutate, isLoading: invoiceLoading } = useMutation({
+    mutationFn: createInvoice,
+    onSuccess: (response) => {
+      console.log(response);
+    },
+  });
+
   const loading = isLoading || isUsersLoading;
   return (
     <main className="workspace overflow-hidden pb-8 relative">
@@ -31,19 +39,32 @@ const Bills = () => {
         ) : (
           data.map((item) => (
             <div key={item.sumTransaction + item.ownerID}>
-              <span>{authorizedUser.name}-ს აქვს</span>
-              <span>დავალიანება {item?.sumTransaction}.</span>
+              <span>
+                {users.find((user) => user.id === item?.agentID)?.name ||
+                  item?.agentID}
+                -ს აქვს
+              </span>
               <span>
                 {" "}
                 {users.find((user) => user.id === item?.ownerID)?.name ||
                   item?.ownerID}
+                -ს{" "}
               </span>
+              <span>ვალი {item?.sumTransaction}</span>
+              <Button
+                onClick={() =>
+                  invoiceMutate({
+                    agentID: item?.agentID,
+                    ownerID: item?.ownerID,
+                  })
+                }
+                className="p-1 text-xs ml-2 min-w-20 text-center"
+              >
+                {invoiceLoading ? <LoadingSpinner /> : "ანგარიშსწორება"}
+              </Button>
             </div>
           ))
         )}
-      </div>
-      <div className="card p-5 mt-3">
-        <Button>ანგარიშსწორება</Button>
       </div>
     </main>
   );

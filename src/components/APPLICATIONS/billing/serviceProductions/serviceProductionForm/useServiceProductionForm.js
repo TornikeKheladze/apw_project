@@ -100,7 +100,11 @@ export const useServiceProductionForm = () => {
     };
 
     if (action === "create") {
-      createMutate({ ...requestData, usedTransactionQuantity: 0 });
+      createMutate({
+        ...requestData,
+        usedTransactionQuantity: 0,
+        usedTransactionSum: 0,
+      });
     } else {
       updateMutate({
         ...requestData,

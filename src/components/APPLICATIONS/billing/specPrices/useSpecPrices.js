@@ -6,11 +6,14 @@ import { filterArray } from "helpers/filterArray";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteSpecPrice, getSpecPrices } from "services/servicePrices";
 import { getAllUsers } from "services/users";
+import { useSearchParams } from "react-router-dom";
 
 export const useSpecPrices = () => {
   const queryClient = useQueryClient();
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [filter, setFilter] = useState({});
+  const [searchParam] = useSearchParams();
+  const serviceID = searchParam.get("serviceID");
 
   const { mutate: deleteMutate, isLoading: deleteLoading } = useMutation({
     mutationFn: (id) => deleteSpecPrice(id),
@@ -40,15 +43,20 @@ export const useSpecPrices = () => {
     queryFn: () => getAllUsers().then((res) => res.data.users),
   });
 
-  const specPrices = specPricesData.map((price) => ({
-    ...price,
-    id: price.priceID,
-  }));
+  const specPrices = specPricesData
+    .map((price) => ({
+      ...price,
+      id: price.priceID,
+    }))
+    .filter((specPrice) => +specPrice.serviceID === +serviceID);
 
   const services = servicesData.map((service) => ({
     ...service,
     id: service.serviceID,
   }));
+
+  const service =
+    services.find((service) => +service.serviceID === +serviceID) || {};
 
   const updatedList = filterArray(specPrices, removeEmpty(filter))?.map(
     (serParams) => {
@@ -75,5 +83,6 @@ export const useSpecPrices = () => {
       deleteMutate,
       deleteLoading,
     },
+    service,
   };
 };

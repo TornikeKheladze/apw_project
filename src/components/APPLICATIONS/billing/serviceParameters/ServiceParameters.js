@@ -15,6 +15,7 @@ const ServiceParameters = () => {
     setFilter,
     selectOptions,
     deleteItem,
+    service,
   } = useServiceParameters();
 
   return (
@@ -22,8 +23,9 @@ const ServiceParameters = () => {
       <BilHeader
         visible={true}
         text={"სერვისის პარამეტრები"}
-        url={"/billing/service-parameters/create"}
+        url={`/billing/service-parameters/create?serviceID=${service.serviceID}`}
       />
+      {service && <h4 className="mb-3">სერვისი: "{service.name}"</h4>}
       <div
         className={`card p-5 w-full overflow-x-auto relative min-h-[25rem] ${
           loading && "overflow-x-hidden"

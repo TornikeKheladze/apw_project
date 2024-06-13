@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import { getAllServices } from "services/services";
@@ -9,6 +9,7 @@ import { createPrice, getPriceById, updatePrice } from "services/servicePrices";
 export const useServicePricesForm = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [searchParam] = useSearchParams();
   const { action, id } = useParams();
 
   const [alert, setAlert] = useState({
@@ -44,14 +45,14 @@ export const useServicePricesForm = () => {
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createPrice,
     onSuccess(data) {
-      mutateHandler(data, "სერვის prices დამატება");
+      mutateHandler(data, "სერვის ფასის დამატება");
     },
   });
 
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
     mutationFn: updatePrice,
     onSuccess(data) {
-      mutateHandler(data, "სერვის prices ცვლილება");
+      mutateHandler(data, "სერვის ფასის ცვლილება");
     },
   });
 
@@ -74,13 +75,19 @@ export const useServicePricesForm = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
+  const serviceID = searchParam.get("serviceID") || servicePrice.serviceID;
+
+  const service =
+    services.find((service) => +service.serviceID === +serviceID) || {};
+
   const submitHandler = (data) => {
     if (action === "create") {
-      createMutate(data);
+      createMutate({ data, serviceID });
     } else {
       updateMutate({
         ...data,
         priceID: id,
+        serviceID,
       });
     }
   };
@@ -93,5 +100,6 @@ export const useServicePricesForm = () => {
     alert,
     servicePrice,
     services,
+    service,
   };
 };

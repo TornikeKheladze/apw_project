@@ -13,7 +13,10 @@ export const createServiceProduction = async (data) => {
 };
 
 export const updateServiceProduction = async (data) => {
-  return instance.put(`/billing-java/service-production`, data);
+  return instance.put(
+    `/billing-java/service-production/${data.serviceProductionID}`,
+    data
+  );
 };
 
 export const deleteServiceProduction = async (id) => {

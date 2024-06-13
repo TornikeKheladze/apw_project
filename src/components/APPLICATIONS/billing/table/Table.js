@@ -17,7 +17,6 @@ const Table = ({
   sortConfig,
   searchSubmit = () => {},
   optionsObj = {},
-  excelExporFunc,
   filter = { filter: {}, setFilter: () => {} },
   actions,
 }) => {

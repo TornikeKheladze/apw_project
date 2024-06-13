@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   createServiceParameter,
@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 export const useServiceParametersForm = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [searchParam] = useSearchParams();
   const { action, id } = useParams();
 
   const [alert, setAlert] = useState({
@@ -83,20 +84,24 @@ export const useServiceParametersForm = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
+  const serviceID = searchParam.get("serviceID") || serviceParameter.serviceID;
+
+  const service =
+    services.find((service) => +service.serviceID === +serviceID) || {};
+
   const submitHandler = (data) => {
-    const service = services.find(
-      (service) => +service.serviceID === +data.serviceID
-    );
     if (action === "create") {
       createMutate({
         ...data,
         catID: service.categoryID,
+        serviceID,
       });
     } else {
       updateMutate({
         ...data,
         serviceParameterID: id,
         catID: service.categoryID,
+        serviceID,
       });
     }
   };
@@ -111,5 +116,6 @@ export const useServiceParametersForm = () => {
     serviceParameter,
     types,
     services,
+    service,
   };
 };

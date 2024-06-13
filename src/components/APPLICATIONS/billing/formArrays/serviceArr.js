@@ -104,7 +104,6 @@ export const serviceParametersArr = [
     type: "text",
   },
   {
-    filter: "select",
     name: "serviceID",
     label: "serviceID",
     type: "select",
@@ -150,7 +149,6 @@ export const servicePricesArr = [
     type: "number",
   },
   {
-    filter: "select",
     name: "serviceID",
     label: "serviceID",
     type: "select",

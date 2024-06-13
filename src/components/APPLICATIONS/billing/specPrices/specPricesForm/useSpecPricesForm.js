@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import { getAllServices } from "services/services";
@@ -15,6 +15,7 @@ export const useSpecPricesForm = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { action, id } = useParams();
+  const [searchParam] = useSearchParams();
 
   const [alert, setAlert] = useState({
     type: "success",
@@ -79,6 +80,11 @@ export const useSpecPricesForm = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
+  const serviceID = searchParam.get("serviceID") || specPrice.serviceID;
+
+  const service =
+    services.find((service) => +service.serviceID === +serviceID) || {};
+
   const { data: users = [{}], isLoading: usersLoading } = useQuery({
     queryKey: "getAllUsers",
     queryFn: () => getAllUsers().then((res) => res.data.users),
@@ -86,11 +92,12 @@ export const useSpecPricesForm = () => {
 
   const submitHandler = (data) => {
     if (action === "create") {
-      createMutate(data);
+      createMutate({ ...data, serviceID });
     } else {
       updateMutate({
         ...data,
         priceID: id,
+        serviceID,
       });
     }
   };
@@ -104,5 +111,6 @@ export const useSpecPricesForm = () => {
     specPrice,
     services,
     users,
+    service,
   };
 };

@@ -9,19 +9,20 @@ const SpecPricesForm = () => {
     action,
     loading,
     submitHandler,
-    services,
     actionLoading,
     alert,
     specPrice,
     users,
+    service,
   } = useSpecPricesForm();
 
   return (
     <main className="workspace p-5">
       <div className="card p-5 lg:w-2/3 lg:mx-auto">
-        <h3 className="mb-3">
-          spec prices {action === "create" ? "დამატება" : "შეცვლა"}
-        </h3>
+        <h3 className="mb-3">სერვისი:"{service.name}"</h3>
+        <h4 className="mb-3">
+          სპეც ფასის {action === "create" ? "დამატება" : "შეცვლა"}
+        </h4>
         {loading ? (
           <div className="flex flex-col items-center justify-center">
             იტვირთება... <LoadingSpinner />
@@ -30,16 +31,16 @@ const SpecPricesForm = () => {
           <GeneralForm
             submitHandler={submitHandler}
             optionsObj={{
-              serviceID: services.map((service) => {
-                return {
-                  ...service,
-                  id: service.serviceID,
-                };
-              }),
+              // serviceID: services.map((service) => ({
+              //   ...service,
+              //   id: service.serviceID,
+              // })),
               agentID: users,
             }}
             updateDataObj={action === "edit" ? specPrice : null}
-            formArray={specPricesArr}
+            formArray={specPricesArr.filter(
+              (item) => item.name !== "serviceID"
+            )}
             isLoading={actionLoading}
           />
         )}

@@ -86,6 +86,7 @@ export const useServiceCategoriesForm = () => {
       setChosenCategory({
         ...data,
         id: data.catID,
+        catID: category.parentID,
       });
       localStorage.setItem("formInputData", JSON.stringify(data));
     },
@@ -97,6 +98,7 @@ export const useServiceCategoriesForm = () => {
     if (action === "edit")
       setChosenCategory({
         id: category.parentID,
+        catID: category.parentID,
       });
     return () => {
       if (action === "edit") {
