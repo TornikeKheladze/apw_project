@@ -11,6 +11,9 @@ import Modal, { ModalBody, ModalFooter, ModalHeader } from "components/Modal";
 import { useQuery } from "react-query";
 import { getDocumentById } from "services/documents";
 import { useEffect, useState } from "react";
+import { filterArray } from "helpers/filterArray";
+import { removeEmpty } from "helpers/removeEmpty";
+import ServiceCategoryTreeMenu from "components/APPLICATIONS/billing/serviceCategories/ServiceCategoryTreeMenu";
 
 const Documents = () => {
   const {
@@ -37,6 +40,31 @@ const Documents = () => {
 
   const [downloadLoading, setDownloadLoading] = useState(false);
 
+  const [filter, setFilter] = useState({});
+  const [chosenCategory, setChosenCategory] = useState({});
+
+  const buildCategoryTree = (categories, parentId = 0) => {
+    return categories
+      .filter((category) => category.parent_id === parentId)
+      .map((category) => ({
+        ...category,
+        children: buildCategoryTree(categories, category.id),
+      }));
+  };
+
+  const updatedList = filterArray(documents, removeEmpty(filter))?.map(
+    (item) => {
+      return {
+        ...item,
+        cat_id: idToName(catalogs, item.cat_id),
+      };
+    }
+  );
+
+  useEffect(() => {
+    setFilter((prevState) => ({ ...prevState, cat_id: chosenCategory.id }));
+  }, [chosenCategory]);
+
   const {
     data: documentById,
     refetch: getDocumentByIdRefetch,
@@ -47,9 +75,6 @@ const Documents = () => {
       getDocumentById(selectedDocument.id).then((res) => res.data.data),
     enabled: selectedDocument.id ? true : false,
   });
-
-  // console.log(documentById);
-  // console.log(documents);
 
   const token = localStorage.getItem("token");
   const downloadPDF = (id) => {
@@ -381,15 +406,34 @@ const Documents = () => {
         </Button>
       </div>
 
+      <div className="card p-5 mb-4 !text-xs">
+        <h2 className="text-sm mb-4">კატეგორიები</h2>
+        <ServiceCategoryTreeMenu
+          categories={buildCategoryTree(
+            catalogs.map((catalog) => {
+              return {
+                ...catalog,
+                catID: catalog.id,
+                parentID: catalog.parent_id,
+                categoryName: catalog.name,
+              };
+            })
+            // catalogs
+          )}
+          chosenItem={chosenCategory}
+          setChosenItem={setChosenCategory}
+        />
+      </div>
+
       <div className="card p-5 overflow-x-auto">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center">
             იტვირთება... <LoadingSpinner />
           </div>
-        ) : documents?.length ? (
+        ) : updatedList?.length ? (
           <AuthTable
             staticArr={documentsArr}
-            fetchedArr={documents.map((item) => {
+            fetchedArr={updatedList?.map((item) => {
               return {
                 ...item,
                 // template_code: truncateText(item?.template_code, 40),

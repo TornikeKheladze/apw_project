@@ -146,14 +146,24 @@ const TemplateDetailsJodit = () => {
         <Alert message={alert.message} dismissable color={alert.type} />
         <div className="flex justify-between mb-4">
           <h3 className="mb-5">{template.template_name}</h3>
-          <Button
-            className="text-xs flex gap-2"
-            onClick={() =>
-              setOpenModal({ open: true, action: "ცვლადის შექმნა" })
-            }
-          >
-            <span>ცვლადის შექმნა</span> <PlusIcon />
-          </Button>
+
+          <div className="flex gap-2 md:flex-row flex-col">
+            <Button
+              className="text-xs"
+              to={`/documents/templateColumns/${templateId}`}
+            >
+              არსებული ცვლადები
+            </Button>
+
+            <Button
+              className="text-xs flex gap-2"
+              onClick={() =>
+                setOpenModal({ open: true, action: "ცვლადის შექმნა" })
+              }
+            >
+              <span>ცვლადის შექმნა</span> <PlusIcon />
+            </Button>
+          </div>
         </div>
 
         <input

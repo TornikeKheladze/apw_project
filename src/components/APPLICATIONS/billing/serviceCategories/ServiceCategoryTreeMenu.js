@@ -58,7 +58,7 @@ const ServiceCategoryTreeMenu = ({
                 }
               }}
             >
-              {category.categoryName}
+              {category.categoryName || category?.name}
             </button>
           </div>
           {expandedCategories.includes(category.catID) &&

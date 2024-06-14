@@ -243,7 +243,7 @@ export const routePermissions = [
   },
   // TEMPLATE COLUMNS
   {
-    route: "/documents/templateColumns",
+    route: "/documents/templateColumns/:id",
     permission: "doc_template_columns_get",
     element: <TemplateColumns />,
   },

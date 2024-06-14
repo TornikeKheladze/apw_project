@@ -10,6 +10,10 @@ import { idToName } from "helpers/idToName";
 import Footer from "partials/Footer";
 import { useTemplates } from "./useTemplates";
 import { truncateText } from "helpers/truncateText";
+import { useEffect, useState } from "react";
+import { filterArray } from "helpers/filterArray";
+import { removeEmpty } from "helpers/removeEmpty";
+import ServiceCategoryTreeMenu from "components/APPLICATIONS/billing/serviceCategories/ServiceCategoryTreeMenu";
 
 const Templates = () => {
   const {
@@ -22,6 +26,31 @@ const Templates = () => {
     mutates: { createMutate, editMutate, deleteMutate },
     loadings: { createLoading, editLoading, deleteLoading, isLoading },
   } = useTemplates();
+
+  const [filter, setFilter] = useState({});
+  const [chosenCategory, setChosenCategory] = useState({});
+
+  const buildCategoryTree = (categories, parentId = 0) => {
+    return categories
+      .filter((category) => category.parent_id === parentId)
+      .map((category) => ({
+        ...category,
+        children: buildCategoryTree(categories, category.id),
+      }));
+  };
+
+  const updatedList = filterArray(templates, removeEmpty(filter))?.map(
+    (item) => {
+      return {
+        ...item,
+        cat_id: idToName(catalogs, item.cat_id),
+      };
+    }
+  );
+
+  useEffect(() => {
+    setFilter((prevState) => ({ ...prevState, cat_id: chosenCategory.id }));
+  }, [chosenCategory]);
 
   return (
     <main className="workspace overflow-hidden">
@@ -96,15 +125,34 @@ const Templates = () => {
         </Button>
       </div>
 
+      <div className="card p-5 mb-4 !text-xs">
+        <h2 className="text-sm mb-4">კატეგორიები</h2>
+        <ServiceCategoryTreeMenu
+          categories={buildCategoryTree(
+            catalogs.map((catalog) => {
+              return {
+                ...catalog,
+                catID: catalog.id,
+                parentID: catalog.parent_id,
+                categoryName: catalog.name,
+              };
+            })
+            // catalogs
+          )}
+          chosenItem={chosenCategory}
+          setChosenItem={setChosenCategory}
+        />
+      </div>
+
       <div className="card p-5 overflow-x-auto">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center">
             იტვირთება... <LoadingSpinner />
           </div>
-        ) : templates?.length ? (
+        ) : updatedList?.length ? (
           <AuthTable
             staticArr={templateArr}
-            fetchedArr={templates.map((item) => {
+            fetchedArr={updatedList?.map((item) => {
               return {
                 ...item,
                 template_code: truncateText(item?.template_code, 40),

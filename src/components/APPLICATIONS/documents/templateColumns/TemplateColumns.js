@@ -9,8 +9,10 @@ import PlusIcon from "components/icons/PlusIcon";
 import { idToName } from "helpers/idToName";
 import Footer from "partials/Footer";
 import { useTemplateColumns } from "./useTemplateColumns";
+import { useParams } from "react-router-dom";
 
 const TemplateColumns = () => {
+  const { id } = useParams();
   const {
     templateColumns,
     templateColumnsType,
@@ -93,7 +95,7 @@ const TemplateColumns = () => {
         )}
       </Modal>
       <div className="w-full flex justify-between mb-4">
-        <h3>შაბლონები</h3>
+        <h3>ცვლადები</h3>
         <Button
           onClick={() => setOpenModal({ open: true, action: "დამატება" })}
         >
@@ -106,19 +108,29 @@ const TemplateColumns = () => {
           <div className="flex flex-col items-center justify-center">
             იტვირთება... <LoadingSpinner />
           </div>
-        ) : templateColumns?.length ? (
+        ) : templateColumns?.filter(
+            (template) => template.template_id?.toString() === id?.toString()
+          )?.length ? (
           <AuthTable
             staticArr={templateColumnsArr}
-            fetchedArr={templateColumns.map((item) => {
-              return {
-                ...item,
-                template_id_displayName: idToName(templates, item.template_id),
-                column_type_id_displayName: idToName(
-                  templateColumnsType,
-                  item.column_type_id
-                ),
-              };
-            })}
+            fetchedArr={templateColumns
+              ?.filter(
+                (template) =>
+                  template.template_id?.toString() === id?.toString()
+              )
+              .map((item) => {
+                return {
+                  ...item,
+                  template_id_displayName: idToName(
+                    templates,
+                    item.template_id
+                  ),
+                  column_type_id_displayName: idToName(
+                    templateColumnsType,
+                    item.column_type_id
+                  ),
+                };
+              })}
             actions={{
               editClick: (item) => {
                 setOpenModal({ open: true, action: "შეცვლა" });
@@ -134,7 +146,7 @@ const TemplateColumns = () => {
             }}
           />
         ) : (
-          <p>column არ მოიძებნა</p>
+          <p>ცვლადები არ მოიძებნა</p>
         )}
       </div>
 

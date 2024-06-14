@@ -539,12 +539,12 @@ const MenuDetailDocuments = () => {
             შაბლონები
           </NavLink>
         )}
-        {useCheckPermission("doc_template_columns_get") && (
+        {/* {useCheckPermission("doc_template_columns_get") && (
           <NavLink to="/documents/templateColumns" onClick={hideMenuDetail}>
             <PuzzleIcon className="w-6 h-6" />
             ცვლადები
           </NavLink>
-        )}
+        )} */}
         {useCheckPermission("doc_documents_get") && (
           <NavLink to="/documents/documents" onClick={hideMenuDetail}>
             <PuzzleIcon className="w-6 h-6" />
