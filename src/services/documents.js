@@ -121,4 +121,8 @@ export const signDocument = (data) => {
 export const downloadSignedDocument = (id) => {
   return instance.get(`document/doc-file/html-tu-pdf-download/${id}`);
 };
+
+export const getAmountByWord = (amount) => {
+  return instance.get(`document/io/money-word/${amount}`);
+};
 // https://test-dga-authorisation.apw.ge/api/document/doc-file/html-tu-pdf-download/662a57c16982aa213dba530a

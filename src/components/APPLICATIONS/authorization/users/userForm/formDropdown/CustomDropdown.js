@@ -15,7 +15,7 @@ const CustomDropdown = ({
     list.map((item) => (
       <button
         className={`cursor-pointer border-b ${contentClassName} DO_NOT_CLOSE_MODAL`}
-        key={item.id}
+        key={item.id + Math.random()}
         onClick={() => {
           setActive(item);
         }}

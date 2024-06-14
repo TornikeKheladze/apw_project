@@ -70,7 +70,6 @@ const Modal = (props) => {
     </ModalContext.Provider>
   );
 };
-
 Modal.propTypes = {
   active: PropTypes.bool,
   centered: PropTypes.bool,
