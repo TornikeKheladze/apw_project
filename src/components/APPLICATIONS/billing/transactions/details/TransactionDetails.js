@@ -3,9 +3,9 @@ import DetailComponent from "../../detailComponent/DetailComponent";
 import { transactionArr } from "../../formArrays/transactionArr";
 import { useQuery } from "react-query";
 import { getTransactionById } from "services/transactions";
-import { getAllUsers } from "services/users";
 import { getAllServices } from "services/services";
 import { idToName } from "helpers/idToName";
+import { getOrganizations } from "services/organizations";
 
 const TransactionDetails = () => {
   const { id } = useParams();
@@ -19,9 +19,9 @@ const TransactionDetails = () => {
     queryKey: "getAllServices",
     queryFn: () => getAllServices().then((res) => res.data),
   });
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   return (
@@ -36,10 +36,10 @@ const TransactionDetails = () => {
           }),
           transaction.serviceID
         ),
-        ownerID: idToName(users, transaction.ownerID),
-        agentID: idToName(users, transaction.agentID),
+        ownerID: idToName(organizations, transaction.ownerID),
+        agentID: idToName(organizations, transaction.agentID),
       }}
-      loading={transactionLoading || categoriesLoading || usersLoading}
+      loading={transactionLoading || categoriesLoading || orgLoading}
     />
   );
 };

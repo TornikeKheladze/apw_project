@@ -14,10 +14,10 @@ const CategoryProductionForm = () => {
     action,
     submitHandler,
     categories,
-    users,
     categoryProduction,
     chosenCategory,
     setChosenCategory,
+    organizations,
   } = useCategoryProductionForm();
 
   return (
@@ -48,7 +48,7 @@ const CategoryProductionForm = () => {
               isLoading={actionLoading}
               updateDataObj={action === "edit" ? categoryProduction : null}
               optionsObj={{
-                agentID: users,
+                agentID: organizations,
                 status: [
                   { id: 1, name: "აქტიური" },
                   { id: 0, name: "არააქტიური" },

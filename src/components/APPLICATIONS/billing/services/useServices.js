@@ -6,8 +6,8 @@ import { filterArray } from "helpers/filterArray";
 import { useMutation, useQuery } from "react-query";
 import { getCategories } from "services/serviceCategories";
 import { useQueryClient } from "react-query";
-import { getAllUsers } from "services/users";
 import { statusBadge } from "helpers/CheckStatusForBilling";
+import { getOrganizations } from "services/organizations";
 
 export const useServices = () => {
   const queryClient = useQueryClient();
@@ -25,9 +25,9 @@ export const useServices = () => {
       queryKey: "getCategories",
       queryFn: () => getCategories().then((res) => res.data),
     });
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
@@ -57,7 +57,7 @@ export const useServices = () => {
       return {
         ...service,
         categoryID: idToName(categories, service.categoryID),
-        ownerID: idToName(users, service.ownerID),
+        ownerID: idToName(organizations, service.ownerID),
         active: statusBadge(service.active),
       };
     }
@@ -65,7 +65,11 @@ export const useServices = () => {
 
   const activationHandler = (id) => {
     const service = services.find((service) => service.serviceID === id);
-    updateMutate({ ...service, active: service.active === 1 ? 0 : 1 });
+    updateMutate({
+      ...service,
+      price: 0,
+      active: service.active === 1 ? 0 : 1,
+    });
   };
 
   const isActive = (id) =>
@@ -78,7 +82,7 @@ export const useServices = () => {
   }, [chosenCategory]);
 
   return {
-    loading: servicesLoading || categoriesLoading || usersLoading,
+    loading: servicesLoading || categoriesLoading || orgLoading,
     updatedList,
     activation: {
       activationHandler,

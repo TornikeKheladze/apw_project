@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getAllServices } from "services/services";
 import { idToName } from "helpers/idToName";
-import { getAllUsers } from "services/users";
 import { getServiceProductionById } from "services/serviceProduction";
+import { getOrganizations } from "services/organizations";
 
 const ServiceProductionDetails = () => {
   const { id } = useParams();
@@ -21,9 +21,9 @@ const ServiceProductionDetails = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   return (
@@ -36,16 +36,10 @@ const ServiceProductionDetails = () => {
           services.map((s) => ({ ...s, id: s.serviceID })),
           serviceProduction.serviceID
         ),
-        ownerID: idToName(
-          users.map((user) => ({ ...user, id: user.user_id })),
-          serviceProduction.ownerID
-        ),
-        agentID: idToName(
-          users.map((user) => ({ ...user, id: user.user_id })),
-          serviceProduction.agentID
-        ),
+        ownerID: idToName(organizations, serviceProduction.ownerID),
+        agentID: idToName(organizations, serviceProduction.agentID),
       }}
-      loading={serviceProductionLoading || servicesLoading || usersLoading}
+      loading={serviceProductionLoading || servicesLoading || orgLoading}
     />
   );
 };

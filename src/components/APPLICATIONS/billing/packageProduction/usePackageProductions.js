@@ -6,10 +6,10 @@ import {
   getBillingPackages,
   getBillingPackagesProduction,
 } from "services/billingPackages";
-import { getAllUsers } from "services/users";
 import { filterArray } from "helpers/filterArray";
 import { removeEmpty } from "helpers/removeEmpty";
 import { idToName } from "helpers/idToName";
+import { getOrganizations } from "services/organizations";
 
 export const usePackageProductions = () => {
   const queryClient = useQueryClient();
@@ -48,9 +48,9 @@ export const usePackageProductions = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const services = servicesData.map((service) => ({
@@ -75,16 +75,16 @@ export const usePackageProductions = () => {
       id: packageProduction.packagesProductionID,
       serviceID: idToName(services, packageProduction.serviceID),
       packageID: idToName(packages, packageProduction.packageID),
-      agentID: idToName(users, packageProduction.agentID),
-      ownerID: idToName(users, packageProduction.ownerID),
+      agentID: idToName(organizations, packageProduction.agentID),
+      ownerID: idToName(organizations, packageProduction.ownerID),
     })
   );
 
   const searchOptions = {
     serviceID: services,
     packageID: packages,
-    agentID: users,
-    ownerID: users,
+    agentID: organizations,
+    ownerID: organizations,
   };
 
   return {
@@ -92,7 +92,7 @@ export const usePackageProductions = () => {
       packageLoading ||
       servicesLoading ||
       packageProductionsLoading ||
-      usersLoading,
+      orgLoading,
     deleteItem: {
       deleteMutate,
       deleteLoading,

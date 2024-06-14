@@ -8,8 +8,8 @@ import { useState } from "react";
 import { filterArray } from "helpers/filterArray";
 import { removeEmpty } from "helpers/removeEmpty";
 import { idToName } from "helpers/idToName";
-import { getAllUsers } from "services/users";
 import { statusBadge } from "helpers/CheckStatusForBilling";
+import { getOrganizations } from "services/organizations";
 
 export const useCategoryProduction = () => {
   const queryClient = useQueryClient();
@@ -29,9 +29,9 @@ export const useCategoryProduction = () => {
     queryFn: () => getCategories().then((res) => res.data),
   });
 
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
@@ -59,7 +59,7 @@ export const useCategoryProduction = () => {
     (catProduction) => {
       return {
         ...catProduction,
-        agentID: idToName(users, catProduction.agentID),
+        agentID: idToName(organizations, catProduction.agentID),
         catID: idToName(categories, catProduction.catID),
         status: statusBadge(catProduction.status),
       };
@@ -67,7 +67,7 @@ export const useCategoryProduction = () => {
   );
 
   const selectOptions = {
-    agentID: users,
+    agentID: organizations,
     catID: categories,
     status: [
       { id: 1, name: "აქტიური" },
@@ -84,7 +84,7 @@ export const useCategoryProduction = () => {
     categoryProduction.find((c) => c.id === id)?.status === 1 ? true : false;
 
   return {
-    isLoading: isLoading || categoryLoading || usersLoading,
+    isLoading: isLoading || categoryLoading || orgLoading,
     updatedList,
     alert,
     filter,

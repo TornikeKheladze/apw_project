@@ -3,9 +3,9 @@ import { serviceCategoriesArr } from "../../formArrays/serviceArr";
 import { getCategories, getCategoryById } from "services/serviceCategories";
 import { useQuery } from "react-query";
 import { idToName } from "helpers/idToName";
-import { getAllUsers } from "services/users";
 import ServiceCategoryTreeMenu from "../ServiceCategoryTreeMenu";
 import LoadingSpinner from "components/icons/LoadingSpinner";
+import { getOrganizations } from "services/organizations";
 
 const ServiceCategoriesDetails = () => {
   const { id } = useParams();
@@ -22,9 +22,9 @@ const ServiceCategoriesDetails = () => {
     }
   );
 
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const buildTreeMenu = (categories, parentId = 0) => {
@@ -42,7 +42,7 @@ const ServiceCategoriesDetails = () => {
       categoriesArr.map((cat) => ({ ...cat, id: cat.catID })),
       serviceCategory.parentID
     ),
-    ownerID: idToName(users, serviceCategory.ownerID),
+    ownerID: idToName(organizations, serviceCategory.ownerID),
   };
 
   const categoriesTree = buildTreeMenu(categoriesArr, +id);
@@ -80,7 +80,7 @@ const ServiceCategoriesDetails = () => {
         <div className="flex justify-between items-center">
           <h4>კატეგორიის დეტალები</h4>
         </div>
-        {categoryLoading || categoriesLoading || usersLoading ? (
+        {categoryLoading || categoriesLoading || orgLoading ? (
           <LoadingSpinner blur />
         ) : (
           <table className="table table_bordered w-full mt-3">

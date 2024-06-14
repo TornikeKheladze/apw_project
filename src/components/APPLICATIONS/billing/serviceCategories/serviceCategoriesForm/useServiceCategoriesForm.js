@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { buildCategoryTree } from "helpers/treeMenuBuilder";
 import { serviceCategoriesArr } from "../../formArrays/serviceArr";
-import { getAllUsers } from "services/users";
+import { getOrganizations } from "services/organizations";
 
 export const useServiceCategoriesForm = () => {
   const { action, id } = useParams();
@@ -52,9 +52,9 @@ export const useServiceCategoriesForm = () => {
       queryFn: () => getCategories().then((res) => res.data),
     }
   );
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const categories = categoriesArr.map((cat) => {
@@ -137,7 +137,7 @@ export const useServiceCategoriesForm = () => {
   return {
     alert,
     action,
-    isLoading: isLoading || categoriesLoading || usersLoading,
+    isLoading: isLoading || categoriesLoading || orgLoading,
     submitHandler,
     actionLoading: createLoading || editLoading,
     category,
@@ -146,6 +146,6 @@ export const useServiceCategoriesForm = () => {
     chosenCategory,
     setChosenCategory,
     formFields,
-    users,
+    organizations,
   };
 };

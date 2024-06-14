@@ -10,8 +10,8 @@ import {
   getBillingPackages,
   updateBillingPackageProduction,
 } from "services/billingPackages";
-import { getAllUsers } from "services/users";
 import { packageProductionsArr } from "../../formArrays/serviceArr";
+import { getOrganizations } from "services/organizations";
 
 export const usePackageProductionForm = () => {
   const queryClient = useQueryClient();
@@ -89,9 +89,9 @@ export const usePackageProductionForm = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const services = servicesData.map((service) => ({
@@ -133,7 +133,7 @@ export const usePackageProductionForm = () => {
     loading:
       packageLoading ||
       servicesLoading ||
-      usersLoading ||
+      orgLoading ||
       packageProductionLoading ||
       isFetching,
     submitHandler,
@@ -142,7 +142,7 @@ export const usePackageProductionForm = () => {
     services,
     packageProduction,
     packages,
-    users,
+    organizations,
     formFields,
   };
 };

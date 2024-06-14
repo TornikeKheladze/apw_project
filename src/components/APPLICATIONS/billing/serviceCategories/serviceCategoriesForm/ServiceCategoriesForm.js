@@ -17,7 +17,7 @@ const ServiceCategoriesForm = () => {
     chosenCategory,
     setChosenCategory,
     formFields,
-    users,
+    organizations,
   } = useServiceCategoriesForm();
 
   return (
@@ -46,7 +46,7 @@ const ServiceCategoriesForm = () => {
               isLoading={actionLoading}
               updateDataObj={action === "edit" ? category : null}
               optionsObj={{
-                ownerID: users,
+                ownerID: organizations,
                 catType: [
                   { name: "noli", id: 0 },
                   { name: "erti", id: 1 },

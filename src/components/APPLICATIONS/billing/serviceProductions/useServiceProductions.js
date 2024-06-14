@@ -2,7 +2,6 @@ import { useState } from "react";
 import { getAllServices } from "services/services";
 import { useMutation, useQuery } from "react-query";
 import { useQueryClient } from "react-query";
-import { getAllUsers } from "services/users";
 import {
   getServiceProduction,
   updateServiceProduction,
@@ -11,6 +10,7 @@ import { idToName } from "helpers/idToName";
 import { filterArray } from "helpers/filterArray";
 import { removeEmpty } from "helpers/removeEmpty";
 import { statusBadge } from "helpers/CheckStatusForBilling";
+import { getOrganizations } from "services/organizations";
 
 export const useServiceProductions = () => {
   const queryClient = useQueryClient();
@@ -28,9 +28,9 @@ export const useServiceProductions = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
@@ -61,8 +61,8 @@ export const useServiceProductions = () => {
     (sProd) => {
       return {
         ...sProd,
-        ownerID: idToName(users, sProd.ownerID),
-        agentID: idToName(users, sProd.agentID),
+        ownerID: idToName(organizations, sProd.ownerID),
+        agentID: idToName(organizations, sProd.agentID),
         serviceID: idToName(services, sProd.serviceID),
         status: statusBadge(sProd.status),
       };
@@ -71,8 +71,8 @@ export const useServiceProductions = () => {
 
   const selectOptions = {
     serviceID: services,
-    ownerID: users,
-    agentID: users,
+    ownerID: organizations,
+    agentID: organizations,
     status: [
       { name: "არააქტიური", id: 0 },
       { name: "აქტიური", id: 1 },
@@ -94,7 +94,7 @@ export const useServiceProductions = () => {
       : false;
 
   return {
-    loading: servicesLoading || usersLoading || productionsLoading,
+    loading: servicesLoading || orgLoading || productionsLoading,
     alert,
     productions,
     selectOptions,

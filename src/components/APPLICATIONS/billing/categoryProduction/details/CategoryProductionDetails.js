@@ -7,7 +7,7 @@ import {
 } from "services/serviceCategories";
 import { useQuery } from "react-query";
 import { idToName } from "helpers/idToName";
-import { getAllUsers } from "services/users";
+import { getOrganizations } from "services/organizations";
 
 const CategoryProductionDetails = () => {
   const { id } = useParams();
@@ -25,9 +25,9 @@ const CategoryProductionDetails = () => {
     }
   );
 
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   return (
@@ -42,7 +42,7 @@ const CategoryProductionDetails = () => {
           }),
           categoryProduction.catID
         ),
-        agentID: idToName(users, categoryProduction.agentID),
+        agentID: idToName(organizations, categoryProduction.agentID),
         status: idToName(
           [
             { id: 1, name: "აქტიური" },
@@ -51,7 +51,7 @@ const CategoryProductionDetails = () => {
           categoryProduction.status
         ),
       }}
-      loading={categoryLoading || categoriesLoading || usersLoading}
+      loading={categoryLoading || categoriesLoading || orgLoading}
     />
   );
 };

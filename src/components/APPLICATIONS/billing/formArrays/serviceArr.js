@@ -60,11 +60,6 @@ export const serviceArr = [
   //   type: "file",
   // },
   {
-    name: "price",
-    label: "price",
-    type: "text",
-  },
-  {
     filter: "select",
     name: "categoryID",
     label: "categoryID",
@@ -76,7 +71,6 @@ export const serviceArr = [
     type: "number",
   },
   {
-    filter: "select",
     name: "ownerID",
     label: "ownerID",
     type: "select",

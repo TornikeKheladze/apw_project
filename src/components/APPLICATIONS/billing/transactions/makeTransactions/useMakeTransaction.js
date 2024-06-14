@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { getAllServices } from "services/services";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getAllUsers } from "services/users";
 import { makeTransactionsArr } from "../../formArrays/transactionArr";
 import { makeTransaction } from "services/transactions";
 import { getSales } from "services/sales";
 import { getServiceParametersByServiceID } from "services/serviceParameters";
 import { useSelector } from "react-redux";
-import { getOrganizationById } from "services/organizations";
+import { getOrganizationById, getOrganizations } from "services/organizations";
 
 export const useMakeTransaction = () => {
   const queryClient = useQueryClient();
@@ -36,9 +35,9 @@ export const useMakeTransaction = () => {
     enabled: authorizedUser.oid ? true : false,
   });
 
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
   const { data: salesData = [], isLoading: salesLoading } = useQuery({
     queryKey: "getSales",
@@ -96,7 +95,7 @@ export const useMakeTransaction = () => {
   }, []);
 
   const selectOptions = {
-    agentID: users,
+    agentID: organizations,
     serviceID: services,
     saleID: [{ id: 0, name: "სეილის გარეშე" }, ...sales],
   };
@@ -124,7 +123,7 @@ export const useMakeTransaction = () => {
     : makeTransactionsArr;
 
   return {
-    isLoading: usersLoading || servicesLoading || salesLoading,
+    isLoading: orgLoading || servicesLoading || salesLoading,
     actionLoading: createLoading,
     submitHandler,
     alert,

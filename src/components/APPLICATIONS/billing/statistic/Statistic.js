@@ -1,13 +1,13 @@
 import { useQuery } from "react-query";
 import BarChart from "./BarChart";
 import { getAgentStatistic, getOwnerStatistic } from "services/statistic";
-import { getAllUsers } from "services/users";
 import { idToName } from "helpers/idToName";
 import ConfigChartJS from "config/chartjs";
 import useThemeOptions from "utilities/hooks/useThemeOptions";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import { mergeObjectsWithSimilarNames } from "helpers/sumObjectKeys";
+import { getOrganizations } from "services/organizations";
 
 const Statistic = () => {
   const { user } = useParams();
@@ -24,12 +24,12 @@ const Statistic = () => {
   });
 
   const {
-    data: users = [{}],
-    isLoading: usersLoading,
-    isFetching: usersFetching,
+    data: organizations = [{}],
+    isLoading: orgLoading,
+    isFetching: orgsFetching,
   } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res.data.users),
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const { bar } = ConfigChartJS();
@@ -38,7 +38,7 @@ const Statistic = () => {
   const statisticData = statistic.map((s) => {
     return {
       ...s,
-      [key]: idToName(users, s[key]) || s[key],
+      [key]: idToName(organizations, s[key]) || s[key],
     };
   });
 
@@ -117,7 +117,7 @@ const Statistic = () => {
   };
 
   const loading =
-    statisticFetching || usersFetching || statisticLoading || usersLoading;
+    statisticFetching || orgsFetching || statisticLoading || orgLoading;
   return (
     <main className="workspace overflow-hidden pb-8 relative">
       {loading && <LoadingSpinner blur />}

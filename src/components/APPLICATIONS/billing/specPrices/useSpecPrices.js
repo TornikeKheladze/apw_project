@@ -5,8 +5,8 @@ import { getAllServices } from "services/services";
 import { filterArray } from "helpers/filterArray";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteSpecPrice, getSpecPrices } from "services/servicePrices";
-import { getAllUsers } from "services/users";
 import { useSearchParams } from "react-router-dom";
+import { getOrganizations } from "services/organizations";
 
 export const useSpecPrices = () => {
   const queryClient = useQueryClient();
@@ -38,9 +38,9 @@ export const useSpecPrices = () => {
     queryKey: "getAllServices",
     queryFn: () => getAllServices().then((res) => res.data),
   });
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res.data.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const specPrices = specPricesData
@@ -63,17 +63,17 @@ export const useSpecPrices = () => {
       return {
         ...serParams,
         serviceID: idToName(services, serParams.serviceID),
-        agentID: idToName(users, serParams.agentID),
+        agentID: idToName(organizations, serParams.agentID),
       };
     }
   );
   const selectOptions = {
     serviceID: services,
-    agentID: users,
+    agentID: organizations,
   };
 
   return {
-    loading: specPricesLoading || servicesLoading || usersLoading,
+    loading: specPricesLoading || servicesLoading || orgLoading,
     updatedList,
     alert,
     filter,

@@ -12,8 +12,8 @@ const SpecPricesForm = () => {
     actionLoading,
     alert,
     specPrice,
-    users,
     service,
+    organizations,
   } = useSpecPricesForm();
 
   return (
@@ -35,7 +35,7 @@ const SpecPricesForm = () => {
               //   ...service,
               //   id: service.serviceID,
               // })),
-              agentID: users,
+              agentID: organizations,
             }}
             updateDataObj={action === "edit" ? specPrice : null}
             formArray={specPricesArr.filter(

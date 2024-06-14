@@ -5,8 +5,8 @@ import { useQuery } from "react-query";
 import { getServiceById } from "services/services";
 import { idToName } from "helpers/idToName";
 import { getCategories } from "services/serviceCategories";
-import { getAllUsers } from "services/users";
 import { getServiceParametersByServiceID } from "services/serviceParameters";
+import { getOrganizations } from "services/organizations";
 
 const ServiceDetails = () => {
   const { id } = useParams();
@@ -20,9 +20,9 @@ const ServiceDetails = () => {
     queryKey: "getCategories",
     queryFn: () => getCategories().then((res) => res.data),
   });
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
   const {
     data: serviceParameters = [{}],
@@ -98,12 +98,12 @@ const ServiceDetails = () => {
           }),
           service.categoryID
         ),
-        ownerID: idToName(users, service.ownerID),
+        ownerID: idToName(organizations, service.ownerID),
       }}
       loading={
         serviceLoading ||
         categoriesLoading ||
-        usersLoading ||
+        orgLoading ||
         serviceParametersLoading
       }
     />

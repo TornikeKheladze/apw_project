@@ -4,13 +4,13 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { getAllServices } from "services/services";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { getAllUsers } from "services/users";
 import {
   createServiceProduction,
   getServiceProductionById,
   updateServiceProduction,
 } from "services/serviceProduction";
 import { serviceProductionArr } from "../../formArrays/serviceArr";
+import { getOrganizations } from "services/organizations";
 
 export const useServiceProductionForm = () => {
   const dispatch = useDispatch();
@@ -44,9 +44,9 @@ export const useServiceProductionForm = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const mutateHandler = (response, message) => {
@@ -126,9 +126,9 @@ export const useServiceProductionForm = () => {
     services,
     alert,
     serviceProduction,
-    isLoading: servicesLoading || isLoading || usersLoading || isFetching,
+    isLoading: servicesLoading || isLoading || orgLoading || isFetching,
     actionLoading: createLoading || editLoading,
-    users,
+    organizations,
     formFields,
   };
 };

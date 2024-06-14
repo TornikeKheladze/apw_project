@@ -13,8 +13,8 @@ const PackageProductionForm = () => {
     alert,
     packageProduction,
     packages,
-    users,
     formFields,
+    organizations,
   } = usePackageProductionForm();
 
   return (
@@ -35,8 +35,8 @@ const PackageProductionForm = () => {
             optionsObj={{
               serviceID: services,
               packageID: packages,
-              ownerID: users,
-              agentID: users,
+              ownerID: organizations,
+              agentID: organizations,
             }}
             updateDataObj={action === "edit" ? packageProduction : null}
             formArray={formFields}

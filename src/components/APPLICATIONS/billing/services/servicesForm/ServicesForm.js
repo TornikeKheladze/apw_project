@@ -17,7 +17,7 @@ const ServicesForm = () => {
     chosenCategory,
     setChosenCategory,
     formFields,
-    users,
+    organizations,
   } = useServicesForm();
 
   return (
@@ -43,7 +43,7 @@ const ServicesForm = () => {
 
             <GeneralForm
               optionsObj={{
-                ownerID: users,
+                ownerID: organizations,
                 active: [
                   { name: "არააქტიური", id: 0 },
                   { name: "აქტიური", id: 1 },

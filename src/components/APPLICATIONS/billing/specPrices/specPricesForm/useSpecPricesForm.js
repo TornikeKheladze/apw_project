@@ -9,7 +9,7 @@ import {
   getSpecPriceById,
   updateSpecPrice,
 } from "services/servicePrices";
-import { getAllUsers } from "services/users";
+import { getOrganizations } from "services/organizations";
 
 export const useSpecPricesForm = () => {
   const queryClient = useQueryClient();
@@ -85,9 +85,9 @@ export const useSpecPricesForm = () => {
   const service =
     services.find((service) => +service.serviceID === +serviceID) || {};
 
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res.data.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const submitHandler = (data) => {
@@ -104,13 +104,13 @@ export const useSpecPricesForm = () => {
 
   return {
     action,
-    loading: specPriceLoading || servicesLoading || usersLoading || isFetching,
+    loading: specPriceLoading || servicesLoading || orgLoading || isFetching,
     submitHandler,
     actionLoading: createLoading || updateLoading,
     alert,
     specPrice,
     services,
-    users,
+    organizations,
     service,
   };
 };

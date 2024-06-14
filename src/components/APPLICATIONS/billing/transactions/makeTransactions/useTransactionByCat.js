@@ -3,13 +3,12 @@ import { getAllServices } from "services/services";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getCategories } from "services/serviceCategories";
-import { getAllUsers } from "services/users";
 import { makeTransactionsArr } from "../../formArrays/transactionArr";
 import { makeTransactionByCategory } from "services/transactions";
 import { getSales } from "services/sales";
 import { getServiceParametersByServiceID } from "services/serviceParameters";
 import { useSelector } from "react-redux";
-import { getOrganizationById } from "services/organizations";
+import { getOrganizationById, getOrganizations } from "services/organizations";
 
 export const useTransactionByCat = () => {
   const queryClient = useQueryClient();
@@ -43,9 +42,9 @@ export const useTransactionByCat = () => {
       queryKey: "getCategories",
       queryFn: () => getCategories().then((res) => res.data),
     });
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
   const { data: salesData = [], isLoading: salesLoading } = useQuery({
     queryKey: "getSales",
@@ -109,7 +108,7 @@ export const useTransactionByCat = () => {
   }, []);
 
   const selectOptions = {
-    agentID: users,
+    agentID: organizations,
     serviceID: services,
     saleID: [{ id: 0, name: "სეილის გარეშე" }, ...sales],
   };
@@ -140,10 +139,10 @@ export const useTransactionByCat = () => {
   return {
     submitHandler,
     categories,
-    users,
+    organizations,
     alert,
     isLoading:
-      categoriesLoading || usersLoading || servicesLoading || salesLoading,
+      categoriesLoading || orgLoading || servicesLoading || salesLoading,
     actionLoading: createLoading,
     chosenCategory,
     setChosenCategory,

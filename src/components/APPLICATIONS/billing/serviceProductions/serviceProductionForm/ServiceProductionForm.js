@@ -12,8 +12,8 @@ const ServiceProductionForm = () => {
     serviceProduction = {},
     isLoading,
     actionLoading,
-    users,
     formFields,
+    organizations,
   } = useServiceProductionForm();
 
   return (
@@ -32,8 +32,8 @@ const ServiceProductionForm = () => {
           <GeneralForm
             optionsObj={{
               serviceID: services,
-              agentID: users,
-              ownerID: users,
+              agentID: organizations,
+              ownerID: organizations,
               status: [
                 { name: "არააქტიური", id: 0 },
                 { name: "აქტიური", id: 1 },

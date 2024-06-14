@@ -9,7 +9,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "services/serviceCategories";
 import { serviceArr } from "../../formArrays/serviceArr";
-import { getAllUsers } from "services/users";
+import { getOrganizations } from "services/organizations";
 
 const useServicesForm = () => {
   const queryClient = useQueryClient();
@@ -45,9 +45,9 @@ const useServicesForm = () => {
       queryKey: "getCategories",
       queryFn: () => getCategories().then((res) => res.data),
     });
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const mutateHandler = (response, message) => {
@@ -113,6 +113,7 @@ const useServicesForm = () => {
       ...data,
       image: JSON.parse(localStorage.getItem("formInputData"))?.image,
       categoryID: chosenCategory.id,
+      price: 0,
     };
     if (!chosenCategory.id) {
       setAlert({
@@ -138,10 +139,10 @@ const useServicesForm = () => {
     action,
     submitHandler,
     categories,
-    users,
+    organizations,
     alert,
     service,
-    isLoading: categoriesLoading || isLoading || isFetching || usersLoading,
+    isLoading: categoriesLoading || isLoading || isFetching || orgLoading,
     actionLoading: createLoading || editLoading,
     chosenCategory,
     setChosenCategory,

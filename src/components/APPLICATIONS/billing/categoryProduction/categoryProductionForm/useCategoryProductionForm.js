@@ -8,7 +8,7 @@ import {
 } from "services/serviceCategories";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getAllUsers } from "services/users";
+import { getOrganizations } from "services/organizations";
 
 export const useCategoryProductionForm = () => {
   const { action, id } = useParams();
@@ -47,9 +47,9 @@ export const useCategoryProductionForm = () => {
     }
   );
 
-  const { data: users = [{}], isLoading: usersLoading } = useQuery({
-    queryKey: "getAllUsers",
-    queryFn: () => getAllUsers().then((res) => res?.data?.users),
+  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
   const categories = categoriesArr.map((cat) => ({
@@ -112,14 +112,14 @@ export const useCategoryProductionForm = () => {
   };
 
   return {
-    isLoading: isLoading || categoriesLoading || isFetching || usersLoading,
+    isLoading: isLoading || categoriesLoading || isFetching || orgLoading,
     actionLoading: createLoading || editLoading,
     alert,
     action,
     submitHandler,
     categoryProduction,
     categories,
-    users,
+    organizations,
     chosenCategory,
     setChosenCategory,
   };
