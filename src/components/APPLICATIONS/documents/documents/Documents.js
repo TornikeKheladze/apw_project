@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { filterArray } from "helpers/filterArray";
 import { removeEmpty } from "helpers/removeEmpty";
 import ServiceCategoryTreeMenu from "components/APPLICATIONS/billing/serviceCategories/ServiceCategoryTreeMenu";
+import { downloadPDF } from "helpers/downloadPDF";
 
 const Documents = () => {
   const {
@@ -75,36 +76,6 @@ const Documents = () => {
       getDocumentById(selectedDocument.id).then((res) => res.data.data),
     enabled: selectedDocument.id ? true : false,
   });
-
-  const token = localStorage.getItem("token");
-  const downloadPDF = (id) => {
-    setDownloadLoading(true);
-    fetch(
-      `https://test-dga-authorisation.apw.ge/api/document/doc-file/html-tu-pdf-download/${id}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/pdf",
-          Authorization: `Bearer ${token}`, // Add authorizati
-        },
-      }
-    )
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(new Blob([blob]));
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "your_file_name.pdf";
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        setDownloadLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error downloading PDF:", error);
-        setDownloadLoading(false);
-      });
-  };
 
   useEffect(() => {
     getDocumentByIdRefetch();
@@ -314,7 +285,12 @@ const Documents = () => {
                       <p>დოკუმენტი ხელმოწერილია</p>
                       <button
                         className="bg-success px-2 py-1 rounded hover:text-white text-white min-w-28"
-                        onClick={() => downloadPDF(documentById.signature_doc)}
+                        onClick={() =>
+                          downloadPDF(
+                            documentById.signature_doc,
+                            setDownloadLoading
+                          )
+                        }
                       >
                         {downloadLoading ? <LoadingSpinner /> : "ჩამოტვირთვა"}
                       </button>
@@ -387,7 +363,12 @@ const Documents = () => {
             {documentById?.not_signature_doc ? (
               <button
                 className="bg-success px-2 py-1 rounded hover:text-white text-white min-w-28 block mt-10"
-                onClick={() => downloadPDF(documentById?.not_signature_doc)}
+                onClick={() =>
+                  downloadPDF(
+                    documentById?.not_signature_doc,
+                    setDownloadLoading
+                  )
+                }
               >
                 {downloadLoading ? <LoadingSpinner /> : "ჩამოტვირთვა"}
               </button>

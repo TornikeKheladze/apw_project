@@ -125,4 +125,13 @@ export const downloadSignedDocument = (id) => {
 export const getAmountByWord = (amount) => {
   return instance.get(`document/io/money-word/${amount}`);
 };
+
+export const createUserInvoiceDoc = (data) => {
+  return instance.post("/document/doc-file/invoice-template", data);
+};
+
+export const getDocumentByUUID = (uuid) => {
+  return instance.post(`document/documents/uuid`, { uuid });
+};
+
 // https://test-dga-authorisation.apw.ge/api/document/doc-file/html-tu-pdf-download/662a57c16982aa213dba530a

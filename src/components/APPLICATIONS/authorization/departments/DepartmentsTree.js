@@ -23,18 +23,15 @@ const DepartmentsTree = () => {
     organization,
     organizations,
     departmentTree,
-    addDepartmentMutate,
-    packages = [],
+    packages,
     bindOrgToPackage,
     orgPackages,
-    deleteOrgPackageMutate,
-    states: {
-      input,
-      chosenDepartment,
-      successMessage,
-      packageModal,
-      deleteModal,
+    mutates: {
+      addDepartmentMutate,
+      deleteOrgPackageMutate,
+      getDocumentByUUIDMutate,
     },
+    states: { input, chosenDepartment, alert, packageModal, deleteModal },
     setStates: {
       setInput,
       setChosenDepartment,
@@ -46,13 +43,15 @@ const DepartmentsTree = () => {
       initialLoading,
       insertOrgPackageLoading,
       deleteOrgPackageLoading,
+      createInvoiceLoading,
+      getDocumentLoading,
     },
   } = useDepartmentsTree();
 
   return (
     <main className="workspace">
       <Paths />
-      <Alert message={successMessage} color="success" dismissable />
+      <Alert message={alert.message} color={alert.type} dismissable />
 
       <div className="lg:col-span-2 xl:col-span-3 mb-4">
         <h3 className="mb-3">ორგანიზაცია</h3>
@@ -119,7 +118,7 @@ const DepartmentsTree = () => {
         <ModalHeader>პაკეტის დამატება</ModalHeader>
         <div className="p-5">
           <AuthForm
-            isLoading={insertOrgPackageLoading}
+            isLoading={insertOrgPackageLoading || createInvoiceLoading}
             formArray={orgPackageArr}
             submitHandler={bindOrgToPackage}
             optionsObj={{
@@ -176,6 +175,18 @@ const DepartmentsTree = () => {
                         className="btn-icon btn_outlined btn_danger flex justify-center items-center"
                       >
                         <span className="la la-trash-alt"></span>
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => getDocumentByUUIDMutate(item.uuid)}
+                        className="btn-icon btn_outlined flex justify-center items-center"
+                      >
+                        {getDocumentLoading ? (
+                          <LoadingSpinner />
+                        ) : (
+                          <span className="la la-download"></span>
+                        )}
                       </button>
                     </td>
                   </tr>

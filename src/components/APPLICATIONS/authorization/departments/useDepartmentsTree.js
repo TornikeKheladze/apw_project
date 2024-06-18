@@ -11,16 +11,24 @@ import {
   searchOrgPackage,
 } from "services/orgPackages";
 import {
+  createUserInvoiceDoc,
   getAllTemplates,
+  getDocumentByUUID,
   getTemplateColumnsByTemplateId,
 } from "services/documents";
+import { createInvoice } from "services/billingPackages";
+import { downloadPDF } from "helpers/downloadPDF";
 
 const useDepartmentsTree = () => {
   const queriClient = useQueryClient();
   const { oid } = useParams();
   const [input, setInput] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [alert, setAlert] = useState({
+    message: "",
+    type: "success",
+  });
   const [packageModal, setPackageModal] = useState(false);
+  const [downloadLoading, setDownloadLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
   });
@@ -38,10 +46,26 @@ const useDepartmentsTree = () => {
     queryKey: "organizations",
     queryFn: () => getOrganizations().then((res) => res.data.data),
   });
+  const { data: dga = [] } = useQuery({
+    queryKey: "organizations",
+    queryFn: () => getOrganizations().then((res) => res.data.dga),
+  });
+
   const { data: packages = [] } = useQuery({
     queryKey: ["getPackages"],
     queryFn: () => getPackages().then((res) => res.data),
   });
+
+  const { isLoading: getDocumentLoading, mutate: getDocumentByUUIDMutate } =
+    useMutation({
+      mutationFn: getDocumentByUUID,
+      onSuccess: (data) => {
+        const doc = data.data.data[0];
+        if (doc) {
+          downloadPDF(doc.not_signature_doc, setDownloadLoading);
+        }
+      },
+    });
 
   const { data: orgPackages = [] } = useQuery({
     queryKey: ["searchOrgPackage", oid],
@@ -51,6 +75,16 @@ const useDepartmentsTree = () => {
         value: oid,
       }).then((res) => res.data),
   });
+  const { mutate: createInvoiceMutate, isLoading: createInvoiceLoading } =
+    useMutation({
+      mutationFn: createUserInvoiceDoc,
+      onSuccess: () => {
+        setAlert({
+          message: "ინვოისი წარმატებით შეიქმნა",
+          type: "success",
+        });
+      },
+    });
 
   const { mutate: addDepartmentMutate, isLoading: addDepartmentLoading } =
     useMutation({
@@ -62,10 +96,13 @@ const useDepartmentsTree = () => {
         }),
       onSuccess: () => {
         queriClient.invalidateQueries(["departments", oid]);
-        setSuccessMessage("დეპარტამენტი წარმატებით შეიქმნა");
+        setAlert({
+          message: "დეპარტამენტი წარმატებით შეიქმნა",
+          type: "success",
+        });
         setInput("");
         setTimeout(() => {
-          setSuccessMessage("");
+          setAlert({ message: "", type: "success" });
         }, 3000);
       },
     });
@@ -73,12 +110,22 @@ const useDepartmentsTree = () => {
   const { mutate: insertOrgPackageMutate, isLoading: insertOrgPackageLoading } =
     useMutation({
       mutationFn: insertOrgPackage,
-      onSuccess: () => {
+      onSuccess: (data) => {
+        createInvoiceMutate({
+          package_id: data.data.package_id,
+          invoice_id: data.data.uuid,
+        });
         queriClient.invalidateQueries(["searchOrgPackage", oid]);
-        setSuccessMessage("პაკეტი წარმატებით დაემატა");
+        setAlert({
+          message: "პაკეტი წარმატებით დაემატა",
+          type: "success",
+        });
         setPackageModal(false);
         setTimeout(() => {
-          setSuccessMessage("");
+          setAlert({
+            message: "",
+            type: "success",
+          });
         }, 3000);
       },
     });
@@ -87,10 +134,10 @@ const useDepartmentsTree = () => {
       mutationFn: deleteOrgPackage,
       onSuccess: () => {
         queriClient.invalidateQueries(["searchOrgPackage", oid]);
-        setSuccessMessage("პაკეტი წარმატებით წაიშალა");
+        setAlert({ message: "პაკეტი წარმატებით წაიშალა", type: "success" });
         setDeleteModal({ isOpen: false });
         setTimeout(() => {
-          setSuccessMessage("");
+          setAlert({ message: "", type: "success" });
         }, 3000);
       },
     });
@@ -116,28 +163,40 @@ const useDepartmentsTree = () => {
     enabled: templateForActiveOrganization.id ? true : false,
   });
 
-  const bindOrgToPackage = (data) => {
-    function addMonthsToDate(months) {
-      const currentDate = new Date();
-      currentDate.setMonth(currentDate.getMonth() + months);
-      return currentDate.toISOString().split("T")[0];
+  const bindOrgToPackage = async (data) => {
+    try {
+      const res = await createInvoice({
+        ownerID: dga[0].id,
+        agentID: oid,
+      });
+      function addMonthsToDate(months) {
+        const currentDate = new Date();
+        currentDate.setMonth(currentDate.getMonth() + months);
+        return currentDate.toISOString().split("T")[0];
+      }
+      const selectedPackage = packages.find((p) => +p.id === +data.package_id);
+      const insertData = {
+        oid,
+        package_id: data.package_id,
+        count: selectedPackage.count,
+        start_date: new Date().toISOString().split("T")[0],
+        end_date: addMonthsToDate(selectedPackage.exp),
+        template_id: templateForActiveOrganization.id,
+        cat_id: templateForActiveOrganization.cat_id,
+        invoice_id: res.data.invoiceNumber,
+      };
+
+      templateColums.forEach((item) => {
+        insertData[item.column_marker] = `test ${item.column_marker}`;
+      });
+      insertOrgPackageMutate(insertData);
+    } catch (error) {
+      console.log(error);
+      setAlert({
+        message: "Something Went Wrong",
+        type: "danger",
+      });
     }
-    const selectedPackage = packages.find((p) => +p.id === +data.package_id);
-    const insertData = {
-      oid,
-      package_id: data.package_id,
-      count: selectedPackage.count,
-      start_date: new Date().toISOString().split("T")[0],
-      end_date: addMonthsToDate(selectedPackage.exp),
-      template_id: templateForActiveOrganization.id,
-      cat_id: templateForActiveOrganization.cat_id,
-    };
-
-    templateColums.forEach((item) => {
-      insertData[item.column_marker] = `test ${item.column_marker}`;
-    });
-
-    insertOrgPackageMutate(insertData);
   };
 
   const departmentTree = buildDepartmentTree(departments);
@@ -149,15 +208,20 @@ const useDepartmentsTree = () => {
     organization,
     organizations,
     departmentTree,
-    addDepartmentMutate,
     packages,
     bindOrgToPackage,
     orgPackages,
-    deleteOrgPackageMutate,
+    mutates: {
+      insertOrgPackageMutate,
+      createInvoiceMutate,
+      addDepartmentMutate,
+      deleteOrgPackageMutate,
+      getDocumentByUUIDMutate,
+    },
     states: {
       input,
       chosenDepartment,
-      successMessage,
+      alert,
       packageModal,
       deleteModal,
     },
@@ -172,6 +236,8 @@ const useDepartmentsTree = () => {
       initialLoading,
       insertOrgPackageLoading,
       deleteOrgPackageLoading,
+      createInvoiceLoading,
+      getDocumentLoading: getDocumentLoading || downloadLoading,
     },
   };
 };
