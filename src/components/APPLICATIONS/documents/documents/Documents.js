@@ -15,6 +15,7 @@ import { filterArray } from "helpers/filterArray";
 import { removeEmpty } from "helpers/removeEmpty";
 import ServiceCategoryTreeMenu from "components/APPLICATIONS/billing/serviceCategories/ServiceCategoryTreeMenu";
 import { downloadPDF } from "helpers/downloadPDF";
+import { useSelector } from "react-redux";
 
 const Documents = () => {
   const {
@@ -38,6 +39,8 @@ const Documents = () => {
       signLoadingForIdCard,
     },
   } = useDocuments();
+
+  const authorizedUser = useSelector((state) => state.user.authorizedUser);
 
   const [downloadLoading, setDownloadLoading] = useState(false);
 
@@ -391,14 +394,20 @@ const Documents = () => {
         <h2 className="text-sm mb-4">კატეგორიები</h2>
         <ServiceCategoryTreeMenu
           categories={buildCategoryTree(
-            catalogs.map((catalog) => {
-              return {
-                ...catalog,
-                catID: catalog.id,
-                parentID: catalog.parent_id,
-                categoryName: catalog.name,
-              };
-            })
+            catalogs
+              ?.filter((item) =>
+                authorizedUser?.superAdmin
+                  ? item
+                  : item.org_id === authorizedUser?.oid
+              )
+              .map((catalog) => {
+                return {
+                  ...catalog,
+                  catID: catalog.id,
+                  parentID: catalog.parent_id,
+                  categoryName: catalog.name,
+                };
+              })
             // catalogs
           )}
           chosenItem={chosenCategory}
@@ -414,15 +423,24 @@ const Documents = () => {
         ) : updatedList?.length ? (
           <AuthTable
             staticArr={documentsArr}
-            fetchedArr={updatedList?.map((item) => {
-              return {
-                ...item,
-                // template_code: truncateText(item?.template_code, 40),
-                // org_id_displayName: idToName(organizations, item.org_id),
-                template_id_displayName: idToName(templates, item.template_id),
-                cat_id_displayName: idToName(catalogs, item.cat_id),
-              };
-            })}
+            fetchedArr={updatedList
+              ?.filter((item) =>
+                authorizedUser?.superAdmin
+                  ? item
+                  : item.member_id === authorizedUser?.id
+              )
+              ?.map((item) => {
+                return {
+                  ...item,
+                  // template_code: truncateText(item?.template_code, 40),
+                  // org_id_displayName: idToName(organizations, item.org_id),
+                  template_id_displayName: idToName(
+                    templates,
+                    item.template_id
+                  ),
+                  cat_id_displayName: idToName(catalogs, item.cat_id),
+                };
+              })}
             actions={{
               // editClick: (item) => {
               //   navigate(`/documents/documents/${item.id}`);

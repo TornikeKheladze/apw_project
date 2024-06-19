@@ -10,6 +10,7 @@ import { idToName } from "helpers/idToName";
 import Footer from "partials/Footer";
 import { useTemplateColumns } from "./useTemplateColumns";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const TemplateColumns = () => {
   const { id } = useParams();
@@ -22,6 +23,11 @@ const TemplateColumns = () => {
     loadings: { isLoading, createLoading, editLoading, deleteLoading },
     mutates: { createMutate, editMutate, deleteMutate },
   } = useTemplateColumns();
+
+  const authorizedUser = useSelector((state) => state.user.authorizedUser);
+
+  console.log(templateColumns);
+
   return (
     <main className="workspace overflow-hidden">
       <Alert message={alert.message} color={alert.type} dismissable />
@@ -117,6 +123,11 @@ const TemplateColumns = () => {
               ?.filter(
                 (template) =>
                   template.template_id?.toString() === id?.toString()
+              )
+              ?.filter((item) =>
+                authorizedUser?.superAdmin
+                  ? item
+                  : item.org_id === authorizedUser?.oid
               )
               .map((item) => {
                 return {

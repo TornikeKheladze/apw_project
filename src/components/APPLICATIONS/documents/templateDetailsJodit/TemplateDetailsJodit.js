@@ -3,7 +3,7 @@ import Button from "components/Button";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   createTemplateColumn,
   getAllTemplateColumnsType,
@@ -26,6 +26,7 @@ const TemplateDetailsJodit = () => {
   const [openModal, setOpenModal] = useState({ open: false, action: "" });
   let editor = useRef(null);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const [alert, setAlert] = useState({
     type: "success",
@@ -105,7 +106,7 @@ const TemplateDetailsJodit = () => {
           },
         },
         {
-          name: "ბეჭდის ადგილი",
+          name: "ციფრული მმართველობის სააგენტოს ბეჭდის ადგილი",
           exec: (editor) => {
             editor.selection.insertHTML(
               "<span style='width: 160px; height:70px; border: 1px dashed red; color: red; margin-right: 80px; margin-left: 160px; display: flex; justify-content: center; align-items: center;'>TEST</span>"
@@ -150,7 +151,9 @@ const TemplateDetailsJodit = () => {
           <div className="flex gap-2 md:flex-row flex-col">
             <Button
               className="text-xs"
-              to={`/documents/templateColumns/${templateId}`}
+              onClick={() =>
+                navigate(`/documents/templateColumns/${templateId}`)
+              }
             >
               არსებული ცვლადები
             </Button>

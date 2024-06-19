@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { filterArray } from "helpers/filterArray";
 import { removeEmpty } from "helpers/removeEmpty";
 import ServiceCategoryTreeMenu from "components/APPLICATIONS/billing/serviceCategories/ServiceCategoryTreeMenu";
+import { useSelector } from "react-redux";
 
 const Templates = () => {
   const {
@@ -26,6 +27,8 @@ const Templates = () => {
     mutates: { createMutate, editMutate, deleteMutate },
     loadings: { createLoading, editLoading, deleteLoading, isLoading },
   } = useTemplates();
+
+  const authorizedUser = useSelector((state) => state.user.authorizedUser);
 
   const [filter, setFilter] = useState({});
   const [chosenCategory, setChosenCategory] = useState({});
@@ -73,7 +76,11 @@ const Templates = () => {
               isLoading={editLoading}
               defaultValues={selectedTemplate}
               optionsObj={{
-                cat_id: catalogs,
+                cat_id: catalogs?.filter((item) =>
+                  authorizedUser?.superAdmin
+                    ? item
+                    : item.org_id === authorizedUser?.oid
+                ),
                 org_id: organizations,
               }}
             />
@@ -86,7 +93,11 @@ const Templates = () => {
               submitHandler={createMutate}
               isLoading={createLoading}
               optionsObj={{
-                cat_id: catalogs,
+                cat_id: catalogs?.filter((item) =>
+                  authorizedUser?.superAdmin
+                    ? item
+                    : item.org_id === authorizedUser?.oid
+                ),
                 org_id: organizations,
               }}
             />
@@ -129,14 +140,20 @@ const Templates = () => {
         <h2 className="text-sm mb-4">კატეგორიები</h2>
         <ServiceCategoryTreeMenu
           categories={buildCategoryTree(
-            catalogs.map((catalog) => {
-              return {
-                ...catalog,
-                catID: catalog.id,
-                parentID: catalog.parent_id,
-                categoryName: catalog.name,
-              };
-            })
+            catalogs
+              ?.filter((item) =>
+                authorizedUser?.superAdmin
+                  ? item
+                  : item.org_id === authorizedUser?.oid
+              )
+              .map((catalog) => {
+                return {
+                  ...catalog,
+                  catID: catalog.id,
+                  parentID: catalog.parent_id,
+                  categoryName: catalog.name,
+                };
+              })
             // catalogs
           )}
           chosenItem={chosenCategory}
@@ -152,14 +169,20 @@ const Templates = () => {
         ) : updatedList?.length ? (
           <AuthTable
             staticArr={templateArr}
-            fetchedArr={updatedList?.map((item) => {
-              return {
-                ...item,
-                template_code: truncateText(item?.template_code, 40),
-                org_id_displayName: idToName(organizations, item.org_id),
-                cat_id_displayName: idToName(catalogs, item.cat_id),
-              };
-            })}
+            fetchedArr={updatedList
+              ?.filter((item) =>
+                authorizedUser?.superAdmin
+                  ? item
+                  : item.org_id === authorizedUser?.oid
+              )
+              ?.map((item) => {
+                return {
+                  ...item,
+                  template_code: truncateText(item?.template_code, 40),
+                  org_id_displayName: idToName(organizations, item.org_id),
+                  cat_id_displayName: idToName(catalogs, item.cat_id),
+                };
+              })}
             actions={{
               editClick: (item) => {
                 setOpenModal({ open: true, action: "შეცვლა" });

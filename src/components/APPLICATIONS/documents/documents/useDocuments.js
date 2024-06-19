@@ -90,16 +90,26 @@ export const useDocuments = () => {
     useMutation({
       mutationFn: signDocument,
       onSuccess: (data) => {
-        queryClient.invalidateQueries(["getDocumentById", selectedDocument.id]);
-        setAlert({
-          message: "ჩამოტვირთვის მოთხოვნა წარმატებით გაიგზავნა",
-          type: "success",
-        });
-        setTimeout(() => {
-          setAlert({ message: "" });
-        }, 1500);
+        if (data?.data?.status === "error") {
+          setAlert({
+            message: "დაფიქსირდა შეცდომა",
+            type: "danger",
+          });
+          setTimeout(() => {
+            setAlert({ message: "" });
+          }, 1500);
+        } else {
+          queryClient.invalidateQueries([
+            "getDocumentById",
+            selectedDocument.id,
+          ]);
+          setAlert({
+            message: "ჩამოტვირთვის მოთხოვნა წარმატებით გაიგზავნა",
+            type: "success",
+          });
+        }
       },
-      onError: afterRequestHandler("error.response.data.message", "danger"),
+      onError: afterRequestHandler("დაფიქსირდა შეცდომა", "danger"),
     });
 
   return {

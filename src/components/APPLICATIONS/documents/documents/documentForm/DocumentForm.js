@@ -170,15 +170,21 @@ const DocumentForm = () => {
           >
             <option value="">{"აირჩიეთ შაბლონი"}</option>
             {templates &&
-              templates?.map((item) => (
-                <option
-                  className="p-3"
-                  key={item.id?.toString() + item.name}
-                  value={item.id}
-                >
-                  {item?.template_name}
-                </option>
-              ))}
+              templates
+                ?.filter((item) =>
+                  authorizedUser?.superAdmin
+                    ? item
+                    : item.org_id === authorizedUser?.oid
+                )
+                ?.map((item) => (
+                  <option
+                    className="p-3"
+                    key={item.id?.toString() + item.name}
+                    value={item.id}
+                  >
+                    {item?.template_name}
+                  </option>
+                ))}
           </CustomSelect>
         </div>
         <div className="mt-10 mb-3">

@@ -54,7 +54,7 @@ const AuthForm = ({
                       key={item.id.toString() + item.name}
                       value={item.id}
                     >
-                      {item.name || item.category_name}
+                      {item.label || item.name || item.category_name}
                     </option>
                   ))}
               </CustomSelect>

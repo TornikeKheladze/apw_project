@@ -44,7 +44,7 @@ export const useTemplates = () => {
   });
 
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
-    mutationFn: createTemplate,
+    mutationFn: (data) => createTemplate({ ...data, template_code: "  " }),
     onSuccess: afterRequestHandler("შაბლონი წარმატებით დაემატა", "success"),
     onError: afterRequestHandler("error.response.data.message", "danger"),
   });

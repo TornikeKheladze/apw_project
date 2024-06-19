@@ -1,6 +1,5 @@
 import AuthForm from "components/APPLICATIONS/authorization/authForm/AuthForm";
 import AuthTable from "components/APPLICATIONS/authorization/authTable/AuthTable";
-import { docCatalogsArr } from "components/APPLICATIONS/billing/formArrays/documentsArrs";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import Modal, { ModalBody, ModalFooter, ModalHeader } from "components/Modal";
@@ -17,11 +16,13 @@ const DocCatalogs = () => {
     catalogs,
     catalogsTree,
     catalogTypes,
+    fields,
     organizations,
     mutates: { createMutate, deleteMutate, editMutate },
     loadings: { createLoading, deleteLoading, editLoading, loading },
     states: { alert, openModal, selectedCatalog },
     setStates: { setOpenModal, setSelectedCatalog },
+    authorizedUser,
   } = useDocCatalogs();
 
   return (
@@ -40,7 +41,7 @@ const DocCatalogs = () => {
         {openModal.action === "შეცვლა" && (
           <div className="p-5">
             <AuthForm
-              formArray={docCatalogsArr}
+              formArray={fields}
               submitHandler={editMutate}
               isLoading={editLoading}
               defaultValues={selectedCatalog}
@@ -55,7 +56,7 @@ const DocCatalogs = () => {
         {openModal.action === "დამატება" && (
           <div className="p-5">
             <AuthForm
-              formArray={docCatalogsArr}
+              formArray={fields}
               submitHandler={(data) => createMutate(removeEmpty(data))}
               isLoading={createLoading}
               optionsObj={{
@@ -106,15 +107,21 @@ const DocCatalogs = () => {
           </div>
         ) : catalogs?.length ? (
           <AuthTable
-            staticArr={docCatalogsArr}
-            fetchedArr={catalogs.map((item) => {
-              return {
-                ...item,
-                org_id_displayName: idToName(organizations, item.org_id),
-                parent_id_displayName: idToName(catalogs, item.parent_id),
-                type_displayName: idToName(catalogTypes, item.type),
-              };
-            })}
+            staticArr={fields}
+            fetchedArr={catalogs
+              ?.filter((item) =>
+                authorizedUser?.superAdmin
+                  ? item
+                  : item.org_id === authorizedUser?.oid
+              )
+              .map((item) => {
+                return {
+                  ...item,
+                  org_id_displayName: idToName(organizations, item.org_id),
+                  parent_id_displayName: idToName(catalogs, item.parent_id),
+                  type_displayName: idToName(catalogTypes, item.type),
+                };
+              })}
             actions={{
               editClick: (item) => {
                 setOpenModal({ open: true, action: "შეცვლა" });

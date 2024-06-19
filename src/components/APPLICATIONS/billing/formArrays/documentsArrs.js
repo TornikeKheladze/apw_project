@@ -18,7 +18,7 @@ export const templateArr = [
   { name: "template_name", label: "შაბლონის სახელი", type: "text" },
   { name: "cat_id", label: "კატეგორია", type: "select" },
   { name: "org_id", label: "ორგანიზაცია", type: "select" },
-  { name: "template_code", label: "კოდი", type: "text" },
+  // { name: "template_code", label: "კოდი", type: "text" },
 ];
 
 export const templateColumnsArr = [

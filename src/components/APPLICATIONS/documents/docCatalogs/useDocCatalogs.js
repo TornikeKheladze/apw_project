@@ -1,6 +1,8 @@
+import { docCatalogsArr } from "components/APPLICATIONS/billing/formArrays/documentsArrs";
 import { buildDepartmentTree } from "helpers/treeMenuBuilder";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
 import {
   createCatalog,
   deleteCategory,
@@ -15,6 +17,7 @@ export const useDocCatalogs = () => {
     message: "",
     type: "success",
   });
+  const authorizedUser = useSelector((state) => state.user.authorizedUser);
   const [openModal, setOpenModal] = useState({
     open: false,
     action: "",
@@ -39,7 +42,11 @@ export const useDocCatalogs = () => {
   });
 
   const { isLoading: createLoading, mutate: createMutate } = useMutation({
-    mutationFn: createCatalog,
+    mutationFn: (data) =>
+      createCatalog({
+        ...data,
+        org_id: authorizedUser.superAdmin ? data.org_id : authorizedUser.oid,
+      }),
     onSuccess: afterRequestHandler("კატალოგი წარმატებით დაემატა", "success"),
     onError: afterRequestHandler("error.response.data.message", "danger"),
   });
@@ -67,7 +74,15 @@ export const useDocCatalogs = () => {
     };
   }
 
-  const catalogsTree = buildDepartmentTree(catalogs);
+  const catalogsTree = buildDepartmentTree(
+    catalogs?.filter((item) =>
+      authorizedUser?.superAdmin ? item : item.org_id === authorizedUser?.oid
+    )
+  );
+
+  const fields = authorizedUser.superAdmin
+    ? docCatalogsArr
+    : docCatalogsArr.filter((item) => item.name !== "org_id");
 
   const loading = isLoading || organizationsLoading || catalogTypesLoading;
 
@@ -76,6 +91,8 @@ export const useDocCatalogs = () => {
     catalogsTree,
     catalogTypes,
     organizations,
+    fields,
+    authorizedUser,
     mutates: { createMutate, deleteMutate, editMutate },
     loadings: { createLoading, deleteLoading, editLoading, loading },
     states: { alert, openModal, selectedCatalog },
