@@ -134,7 +134,7 @@ const Organizations = () => {
       >
         <ModalHeader>ორგანიზაციის {openModal.action}</ModalHeader>
         {openModal.action === "შეცვლა" && (
-          <div className="p-5">
+          <div className="p-5 overflow-y-auto h-[90vh]">
             <AuthForm
               formArray={orgArr}
               submitHandler={updateMutate}
@@ -157,7 +157,7 @@ const Organizations = () => {
           </div>
         )}
         {openModal.action === "დამატება" && (
-          <div className="p-5">
+          <div className="p-5 overflow-y-auto h-[90vh]">
             <AuthForm
               formArray={orgArr}
               submitHandler={addMutate}

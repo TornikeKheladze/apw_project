@@ -118,6 +118,23 @@ export const useTransactions = () => {
   const updatedList = transactions.map((tr) => ({
     ...tr,
     id: tr.transactionID,
+    transactionType: idToName(
+      [
+        {
+          id: 0,
+          name: "საცალო ტრანზაქცია",
+        },
+        {
+          id: 1,
+          name: "პაკეტიდან გამოყენებული ტრანზაქცია",
+        },
+        {
+          id: 2,
+          name: "რესელერის ტრანზაქცია",
+        },
+      ],
+      tr.transactionType
+    ),
     statusID: checkStatus(tr.statusID),
     serviceID: idToName(services, tr.serviceID),
     agentID: idToName(organizations, tr.agentID),

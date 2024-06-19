@@ -1,3 +1,4 @@
+import { filterDuplicates } from "helpers/filterArray";
 import React, { useState, useRef, useEffect } from "react";
 
 const PermissionSelect = ({
@@ -12,13 +13,14 @@ const PermissionSelect = ({
   const filteredOptions = options.filter(({ name = "" }) =>
     name?.toLowerCase().includes(searchText.toLowerCase())
   );
-
   const handleCheckboxChange = (option, all = false) => {
     if (all) {
       if (selectedOptions.length === filteredOptions.length) {
         setSelectedOptions([]);
       } else {
-        setSelectedOptions(filteredOptions);
+        setSelectedOptions(
+          filterDuplicates([...selectedOptions, ...filteredOptions], "id")
+        );
       }
     } else {
       if (selectedOptions.map(({ id }) => id).includes(option.id)) {

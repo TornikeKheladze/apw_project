@@ -14,7 +14,6 @@ const Roles = () => {
     roles,
     isLoading,
     permissions,
-    authorizedUser,
     loadings: { createLoading, deleteLoading, editLoading },
     mutates: { createMutate, deleteMutate, editMutate },
     states: { isDeleteModalOpen, isEditModalOpen, choosenRole, alert },
@@ -38,13 +37,11 @@ const Roles = () => {
         loading={editLoading}
         permissions={permissions}
       />
-      {authorizedUser.superAdmin && (
-        <AddRole
-          permissions={permissions}
-          add={createMutate}
-          loading={createLoading}
-        />
-      )}
+      <AddRole
+        permissions={permissions}
+        add={createMutate}
+        loading={createLoading}
+      />
 
       <div className="card p-5">
         {isLoading ? (

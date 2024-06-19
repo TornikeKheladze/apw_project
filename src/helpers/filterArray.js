@@ -74,3 +74,16 @@ export const filterArray = (arr, filterObject) => {
 
   return filteredData;
 };
+
+export const filterDuplicates = (array, key) => {
+  const seen = new Set();
+  return array.filter((item) => {
+    const id = item[key];
+    if (seen.has(id)) {
+      return false;
+    } else {
+      seen.add(id);
+      return true;
+    }
+  });
+};

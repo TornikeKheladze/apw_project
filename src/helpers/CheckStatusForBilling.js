@@ -1,4 +1,4 @@
-const { default: Badge } = require("components/Badge");
+import Badge from "components/Badge";
 
 export const checkStatus = (statusId) => {
   switch (statusId) {

@@ -35,8 +35,10 @@ const AddRole = ({ add, loading, permissions }) => {
         className="mb-4"
         placeholder="როლის სახელი ლათინური სიმბოლოებით"
       />
+      <Label className="block mb-2" htmlFor="role">
+        აირჩიეთ აპლიკაცია
+      </Label>
       <CustomSelect onChange={(e) => setAid(e.target.value)}>
-        <option value="">აპლიკაცია</option>
         {APPLICATIONS.map((item) => (
           <option
             className="p-3"
