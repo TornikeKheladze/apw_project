@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { buildDepartmentTree } from "helpers/treeMenuBuilder";
 import { getOrganizations } from "services/organizations";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getPackages } from "services/packages";
+import { activatePackage, getPackages } from "services/packages";
 import {
   deleteOrgPackage,
   insertOrgPackage,
@@ -18,6 +18,7 @@ import {
 } from "services/documents";
 import { createInvoice } from "services/billingPackages";
 import { downloadPDF } from "helpers/downloadPDF";
+import { useSelector } from "react-redux";
 
 const useDepartmentsTree = () => {
   const queriClient = useQueryClient();
@@ -32,10 +33,16 @@ const useDepartmentsTree = () => {
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
   });
+  const [activatePackageModal, setActivatePackateModal] = useState({
+    isOpen: false,
+    package: {},
+  });
+
   const [chosenDepartment, setChosenDepartment] = useState({
     id: 0,
     department_name: "",
   });
+  const { authorizedUser } = useSelector((store) => store.user);
 
   const { data: departments = [], isLoading } = useQuery({
     queryKey: ["departments", oid],
@@ -141,6 +148,18 @@ const useDepartmentsTree = () => {
         }, 3000);
       },
     });
+  const { mutate: activatePackageMutate, isLoading: activatePackageLoading } =
+    useMutation({
+      mutationFn: () => activatePackage(activatePackageModal.package.uuid),
+      onSuccess: () => {
+        queriClient.invalidateQueries(["searchOrgPackage", oid]);
+        setAlert({ message: "პაკეტი წარმატებით გააქტიურდა", type: "success" });
+        setActivatePackateModal({ isOpen: false, package: {} });
+        setTimeout(() => {
+          setAlert({ message: "", type: "success" });
+        }, 2500);
+      },
+    });
 
   // to bind organization to package
   const { data: templates = [] } = useQuery({
@@ -211,12 +230,14 @@ const useDepartmentsTree = () => {
     packages,
     bindOrgToPackage,
     orgPackages,
+    authorizedUser,
     mutates: {
       insertOrgPackageMutate,
       createInvoiceMutate,
       addDepartmentMutate,
       deleteOrgPackageMutate,
       getDocumentByUUIDMutate,
+      activatePackageMutate,
     },
     states: {
       input,
@@ -224,12 +245,14 @@ const useDepartmentsTree = () => {
       alert,
       packageModal,
       deleteModal,
+      activatePackageModal,
     },
     setStates: {
       setInput,
       setChosenDepartment,
       setPackageModal,
       setDeleteModal,
+      setActivatePackateModal,
     },
     loadings: {
       addDepartmentLoading,
@@ -238,6 +261,7 @@ const useDepartmentsTree = () => {
       deleteOrgPackageLoading,
       createInvoiceLoading,
       getDocumentLoading: getDocumentLoading || downloadLoading,
+      activatePackageLoading,
     },
   };
 };

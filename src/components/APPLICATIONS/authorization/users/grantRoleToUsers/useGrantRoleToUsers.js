@@ -1,7 +1,7 @@
 import { APPLICATIONS } from "data/applications";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getRolesData, setRolesToUser } from "services/roles";
 import { getUsersByTypeAndId } from "services/users";
 
@@ -9,6 +9,7 @@ const useGrantRoleToUsers = () => {
   const queryClient = useQueryClient();
   const [selectedRole, setSelectedRole] = useState();
   const { type, id } = useParams();
+  const navigate = useNavigate();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [alert, setAlert] = useState({
     type: "success",
@@ -25,6 +26,9 @@ const useGrantRoleToUsers = () => {
         type: type,
         message: "",
       });
+      if (type === "success") {
+        navigate(-1);
+      }
     }, 2000);
     queryClient.invalidateQueries(["getUsers", type, id]);
     if (type === "success") {

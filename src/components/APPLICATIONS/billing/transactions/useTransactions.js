@@ -12,6 +12,7 @@ import { useMutation, useQuery } from "react-query";
 import { getAllServices } from "services/services";
 import { useSearchParams } from "react-router-dom";
 import { getOrganizations } from "services/organizations";
+import { checkStatus } from "helpers/CheckStatusForBilling";
 
 export const useTransactions = () => {
   const [searchParam, setSearchParam] = useSearchParams();
@@ -117,6 +118,7 @@ export const useTransactions = () => {
   const updatedList = transactions.map((tr) => ({
     ...tr,
     id: tr.transactionID,
+    statusID: checkStatus(tr.statusID),
     serviceID: idToName(services, tr.serviceID),
     agentID: idToName(organizations, tr.agentID),
     ownerID: idToName(organizations, tr.ownerID),

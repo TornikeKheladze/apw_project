@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
 
 import {
   addSuperAdminRole,
@@ -17,6 +18,7 @@ export const useRoles = () => {
     message: "",
     type: "success",
   });
+  const { authorizedUser } = useSelector((store) => store.user);
 
   const {
     data: rolesData = { roles: [], permission: [] },
@@ -64,18 +66,27 @@ export const useRoles = () => {
     roles: rolesData.roles,
     isLoading: rolesDataLoading,
     permissions: rolesData.permission,
-    isDeleteModalOpen,
-    setIsDeleteModalOpen,
-    isEditModalOpen,
-    setIsEditModalOpen,
-    choosenRole,
-    setChoosenRole,
-    createMutate,
-    alert,
-    createLoading,
-    deleteMutate,
-    deleteLoading,
-    editMutate,
-    editLoading,
+    authorizedUser,
+    loadings: {
+      createLoading,
+      deleteLoading,
+      editLoading,
+    },
+    mutates: {
+      createMutate,
+      deleteMutate,
+      editMutate,
+    },
+    states: {
+      isDeleteModalOpen,
+      isEditModalOpen,
+      choosenRole,
+      alert,
+    },
+    setStates: {
+      setIsDeleteModalOpen,
+      setIsEditModalOpen,
+      setChoosenRole,
+    },
   };
 };

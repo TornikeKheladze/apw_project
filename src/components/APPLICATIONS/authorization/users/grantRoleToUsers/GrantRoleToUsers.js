@@ -35,7 +35,7 @@ const GrantRoleToUsers = () => {
             users?.map((user) => (
               <Checkbox
                 key={user.id + Math.random().toString()}
-                label={user.name}
+                label={user.name + " " + user.l_name}
                 checked={selectedUsers.includes(user.id)}
                 onChange={(event) => handleCheckboxChange(event, user.id)}
               />

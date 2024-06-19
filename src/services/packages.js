@@ -28,3 +28,7 @@ export const deletePackage = async (id) => {
   const response = await instance.delete(`/user/package/delete/${id}`);
   return response;
 };
+
+export const activatePackage = (invoiceId) => {
+  return instance.get(`/admin/package-active/${invoiceId}`);
+};

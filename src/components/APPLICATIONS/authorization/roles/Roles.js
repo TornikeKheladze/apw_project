@@ -14,22 +14,13 @@ const Roles = () => {
     roles,
     isLoading,
     permissions,
-    isDeleteModalOpen,
-    setIsDeleteModalOpen,
-    isEditModalOpen,
-    setIsEditModalOpen,
-    choosenRole,
-    setChoosenRole,
-    createMutate,
-    alert,
-    createLoading,
-    deleteMutate,
-    deleteLoading,
-    editLoading,
-    editMutate,
+    authorizedUser,
+    loadings: { createLoading, deleteLoading, editLoading },
+    mutates: { createMutate, deleteMutate, editMutate },
+    states: { isDeleteModalOpen, isEditModalOpen, choosenRole, alert },
+    setStates: { setIsDeleteModalOpen, setIsEditModalOpen, setChoosenRole },
   } = useRoles();
 
-  // createLoading მიწერია ყველგან
   return (
     <main className="workspace">
       <DeleteModal
@@ -47,11 +38,13 @@ const Roles = () => {
         loading={editLoading}
         permissions={permissions}
       />
-      <AddRole
-        permissions={permissions}
-        add={createMutate}
-        loading={createLoading}
-      />
+      {authorizedUser.superAdmin && (
+        <AddRole
+          permissions={permissions}
+          add={createMutate}
+          loading={createLoading}
+        />
+      )}
 
       <div className="card p-5">
         {isLoading ? (
@@ -64,7 +57,7 @@ const Roles = () => {
             openDelete={setIsDeleteModalOpen}
             openEdit={setIsEditModalOpen}
             setChoosenItem={setChoosenRole}
-            title={"დასახელება"}
+            title={"როლები"}
           />
         ) : (
           <p>როლები არ მოიძებნა</p>

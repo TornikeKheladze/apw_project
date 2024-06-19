@@ -25,18 +25,28 @@ const DepartmentsTree = () => {
     departmentTree,
     packages,
     bindOrgToPackage,
+    authorizedUser,
     orgPackages,
     mutates: {
       addDepartmentMutate,
       deleteOrgPackageMutate,
       getDocumentByUUIDMutate,
+      activatePackageMutate,
     },
-    states: { input, chosenDepartment, alert, packageModal, deleteModal },
+    states: {
+      input,
+      chosenDepartment,
+      alert,
+      packageModal,
+      deleteModal,
+      activatePackageModal,
+    },
     setStates: {
       setInput,
       setChosenDepartment,
       setPackageModal,
       setDeleteModal,
+      setActivatePackateModal,
     },
     loadings: {
       addDepartmentLoading,
@@ -45,8 +55,11 @@ const DepartmentsTree = () => {
       deleteOrgPackageLoading,
       createInvoiceLoading,
       getDocumentLoading,
+      activatePackageLoading,
     },
   } = useDepartmentsTree();
+
+  console.log(activatePackageModal);
 
   return (
     <main className="workspace">
@@ -109,6 +122,34 @@ const DepartmentsTree = () => {
         )}
       </div>
       <Modal
+        active={activatePackageModal.isOpen}
+        centered
+        onClose={() => {
+          setActivatePackateModal({
+            isOpen: false,
+            package: {},
+          });
+        }}
+      >
+        <ModalHeader>პაკეტის აქტივაცია</ModalHeader>
+        <div className="p-5 flex gap-3">
+          <Button
+            onClick={() => {
+              setActivatePackateModal({
+                isOpen: false,
+                package: {},
+              });
+            }}
+            color="danger"
+          >
+            გაუქმება
+          </Button>
+          <Button onClick={activatePackageMutate} color="success">
+            {activatePackageLoading ? <LoadingSpinner /> : "დადასტურება"}
+          </Button>
+        </div>
+      </Modal>
+      <Modal
         active={packageModal}
         centered
         onClose={() => {
@@ -151,8 +192,8 @@ const DepartmentsTree = () => {
             <table className="w-full">
               <thead>
                 <tr className="text-left">
+                  <th>სტატუსი</th>
                   <th>რაოდენობა</th>
-                  <th>აქტიური</th>
                   <th>დაწყების თარიღი</th>
                   <th>დასრულების თარიღი</th>
                 </tr>
@@ -160,8 +201,27 @@ const DepartmentsTree = () => {
               <tbody>
                 {orgPackages.map((item) => (
                   <tr key={item.id + Math.random()}>
+                    <td>
+                      <Button
+                        color={item.active === 1 ? "success" : "danger"}
+                        className={`text-xs rounded-lg p-1 w-20 justify-center ${
+                          authorizedUser.superAdmin
+                            ? "cursor-pointer"
+                            : "cursor-default"
+                        }`}
+                        onClick={() => {
+                          if (authorizedUser.superAdmin) {
+                            setActivatePackateModal({
+                              isOpen: true,
+                              package: item,
+                            });
+                          }
+                        }}
+                      >
+                        {item.active === 1 ? "აქტიური" : "არააქტიური"}
+                      </Button>
+                    </td>
                     <td>{item.count}</td>
-                    <td>{item.active}</td>
                     <td>{item.start_date}</td>
                     <td>{item.end_date}</td>
                     <td>

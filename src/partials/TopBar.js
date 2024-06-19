@@ -25,11 +25,8 @@ const TopBar = () => {
 
   const userInitials = () => {
     if (authorizedUser.name) {
-      if (authorizedUser.name.split(" ").length > 1) {
-        return (
-          authorizedUser.name.split(" ")[0][0] +
-          authorizedUser.name.split(" ")[1][0]
-        );
+      if (authorizedUser.l_name) {
+        return authorizedUser.name[0] + authorizedUser.l_name[0];
       } else {
         return authorizedUser.name[0];
       }
@@ -178,7 +175,7 @@ const TopBar = () => {
                 <div className="p-5">
                   <h5 className="uppercase">
                     {authorizedUser.name
-                      ? authorizedUser.name
+                      ? authorizedUser.name + " " + authorizedUser.l_name
                       : "მომხმარებლის სახელი"}
                   </h5>
                   {/* <p>Editor</p> */}

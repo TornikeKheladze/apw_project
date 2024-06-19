@@ -5,6 +5,7 @@ const initialState = {
   user: {},
   authorizedUser: {
     roles: [],
+    superAdmin: false,
   },
 };
 

@@ -462,10 +462,12 @@ const MenuDetailAuth = () => {
           <span className="la la-user-circle text-2xl leading-none ltr:mr-2 rtl:ml-2"></span>
           მომხმარებლები
         </NavLink>
-        <NavLink to={`/packages`} onClick={hideMenuDetail}>
-          <PackageIcon />
-          პაკეტები
-        </NavLink>
+        {user.superAdmin && (
+          <NavLink to={`/packages`} onClick={hideMenuDetail}>
+            <PackageIcon />
+            პაკეტები
+          </NavLink>
+        )}
         <hr />
       </div>
     </div>

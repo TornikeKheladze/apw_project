@@ -82,7 +82,7 @@ export const useServicePricesForm = () => {
 
   const submitHandler = (data) => {
     if (action === "create") {
-      createMutate({ data, serviceID });
+      createMutate({ ...data, serviceID });
     } else {
       updateMutate({
         ...data,

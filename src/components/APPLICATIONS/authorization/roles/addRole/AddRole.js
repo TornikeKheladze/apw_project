@@ -33,7 +33,7 @@ const AddRole = ({ add, loading, permissions }) => {
         onChange={handleInputChange}
         id="role"
         className="mb-4"
-        placeholder="სახელი..."
+        placeholder="როლის სახელი ლათინური სიმბოლოებით"
       />
       <CustomSelect onChange={(e) => setAid(e.target.value)}>
         <option value="">აპლიკაცია</option>
