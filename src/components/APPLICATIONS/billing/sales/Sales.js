@@ -21,7 +21,11 @@ const Sales = () => {
 
   return (
     <main className="workspace overflow-hidden pb-8">
-      <BilHeader visible={true} text={"sales"} url={"/billing/sales/create"} />
+      <BilHeader
+        visible={true}
+        text={"ფასდაკლებები"}
+        url={"/billing/sales/create"}
+      />
       <div
         className={`card p-5 w-full mb-4 overflow-x-auto relative min-h-[25rem] ${
           loading && "overflow-x-hidden"

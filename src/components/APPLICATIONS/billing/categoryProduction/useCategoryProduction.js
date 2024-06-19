@@ -39,7 +39,7 @@ export const useCategoryProduction = () => {
     onSuccess() {
       queryClient.invalidateQueries("getCategoryProduction");
       setAlert({
-        message: "CategoryProduction წარმატებით შეიცვალა",
+        message: "კატეგორიის მიწოდება შეიცვალა",
         type: "success",
       });
       setTimeout(() => {

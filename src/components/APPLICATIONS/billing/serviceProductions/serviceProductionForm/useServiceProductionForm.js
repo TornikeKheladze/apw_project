@@ -73,14 +73,14 @@ export const useServiceProductionForm = () => {
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createServiceProduction,
     onSuccess: (res) => {
-      mutateHandler(res, "სერვისის production დამატება");
+      mutateHandler(res, "სერვისის მიწოდების დამატება");
     },
   });
 
   const { mutate: updateMutate, isLoading: editLoading } = useMutation({
     mutationFn: updateServiceProduction,
     onSuccess: (res) => {
-      mutateHandler(res, "სერვისის production ცვლილება");
+      mutateHandler(res, "სერვისის მიწოდების ცვლილება");
     },
   });
 

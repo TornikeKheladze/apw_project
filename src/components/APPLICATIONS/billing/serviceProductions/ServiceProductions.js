@@ -21,7 +21,7 @@ const ServiceProductions = () => {
     <main className="workspace overflow-hidden pb-8">
       <BilHeader
         visible={true}
-        text={"service productions"}
+        text={"სერვისის მიწოდება"}
         url={"/billing/service-productions/create"}
       />
       <div

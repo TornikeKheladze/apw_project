@@ -21,7 +21,7 @@ export const usePackageProductions = () => {
     onSuccess: () => {
       queryClient.invalidateQueries("getBillingPackagesProduction");
       setAlert({
-        message: "package production წარმატებით წაიშალა",
+        message: "პაკეტის მიწოდება წარმატებით წაიშალა",
         type: "success",
       });
       setTimeout(() => {

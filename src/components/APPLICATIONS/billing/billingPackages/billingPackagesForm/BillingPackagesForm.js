@@ -21,7 +21,7 @@ const BillingPackagesForm = () => {
 
       <div className="card p-5 lg:w-2/3 lg:mx-auto">
         <h3 className="mb-3">
-          package {action === "create" ? "დამატება" : "შეცვლა"}
+          ტრანზაქციის პაკეტის {action === "create" ? "დამატება" : "შეცვლა"}
         </h3>
         {loading ? (
           <div className="flex flex-col items-center justify-center">

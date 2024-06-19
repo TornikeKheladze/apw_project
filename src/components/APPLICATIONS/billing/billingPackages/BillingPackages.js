@@ -22,7 +22,7 @@ const BillingPackages = () => {
     <main className="workspace overflow-hidden pb-8">
       <BilHeader
         visible={true}
-        text={"packages"}
+        text={"ტრანზაქციის პაკეტები"}
         url={"/billing/packages/create"}
       />
       <div

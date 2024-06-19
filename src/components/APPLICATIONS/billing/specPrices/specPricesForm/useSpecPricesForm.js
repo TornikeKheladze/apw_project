@@ -50,14 +50,14 @@ export const useSpecPricesForm = () => {
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createSpecPrice,
     onSuccess(data) {
-      mutateHandler(data, "spec prices დამატება");
+      mutateHandler(data, "სპეც ფასის დამატება");
     },
   });
 
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
     mutationFn: updateSpecPrice,
     onSuccess(data) {
-      mutateHandler(data, "spec prices ცვლილება");
+      mutateHandler(data, "სპეც ფასის ცვლილება");
     },
   });
 

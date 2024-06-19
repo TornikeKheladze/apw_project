@@ -30,8 +30,9 @@ const Bills = () => {
 
   const { data = [], isLoading } = useQuery({
     queryKey: ["getTransactionSumAmount", authorizedUser.oid],
-    queryFn: () => getTransactionSumAmount(33).then((res) => res.data),
-    // enabled: !!authorizedUser.oid,
+    queryFn: () =>
+      getTransactionSumAmount(authorizedUser.oid).then((res) => res.data),
+    enabled: !!authorizedUser.oid,
   });
 
   const { data: organizations = [{}], isLoading: orgLoading } = useQuery({

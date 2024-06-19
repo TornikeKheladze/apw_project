@@ -19,7 +19,7 @@ export const useBillingPackages = () => {
     onSuccess: () => {
       queryClient.invalidateQueries("getBillingPackages");
       setAlert({
-        message: "package წარმატებით წაიშალა",
+        message: "ტრანზაქციის პაკეტი წარმატებით წაიშალა",
         type: "success",
       });
       setTimeout(() => {

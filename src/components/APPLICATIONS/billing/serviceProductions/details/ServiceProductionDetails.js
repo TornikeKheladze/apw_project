@@ -28,7 +28,7 @@ const ServiceProductionDetails = () => {
 
   return (
     <DetailComponent
-      title="service productions"
+      title="სერვისის მიწოდების"
       staticArray={serviceProductionArr}
       updatedData={{
         ...serviceProduction,

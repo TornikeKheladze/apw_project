@@ -57,7 +57,7 @@ const Services = () => {
         ) : (
           <Table
             filter={{ filter, setFilter }}
-            staticArr={serviceArr}
+            staticArr={serviceArr.filter((item) => item.name !== "serviceUrl")}
             fetchedArr={updatedList}
             optionsObj={{
               categoryID: categories,

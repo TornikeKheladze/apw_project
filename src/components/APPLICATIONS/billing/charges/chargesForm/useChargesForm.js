@@ -44,14 +44,14 @@ export const useChargesForm = () => {
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createCharge,
     onSuccess(data) {
-      mutateHandler(data, "charge დამატება");
+      mutateHandler(data, "მოსაკრებლის დამატება");
     },
   });
 
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
     mutationFn: updateCharge,
     onSuccess(data) {
-      mutateHandler(data, "charge ცვლილება");
+      mutateHandler(data, "მოსაკრებლის ცვლილება");
     },
   });
 

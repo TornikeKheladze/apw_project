@@ -26,7 +26,7 @@ const CategoryProductionForm = () => {
 
       <div className="card p-5 lg:w-2/3 lg:mx-auto">
         <h3 className="mb-3">
-          category production {action === "create" ? "დამატება" : "შეცვლა"}
+          კატეგორიის მიწოდების {action === "create" ? "დამატება" : "შეცვლა"}
         </h3>
         {isLoading ? (
           <div className="flex flex-col items-center justify-center">

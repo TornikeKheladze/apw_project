@@ -48,14 +48,14 @@ export const useBillingPackagesForm = () => {
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createBillingPackage,
     onSuccess(data) {
-      mutateHandler(data, "package დამატება");
+      mutateHandler(data, "ტრანზაქციის პაკეტის დამატება");
     },
   });
 
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
     mutationFn: updateBillingPackage,
     onSuccess(data) {
-      mutateHandler(data, "package ცვლილება");
+      mutateHandler(data, "ტრანზაქციის პაკეტის ცვლილება");
     },
   });
 

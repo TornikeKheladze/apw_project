@@ -54,14 +54,14 @@ export const usePackageProductionForm = () => {
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createBillingPackageProduction,
     onSuccess(data) {
-      mutateHandler(data, "package production დამატება");
+      mutateHandler(data, "პაკეტის მიწოდების დამატება");
     },
   });
 
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
     mutationFn: updateBillingPackageProduction,
     onSuccess(data) {
-      mutateHandler(data, "package production ცვლილება");
+      mutateHandler(data, "პაკეტის მიწოდების ცვლილება");
     },
   });
 

@@ -21,7 +21,7 @@ const Charges = () => {
     <main className="workspace overflow-hidden pb-8">
       <BilHeader
         visible={true}
-        text={"charges"}
+        text={"მოსაკრებელი"}
         url={"/billing/charges/create"}
       />
       <div

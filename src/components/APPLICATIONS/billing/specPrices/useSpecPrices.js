@@ -20,7 +20,7 @@ export const useSpecPrices = () => {
     onSuccess: () => {
       queryClient.invalidateQueries("getSpecPrices");
       setAlert({
-        message: "spec price წარმატებით წაიშალა",
+        message: "სპეც ფასი წარმატებით წაიშალა",
         type: "success",
       });
       setTimeout(() => {

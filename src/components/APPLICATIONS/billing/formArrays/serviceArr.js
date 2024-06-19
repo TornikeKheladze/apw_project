@@ -2,56 +2,56 @@ export const serviceCategoriesArr = [
   {
     filter: "categoryName",
     name: "categoryName",
-    label: "categoryName",
+    label: "კატეგორიის სახელი",
     type: "text",
   },
   {
     name: "calculationPeriod",
-    label: "calculationPeriod",
+    label: "კალკულაციის პერიოდი",
     type: "number",
   },
-  { name: "catType", label: "catType", type: "select" },
+  { name: "catType", label: "კატეგორიის ტიპი", type: "select" },
   {
     name: "chargeCalculationEndDate",
-    label: "chargeCalculationEndDate",
+    label: "მოსაკრებლის კალკულაციის დასრულების თარიღი",
     type: "datetime-local",
   },
   {
     name: "chargeCalculationStartDate",
-    label: "chargeCalculationStartDate",
+    label: "მოსაკრებლის კალკულაციის დაწყების თარიღი",
     type: "datetime-local",
   },
-  { filter: "select", name: "ownerID", label: "ownerID", type: "select" },
+  { filter: "select", name: "ownerID", label: "მომწოდებელი", type: "select" },
   { name: "parentID", label: "parentID", type: "select" },
   {
     name: "usedQuantity",
-    label: "usedQuantity",
+    label: "გამოყენებული რაოდენობა",
     type: "number",
   },
 ];
 
 export const serviceArr = [
-  {
-    filter: "status",
-    name: "status",
-    label: "status",
-    type: "text",
-  },
+  // {
+  //   filter: "status",
+  //   name: "status",
+  //   label: "status",
+  //   type: "text",
+  // },
   {
     name: "active",
-    label: "active",
+    label: "სტატუსი",
     type: "select",
   },
   {
     filter: "search",
     name: "name",
-    label: "name",
+    label: "სახელი",
     type: "text",
   },
   {
     filter: "search",
     name: "description",
-    label: "description",
+    label: "აღწერა",
     type: "text",
   },
   // {
@@ -62,22 +62,22 @@ export const serviceArr = [
   {
     filter: "select",
     name: "categoryID",
-    label: "categoryID",
+    label: "კატეგორია",
     type: "select",
   },
   {
     name: "priceCalculationPeriod",
-    label: "priceCalculationPeriod",
+    label: "ფასის კალკულაციის პერიოდი",
     type: "number",
   },
   {
     name: "ownerID",
-    label: "ownerID",
+    label: "მომწოდებელი",
     type: "select",
   },
   {
     name: "serviceUrl",
-    label: "serviceUrl",
+    label: "სერვისის URL",
     type: "text",
   },
 
@@ -88,43 +88,43 @@ export const serviceParametersArr = [
   {
     filter: "search",
     name: "parameterName",
-    label: "parameterName",
+    label: "ტექნიკური სახელი",
     type: "text",
   },
   {
     filter: "search",
     name: "parameterPlaceholder",
-    label: "parameterPlaceholder",
+    label: "სახელი",
     type: "text",
   },
   {
     name: "serviceID",
-    label: "serviceID",
+    label: "სერვისი",
     type: "select",
   },
   {
     name: "parameterLength",
-    label: "parameterLength",
+    label: "ველში სიმბოლოების რაოდენობა",
     type: "number",
   },
   {
     filter: "select",
     name: "parameterTypeID",
-    label: "parameterTypeID",
+    label: "პარამეტრის ტიპი",
     type: "select",
   },
-  { filter: "select", name: "catID", label: "catID", type: "select" },
+  { filter: "select", name: "catID", label: "კატეგორია", type: "select" },
 ];
 
 export const serviceParametersTypeArr = [
   {
     name: "parameterPlaceholder",
-    label: "parameterPlaceholder",
+    label: "სახელი",
     type: "text",
   },
   {
     name: "parameterTypeName",
-    label: "parameterTypeName",
+    label: "ტექნიკური სახელი",
     type: "text",
   },
 ];
@@ -133,18 +133,18 @@ export const servicePricesArr = [
   {
     filter: "search",
     name: "price",
-    label: "price",
+    label: "ფასი",
     type: "number",
   },
   {
     filter: "search",
     name: "quantity",
-    label: "quantity",
+    label: "რაოდენობა",
     type: "number",
   },
   {
     name: "serviceID",
-    label: "serviceID",
+    label: "სერვისი",
     type: "select",
   },
 ];
@@ -154,7 +154,7 @@ export const specPricesArr = [
   {
     filter: "select",
     name: "agentID",
-    label: "agentID",
+    label: "სერვისის მიმღები",
     type: "select",
   },
 ];
@@ -163,25 +163,25 @@ export const chargesArr = [
   {
     filter: "search",
     name: "chargeFixed",
-    label: "chargeFixed",
+    label: "ფიქსირებული მოსაკრებელი",
     type: "number",
   },
   {
     filter: "search",
     name: "chargePercent",
-    label: "chargePercent",
+    label: "მოსაკრებელი პროცენტულად",
     type: "number",
   },
   {
     filter: "search",
     name: "quantity",
-    label: "quantity",
+    label: "რაოდენობა",
     type: "number",
   },
   {
     filter: "select",
     name: "catID",
-    label: "catID",
+    label: "კატეგორია",
     type: "select",
   },
 ];
@@ -190,45 +190,45 @@ export const salesArr = [
   {
     filter: "select",
     name: "active",
-    label: "active",
+    label: "სტატუსი",
     type: "select",
   },
   {
     filter: "select",
     name: "serviceID",
-    label: "serviceID",
+    label: "სერვისი",
     type: "select",
   },
   {
     filter: "select",
     name: "catID",
-    label: "catID",
+    label: "კატეგორია",
     type: "select",
   },
   {
     filter: "select",
     name: "saleStatusID",
-    label: "saleStatusID",
+    label: "ფასდაკლების სტატუსი",
     type: "select",
   },
   {
     name: "percent",
-    label: "percent",
+    label: "პროცენტი",
     type: "number",
   },
   {
     name: "fixed",
-    label: "fixed",
+    label: "ფიქსირებული",
     type: "number",
   },
   {
     name: "startDate",
-    label: "startDate",
+    label: "დაწყების თარიღი",
     type: "datetime-local",
   },
   {
     name: "endDate",
-    label: "endDate",
+    label: "დასრულების თარიღი",
     type: "datetime-local",
   },
 ];
@@ -237,22 +237,22 @@ export const billingPackageArr = [
   {
     filter: "select",
     name: "serviceID",
-    label: "serviceID",
+    label: "სერვისი",
     type: "select",
   },
   {
     name: "price",
-    label: "price",
+    label: "ფასი",
     type: "number",
   },
   {
     name: "expiration",
-    label: "expiration",
+    label: "ვადა (დღეები)",
     type: "number",
   },
   {
     name: "quantity",
-    label: "quantity",
+    label: "ტრანზაქციების რაოდენობა",
     type: "number",
   },
 ];
@@ -261,60 +261,60 @@ export const serviceProductionArr = [
   {
     filter: "select",
     name: "status",
-    label: "status",
+    label: "სტატუსი",
     type: "select",
   },
   {
     filter: "select",
     name: "serviceID",
-    label: "serviceID",
+    label: "სერვისი",
     type: "select",
   },
   {
     filter: "select",
     name: "agentID",
-    label: "agentID",
+    label: "სერვისის მიმღები",
     type: "select",
   },
   {
     filter: "select",
     name: "ownerID",
-    label: "ownerID",
+    label: "მომწოდებელი",
     type: "select",
   },
   {
     name: "maxCredit",
-    label: "maxCredit",
+    label: "კრედიტის ზედა ზღვარი",
     type: "number",
   },
   {
     name: "maxCreditTransactions",
-    label: "maxCreditTransactions",
+    label: "კრედიტის ზედა ზღვარი ტრანზაქციების რაოდენობის მიხედვით",
     type: "number",
   },
   {
     name: "usedTransactionQuantity",
-    label: "usedTransactionQuantity",
+    label: "გამოყენებული ტრანზაქციების რაოდენობა",
     type: "number",
   },
   {
     name: "percentToAgent",
-    label: "percentToAgent",
+    label: "სერვისის მიმღებისთვის გადასახდელი პროცენტი",
     type: "number",
   },
   {
     name: "fixedToAgent",
-    label: "fixedToAgent",
+    label: "სერვისის მიმღებისთვის ფიქსირებული გადასახადი",
     type: "number",
   },
   {
     name: "priceCalculationStartDate",
-    label: "priceCalculationStartDate",
+    label: "ფასის დაანგარიშების საწყისი თარიღი",
     type: "datetime-local",
   },
   {
     name: "priceCalculationEndDate",
-    label: "priceCalculationEndDate",
+    label: "ფასის დაანგარიშების საბოლოო თარიღი",
     type: "datetime-local",
   },
 ];
@@ -323,40 +323,40 @@ export const packageProductionsArr = [
   {
     filter: "select",
     name: "packageID",
-    label: "packageID",
+    label: "პაკეტი",
     type: "select",
   },
   {
     filter: "select",
     name: "serviceID",
-    label: "serviceID",
+    label: "სერვისი",
     type: "select",
   },
   {
     filter: "select",
     name: "ownerID",
-    label: "ownerID",
+    label: "მომწოდებელი",
     type: "select",
   },
   {
     filter: "select",
     name: "agentID",
-    label: "agentID",
+    label: "სერვისის მიმღები",
     type: "select",
   },
   {
     name: "usedTransactionQuantity",
-    label: "usedTransactionQuantity",
+    label: "გამოყენებული ტრანზაქციების რაოდენობა",
     type: "number",
   },
   {
     name: "startDate",
-    label: "startDate",
+    label: "დაწყების თარიღი",
     type: "datetime-local",
   },
   {
     name: "endDate",
-    label: "endDate",
+    label: "დასრულების თარიღი",
     type: "datetime-local",
   },
 ];
@@ -365,55 +365,55 @@ export const categoryProductionArr = [
   {
     filter: "select",
     name: "status",
-    label: "status",
+    label: "სტატუსი",
     type: "select",
   },
   {
     filter: "select",
     name: "agentID",
-    label: "agentID",
+    label: "სერვისის მიმღები",
     type: "select",
   },
   {
     filter: "select",
     name: "catID",
-    label: "catID",
+    label: "კატეგორია",
     type: "select",
   },
 
   {
     name: "usedQuantity",
-    label: "usedQuantity",
+    label: "გამოყენებული რაოდენობა",
     type: "number",
   },
   {
     name: "fixedToAgent",
-    label: "fixedToAgent",
+    label: "სერვისის მიმღებისთვის ფიქსირებული გადასახადი",
     type: "number",
   },
   {
     name: "percentToAgent",
-    label: "percentToAgent",
+    label: "სერვისის მიმღებისთვის გადასახდელი პროცენტი",
     type: "number",
   },
   {
     name: "maxCredit",
-    label: "maxCredit",
+    label: "კრედიტის ზედა ზღვარი",
     type: "number",
   },
   {
     name: "maxCreditTransactions",
-    label: "maxCreditTransactions",
+    label: "კრედიტის ზედა ზღვარი ტრანზაქციების რაოდენობის მიხედვით",
     type: "number",
   },
   {
     name: "chargeCalculationStartDate",
-    label: "chargeCalculationStartDate",
+    label: "მოსაკრებლის კალკულაციის დაწყების თარიღი",
     type: "datetime-local",
   },
   {
     name: "chargeCalculationEndDate",
-    label: "chargeCalculationEndDate",
+    label: "მოსაკრებლის კალკულაციის დასრულების თარიღი",
     type: "datetime-local",
   },
 ];
@@ -421,17 +421,17 @@ export const categoryProductionArr = [
 export const apiCredentialsArr = [
   {
     name: "apiName",
-    label: "apiName",
+    label: "API ს სახელი",
     type: "text",
   },
   {
     name: "apiId",
-    label: "apiId",
+    label: "API ID",
     type: "number",
   },
   {
     name: "apiKey",
-    label: "apiKey",
+    label: "API KEY",
     type: "number",
   },
 ];

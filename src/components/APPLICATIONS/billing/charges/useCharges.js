@@ -16,7 +16,7 @@ export const useCharges = () => {
     onSuccess: () => {
       queryClient.invalidateQueries("getCharges");
       setAlert({
-        message: "charge წარმატებით წაიშალა",
+        message: "მოსაკრებელი წარმატებით წაიშალა",
         type: "success",
       });
       setTimeout(() => {

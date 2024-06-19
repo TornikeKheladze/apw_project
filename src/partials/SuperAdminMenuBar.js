@@ -588,12 +588,12 @@ const MenuDetailBilling = () => {
           )}
           {useCheckPermission("bil_service_production_get") && (
             <NavLink to="/billing/service-productions" onClick={hideMenuDetail}>
-              სერვისის პროდაქშენი
+              სერვისის მიწოდება
             </NavLink>
           )}
           {useCheckPermission("bil_category_production_get") && (
             <NavLink to="/billing/category-production" onClick={hideMenuDetail}>
-              category-production
+              კატეგორიის მიწოდება
             </NavLink>
           )}
         </MenuBarCollapse>
@@ -602,11 +602,11 @@ const MenuDetailBilling = () => {
           <>
             <NavLink to="/billing/charges" onClick={hideMenuDetail}>
               <span className="la la-dollar"></span>
-              charges
+              მოსაკრებელი
             </NavLink>
             <NavLink to="/billing/sales" onClick={hideMenuDetail}>
               <span className="la la-money"></span>
-              sales
+              ფასდაკლებები
             </NavLink>
             <NavLink to="/billing/api-credentials" onClick={hideMenuDetail}>
               <AlgIcon />
@@ -622,12 +622,12 @@ const MenuDetailBilling = () => {
         >
           {useCheckPermission("bil_packages_get") && (
             <NavLink to="/billing/packages" onClick={hideMenuDetail}>
-              packages
+              პაკეტები
             </NavLink>
           )}
           {useCheckPermission("bil_packages_production_get") && (
             <NavLink to="/billing/package-production" onClick={hideMenuDetail}>
-              package production
+              პაკეტების მიწოდება
             </NavLink>
           )}
         </MenuBarCollapse>

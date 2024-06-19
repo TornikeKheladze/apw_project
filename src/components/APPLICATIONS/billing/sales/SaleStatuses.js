@@ -45,28 +45,28 @@ const SaleStatuses = () => {
   const { mutate: deleteMutate, isLoading: deleteLoading } = useMutation(
     getMutateConfig(
       () => deleteSaleStatus(chosenSaleStatus.id),
-      "sale status შეიცვალა"
+      "ფასდაკლების სტატუსი შეიცვალა"
     )
   );
 
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation(
     getMutateConfig(
       () => updateSaleStatus({ ...chosenSaleStatus, saleStatusName: input }),
-      "sale status წაიშლა"
+      "ფასდაკლების სტატუსი წაიშლა"
     )
   );
 
   const { mutate: createMutate, isLoading: createLoading } = useMutation(
     getMutateConfig(
       () => createSaleStatus({ saleStatusName: input }),
-      "sale status დაემატა"
+      "ფასდაკლების სტატუსი დაემატა"
     )
   );
 
   return (
     <div className="card p-5 relative">
       <div className="flex items-center justify-between">
-        <h3>sale statuses</h3>
+        <h3>ფასდაკლების სტატუსები</h3>
         <Button
           onClick={() => {
             setCreateModalOpen(true);

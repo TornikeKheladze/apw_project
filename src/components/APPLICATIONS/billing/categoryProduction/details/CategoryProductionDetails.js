@@ -32,7 +32,7 @@ const CategoryProductionDetails = () => {
 
   return (
     <DetailComponent
-      title="categoryProduction"
+      title="კარეგორიის მიწოდების"
       staticArray={categoryProductionArr}
       updatedData={{
         ...categoryProduction,

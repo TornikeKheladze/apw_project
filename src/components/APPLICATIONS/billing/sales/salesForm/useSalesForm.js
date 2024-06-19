@@ -49,14 +49,14 @@ export const useSalesForm = () => {
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createSale,
     onSuccess(data) {
-      mutateHandler(data, "sale დამატება");
+      mutateHandler(data, "ფასდაკლების დამატება");
     },
   });
 
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
     mutationFn: updateSale,
     onSuccess(data) {
-      mutateHandler(data, "sale ცვლილება");
+      mutateHandler(data, "ფასდაკლების ცვლილება");
     },
   });
 

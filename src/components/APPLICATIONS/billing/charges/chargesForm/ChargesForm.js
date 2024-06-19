@@ -23,7 +23,7 @@ const ChargesForm = () => {
     <main className="workspace p-5">
       <div className="card p-5 lg:w-2/3 lg:mx-auto">
         <h3 className="mb-3">
-          charges {action === "create" ? "დამატება" : "შეცვლა"}
+          მოსაკრებლის {action === "create" ? "დამატება" : "შეცვლა"}
         </h3>
         {loading ? (
           <div className="flex flex-col items-center justify-center">
