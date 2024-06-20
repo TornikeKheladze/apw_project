@@ -39,6 +39,7 @@ export const useMakeTransaction = () => {
     queryKey: "organizations",
     queryFn: () => getOrganizations().then((res) => res.data.data),
   });
+
   const { data: salesData = [], isLoading: salesLoading } = useQuery({
     queryKey: "getSales",
     queryFn: () => getSales().then((res) => res.data),
@@ -101,10 +102,14 @@ export const useMakeTransaction = () => {
   };
 
   const submitHandler = async (data) => {
-    const reseller = org?.reseller;
+    const organization = authorizedUser.superAdmin
+      ? organizations.find((item) => +item.id === +data.agentID)
+      : org || {};
+
     createMutate({
       ...data,
-      reseller: reseller ? 1 : 0,
+      reseller: organization.reseller === 1 ? 1 : 0,
+      agentTypeID: organization.type,
     });
   };
 

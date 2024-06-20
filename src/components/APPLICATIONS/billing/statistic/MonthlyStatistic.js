@@ -112,7 +112,8 @@ const MonthlyStatistic = () => {
     <main className="workspace overflow-hidden pb-8 relative">
       {loading && <LoadingSpinner blur />}
       <h2 className="mb-3">
-        {user === "owner" ? "ოვნერის" : "აგენტის"} თვიური სტატისტიკა
+        {user === "owner" ? "სერვისის მომწოდებლის" : "სერვისის მიმღების"} თვიური
+        სტატისტიკა
       </h2>
       <div className="grid lg:grid-cols-2 gap-5">
         <div className="card p-5 min-w-0">

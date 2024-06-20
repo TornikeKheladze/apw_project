@@ -2,8 +2,8 @@ const Footer = () => {
   return (
     <footer className="mt-auto">
       <div className="footer">
-        <span className="uppercase">&copy; 2023 DevSpace</span>
-        <nav>
+        <span className="uppercase">&copy; 2024 All Pay Way</span>
+        {/* <nav>
           <a href="mailto:Yeti Themes<info@yetithemes.net>?subject=Support">
             Support
           </a>
@@ -15,7 +15,7 @@ const Footer = () => {
           >
             Docs
           </a>
-        </nav>
+        </nav> */}
       </div>
     </footer>
   );

@@ -10,6 +10,7 @@ import Tooltip from "components/Tooltip";
 import { Link } from "react-router-dom";
 import { useTopBar } from "./useTopBar";
 import Search from "./search/Search";
+import Logo from "components/icons/Logo";
 
 const TopBar = () => {
   const {
@@ -42,7 +43,9 @@ const TopBar = () => {
       ></button>
 
       {/* Brand */}
-      <span className="brand">LOGO</span>
+      <span className="brand">
+        <Logo />
+      </span>
 
       {/* Search */}
       <Search />

@@ -645,32 +645,54 @@ const MenuDetailBilling = () => {
         >
           <NavLink
             className="flex items-center gap-2"
+            to="/billing/userStatistic"
+            onClick={hideMenuDetail}
+          >
+            მომხმარებლების <br /> სტატისტიკა
+          </NavLink>
+          <NavLink
+            className="flex items-center gap-2"
+            to="/billing/transactionStatistic"
+            onClick={hideMenuDetail}
+          >
+            ტრანზაქციების სტატისტიკა
+          </NavLink>
+          <NavLink
+            className="flex items-center gap-2"
+            to="/billing/serviceStatistic"
+            onClick={hideMenuDetail}
+          >
+            სერვისების სტატისტიკა
+          </NavLink>
+
+          {/* <NavLink
+            className="flex items-center gap-2"
             to="/billing/statistic/owner"
             onClick={hideMenuDetail}
           >
-            ოვნერის სტატისტიკა
+            სერვისის მომწოდებლის <br /> სტატისტიკა
           </NavLink>
           <NavLink
             className="flex items-center gap-2"
             to="/billing/statistic/agent"
             onClick={hideMenuDetail}
           >
-            აგენტის სტატისტიკა
+            სერვისის მიმღების <br /> სტატისტიკა
           </NavLink>
           <NavLink
             className="flex items-center gap-2"
             to="/billing/statistic/monthly/agent"
             onClick={hideMenuDetail}
           >
-            აგენტის თვიური სტატისტიკა
+            სერვისის მიმღების <br /> თვიური სტატისტიკა
           </NavLink>
           <NavLink
             className="flex items-center gap-2"
             to="/billing/statistic/monthly/owner"
             onClick={hideMenuDetail}
           >
-            ოვნერის თვიური სტატისტიკა
-          </NavLink>
+            სერვისის მომწოდებლის <br /> თვიური სტატისტიკა
+          </NavLink> */}
         </MenuBarCollapse>
         {useCheckPermission("bil_transactions_get_sum_amount") && (
           <NavLink to="/billing/bills" onClick={hideMenuDetail}>

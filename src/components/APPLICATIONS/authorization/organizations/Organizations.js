@@ -230,7 +230,7 @@ const Organizations = () => {
                 className="p-1 md:text-sm text-xs"
                 onClick={() => navigate("/organization-type-edit")}
               >
-                ტიპების ცვლილება
+                ორგანიზაციის ტიპების მართვა
               </Button>
             </TabsNavigation>
             <TabsContent>{tabContents}</TabsContent>

@@ -77,6 +77,9 @@ import SpecPrices from "components/APPLICATIONS/billing/specPrices/SpecPrices";
 import SpecPricesForm from "components/APPLICATIONS/billing/specPrices/specPricesForm/SpecPricesForm";
 import DocumentForm from "components/APPLICATIONS/documents/documents/documentForm/DocumentForm";
 import UserEditForm from "components/APPLICATIONS/authorization/users/userForm/UserEditForm";
+import UserStatistic from "components/APPLICATIONS/billing/statistic/UserStatistic";
+import ServiceStatistic from "components/APPLICATIONS/billing/statistic/ServiceStatistic";
+import TransactionStatistic from "components/APPLICATIONS/billing/statistic/TransactionStatistic";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -113,6 +116,16 @@ const Router = () => {
           <Route path="/dashboard" element={<Dashboard />} />
 
           <Route path="/packages" element={<Packages />} />
+
+          <Route path="/billing/userStatistic" element={<UserStatistic />} />
+          <Route
+            path="/billing/serviceStatistic"
+            element={<ServiceStatistic />}
+          />
+          <Route
+            path="/billing/transactionStatistic"
+            element={<TransactionStatistic />}
+          />
 
           {routes}
 

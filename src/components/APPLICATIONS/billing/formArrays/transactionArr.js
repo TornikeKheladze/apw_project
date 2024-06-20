@@ -2,7 +2,7 @@ export const transactionArr = [
   {
     filter: "select",
     name: "statusID",
-    label: "სტატუსი",
+    label: "ტრანზაქციის სტატუსი",
     type: "select",
   },
   {
@@ -20,13 +20,19 @@ export const transactionArr = [
   {
     filter: "select",
     name: "ownerID",
-    label: "მომწოდებელი",
+    label: "სერვისის მომწოდებელი",
     type: "select",
   },
   {
     filter: "select",
     name: "agentID",
-    label: "აგენტი",
+    label: "სერვისის მიმღები",
+    type: "select",
+  },
+  {
+    filter: "select",
+    name: "agentTypeID",
+    label: "სერვისის მიმღების ტიპი",
     type: "select",
   },
   {
@@ -37,12 +43,12 @@ export const transactionArr = [
   },
   {
     name: "ownerOperationID",
-    label: "მომწოდებლის ოპერაციის ID",
+    label: "სერვისის მომწოდებლის ოპერაციის იდენტიფიკატორი",
     type: "number",
   },
   {
     name: "agentOperationID",
-    label: "აგენტის ოპერაციის ID",
+    label: "სერვისის მიმღების ოპერაციის იდენტიფიკატორი",
     type: "number",
   },
   {
@@ -53,22 +59,22 @@ export const transactionArr = [
   },
   {
     name: "ourProfit",
-    label: "ჩვენი მოგება",
+    label: "მოსაკრებელი",
     type: "number",
   },
   {
     name: "ownerProfit",
-    label: "მომწოდებლის მოგება",
+    label: "სერვისის მომწოდებლის სარგებელი",
     type: "number",
   },
   {
     name: "ownerExpense",
-    label: "მომწოდებლის ხარჯი",
+    label: "სერვისის მომწოდებლის ხარჯი",
     type: "number",
   },
   {
     name: "agentProfit",
-    label: "აგენტის მოგება",
+    label: "სერვისის მიმღების სარგებელი",
     type: "number",
   },
   {
@@ -94,9 +100,13 @@ export const transactionArr = [
 ];
 
 export const makeTransactionsArr = [
-  { name: "agentID", label: "აგენტი", type: "select" },
+  { name: "agentID", label: "სერვისის მიმღები", type: "select" },
   { name: "serviceID", label: "სერვისი", type: "select" },
-  { name: "agentOperationID", label: "აგენტის ოპერაციის ID", type: "number" },
+  {
+    name: "agentOperationID",
+    label: "სერვისის მიმღები ოპერაციის იდენტიფიკატორი",
+    type: "number",
+  },
   { name: "payerParameter", label: "გადამხდელის პარამეტრი", type: "text" },
   { name: "saleID", label: "ფასდაკლება", type: "select" },
 ];

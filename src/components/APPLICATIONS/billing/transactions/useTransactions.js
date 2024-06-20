@@ -13,6 +13,7 @@ import { getAllServices } from "services/services";
 import { useSearchParams } from "react-router-dom";
 import { getOrganizations } from "services/organizations";
 import { checkStatus } from "helpers/CheckStatusForBilling";
+import { getOrganizationsTypes } from "services/organization-type";
 
 export const useTransactions = () => {
   const [searchParam, setSearchParam] = useSearchParams();
@@ -52,6 +53,13 @@ export const useTransactions = () => {
     queryKey: "organizations",
     queryFn: () => getOrganizations().then((res) => res.data.data),
   });
+
+  const { data: organizationTypes = [], isLoading: orgTypesLoading } = useQuery(
+    {
+      queryKey: "organizationTypes",
+      queryFn: () => getOrganizationsTypes().then((res) => res.data.data),
+    }
+  );
 
   const services = servicesData.map((service) => ({
     ...service,
@@ -139,6 +147,7 @@ export const useTransactions = () => {
     serviceID: idToName(services, tr.serviceID),
     agentID: idToName(organizations, tr.agentID),
     ownerID: idToName(organizations, tr.ownerID),
+    agentTypeID: idToName(organizationTypes, tr.agentTypeID),
   }));
 
   const searchOptions = {
@@ -152,10 +161,11 @@ export const useTransactions = () => {
       { id: 4, name: "გაუქმებული" },
       { id: 5, name: "დაბრუნებული" },
     ],
+    agentTypeID: organizationTypes,
   };
 
   return {
-    loading: servicesLoading || orgLoading,
+    loading: servicesLoading || orgLoading || orgTypesLoading,
     actionLoading: searchLoading || isFetching,
     sortConfig,
     filterHandler,

@@ -21,7 +21,12 @@ export const serviceCategoriesArr = [
     label: "მოსაკრებლის კალკულაციის დაწყების თარიღი",
     type: "datetime-local",
   },
-  { filter: "select", name: "ownerID", label: "მომწოდებელი", type: "select" },
+  {
+    filter: "select",
+    name: "ownerID",
+    label: "სერვისის მომწოდებელი",
+    type: "select",
+  },
   { name: "parentID", label: "parentID", type: "select" },
   {
     name: "usedQuantity",
@@ -72,7 +77,7 @@ export const serviceArr = [
   },
   {
     name: "ownerID",
-    label: "მომწოდებელი",
+    label: "სერვისის მომწოდებელი",
     type: "select",
   },
   {
@@ -279,7 +284,7 @@ export const serviceProductionArr = [
   {
     filter: "select",
     name: "ownerID",
-    label: "მომწოდებელი",
+    label: "სერვისის მომწოდებელი",
     type: "select",
   },
   {
@@ -335,7 +340,7 @@ export const packageProductionsArr = [
   {
     filter: "select",
     name: "ownerID",
-    label: "მომწოდებელი",
+    label: "სერვისის მომწოდებელი",
     type: "select",
   },
   {
