@@ -17,7 +17,7 @@ const Departments = () => {
     did,
     oid,
     orderedDepartments,
-    successMessage,
+    alert,
     departmentsFromOtherOrg,
     organizations,
     setStates: {
@@ -47,7 +47,7 @@ const Departments = () => {
   return (
     <main className="workspace">
       <Paths title={name} />
-      <Alert message={successMessage} color="success" dismissable />
+      <Alert message={alert.message} color={alert.type} dismissable />
 
       <DeleteModal
         isOpen={isDeleteModalOpen}

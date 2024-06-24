@@ -7,12 +7,13 @@ import Tooltip from "components/Tooltip";
 
 import CustomInput from "components/form/CustomInput";
 import { useLogin } from "./useLogin";
-import Modal, { ModalBody, ModalHeader } from "components/Modal";
+import Modal, { ModalBody, ModalFooter, ModalHeader } from "components/Modal";
 import NewPasswordForm from "../users/passwordForms/newPasswordForm/NewPasswordForm";
+import Input from "components/form/Input";
+import LoadingSpinner from "components/icons/LoadingSpinner";
 
 const Login = () => {
   const {
-    onSubmit,
     register,
     handleSubmit,
     formState: { errors },
@@ -24,6 +25,12 @@ const Login = () => {
     setIsPasswordVisible,
     passwordModal,
     setPasswordModal,
+    sms,
+    setSms,
+    loginLoading,
+    loginMutate,
+    sendSmsMutate,
+    smsLoading,
   } = useLogin();
 
   return (
@@ -59,7 +66,7 @@ const Login = () => {
             <h2>ავტორიზაცია</h2>
           </div>
           <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(sendSmsMutate)}
             className="card mt-5 p-5 md:p-10"
           >
             <div className="mb-6">
@@ -118,7 +125,7 @@ const Login = () => {
             </div>
             <div className="flex items-center">
               <Button className="ltr:ml-auto rtl:mr-auto uppercase">
-                შესვლა
+                {smsLoading ? <LoadingSpinner /> : "შესვლა"}
               </Button>
             </div>
           </form>
@@ -133,6 +140,35 @@ const Login = () => {
         <ModalBody>
           <NewPasswordForm setPasswordModal={setPasswordModal} />
         </ModalBody>
+      </Modal>
+      <Modal
+        centered
+        active={sms.open}
+        onClose={() =>
+          setSms({
+            open: false,
+            value: "",
+          })
+        }
+      >
+        <ModalHeader>შეიყვანეთ SMS კოდი</ModalHeader>
+        <ModalBody>
+          <Input
+            placeholder="SMS კოდი"
+            value={sms.value}
+            onChange={(e) =>
+              setSms({
+                open: true,
+                value: e.target.value,
+              })
+            }
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={loginMutate}>
+            {loginLoading ? <LoadingSpinner /> : "დადასტურება"}
+          </Button>
+        </ModalFooter>
       </Modal>
     </>
   );

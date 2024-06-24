@@ -23,10 +23,14 @@ const useOrganization = () => {
     action: "",
   });
 
-  const { data: organizations = [], isLoading: orgsLoading } = useQuery({
-    queryKey: "organizations",
-    queryFn: () => getOrganizations().then((res) => res.data.data),
+  const {
+    data: organizationData = { data: [], member: null, dga: [] },
+    isLoading: orgsLoading,
+  } = useQuery({
+    queryKey: "getOrganizationsData",
+    queryFn: () => getOrganizations().then((res) => res.data),
   });
+
   const { data: types = [], isLoading: orgTypesLoading } = useQuery({
     queryKey: "organizationTypes",
     queryFn: () => getOrganizationsTypes().then((res) => res.data.data),
@@ -35,7 +39,7 @@ const useOrganization = () => {
   const { mutate: addMutate, isLoading: addLoading } = useMutation({
     mutationFn: addOrganization,
     onSuccess: () => {
-      queryClient.invalidateQueries("organizations");
+      queryClient.invalidateQueries("getOrganizationsData");
       setSuccessMessage("ორგანიზაცია წარმატებით შეიქმნა");
       setTimeout(() => {
         setOpenModal({
@@ -52,7 +56,7 @@ const useOrganization = () => {
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
     mutationFn: updateOrganization,
     onSuccess: () => {
-      queryClient.invalidateQueries("organizations");
+      queryClient.invalidateQueries("getOrganizationsData");
       setSuccessMessage("ორგანიზაცია წარმატებით შეიცვალა");
       setTimeout(() => {
         setOpenModal({
@@ -69,7 +73,7 @@ const useOrganization = () => {
   const { mutate: deleteMutate, isLoading: deleteLoading } = useMutation({
     mutationFn: () => deleteOrganization(choosenOrganization.id),
     onSuccess: () => {
-      queryClient.invalidateQueries("organizations");
+      queryClient.invalidateQueries("getOrganizationsData");
       setSuccessMessage("ორგანიზაცია წარმატებით წაიშალა");
       setTimeout(() => {
         setOpenModal({
@@ -84,7 +88,8 @@ const useOrganization = () => {
   });
 
   return {
-    organizations,
+    organizations: organizationData.data,
+    members: organizationData.member,
     types,
     authorizedUser,
     typeId,

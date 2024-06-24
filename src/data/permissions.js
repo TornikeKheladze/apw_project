@@ -184,4 +184,5 @@ export const permissionsObj = {
   bil_agent_statistic_get_sum_paid_transactionCount:
     "bil_agent_statistic_get_sum_paid_transactionCount",
   bil_transactions_get_sum_amount: "bil_transactions_get_sum_amount",
+  user_create_organisation: "ორგანიზაციის შექმნა",
 };

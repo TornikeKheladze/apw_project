@@ -17,10 +17,12 @@ import LoadingSpinner from "components/icons/LoadingSpinner";
 import Modal, { ModalBody, ModalFooter, ModalHeader } from "components/Modal";
 import AuthForm from "../authForm/AuthForm";
 import { orgArr } from "components/APPLICATIONS/billing/formArrays/authArr";
+import useCheckPermission from "helpers/useCheckPermission";
 
 const Organizations = () => {
   const {
     organizations,
+    members,
     types,
     authorizedUser,
     typeId,
@@ -116,6 +118,27 @@ const Organizations = () => {
         <span className="ltr:ml-3 rtl:mr-3 la la-caret-down text-xl leading-none"></span>
       </Button>
     </Dropdown>
+  );
+
+  const createOrgButtonForRegularUser = useCheckPermission(
+    "user_create_organisation"
+  ) ? (
+    <div className="flex justify-between items-center">
+      <h3>ორგანიზაციები</h3>
+      <Button
+        onClick={() =>
+          setOpenModal({
+            open: true,
+            action: "დამატება",
+          })
+        }
+        className="p-2 md:text-sm text-xs"
+      >
+        ორგანიზაციის შექმნა
+      </Button>
+    </div>
+  ) : (
+    <></>
   );
 
   return (
@@ -238,6 +261,7 @@ const Organizations = () => {
         </div>
       ) : (
         <div className="card p-5">
+          {createOrgButtonForRegularUser}
           {orgsLoading && orgTypesLoading ? (
             <div className="flex flex-col items-center justify-center">
               იტვირთება... <LoadingSpinner />
@@ -264,6 +288,29 @@ const Organizations = () => {
             />
           ) : (
             <p>ორგანიზაციები არ მოიძებნა</p>
+          )}
+          {members && members.length && (
+            <div className="mt-3">
+              <List
+                openDelete={() => {
+                  setOpenModal({
+                    open: true,
+                    action: "წაშლა",
+                  });
+                }}
+                openEdit={() => {
+                  setOpenModal({
+                    open: true,
+                    action: "შეცვლა",
+                  });
+                }}
+                setChoosenItem={setChoosenOrganization}
+                items={members}
+                title={"ჩემი შექმნილი ორგანიზაციები"}
+                toUsers={"/users/organisation/"}
+                toDepartments={"/departments/"}
+              />
+            </div>
           )}
         </div>
       )}

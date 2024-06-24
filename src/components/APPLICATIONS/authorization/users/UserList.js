@@ -28,7 +28,6 @@ const UserList = ({ users, isLoading, departments }) => {
       return `/user/create/?oid=${id}`;
     } else if (type === "departments") {
       const department = departments.find((d) => +d.id === +id) || {};
-      console.log(department);
       return `/user/create?oid=${department.oid}&did=${department.id}`;
     } else if (type === "positions") {
       return `/user/create`;

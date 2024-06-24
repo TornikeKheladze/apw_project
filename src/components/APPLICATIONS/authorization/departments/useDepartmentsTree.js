@@ -1,7 +1,7 @@
 import { addDepartment, getDepartments } from "services/departments";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { buildDepartmentTree } from "helpers/treeMenuBuilder";
+import { buildDepartmentTree, buildMemberList } from "helpers/treeMenuBuilder";
 import { getOrganizations } from "services/organizations";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { activatePackage, getPackages } from "services/packages";
@@ -44,18 +44,18 @@ const useDepartmentsTree = () => {
   });
   const { authorizedUser } = useSelector((store) => store.user);
 
-  const { data: departments = [], isLoading } = useQuery({
-    queryKey: ["departments", oid],
-    queryFn: () => getDepartments(oid).then((res) => res.data.data),
-  });
+  const { data: departmentData = { data: [], member: null }, isLoading } =
+    useQuery({
+      queryKey: ["departments", oid],
+      queryFn: () => getDepartments(oid).then((res) => res.data),
+    });
 
-  const { data: organizations = [], isLoading: isLoadingOrgs } = useQuery({
-    queryKey: "organizations",
-    queryFn: () => getOrganizations().then((res) => res.data.data),
-  });
-  const { data: dga = [] } = useQuery({
-    queryKey: "organizations",
-    queryFn: () => getOrganizations().then((res) => res.data.dga),
+  const {
+    data: organizationData = { data: [], member: null, dga: [] },
+    isLoading: isLoadingOrgs,
+  } = useQuery({
+    queryKey: "getOrganizationsData",
+    queryFn: () => getOrganizations().then((res) => res.data),
   });
 
   const { data: packages = [] } = useQuery({
@@ -185,7 +185,7 @@ const useDepartmentsTree = () => {
   const bindOrgToPackage = async (data) => {
     try {
       const res = await createInvoice({
-        ownerID: dga[0].id,
+        ownerID: organizationData.dga[0].id,
         agentID: oid,
       });
       function addMonthsToDate(months) {
@@ -217,6 +217,14 @@ const useDepartmentsTree = () => {
       });
     }
   };
+
+  // თუ მემბერი მოყვება ანუ თავისი შექმნილი ორგანიზაცია
+  // ორ ერეის ვაერთიანებ. თუ არმოყვება სტანდარტულად ვუშვებ
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data;
+
+  const departments = buildMemberList(departmentData, authorizedUser, oid);
 
   const departmentTree = buildDepartmentTree(departments);
   const organization = organizations.find((org) => +org?.id === +oid) || {};

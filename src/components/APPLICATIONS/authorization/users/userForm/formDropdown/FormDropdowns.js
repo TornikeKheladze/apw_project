@@ -7,9 +7,12 @@ import { getPositionByDepartmentId } from "services/positions";
 import { useWatch } from "react-hook-form";
 import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
+import { buildMemberList } from "helpers/treeMenuBuilder";
+import { useSelector } from "react-redux";
 
 const FormDropdowns = ({ setValue, formObject, errors }) => {
   const [searchParam] = useSearchParams();
+  const { authorizedUser } = useSelector((store) => store.user);
   const oid = searchParam.get("oid");
   const did = searchParam.get("did");
   const pid = searchParam.get("pid");
@@ -45,41 +48,59 @@ const FormDropdowns = ({ setValue, formObject, errors }) => {
     setValue("pid", item);
   };
 
-  const { data: organizations = [] } = useQuery({
-    queryKey: "organizations",
-    queryFn: () => getOrganizations().then((res) => res.data.data),
-    onSuccess: (data) => {
-      if (oid) {
-        const org = data.find((org) => +org.id === +oid);
-        setOrg(org);
-      }
-    },
-  });
+  const { data: organizationData = { data: [], member: null, dga: [] } } =
+    useQuery({
+      queryKey: "getOrganizations",
+      queryFn: () => getOrganizations().then((res) => res.data),
+      onSuccess: (data) => {
+        if (oid) {
+          const orgData = data.data || [];
+          const member = data.member || [];
+          const org = [...orgData, ...member].find((org) => +org.id === +oid);
+          setOrg(org);
+        }
+      },
+    });
 
-  const { data: departments = [] } = useQuery({
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data || [];
+
+  const { data: departmentData = { data: [], member: null } } = useQuery({
     queryKey: ["departments", orgInput?.id],
-    queryFn: () => getDepartments(orgInput.id).then((res) => res.data.data),
+    queryFn: () => getDepartments(orgInput.id).then((res) => res.data),
     enabled: !!orgInput?.id,
     onSuccess: (data) => {
       if (oid && did) {
-        const dep = data.find((dep) => +dep.id === +did);
-        setDep(dep);
+        const depData = data.data || [];
+        const member = data.member || [];
+        const dep = [...depData, ...member].find((dep) => +dep.id === +did);
+        if (+dep.oid === +orgInput.id) setDep(dep);
       }
     },
   });
 
-  const { data: positions = [] } = useQuery({
+  const departments = buildMemberList(
+    departmentData,
+    authorizedUser,
+    orgInput?.id
+  );
+
+  const { data: positionsData = { data: [], member: null } } = useQuery({
     queryKey: ["positions", depInput?.id],
     queryFn: () =>
-      getPositionByDepartmentId(depInput.id).then((res) => res.data.data),
+      getPositionByDepartmentId(depInput.id).then((res) => res.data),
     enabled: !!depInput?.id,
     onSuccess: (data) => {
       if (oid && did && pid) {
-        const pos = data.find((pos) => +pos.id === +pid);
-        setPos(pos);
+        const posData = data.data || [];
+        const member = data.member || [];
+        const pos = [...posData, ...member].find((pos) => +pos.id === +pid);
+        if (+pos.did === +depInput.id) setPos(pos);
       }
     },
   });
+  const positions = buildMemberList(positionsData, authorizedUser, orgInput.id);
 
   const disable = +!depInput || positions.length === 0;
 

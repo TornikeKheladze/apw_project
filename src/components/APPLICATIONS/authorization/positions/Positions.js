@@ -29,7 +29,7 @@ const Positions = () => {
       isDeleteModalOpen,
       isEditModalOpen,
       choosenPosition,
-      successMessage,
+      alert,
     },
   } = usePositions();
 
@@ -40,7 +40,7 @@ const Positions = () => {
   return (
     <main className="workspace">
       <Paths />
-      <Alert message={successMessage} color="success" dismissable />
+      <Alert message={alert.message} color={alert.type} dismissable />
 
       <DeleteModal
         isOpen={isDeleteModalOpen}

@@ -3,10 +3,12 @@ import {
   editDepartment,
   getDepartments,
 } from "services/departments";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getOrganizationById, getOrganizations } from "services/organizations";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
+import { buildMemberList } from "helpers/treeMenuBuilder";
 
 const useDepartments = () => {
   const { oid, did } = useParams();
@@ -22,22 +24,32 @@ const useDepartments = () => {
   const [chosenOrganization, setChosenOrganization] = useState({});
   const [filteredDepartments, setFilteredDepartmens] = useState(null);
   const [orderedDepartments, setOrderedDepartments] = useState([]);
-  const [successMessage, setSuccessMessage] = useState("");
+  const { authorizedUser } = useSelector((store) => store.user);
+  const [alert, setAlert] = useState({
+    message: "",
+    type: "success",
+  });
   // const [departmentsFromOtherOrg, setDepartmentsFromOtherOrg] = useState([]);
 
-  const { data: departments = [], isLoading } = useQuery({
-    queryKey: ["departments", oid],
-    queryFn: () => getDepartments(oid).then((res) => res.data.data),
-  });
+  const { data: departmentData = { data: [], member: null }, isLoading } =
+    useQuery({
+      queryKey: ["departments", oid],
+      queryFn: () => getDepartments(oid).then((res) => res.data),
+    });
 
-  const { data: organizations = [] } = useQuery({
-    queryKey: "organizations",
-    queryFn: () => getOrganizations().then((res) => res.data.data),
+  const {
+    data: organizationData = { data: [], member: null, dga: [] },
+    isLoading: orgLoading,
+  } = useQuery({
+    queryKey: "getOrganizationsData",
+    queryFn: () => getOrganizations().then((res) => res.data),
   });
 
   const { data: organization = {}, isLoading: isLoadingOrg } = useQuery({
     queryKey: "getOrganizationById",
     queryFn: () => getOrganizationById(oid).then((res) => res.data.data),
+    enabled:
+      authorizedUser.superAdmin || +authorizedUser.oid === +oid ? true : false,
   });
 
   const { data: departmentsFromOtherOrg = [] } = useQuery({
@@ -46,6 +58,11 @@ const useDepartments = () => {
       getDepartments(chosenOrganization.id).then((res) => res.data.data),
     enabled: chosenOrganization.id ? true : false,
   });
+
+  const departments = useMemo(
+    () => buildMemberList(departmentData, authorizedUser, oid),
+    [departmentData, authorizedUser, oid]
+  );
 
   useEffect(() => {
     if (departments.length > 0) {
@@ -80,13 +97,25 @@ const useDepartments = () => {
       }),
     onSuccess: () => {
       queriClient.invalidateQueries(["departments", oid]);
-      setSuccessMessage("დეპარტამენტი წარმატებით შეიცვალა");
+      setAlert({
+        message: "დეპარტამენტი წარმატებით შეიცვალა",
+        type: "success",
+      });
       setTimeout(() => {
         setIsEditModalOpen(false);
       }, 1500);
       setTimeout(() => {
-        setSuccessMessage("");
+        setAlert({
+          message: "",
+          type: "success",
+        });
       }, 3000);
+    },
+    onError: () => {
+      setAlert({
+        message: "დეპარტამენტის ცვლილება ვერ მოხერხდა",
+        type: "danger",
+      });
     },
   });
 
@@ -94,17 +123,33 @@ const useDepartments = () => {
     mutationFn: () => deleteDepartment(choosenDepartment.id),
     onSuccess: () => {
       queriClient.invalidateQueries(["departments", oid]);
-      setSuccessMessage("დეპარტამენტი წარმატებით წაიშალა");
+      setAlert({
+        message: "დეპარტამენტი წარმატებით წაიშალა",
+        type: "success",
+      });
       setTimeout(() => {
         setIsDeleteModalOpen(false);
       }, 1500);
       setTimeout(() => {
-        setSuccessMessage("");
+        setAlert({
+          message: "",
+          type: "success",
+        });
       }, 3000);
+    },
+    onError: () => {
+      setAlert({
+        message: "დეპარტამენტის წაშლა ვერ მოხერხდა",
+        type: "danger",
+      });
     },
   });
 
-  const loading = isLoading || isLoadingOrg;
+  const loading = isLoading || isLoadingOrg || orgLoading;
+
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data;
 
   return {
     departments,
@@ -113,7 +158,7 @@ const useDepartments = () => {
     did,
     oid,
     orderedDepartments,
-    successMessage,
+    alert,
     departmentsFromOtherOrg,
     organizations,
     editMutate,

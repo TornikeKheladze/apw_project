@@ -1,8 +1,10 @@
 import Button from "components/Button";
 import Dropdown from "components/Dropdown";
 import LoadingSpinner from "components/icons/LoadingSpinner";
+import { buildMemberList } from "helpers/treeMenuBuilder";
 import { truncateText } from "helpers/truncateText";
 import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 
 import { getDepartmentById, getDepartments } from "services/departments";
@@ -11,50 +13,66 @@ import { getAllUsers, getUsersByTypeAndId } from "services/users";
 
 const useUsers = () => {
   const { type, id } = useParams();
+  const { authorizedUser } = useSelector((store) => store.user);
 
   // Fetch all users query
-  const { data: users = [], isLoading: isUsersLoading } = useQuery(
-    ["getUsers", type, id],
-    async () => {
-      if (type === "all" && id === "all") {
-        return getAllUsers().then((res) => res?.data?.users);
-      } else {
-        return getUsersByTypeAndId(type, id).then((res) => res?.data?.users);
-      }
+  const {
+    data: userData = { users: [], member: null },
+    isLoading: isUsersLoading,
+  } = useQuery(["getUsers", type, id], async () => {
+    if (type === "all" && id === "all") {
+      return getAllUsers().then((res) => res.data);
+    } else {
+      return getUsersByTypeAndId(type, id).then((res) => res.data);
     }
-  );
+  });
 
-  // Fetch organizations query
-  const { data: organizations = [], isLoading: organizationsLoading } =
-    useQuery(
-      "organizations",
-      () => getOrganizations().then((res) => res?.data?.data),
-      {
-        enabled: type === "organisation",
-      }
-    );
-  const organization = organizations.find(({ id: orgId }) => +orgId === +id);
+  const {
+    data: organizationData = { data: [], member: null, dga: [] },
+    isLoading: organizationsLoading,
+  } = useQuery({
+    queryKey: "getOrganizationsData",
+    queryFn: () => getOrganizations().then((res) => res.data),
+    enabled: type === "organisation",
+  });
+
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data;
+
+  const organization =
+    organizations.find(({ id: orgId }) => +orgId === +id) || {};
 
   // Fetch department and departments query
-  const { data: department = {} } = useQuery(
-    "department",
-    () => getDepartmentById(id).then((res) => res?.data?.data[0]),
-    {
-      enabled: type === "departments",
-    }
-  );
+  const { data: departmentByIdData = { member: [], data: [] } } = useQuery({
+    queryKey: ["department", id],
+    queryFn: () => getDepartmentById(id).then((res) => res.data),
+    enabled: type === "departments" ? true : false,
+  });
 
-  const { data: departments = [], isLoading: departmentsLoading } = useQuery(
-    "departments",
-    async () => {
-      if (department.oid) {
-        return getDepartments(department?.oid).then((res) => res?.data?.data);
-      }
-    },
-    {
-      enabled: type === "departments" && department.oid ? true : false,
-    }
-  );
+  const department = departmentByIdData.member?.length
+    ? departmentByIdData.member[0]
+    : departmentByIdData.data[0] || {};
+
+  const {
+    data: departmentData = { data: [], member: null },
+    isLoading: departmentsLoading,
+  } = useQuery({
+    queryKey: ["departments", department.oid],
+    queryFn: () => getDepartments(department.oid).then((res) => res.data),
+    enabled: type === "departments" && department.oid ? true : false,
+  });
+
+  const oid = type === "departments" ? department.oid : organization.id;
+
+  const idFields = {
+    organisation: "oid",
+    departments: "did",
+    positions: "pid",
+  };
+
+  const departments = buildMemberList(departmentData, authorizedUser, oid);
+  const users = buildMemberList(userData, authorizedUser, id, idFields[type]);
 
   const header = () => {
     if (type === "organisation") {

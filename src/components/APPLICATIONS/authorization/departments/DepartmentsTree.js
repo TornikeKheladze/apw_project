@@ -59,8 +59,6 @@ const DepartmentsTree = () => {
     },
   } = useDepartmentsTree();
 
-  console.log(activatePackageModal);
-
   return (
     <main className="workspace">
       <Paths />
@@ -180,7 +178,7 @@ const DepartmentsTree = () => {
         loading={deleteOrgPackageLoading}
         title={"პაკეტის წაშლა"}
       />
-      <div className="card p-5 md:text-base text-xs">
+      <div className="card relative p-5 md:text-base text-xs">
         <div className="flex items-center justify-between">
           <h3 className="mb-3 text-base">მიმდინარე პაკეტები</h3>
           <Button onClick={() => setPackageModal(true)}>
@@ -189,6 +187,7 @@ const DepartmentsTree = () => {
         </div>
         {orgPackages.length ? (
           <div className="overflow-x-auto mt-2">
+            {getDocumentLoading && <LoadingSpinner blur />}
             <table className="w-full">
               <thead>
                 <tr className="text-left">
@@ -242,11 +241,7 @@ const DepartmentsTree = () => {
                         onClick={() => getDocumentByUUIDMutate(item.uuid)}
                         className="btn-icon btn_outlined flex justify-center items-center"
                       >
-                        {getDocumentLoading ? (
-                          <LoadingSpinner />
-                        ) : (
-                          <span className="la la-download"></span>
-                        )}
+                        <span className="la la-download"></span>
                       </button>
                     </td>
                   </tr>

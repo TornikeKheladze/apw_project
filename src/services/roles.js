@@ -36,9 +36,8 @@ export const removeRolesFromUser = async (data) => {
   );
 };
 
-export const addRole = async (data, app) => {
-  const response = await instance.post(`/${app}/permissions/role`, data);
-  return response;
+export const createRole = (data) => {
+  return instance.post(`/${data.url}/permissions/role`, data);
 };
 
 export const deleteRoleById = async (data, app) => {

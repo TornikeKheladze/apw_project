@@ -1,6 +1,8 @@
 import { APPLICATIONS } from "data/applications";
+import { buildMemberList } from "helpers/treeMenuBuilder";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getRolesData, setRolesToUser } from "services/roles";
 import { getUsersByTypeAndId } from "services/users";
@@ -11,6 +13,7 @@ const useGrantRoleToUsers = () => {
   const { type, id } = useParams();
   const navigate = useNavigate();
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const { authorizedUser } = useSelector((store) => store.user);
   const [alert, setAlert] = useState({
     type: "success",
     message: "",
@@ -37,10 +40,12 @@ const useGrantRoleToUsers = () => {
     }
   };
 
-  const { data: users = [], isLoading: isUsersLoading } = useQuery({
+  const {
+    data: userData = { users: [], member: null },
+    isLoading: isUsersLoading,
+  } = useQuery({
     queryKey: ["getUsers", type, id],
-    queryFn: () =>
-      getUsersByTypeAndId(type, id).then((res) => res?.data?.users),
+    queryFn: () => getUsersByTypeAndId(type, id).then((res) => res?.data),
   });
 
   const {
@@ -82,6 +87,14 @@ const useGrantRoleToUsers = () => {
     const url = APPLICATIONS.find((app) => +app.id === +aid).url;
     setRoleMutate({ aid, url, role_id: selectedRole, user_id: selectedUsers });
   };
+
+  const idFields = {
+    organisation: "oid",
+    departments: "did",
+    positions: "pid",
+  };
+
+  const users = buildMemberList(userData, authorizedUser, id, idFields[type]);
 
   return {
     roles: rolesData.roles,

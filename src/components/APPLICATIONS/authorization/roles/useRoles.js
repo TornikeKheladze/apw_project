@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 import {
   addSuperAdminRole,
+  createRole,
   deleteSuperAdminRole,
   getRolesData,
   updateSuperAdminRole,
@@ -45,7 +46,7 @@ export const useRoles = () => {
   };
 
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
-    mutationFn: addSuperAdminRole,
+    mutationFn: authorizedUser.superAdmin ? addSuperAdminRole : createRole,
     onSuccess: () => afterRequestHandler("success", "როლი წარმატებით შეიქმნა"),
     onError: () => afterRequestHandler("danger", "როლის შექმნა ვერ მოხერხდა"),
   });

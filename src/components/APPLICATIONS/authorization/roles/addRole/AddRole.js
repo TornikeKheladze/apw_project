@@ -7,12 +7,26 @@ import { useState } from "react";
 import PermissionSelect from "../PermissionSelect";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import { permissionsObj } from "data/permissions";
+import { getOrganizations } from "services/organizations";
+import { useQuery } from "react-query";
 
 const AddRole = ({ add, loading, permissions }) => {
-  const [aid, setAid] = useState();
+  const [aid, setAid] = useState(2);
+  const [oid, setOid] = useState();
   const [input, setInput] = useState("");
 
   const [selectedPermissions, setSelectedPermissions] = useState([]);
+
+  const { data: organizationData = { data: [], member: null, dga: [] } } =
+    useQuery({
+      queryKey: "getOrganizationsData",
+      queryFn: () => getOrganizations().then((res) => res.data),
+      onSuccess: (data) => setOid(data.data[0].id || data.member[0].id),
+    });
+
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data;
 
   const handleInputChange = (e) => {
     const input = e.target.value;
@@ -35,16 +49,26 @@ const AddRole = ({ add, loading, permissions }) => {
         className="mb-4"
         placeholder="როლის სახელი ლათინური სიმბოლოებით"
       />
-      <Label className="block mb-2" htmlFor="role">
+      <Label className="block mb-2" htmlFor="aid">
         აირჩიეთ აპლიკაცია
       </Label>
-      <CustomSelect onChange={(e) => setAid(e.target.value)}>
+      <CustomSelect id="aid" onChange={(e) => setAid(e.target.value)}>
         {APPLICATIONS.map((item) => (
           <option
             className="p-3"
             key={item.id.toString() + item.name}
             value={item.id}
           >
+            {item.name}
+          </option>
+        ))}
+      </CustomSelect>
+      <Label className="block mb-2 mt-2" htmlFor="oid">
+        აირჩიეთ ორგანიზაცია
+      </Label>
+      <CustomSelect id="oid" onChange={(e) => setOid(e.target.value)}>
+        {organizations.map((item) => (
+          <option className="p-3" key={item.id} value={item.id}>
             {item.name}
           </option>
         ))}
@@ -58,12 +82,14 @@ const AddRole = ({ add, loading, permissions }) => {
       />
 
       <Button
-        disabled={!input || !aid}
+        disabled={!input || !aid || !oid}
         onClick={() => {
           add({
             aid,
             permission: selectedPermissions.map((p) => p.id),
             role_name: input,
+            oid,
+            url: APPLICATIONS.find((app) => +app.id === +aid).url,
           });
           setInput("");
           setSelectedPermissions([]);

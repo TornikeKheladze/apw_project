@@ -8,6 +8,8 @@ import {
 import { getDepartments } from "services/departments";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { buildMemberList } from "helpers/treeMenuBuilder";
+import { useSelector } from "react-redux";
 
 export const usePositions = () => {
   const { did, oid } = useParams();
@@ -15,29 +17,42 @@ export const usePositions = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [choosenPosition, setChoosenPosition] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
+  const [alert, setAlert] = useState({
+    message: "",
+    type: "success",
+  });
+  const { authorizedUser } = useSelector((store) => store.user);
 
-  const queriClient = useQueryClient();
+  const queryClient = useQueryClient();
 
-  const { data: positions = [], isLoading: positionLoading } = useQuery({
+  const {
+    data: positionsData = { data: [], member: null },
+    isLoading: positionLoading,
+  } = useQuery({
     queryKey: ["getPositionByDepartmentId", did],
-    queryFn: () => getPositionByDepartmentId(did).then((res) => res.data.data),
+    queryFn: () => getPositionByDepartmentId(did).then((res) => res.data),
   });
 
-  const { data: departments = [], isLoading: departmentLoading } = useQuery({
-    queryKey: ["getDepartments", oid],
-    queryFn: () => getDepartments(oid).then((res) => res.data.data),
+  const {
+    data: departmentData = { data: [], member: null },
+    isLoading: departmentLoading,
+  } = useQuery({
+    queryKey: ["departments", oid],
+    queryFn: () => getDepartments(oid).then((res) => res.data),
   });
 
   const { mutate: addPositionMutate, isLoading: addLoading } = useMutation({
     mutationFn: () => addPosition(input, did),
     onSuccess: () => {
-      queriClient.invalidateQueries(["getPositionByDepartmentId", did]);
-      setSuccessMessage("პოზიცია წარმატებით შეიქმნა");
+      queryClient.invalidateQueries(["getPositionByDepartmentId", did]);
+      setAlert({ message: "პოზიცია წარმატებით შეიქმნა", type: "success" });
       setInput("");
       setTimeout(() => {
-        setSuccessMessage("");
+        setAlert({ message: "", type: "success" });
       }, 3000);
+    },
+    onError: () => {
+      setAlert({ message: "პოზიციას შეიქმნა ვერ მოხერხდა", type: "danger" });
     },
   });
 
@@ -45,13 +60,16 @@ export const usePositions = () => {
     useMutation({
       mutationFn: () => deletePosition(choosenPosition.id),
       onSuccess: () => {
-        queriClient.invalidateQueries(["getPositionByDepartmentId", did]);
-        setSuccessMessage("პოზიცია წარმატებით წაიშალა");
+        queryClient.invalidateQueries(["getPositionByDepartmentId", did]);
+        setAlert({ message: "პოზიცია წარმატებით წაიშალა", type: "success" });
         setIsDeleteModalOpen(false);
         setInput("");
         setTimeout(() => {
-          setSuccessMessage("");
+          setAlert({ message: "", type: "success" });
         }, 3000);
+      },
+      onError: () => {
+        setAlert({ message: "პოზიციას წაშლა ვერ მოხერხდა", type: "danger" });
       },
     });
 
@@ -59,17 +77,23 @@ export const usePositions = () => {
     useMutation({
       mutationFn: updatePosition,
       onSuccess: () => {
-        queriClient.invalidateQueries(["getPositionByDepartmentId", did]);
-        setSuccessMessage("პოზიცია წარმატებით შეიცვალა");
+        queryClient.invalidateQueries(["getPositionByDepartmentId", did]);
+        setAlert({ message: "პოზიცია წარმატებით შეიცვალა", type: "success" });
         setIsEditModalOpen(false);
         setInput("");
         setTimeout(() => {
-          setSuccessMessage("");
+          setAlert({ message: "", type: "success" });
         }, 3000);
+      },
+      onError: () => {
+        setAlert({ message: "პოზიციას ცვლილება ვერ მოხერხდა", type: "danger" });
       },
     });
 
   const loading = positionLoading || departmentLoading;
+  const departments = buildMemberList(departmentData, authorizedUser, oid);
+  const positions = buildMemberList(positionsData, authorizedUser, oid);
+
   return {
     did,
     positions,
@@ -96,7 +120,7 @@ export const usePositions = () => {
       isDeleteModalOpen,
       isEditModalOpen,
       choosenPosition,
-      successMessage,
+      alert,
     },
   };
 };
