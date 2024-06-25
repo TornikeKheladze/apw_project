@@ -75,14 +75,24 @@ const AuthForm = ({
                 step="any"
                 register={register}
                 rules={
-                  type !== "file"
+                  name === "tell"
                     ? {
+                        validate: (val) => {
+                          const regex = /^9955\d{8}$/;
+                          if (!regex.test(val)) {
+                            return "არასწორი ფორმატი. მაგ.: 9955XXXXXXXX";
+                          }
+                        },
+                      }
+                    : {
                         required: "ველი აუცილებელია",
                       }
-                    : {}
                 }
                 className={`${errors[name] ? "border-danger" : ""}`}
               />
+              {name === "tell" && errors[name] && (
+                <p className="text-danger text-xs">{errors[name].message}</p>
+              )}
             </div>
           );
         }
