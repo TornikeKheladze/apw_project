@@ -17,20 +17,23 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-    darkMode,
-    toggleDarkMode,
-    isFullscreen,
-    toggleFullscreen,
-    isPasswordVisible,
-    setIsPasswordVisible,
-    passwordModal,
-    setPasswordModal,
-    sms,
-    setSms,
-    loginLoading,
-    loginMutate,
-    sendSmsMutate,
-    smsLoading,
+    mutates: { sendSmsMutate, loginMutate },
+    loadings: { smsLoading, loginLoading },
+    states: {
+      darkMode,
+      isFullscreen,
+      isPasswordVisible,
+      passwordModal,
+      sms,
+      smsError,
+    },
+    setStates: {
+      toggleDarkMode,
+      toggleFullscreen,
+      setIsPasswordVisible,
+      setPasswordModal,
+      setSms,
+    },
   } = useLogin();
 
   return (
@@ -163,6 +166,13 @@ const Login = () => {
               })
             }
           />
+          <p
+            className={`text-danger mt-2 ${
+              smsError ? "opacity-90" : "opacity-0"
+            }`}
+          >
+            SMS კოდი არასწორია
+          </p>
         </ModalBody>
         <ModalFooter>
           <Button onClick={loginMutate}>

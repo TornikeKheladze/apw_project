@@ -11,6 +11,7 @@ export const useLogin = () => {
   const [isFullscreen, toggleFullscreen] = useFullscreen();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [passwordModal, setPasswordModal] = useState(false);
+  const [smsError, setSmsError] = useState(false);
   const [sms, setSms] = useState({
     open: false,
     value: "",
@@ -60,10 +61,7 @@ export const useLogin = () => {
       }
     },
     onError: () => {
-      setError("email", {
-        type: "custom",
-        message: "არასწორი მონაცემები",
-      });
+      setSmsError(true);
     },
   });
 
@@ -72,19 +70,30 @@ export const useLogin = () => {
     handleSubmit,
     formState: { errors },
     setError,
-    darkMode,
-    toggleDarkMode,
-    isFullscreen,
-    toggleFullscreen,
-    isPasswordVisible,
-    setIsPasswordVisible,
-    passwordModal,
-    setPasswordModal,
-    sms,
-    setSms,
     sendSmsMutate,
-    smsLoading,
-    loginMutate,
-    loginLoading,
+    mutates: {
+      sendSmsMutate,
+      loginMutate,
+    },
+    loadings: {
+      smsLoading,
+      loginLoading,
+    },
+    states: {
+      darkMode,
+      isFullscreen,
+      isPasswordVisible,
+      passwordModal,
+      sms,
+      smsError,
+    },
+    setStates: {
+      toggleDarkMode,
+      toggleFullscreen,
+      setIsPasswordVisible,
+      setPasswordModal,
+      setSms,
+      setSmsError,
+    },
   };
 };
