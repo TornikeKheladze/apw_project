@@ -14,6 +14,7 @@ const DocumentEdit = () => {
     message: "",
   });
 
+  // eslint-disable-next-line
   let editor = useRef(null);
 
   const afterRequestHandler = (message, type) => {

@@ -5,7 +5,7 @@ import Label from "components/form/Label";
 import { useNewPasswordForm } from "./useNewPasswordForm";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 
-const NewPasswordForm = ({ setPasswordModal }) => {
+const NewPasswordForm = ({ login }) => {
   const {
     isPasswordVisible,
     setIsPasswordVisible,
@@ -15,7 +15,7 @@ const NewPasswordForm = ({ setPasswordModal }) => {
     onSubmit,
     alert,
     isLoading,
-  } = useNewPasswordForm(setPasswordModal);
+  } = useNewPasswordForm(login);
 
   return (
     <>

@@ -51,12 +51,21 @@ export const useLogin = () => {
   });
 
   const { mutate: loginMutate, isLoading: loginLoading } = useMutation({
-    mutationFn: () => login({ email, password, sms_code: sms.value }),
+    mutationFn: (data) =>
+      login({
+        email,
+        password: data.password ? data.password : password,
+        sms_code: sms.value,
+      }),
     onSuccess: (res) => {
       localStorage.setItem("token", res.data.user.token);
       if (res.data.user.password_verified_at) {
         navigate("/organizations");
       } else {
+        setSms((prevState) => ({
+          ...prevState,
+          open: false,
+        }));
         setPasswordModal(true);
       }
     },

@@ -141,7 +141,7 @@ const Login = () => {
       >
         <ModalHeader>შეცვალეთ პაროლი</ModalHeader>
         <ModalBody>
-          <NewPasswordForm setPasswordModal={setPasswordModal} />
+          <NewPasswordForm login={loginMutate} />
         </ModalBody>
       </Modal>
       <Modal
