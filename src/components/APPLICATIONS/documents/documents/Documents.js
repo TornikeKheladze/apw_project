@@ -442,9 +442,9 @@ const Documents = () => {
                 };
               })}
             actions={{
-              // editClick: (item) => {
-              //   navigate(`/documents/documents/${item.id}`);
-              // },
+              editClick: (item) => {
+                navigate(`/documents/documents/edit/${item.id}`);
+              },
               deleteClick: (item) => {
                 setOpenModal({
                   open: true,

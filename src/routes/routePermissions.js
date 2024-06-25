@@ -28,6 +28,7 @@ import TransactionDetails from "components/APPLICATIONS/billing/transactions/det
 import MakeTransaction from "components/APPLICATIONS/billing/transactions/makeTransactions/MakeTransaction";
 import TransactionByCat from "components/APPLICATIONS/billing/transactions/makeTransactions/TransactionByCat";
 import DocCatalogs from "components/APPLICATIONS/documents/docCatalogs/DocCatalogs";
+import DocumentEdit from "components/APPLICATIONS/documents/documentEdit/DocumentEdit";
 import Documents from "components/APPLICATIONS/documents/documents/Documents";
 import TemplateColumns from "components/APPLICATIONS/documents/templateColumns/TemplateColumns";
 import Templates from "components/APPLICATIONS/documents/templates/Templates";
@@ -223,11 +224,16 @@ export const routePermissions = [
     permission: "bil_transactions_get_sum_amount",
     element: <Bills />,
   },
-  // DOCUMENTS
+  // DOCUMENTSs
   {
     route: "/documents/documents",
     permission: "doc_documents_get",
     element: <Documents />,
+  },
+  {
+    route: "/documents/documents/edit/:id",
+    permission: "doc_documents_get",
+    element: <DocumentEdit />,
   },
   // DOC CATEGORIES
   {
