@@ -78,9 +78,9 @@ const AuthForm = ({
                   name === "tell"
                     ? {
                         validate: (val) => {
-                          const regex = /^9955\d{8}$/;
+                          const regex = /^995\d*/;
                           if (!regex.test(val)) {
-                            return "არასწორი ფორმატი. მაგ.: 9955XXXXXXXX";
+                            return "არასწორი ფორმატი (995)";
                           }
                         },
                       }

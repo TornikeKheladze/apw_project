@@ -1,7 +1,12 @@
 export const orgArr = [
   {
     name: "name",
-    label: "სახელი",
+    label: "დასახელება",
+    type: "text",
+  },
+  {
+    name: "identify_code",
+    label: "საიდენტიფიკაციო კოდი",
     type: "text",
   },
   {
@@ -25,11 +30,6 @@ export const orgArr = [
     type: "text",
   },
   {
-    name: "identify_code",
-    label: "საიდენტიფიკაციო კოდი",
-    type: "text",
-  },
-  {
     name: "tell",
     label: "ტელეფონი",
     type: "number",
@@ -48,9 +48,9 @@ export const orgArr = [
 
 export const userArr = [
   {
-    name: "l_name",
-    label: "გვარი",
-    type: "text",
+    name: "personal_number",
+    label: "პირადი ნომერი",
+    type: "number",
   },
   {
     name: "name",
@@ -58,29 +58,9 @@ export const userArr = [
     type: "text",
   },
   {
-    name: "password",
-    label: "პაროლი",
-    type: "password",
-  },
-  {
-    name: "account_type",
-    label: "ანგარიშის ტიპი",
-    type: "select",
-  },
-  {
-    name: "active",
-    label: "სტატუსი",
-    type: "select",
-  },
-  {
-    name: "address",
-    label: "მისამართი",
+    name: "l_name",
+    label: "გვარი",
     type: "text",
-  },
-  {
-    name: "date_expiration",
-    label: "ვადის გასვლის თარიღი",
-    type: "datetime-local",
   },
   {
     name: "email",
@@ -88,13 +68,28 @@ export const userArr = [
     type: "email",
   },
   {
-    name: "personal_number",
-    label: "პირადი ნომერი",
+    name: "tell",
+    label: "მობილურის ნომერი",
     type: "number",
   },
   {
-    name: "tell",
-    label: "ტელეფონი",
-    type: "number",
+    name: "address",
+    label: "მისამართი",
+    type: "text",
+  },
+  // {
+  //   name: "account_type",
+  //   label: "ანგარიშის ტიპი",
+  //   type: "select",
+  // },
+  {
+    name: "active",
+    label: "სტატუსი",
+    type: "select",
+  },
+  {
+    name: "date_expiration",
+    label: "ვადის გასვლის თარიღი",
+    type: "datetime-local",
   },
 ];

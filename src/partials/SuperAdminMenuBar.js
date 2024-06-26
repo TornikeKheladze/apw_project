@@ -167,15 +167,17 @@ const SuperAdminMenuBar = () => {
           </Tippy> */}
 
           {/* AUTH */}
-          <Tippy content="AUTH" singleton={target}>
+          <Tippy content="ადმინისტრირება" singleton={target}>
             <button
               onClick={() => activateMenu("auth")}
-              className={classNames("link", {
-                active: isActive("auth"),
-              })}
+              className={
+                classNames("link", {
+                  active: isActive("auth"),
+                }) + " !pl-0 !pr-0"
+              }
             >
               <AuthIcon />
-              <span className="title uppercase mt-1">ავტორიზაცია</span>
+              <span className="title uppercase mt-1">ადმინისტრირება</span>
             </button>
           </Tippy>
           {menuType === "wide" ? (
@@ -185,7 +187,7 @@ const SuperAdminMenuBar = () => {
           ) : null}
 
           {/*  Billing */}
-          <Tippy content="BILLING" singleton={target}>
+          <Tippy content="ბილინგი" singleton={target}>
             <button
               onClick={() => activateMenu("billing")}
               className={classNames("link", { active: isActive("billing") })}
@@ -201,7 +203,7 @@ const SuperAdminMenuBar = () => {
           ) : null}
 
           {/*  Documents */}
-          <Tippy content="DOCUMENTS" singleton={target}>
+          <Tippy content="დოკუმენტები" singleton={target}>
             <button
               onClick={() => activateMenu("documents")}
               className={classNames("link", { active: isActive("documents") })}

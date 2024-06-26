@@ -34,7 +34,7 @@ const Organizations = () => {
       orgsLoading,
       orgTypesLoading,
     },
-    states: { choosenOrganization, successMessage, openModal },
+    states: { choosenOrganization, alert, openModal },
     setStates: { setChoosenOrganization, setOpenModal },
     mutates: { deleteMutate, updateMutate, addMutate },
   } = useOrganization();
@@ -125,17 +125,31 @@ const Organizations = () => {
   ) ? (
     <div className="flex justify-between items-center">
       <h3>ორგანიზაციები</h3>
-      <Button
-        onClick={() =>
-          setOpenModal({
-            open: true,
-            action: "დამატება",
-          })
-        }
-        className="p-2 md:text-sm text-xs"
-      >
-        ორგანიზაციის შექმნა
-      </Button>
+      <div className="flex items-end gap-1">
+        <Button
+          onClick={() =>
+            setOpenModal({
+              open: true,
+              action: "დამატება",
+              orgTypeId: 1,
+            })
+          }
+          className="p-1 text-xs"
+        >
+          უწყების რეგისტრაცია
+        </Button>
+        <Button
+          onClick={() =>
+            setOpenModal({
+              open: true,
+              action: "დამატება",
+            })
+          }
+          className="p-1 text-xs"
+        >
+          ავტორიზირებული პირის რეგისტრაცია
+        </Button>
+      </div>
     </div>
   ) : (
     <></>
@@ -145,7 +159,7 @@ const Organizations = () => {
     <main className="workspace">
       <Paths />
 
-      <Alert message={successMessage} color="success" dismissable />
+      <Alert message={alert.message} color={alert.type} dismissable />
 
       <Modal
         active={openModal.open}
@@ -155,7 +169,10 @@ const Organizations = () => {
           setChoosenOrganization({ id: "" });
         }}
       >
-        <ModalHeader>ორგანიზაციის {openModal.action}</ModalHeader>
+        <ModalHeader>
+          {openModal.orgTypeId === 1 ? "უწყების " : "ავტორიზირებული პირის "}
+          {openModal.action}
+        </ModalHeader>
         {openModal.action === "შეცვლა" && (
           <div className="p-5 overflow-y-auto h-[90vh]">
             <AuthForm
@@ -180,9 +197,13 @@ const Organizations = () => {
           </div>
         )}
         {openModal.action === "დამატება" && (
-          <div className="p-5 overflow-y-auto h-[90vh]">
+          <div className="p-5 overflow-y-auto h-[90vh] min-w-80">
             <AuthForm
-              formArray={orgArr}
+              // formArray={orgArr}
+              formArray={orgArr.filter((item) => {
+                if (openModal.orgTypeId === 1) return item.name !== "type";
+                return item;
+              })}
               submitHandler={addMutate}
               isLoading={addLoading}
               optionsObj={{
@@ -236,11 +257,12 @@ const Organizations = () => {
                 setOpenModal({
                   open: true,
                   action: "დამატება",
+                  orgTypeId: 1,
                 })
               }
               className="p-2 md:text-sm text-xs"
             >
-              ორგანიზაციის შექმნა
+              უწყების რეგისტრაცია
             </Button>
           </div>
           <Tabs activeIndex={types.length && types[0].id} className="mt-5">

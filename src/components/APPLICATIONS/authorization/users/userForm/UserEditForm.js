@@ -5,12 +5,14 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { createUser, getUserDetails, updateUserData } from "services/users";
 import Alert from "components/Alert";
+import { useSelector } from "react-redux";
 
 const UserEditForm = () => {
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const { action, id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { authorizedUser } = useSelector((store) => store.user);
 
   const afterRequestHandler = (message, type) => {
     setAlert({
@@ -80,7 +82,7 @@ const UserEditForm = () => {
     >
       <GeneralForm
         formArray={userArr.filter((item) => {
-          if (action === "edit") return item.name !== "password";
+          if (authorizedUser.superAdmin) return item.name !== "date_expiration";
           return item;
         })}
         submitHandler={onSubmit}

@@ -17,10 +17,15 @@ const useOrganization = () => {
 
   const { authorizedUser } = useSelector((state) => state.user);
   const [choosenOrganization, setChoosenOrganization] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
+  // const [successMessage, setSuccessMessage] = useState("");
+  const [alert, setAlert] = useState({
+    type: "success",
+    message: "",
+  });
   const [openModal, setOpenModal] = useState({
     open: false,
     action: "",
+    orgTypeId: 0,
   });
 
   const {
@@ -37,10 +42,17 @@ const useOrganization = () => {
   });
 
   const { mutate: addMutate, isLoading: addLoading } = useMutation({
-    mutationFn: addOrganization,
+    mutationFn: (data) =>
+      addOrganization({
+        ...data,
+        type: openModal.orgTypeId === 1 ? 1 : data.type,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries("getOrganizationsData");
-      setSuccessMessage("ორგანიზაცია წარმატებით შეიქმნა");
+      setAlert({
+        type: "success",
+        message: "ორგანიზაცია წარმატებით შეიქმნა",
+      });
       setTimeout(() => {
         setOpenModal({
           open: false,
@@ -48,8 +60,17 @@ const useOrganization = () => {
         });
       }, 1500);
       setTimeout(() => {
-        setSuccessMessage("");
+        setAlert({
+          type: "success",
+          message: "",
+        });
       }, 3000);
+    },
+    onError: () => {
+      setAlert({
+        message: "დამატება ვერ მოხერხდა",
+        type: "danger",
+      });
     },
   });
 
@@ -57,7 +78,10 @@ const useOrganization = () => {
     mutationFn: updateOrganization,
     onSuccess: () => {
       queryClient.invalidateQueries("getOrganizationsData");
-      setSuccessMessage("ორგანიზაცია წარმატებით შეიცვალა");
+      setAlert({
+        type: "success",
+        message: "ორგანიზაცია წარმატებით შეიცვალა",
+      });
       setTimeout(() => {
         setOpenModal({
           open: false,
@@ -65,8 +89,17 @@ const useOrganization = () => {
         });
       }, 1500);
       setTimeout(() => {
-        setSuccessMessage("");
+        setAlert({
+          type: "success",
+          message: "",
+        });
       }, 3000);
+    },
+    onError: () => {
+      setAlert({
+        message: "ცვლილება ვერ მოხერხდა",
+        type: "danger",
+      });
     },
   });
 
@@ -74,7 +107,10 @@ const useOrganization = () => {
     mutationFn: () => deleteOrganization(choosenOrganization.id),
     onSuccess: () => {
       queryClient.invalidateQueries("getOrganizationsData");
-      setSuccessMessage("ორგანიზაცია წარმატებით წაიშალა");
+      setAlert({
+        type: "success",
+        message: "ორგანიზაცია წარმატებით წაიშალა",
+      });
       setTimeout(() => {
         setOpenModal({
           open: false,
@@ -82,7 +118,10 @@ const useOrganization = () => {
         });
       }, 1500);
       setTimeout(() => {
-        setSuccessMessage("");
+        setAlert({
+          type: "success",
+          message: "",
+        });
       }, 3000);
     },
   });
@@ -101,7 +140,7 @@ const useOrganization = () => {
       orgsLoading,
       orgTypesLoading,
     },
-    states: { choosenOrganization, successMessage, openModal },
+    states: { choosenOrganization, alert, openModal },
     setStates: { setChoosenOrganization, setOpenModal },
     mutates: { deleteMutate, updateMutate, addMutate },
   };

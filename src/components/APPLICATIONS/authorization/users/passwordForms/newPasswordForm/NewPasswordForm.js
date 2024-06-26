@@ -23,7 +23,7 @@ const NewPasswordForm = ({ login }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-5">
           <Label className="block mb-2" htmlFor="old_password">
-            მიმდინარე პაროლი
+            {login ? "ერთჯერადი პაროლი" : "მიმდინარე პაროლი"}
           </Label>
           <label
             className={`form-control-addon-within ${
