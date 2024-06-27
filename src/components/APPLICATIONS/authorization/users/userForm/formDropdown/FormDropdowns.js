@@ -66,16 +66,17 @@ const FormDropdowns = ({ setValue, formObject, errors }) => {
     ? [...organizationData.member, ...organizationData.data]
     : organizationData.data || [];
 
+  const oidForFetch = orgInput?.id || oid;
   const { data: departmentData = { data: [], member: null } } = useQuery({
-    queryKey: ["departments", orgInput?.id],
-    queryFn: () => getDepartments(orgInput.id).then((res) => res.data),
-    enabled: !!orgInput?.id,
+    queryKey: ["departments", oidForFetch],
+    queryFn: () => getDepartments(oidForFetch).then((res) => res.data),
+    enabled: !!oidForFetch,
     onSuccess: (data) => {
       if (oid && did) {
         const depData = data.data || [];
         const member = data.member || [];
         const dep = [...depData, ...member].find((dep) => +dep.id === +did);
-        if (+dep.oid === +orgInput.id) setDep(dep);
+        if (+dep.oid === +oidForFetch) setDep(dep);
       }
     },
   });
@@ -83,20 +84,21 @@ const FormDropdowns = ({ setValue, formObject, errors }) => {
   const departments = buildMemberList(
     departmentData,
     authorizedUser,
-    orgInput?.id
+    oidForFetch
   );
 
+  const didForFetch = depInput?.id || did;
   const { data: positionsData = { data: [], member: null } } = useQuery({
-    queryKey: ["positions", depInput?.id],
+    queryKey: ["positions", didForFetch],
     queryFn: () =>
-      getPositionByDepartmentId(depInput.id).then((res) => res.data),
-    enabled: !!depInput?.id,
+      getPositionByDepartmentId(didForFetch).then((res) => res.data),
+    enabled: !!didForFetch,
     onSuccess: (data) => {
       if (oid && did && pid) {
         const posData = data.data || [];
         const member = data.member || [];
         const pos = [...posData, ...member].find((pos) => +pos.id === +pid);
-        if (+pos.did === +depInput.id) setPos(pos);
+        if (+pos.did === +didForFetch) setPos(pos);
       }
     },
   });
@@ -106,30 +108,36 @@ const FormDropdowns = ({ setValue, formObject, errors }) => {
 
   return (
     <>
-      <CustomDropdown
-        disabled={false}
-        label="აირჩიეთ ორგანიზაცია"
-        list={organizations}
-        active={orgInput}
-        setActive={setOrg}
-        hasError={errors?.oid}
-      />
-      <CustomDropdown
-        label="აირჩიეთ დეპარტამენტი"
-        disabled={departments.length === 0 ? true : false}
-        list={departments}
-        active={depInput}
-        setActive={setDep}
-        hasError={errors?.did}
-      />
-      <CustomDropdown
-        label="აირჩიეთ პოზიცია"
-        disabled={disable}
-        list={positions}
-        active={posInput}
-        setActive={setPos}
-        hasError={errors?.pid}
-      />
+      {!oid && (
+        <CustomDropdown
+          disabled={false}
+          label="აირჩიეთ ორგანიზაცია"
+          list={organizations}
+          active={orgInput}
+          setActive={setOrg}
+          hasError={errors?.oid}
+        />
+      )}
+      {!did && (
+        <CustomDropdown
+          label="აირჩიეთ დეპარტამენტი"
+          disabled={departments.length === 0 ? true : false}
+          list={departments}
+          active={depInput}
+          setActive={setDep}
+          hasError={errors?.did}
+        />
+      )}
+      {!pid && (
+        <CustomDropdown
+          label="აირჩიეთ პოზიცია"
+          disabled={disable}
+          list={positions}
+          active={posInput}
+          setActive={setPos}
+          hasError={errors?.pid}
+        />
+      )}
     </>
   );
 };

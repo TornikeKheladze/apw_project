@@ -28,7 +28,7 @@ import DocumentIcon from "components/icons/DocumentIcon";
 import PackageIcon from "components/icons/PackageIcon";
 import PuzzleIcon from "components/icons/PuzzleIcon";
 import AlgIcon from "components/icons/AlgIcon";
-import useCheckPermission from "helpers/useCheckPermission";
+import useCheckPermission, { useCheckAID } from "helpers/useCheckPermission";
 
 const MenuBarContext = createContext();
 
@@ -185,38 +185,48 @@ const SuperAdminMenuBar = () => {
               <MenuDetailAuth />
             </DefaultCollapse>
           ) : null}
-
-          {/*  Billing */}
-          <Tippy content="ბილინგი" singleton={target}>
-            <button
-              onClick={() => activateMenu("billing")}
-              className={classNames("link", { active: isActive("billing") })}
-            >
-              <BillingIcon />
-              <span className="title uppercase mt-1">ბილინგი</span>
-            </button>
-          </Tippy>
-          {menuType === "wide" ? (
-            <DefaultCollapse open={isActive("billing")}>
-              <MenuDetailBilling />
-            </DefaultCollapse>
-          ) : null}
-
-          {/*  Documents */}
-          <Tippy content="დოკუმენტები" singleton={target}>
-            <button
-              onClick={() => activateMenu("documents")}
-              className={classNames("link", { active: isActive("documents") })}
-            >
-              <DocumentIcon className="h-7 w-7 mx-auto" />
-              <span className="title uppercase mt-1">დოკუმენტები</span>
-            </button>
-          </Tippy>
-          {menuType === "wide" ? (
-            <DefaultCollapse open={isActive("documents")}>
-              <MenuDetailBilling />
-            </DefaultCollapse>
-          ) : null}
+          {useCheckAID(4) && (
+            <>
+              {/*  Billing */}
+              <Tippy content="ბილინგი" singleton={target}>
+                <button
+                  onClick={() => activateMenu("billing")}
+                  className={classNames("link", {
+                    active: isActive("billing"),
+                  })}
+                >
+                  <BillingIcon />
+                  <span className="title uppercase mt-1">ბილინგი</span>
+                </button>
+              </Tippy>
+              {menuType === "wide" ? (
+                <DefaultCollapse open={isActive("billing")}>
+                  <MenuDetailBilling />
+                </DefaultCollapse>
+              ) : null}
+            </>
+          )}
+          {useCheckAID(2) && (
+            <>
+              {/*  Documents */}
+              <Tippy content="დოკუმენტები" singleton={target}>
+                <button
+                  onClick={() => activateMenu("documents")}
+                  className={classNames("link", {
+                    active: isActive("documents"),
+                  })}
+                >
+                  <DocumentIcon className="h-7 w-7 mx-auto" />
+                  <span className="title uppercase mt-1">დოკუმენტები</span>
+                </button>
+              </Tippy>
+              {menuType === "wide" ? (
+                <DefaultCollapse open={isActive("documents")}>
+                  <MenuDetailBilling />
+                </DefaultCollapse>
+              ) : null}
+            </>
+          )}
 
           {/* 
           <Tippy content="UI" singleton={target}>

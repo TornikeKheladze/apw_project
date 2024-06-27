@@ -349,7 +349,7 @@ const Organizations = () => {
                 }}
                 setChoosenItem={setChoosenOrganization}
                 items={membersByType}
-                title={"ჩემი შექმნილი " + headerName}
+                title={headerName}
                 toUsers={"/users/organisation/"}
                 toDepartments={"/departments/"}
               />

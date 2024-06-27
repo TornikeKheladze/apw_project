@@ -1,7 +1,14 @@
-import SuperAdminDashboard from "./SuperAdminDashboard";
+import { useNavigate } from "react-router-dom";
+// import SuperAdminDashboard from "./SuperAdminDashboard";
+import { useEffect } from "react";
 
 const Home = () => {
-  return <SuperAdminDashboard />;
+  const navigate = useNavigate("/");
+  useEffect(() => {
+    navigate("/organizations");
+  }, [navigate]);
+  // return <SuperAdminDashboard />;
+  return <></>;
 };
 
 export default Home;

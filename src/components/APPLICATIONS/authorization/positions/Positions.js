@@ -5,7 +5,7 @@ import Footer from "partials/Footer";
 
 import EditPositionModal from "./editPositionModal/EditPositionModal";
 import { usePositions } from "./usePositions";
-import Paths from "components/paths/Paths";
+// import Paths from "components/paths/Paths";
 import DeleteModal from "components/customModal/DeleteModal";
 import List from "components/list/List";
 import LoadingSpinner from "components/icons/LoadingSpinner";
@@ -39,7 +39,7 @@ const Positions = () => {
 
   return (
     <main className="workspace">
-      <Paths />
+      {/* <Paths /> */}
       <Alert message={alert.message} color={alert.type} dismissable />
 
       <DeleteModal

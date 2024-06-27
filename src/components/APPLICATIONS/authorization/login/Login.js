@@ -39,7 +39,7 @@ const Login = () => {
   return (
     <>
       <section className="top-bar">
-        <span className="brand">Logo</span>
+        {/* <span className="brand">Logo</span> */}
         <nav className="flex items-center ltr:ml-auto rtl:mr-auto">
           <Tooltip content="Toggle Dark Mode">
             <Switch

@@ -64,7 +64,7 @@ const AddRole = ({ add, loading, permissions }) => {
         ))}
       </CustomSelect>
       <Label className="block mb-2 mt-2" htmlFor="oid">
-        აირჩიეთ ორგანიზაცია
+        აირჩიეთ უწყება ან ავტორიზირებული პირი
       </Label>
       <CustomSelect id="oid" onChange={(e) => setOid(e.target.value)}>
         {organizations.map((item) => (

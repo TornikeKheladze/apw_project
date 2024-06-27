@@ -25,3 +25,12 @@ const useCheckPermission = (perm) => {
 };
 
 export default useCheckPermission;
+
+export const useCheckAID = (aid) => {
+  const { authorizedUser } = useSelector((state) => state.user);
+  const roles = authorizedUser.roles || [];
+
+  if (authorizedUser.superAdmin) return true;
+  if (roles.find((role) => role.aid === aid)) return true;
+  return false;
+};
