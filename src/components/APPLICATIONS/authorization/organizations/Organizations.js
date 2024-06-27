@@ -10,7 +10,7 @@ import Tabs, {
 import Button from "components/Button";
 import useOrganization from "./useOrganization";
 import Dropdown from "components/Dropdown";
-import Paths from "components/paths/Paths";
+// import Paths from "components/paths/Paths";
 import List from "components/list/List";
 import Alert from "components/Alert";
 import LoadingSpinner from "components/icons/LoadingSpinner";
@@ -46,8 +46,6 @@ const Organizations = () => {
 
   const headerName =
     typeId === "37" ? "სახელმწიფო უწყებები" : "ავტორიზირებული პირები";
-
-  // instead of 1
 
   // instead of organizations i write orgs
   const membersByType =
@@ -173,7 +171,7 @@ const Organizations = () => {
 
   return (
     <main className="workspace">
-      <Paths />
+      {/* <Paths /> */}
 
       <Alert message={alert.message} color={alert.type} dismissable />
 

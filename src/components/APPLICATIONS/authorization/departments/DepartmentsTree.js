@@ -2,7 +2,7 @@ import Footer from "partials/Footer";
 import Label from "components/form/Label";
 import Input from "components/form/Input";
 import Button from "components/Button";
-import Paths from "components/paths/Paths";
+// import Paths from "components/paths/Paths";
 
 import TreeMenu from "./TreeMenu.js";
 import useDepartmentsTree from "./useDepartmentsTree.js";
@@ -61,11 +61,11 @@ const DepartmentsTree = () => {
 
   return (
     <main className="workspace">
-      <Paths />
+      {/* <Paths /> */}
       <Alert message={alert.message} color={alert.type} dismissable />
 
       <div className="lg:col-span-2 xl:col-span-3 mb-4">
-        <h3 className="mb-3">დასახელება</h3>
+        <h3 className="mb-3 text-base">დასახელება:</h3>
         <Dropdown
           content={
             <div className="dropdown-menu min-w-[12rem]">

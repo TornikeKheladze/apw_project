@@ -11,6 +11,7 @@ import {
 } from "services/organizations";
 
 const useOrganization = () => {
+  // instead of 1, this is type of spec organization
   const specialTypeId = 37;
 
   const { typeId } = useParams();

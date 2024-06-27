@@ -1,7 +1,7 @@
 import Footer from "partials/Footer";
 import EditDepartmentModal from "./editDepartmentModal/EditDepartmentModal";
 import useDepartments from "./useDepartments.js";
-import Paths from "components/paths/Paths";
+// import Paths from "components/paths/Paths";
 import DeleteModal from "components/customModal/DeleteModal";
 import List from "components/list/List";
 import Alert from "components/Alert";
@@ -46,7 +46,7 @@ const Departments = () => {
 
   return (
     <main className="workspace">
-      <Paths title={name} />
+      {/* <Paths title={name} /> */}
       <Alert message={alert.message} color={alert.type} dismissable />
 
       <DeleteModal

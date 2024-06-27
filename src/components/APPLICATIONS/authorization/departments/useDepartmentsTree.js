@@ -1,6 +1,6 @@
 import { addDepartment, getDepartments } from "services/departments";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { buildDepartmentTree, buildMemberList } from "helpers/treeMenuBuilder";
 import { getOrganizations } from "services/organizations";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 const useDepartmentsTree = () => {
   const queriClient = useQueryClient();
   const { oid } = useParams();
+  const navigate = useNavigate();
   const [input, setInput] = useState("");
   const [alert, setAlert] = useState({
     message: "",
@@ -101,12 +102,16 @@ const useDepartmentsTree = () => {
           parent_id: chosenDepartment.id,
           oid,
         }),
-      onSuccess: () => {
+      onSuccess: (data) => {
+        console.log();
         queriClient.invalidateQueries(["departments", oid]);
         setAlert({
           message: "დეპარტამენტი წარმატებით შეიქმნა",
           type: "success",
         });
+        setTimeout(() => {
+          navigate(`/positions/${oid}/${data.data.id}`);
+        }, 1500);
         setInput("");
         setTimeout(() => {
           setAlert({ message: "", type: "success" });

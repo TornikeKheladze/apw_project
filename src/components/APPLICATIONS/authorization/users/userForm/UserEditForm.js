@@ -38,8 +38,10 @@ const UserEditForm = () => {
   const { mutate: createUserMutate, isLoading: createUserLoading } =
     useMutation({
       mutationFn: createUser,
-      onSuccess: () =>
-        afterRequestHandler("მომხმარებელი წარმატებით დაემატა", "success"),
+      onSuccess: (data) => {
+        // console.log(data);
+        afterRequestHandler("მომხმარებელი წარმატებით დაემატა", "success");
+      },
       onError: () => {
         afterRequestHandler("something went wrong", "danger");
       },
@@ -68,6 +70,8 @@ const UserEditForm = () => {
         ...data,
         ...userData,
         active: data?.active,
+        // temporary
+        account_type: 0,
       });
     } else {
       updateUserMutate({ ...data, ...userData, id, active: data?.active });
