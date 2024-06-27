@@ -145,18 +145,6 @@ const Organizations = () => {
             setOpenModal({
               open: true,
               action: "დამატება",
-              orgTypeId: specialTypeId,
-            })
-          }
-          className="p-1 text-xs"
-        >
-          უწყების რეგისტრაცია
-        </Button>
-        <Button
-          onClick={() =>
-            setOpenModal({
-              open: true,
-              action: "დამატება",
             })
           }
           className="p-1 text-xs"
