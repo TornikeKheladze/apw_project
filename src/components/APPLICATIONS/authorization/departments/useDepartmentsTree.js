@@ -14,9 +14,9 @@ import {
   createUserInvoiceDoc,
   getAllTemplates,
   getDocumentByUUID,
-  getTemplateColumnsByTemplateId,
+  // getTemplateColumnsByTemplateId,
 } from "services/documents";
-import { createInvoice } from "services/billingPackages";
+// import { createInvoice } from "services/billingPackages";
 import { downloadPDF } from "helpers/downloadPDF";
 import { useSelector } from "react-redux";
 
@@ -123,10 +123,10 @@ const useDepartmentsTree = () => {
     useMutation({
       mutationFn: insertOrgPackage,
       onSuccess: (data) => {
-        createInvoiceMutate({
-          package_id: data.data.package_id,
-          invoice_id: data.data.uuid,
-        });
+        // createInvoiceMutate({
+        //   package_id: data.data.package_id,
+        //   invoice_id: data.data.uuid,
+        // });
         queriClient.invalidateQueries(["searchOrgPackage", oid]);
         setAlert({
           message: "პაკეტი წარმატებით დაემატა",
@@ -175,24 +175,24 @@ const useDepartmentsTree = () => {
   const templateForActiveOrganization =
     templates.filter((template) => +template.org_id === +oid)[0] || {};
 
-  const { data: templateColums = [] } = useQuery({
-    queryKey: [
-      "getTemplateColumnsByTemplateId",
-      templateForActiveOrganization.id,
-    ],
-    queryFn: () =>
-      getTemplateColumnsByTemplateId(templateForActiveOrganization.id).then(
-        (res) => res.data.data
-      ),
-    enabled: templateForActiveOrganization.id ? true : false,
-  });
+  // const { data: templateColums = [] } = useQuery({
+  //   queryKey: [
+  //     "getTemplateColumnsByTemplateId",
+  //     templateForActiveOrganization.id,
+  //   ],
+  //   queryFn: () =>
+  //     getTemplateColumnsByTemplateId(templateForActiveOrganization.id).then(
+  //       (res) => res.data.data
+  //     ),
+  //   enabled: templateForActiveOrganization.id ? true : false,
+  // });
 
   const bindOrgToPackage = async (data) => {
     try {
-      const res = await createInvoice({
-        ownerID: organizationData.dga[0].id,
-        agentID: oid,
-      });
+      // const res = await createInvoice({
+      //   ownerID: organizationData.dga[0].id,
+      //   agentID: oid,
+      // });
       function addMonthsToDate(months) {
         const currentDate = new Date();
         currentDate.setMonth(currentDate.getMonth() + months);
@@ -207,12 +207,13 @@ const useDepartmentsTree = () => {
         end_date: addMonthsToDate(selectedPackage.exp),
         template_id: templateForActiveOrganization.id,
         cat_id: templateForActiveOrganization.cat_id,
-        invoice_id: res.data.invoiceNumber,
+        // invoice_id: res.data.invoiceNumber,
+        invoice_id: "739-axc-543",
       };
 
-      templateColums.forEach((item) => {
-        insertData[item.column_marker] = `test ${item.column_marker}`;
-      });
+      // templateColums.forEach((item) => {
+      //   insertData[item.column_marker] = `test ${item.column_marker}`;
+      // });
       insertOrgPackageMutate(insertData);
     } catch (error) {
       console.log(error);

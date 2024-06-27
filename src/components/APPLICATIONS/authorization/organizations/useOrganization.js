@@ -65,7 +65,7 @@ const useOrganization = () => {
       queryClient.invalidateQueries("getOrganizationsData");
       setAlert({
         type: "success",
-        message: "ორგანიზაცია წარმატებით შეიქმნა",
+        message: "წარმატებით შეიქმნა",
       });
       setTimeout(() => {
         setOpenModal({
@@ -95,7 +95,7 @@ const useOrganization = () => {
       queryClient.invalidateQueries("getOrganizationsData");
       setAlert({
         type: "success",
-        message: "ორგანიზაცია წარმატებით შეიცვალა",
+        message: "წარმატებით შეიცვალა",
       });
       setTimeout(() => {
         setOpenModal({
@@ -124,7 +124,7 @@ const useOrganization = () => {
       queryClient.invalidateQueries("getOrganizationsData");
       setAlert({
         type: "success",
-        message: "ორგანიზაცია წარმატებით წაიშალა",
+        message: "წარმატებით წაიშალა",
       });
       setTimeout(() => {
         setOpenModal({

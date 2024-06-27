@@ -111,7 +111,7 @@ const FormDropdowns = ({ setValue, formObject, errors }) => {
       {!oid && (
         <CustomDropdown
           disabled={false}
-          label="აირჩიეთ ორგანიზაცია"
+          label="აირჩიეთ უწყება ან ავტ. პირი"
           list={organizations}
           active={orgInput}
           setActive={setOrg}

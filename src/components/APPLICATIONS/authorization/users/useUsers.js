@@ -78,7 +78,7 @@ const useUsers = () => {
     if (type === "organisation") {
       return (
         <>
-          <h4 className="mb-3">ორგანიზაცია</h4>
+          {/* <h4 className="mb-3">ორგანიზაცია</h4> */}
           <Dropdown
             content={
               <div className="dropdown-menu min-w-[12rem]">

@@ -15,6 +15,11 @@ export const orgArr = [
     type: "text",
   },
   {
+    name: "tell",
+    label: "ტელეფონი",
+    type: "number",
+  },
+  {
     name: "address",
     label: "მისამართი",
     type: "text",
@@ -28,11 +33,6 @@ export const orgArr = [
     name: "bank_number",
     label: "ბანკის ნომერი",
     type: "text",
-  },
-  {
-    name: "tell",
-    label: "ტელეფონი",
-    type: "number",
   },
   {
     name: "type",

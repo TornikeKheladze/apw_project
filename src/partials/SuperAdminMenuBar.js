@@ -467,20 +467,24 @@ const MenuDetailAuth = () => {
             </NavLink>
           </MenuBarCollapse>
         )}
-        <MenuBarCollapse
-          icon={<OrgIcon className={"w-6 h-6 mr-2"} />}
-          label={"ავტორიზირებული პირები"}
-        >
-          <NavLink to="/organizations" onClick={hideMenuDetail}>
-            ავტორიზირებულ პირების სია
-          </NavLink>
-          <NavLink to="/roles" onClick={hideMenuDetail}>
-            როლები
-          </NavLink>
-          <NavLink to="/organizations?create=1" onClick={hideMenuDetail}>
-            ავტ. პირთა რეგისტრაცია
-          </NavLink>
-        </MenuBarCollapse>
+        {/* ვამოწმებ ავტორიზირებულ პირი არის თუ არა */}
+        {+user.oid === 37 ||
+          (user.superAdmin && (
+            <MenuBarCollapse
+              icon={<OrgIcon className={"w-6 h-6 mr-2"} />}
+              label={"ავტორიზირებული პირები"}
+            >
+              <NavLink to="/organizations" onClick={hideMenuDetail}>
+                ავტორიზირებულ პირების სია
+              </NavLink>
+              <NavLink to="/roles" onClick={hideMenuDetail}>
+                როლები
+              </NavLink>
+              <NavLink to="/organizations?create=1" onClick={hideMenuDetail}>
+                ავტ. პირთა რეგისტრაცია
+              </NavLink>
+            </MenuBarCollapse>
+          ))}
 
         <MenuBarCollapse
           icon={

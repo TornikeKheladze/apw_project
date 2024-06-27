@@ -76,7 +76,7 @@ const Departments = () => {
 
       <div className="lg:col-span-2 xl:col-span-3 mb-4">
         <h2 className="mb-2">
-          {organization?.name ? `ორგანიზაცია: ${organization.name}` : <></>}
+          {organization?.name ? `${organization.name}` : <></>}
         </h2>
         {name && <h3>მთავარი დეპარტამენტი: {name}</h3>}
       </div>

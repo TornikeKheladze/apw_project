@@ -10,7 +10,7 @@ export const permissionsObj = {
   bil_transactions_get_id: "ტრანზაქციების წამოღება ID-ით",
   bil_transactions_get_transaction_number: "ტრანზაქციის ნომრის წამოღება",
   bil_transactions_get_owner: "ტრანზაქციის მფლობელის წამოღება",
-  bil_transactions_get_agent: "ტრანზაქციის აგენტის წამოღება",
+  bil_transactions_get_agent: "ტრანზაქციის სერვისის მიმღების წამოღება",
   bil_transactions_post_search: "ტრანზაქციის ძებნა",
   bil_transactions_post_transaction_init: "ტრანზაქციის ინიციალიზაცია",
   bil_service_get_transactions: "მომსახურების ტრანზაქციების წამოღება",
@@ -26,7 +26,7 @@ export const permissionsObj = {
   bil_category_production_get_cats_by_owner_id:
     "კატეგორი ფროდაქშენის წამოღება მფლობელის ID-ით",
   bil_category_production_get_by_agent_id:
-    "კატეგორი ფროდაქშენის წამოღება აგენტის ID-ით",
+    "კატეგორი ფროდაქშენის წამოღება სერვისის მიმღების ID-ით",
   bil_category_production_put_edit: "კატეგორი ფროდაქშენის რედაქტირება",
   bil_category_production_delete: "კატეგორი ფროდაქშენის წაშლა",
   bil_sale_get: "გაყიდვების წამოღება",
@@ -56,34 +56,37 @@ export const permissionsObj = {
     "თვიური სტატისტიკის წამოღება მფლობელის წლების თვეების ID-ით",
   bil_monthly_statistic_post_add: "თვიური სტატისტიკის დამატება",
   bil_monthly_statistic_post_upsert_add: "თვიური სტატისტიკის განახლება",
-  bil_agent_monthly_statistics_get: "აგენტის თვიური სტატისტიკის წამოღება",
+  bil_agent_monthly_statistics_get:
+    "სერვისის მიმღების თვიური სტატისტიკის წამოღება",
   bil_agent_monthly_statistics_get_id:
-    "აგენტის თვიური სტატისტიკის წამოღება ID-ით",
+    "სერვისის მიმღების თვიური სტატისტიკის წამოღება ID-ით",
   bil_agent_monthly_statistics_get_agent:
-    "აგენტის თვიური სტატისტიკის წამოღება აგენტის ID-ით",
+    "სერვისის მიმღების თვიური სტატისტიკის წამოღება სერვისის მიმღების ID-ით",
   bil_agent_monthly_statistics_get_year_month:
-    "აგენტის თვიური სტატისტიკის წლების თვეების წამოღება",
+    "სერვისის მიმღების თვიური სტატისტიკის წლების თვეების წამოღება",
   bil_agent_monthly_statistics_get_by_owner_yer_mon:
-    "აგენტის თვიური სტატისტიკის წამოღება მფლობელის წლების თვეების ID-ით",
-  bil_agent_monthly_statistics_post_add: "აგენტის თვიური სტატისტიკის დამატება",
+    "სერვისის მიმღების თვიური სტატისტიკის წამოღება მფლობელის წლების თვეების ID-ით",
+  bil_agent_monthly_statistics_post_add:
+    "სერვისის მიმღების თვიური სტატისტიკის დამატება",
   bil_agent_monthly_statistics_post_upsert_add:
-    "აგენტის თვიური სტატისტიკის განახლება",
-  bil_agent_statistic_get: "აგენტის სტატისტიკის წამოღება",
-  bil_agent_statistic_get_id: "აგენტის სტატისტიკის წამოღება ID-ით",
+    "სერვისის მიმღების თვიური სტატისტიკის განახლება",
+  bil_agent_statistic_get: "სერვისის მიმღების სტატისტიკის წამოღება",
+  bil_agent_statistic_get_id: "სერვისის მიმღების სტატისტიკის წამოღება ID-ით",
   bil_agent_statistic_get_sum_transaction:
-    "აგენტის ტრანზაქციების ჯამის წამოღება",
-  bil_agent_statistic_get_sum_paid: "აგენტის გადახდების ჯამის წამოღება",
-  bil_agent_statistic_get_sum_amount: "აგენტის თანხის ჯამის წამოღება",
+    "სერვისის მიმღების ტრანზაქციების ჯამის წამოღება",
+  bil_agent_statistic_get_sum_paid:
+    "სერვისის მიმღების გადახდების ჯამის წამოღება",
+  bil_agent_statistic_get_sum_amount: "სერვისის მიმღების თანხის ჯამის წამოღება",
   bil_agent_statistic_get_sum_paid_amount:
-    "აგენტის გადახდილი თანხის ჯამის წამოღება",
+    "სერვისის მიმღების გადახდილი თანხის ჯამის წამოღება",
   bil_agent_statistic_get_by_agent:
-    "აგენტის სტატისტიკის წამოღება აგენტის ID-ით",
-  bil_agent_statistic_post_add: "აგენტის სტატისტიკის დამატება",
-  bil_agent_statistic_put_edit: "აგენტის სტატისტიკის რედაქტირება",
+    "სერვისის მიმღების სტატისტიკის წამოღება სერვისის მიმღების ID-ით",
+  bil_agent_statistic_post_add: "სერვისის მიმღების სტატისტიკის დამატება",
+  bil_agent_statistic_put_edit: "სერვისის მიმღების სტატისტიკის რედაქტირება",
   bil_service_production_get: "სერვის ფროდაქშენის წამოღება",
   bil_service_production_get_id: "სერვის ფროდაქშენის წამოღება ID-ით",
   bil_service_production_get_agent_service_id:
-    "სერვის ფროდაქშენის წამოღება აგენტის სერვისის ID-ით",
+    "სერვის ფროდაქშენის წამოღება სერვისის მიმღების სერვისის ID-ით",
   bil_service_production_post_add: "სერვის ფროდაქშენის დამატება",
   bil_service_production_put_edit: "სერვის ფროდაქშენის რედაქტირება",
   bil_service_production_delete: "სერვის ფროდაქშენის წაშლა",
@@ -117,7 +120,7 @@ export const permissionsObj = {
   bil_spec_prices_get: "სპეც. ფასების წამოღება",
   bil_spec_prices_get_id: "სპეც. ფასების წამოღება ID-ით",
   bil_spec_prices_get_agent_service:
-    "სპეც. ფასების წამოღება აგენტის სერვისის ID-ით",
+    "სპეც. ფასების წამოღება სერვისის მიმღების სერვისის ID-ით",
   bil_spec_prices_get_calculate: "სპეც. ფასების გამოთვლა",
   bil_spec_prices_post_add: "სპეც. ფასების დამატება",
   bil_packages_get: "პაკეტების წამოღება",
@@ -127,9 +130,9 @@ export const permissionsObj = {
   bil_packages_production_get: "პაკეტების წარმოების წამოღება",
   bil_packages_production_get_id: "პაკეტების წარმოების წამოღება ID-ით",
   bil_packages_production_get_agent_id:
-    "პაკეტების წარმოების წამოღება აგენტის ID-ით",
+    "პაკეტების წარმოების წამოღება სერვისის მიმღების ID-ით",
   bil_packages_production_get_agent_service:
-    "პაკეტების წარმოების წამოღება აგენტის სერვისის ID-ით",
+    "პაკეტების წარმოების წამოღება სერვისის მიმღების სერვისის ID-ით",
   bil_packages_production_post_add: "პაკეტების წარმოების დამატება",
   bil_packages_production_put_edit: "პაკეტების წარმოების რედაქტირება",
   bil_invoice_get: "ინვოისის წამოღება",
@@ -167,22 +170,18 @@ export const permissionsObj = {
   doc_template_columns_type_get_id: "შაბლონის სვეტების ტიპის წამოღება ID-ით",
   doc_doc_file_post_html_tu_pdf: "HTML-ის PDF-ად კონვერტაცია",
   doc_doc_file_get_html_tu_pdf_download_id: "PDF-ის ჩამოტვირთვა HTML-ით ID-ით",
-  doc_permissions_role_post: "doc_permissions_role_post",
-  doc_permissions_user_pas_permission_post:
-    "doc_permissions_user_pas_permission_post",
-  doc_permissions_user_pas_permission_remove_post:
-    "doc_permissions_user_pas_permission_remove_post",
-  bil_permissions_role_post: "bil_permissions_role_post",
-  bil_permissions_user_pas_permission_post:
-    "bil_permissions_user_pas_permission_post",
-  bil_permissions_user_pas_permission_remove_post:
-    "bil_permissions_user_pas_permission_remove_post",
+  doc_permissions_role_post: "დოკუმენტის როლის დამატება",
+  doc_permissions_user_pas_permission_post: "დოკუმენტის როლის მინიჭება",
+  doc_permissions_user_pas_permission_remove_post: "დოკუმენტის როლის მოხსნა",
+  bil_permissions_role_post: "ბილინგის როლის დამატება",
+  bil_permissions_user_pas_permission_post: "ბილინგის როლის მინიჭება",
+  bil_permissions_user_pas_permission_remove_post: "ბილინგის როლის მოხსნა",
   bil_transactions_post_transaction_by_categor:
-    "bil_transactions_post_transaction_by_categor",
+    "ტრანზაქციის გატარება კატეგორიის მიხედვით",
   bil_agent_statistic_get_sum_transactionCount:
-    "bil_agent_statistic_get_sum_transactionCount",
+    "სერვისის მიმღების ტრანზაქციების რაოდენობის ნახვა",
   bil_agent_statistic_get_sum_paid_transactionCount:
-    "bil_agent_statistic_get_sum_paid_transactionCount",
-  bil_transactions_get_sum_amount: "bil_transactions_get_sum_amount",
+    "სერვისის მიმღების ტრანზაქციების ჯამის ნახვა",
+  bil_transactions_get_sum_amount: "ტრანზაქციების ჯამის წამოღება",
   user_create_organisation: "ორგანიზაციის შექმნა",
 };

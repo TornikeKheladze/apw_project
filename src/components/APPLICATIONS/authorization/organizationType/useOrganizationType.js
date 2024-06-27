@@ -24,7 +24,7 @@ const useOrganizationType = () => {
     mutationFn: () => addOrganizationType(input),
     onSuccess: () => {
       queriClient.invalidateQueries("organizationTypes");
-      setSuccessMessage("ორგანიზაციის ტიპი წარმატებით დაემატა");
+      setSuccessMessage("ტიპი წარმატებით დაემატა");
       setTimeout(() => {
         setSuccessMessage("");
       }, 3000);
@@ -36,7 +36,7 @@ const useOrganizationType = () => {
     mutationFn: () => deleteOrganizationType(currentType.id),
     onSuccess: () => {
       queriClient.invalidateQueries("organizationTypes");
-      setSuccessMessage("ორგანიზაციის ტიპი წარმატებით წაიშალა");
+      setSuccessMessage("ტიპი წარმატებით წაიშალა");
       setTimeout(() => {
         setDeleteModalOpen(false);
       }, 1500);
@@ -50,7 +50,7 @@ const useOrganizationType = () => {
     mutationFn: (data) => updateOrganizationType(data),
     onSuccess: () => {
       queriClient.invalidateQueries("organizationTypes");
-      setSuccessMessage("ორგანიზაციის ტიპი წარმატებით შეიცვალა");
+      setSuccessMessage("ტიპი წარმატებით შეიცვალა");
       setTimeout(() => {
         setEditModalOpen(false);
       }, 1500);
