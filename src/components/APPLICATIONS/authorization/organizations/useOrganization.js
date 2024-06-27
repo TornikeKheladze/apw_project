@@ -144,7 +144,7 @@ const useOrganization = () => {
   return {
     organizations: organizationData.data,
     members: organizationData.member,
-    types,
+    types: types.filter((item) => item.name !== "dga"),
     authorizedUser,
     typeId,
     navigate,
