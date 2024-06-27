@@ -74,7 +74,13 @@ const UserEditForm = () => {
         account_type: 0,
       });
     } else {
-      updateUserMutate({ ...data, ...userData, id, active: data?.active });
+      updateUserMutate({
+        ...data,
+        ...userData,
+        id,
+        active: data?.active,
+        account_type: 0,
+      });
     }
   };
 
