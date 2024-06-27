@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getOrganizationsTypes } from "services/organization-type";
 import {
   addOrganization,
@@ -17,6 +17,8 @@ const useOrganization = () => {
   const { typeId } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [searchParam] = useSearchParams();
+  const createSearchParam = searchParam.get("create");
 
   const { authorizedUser } = useSelector((state) => state.user);
   const [choosenOrganization, setChoosenOrganization] = useState({});
@@ -43,6 +45,15 @@ const useOrganization = () => {
     queryKey: "organizationTypes",
     queryFn: () => getOrganizationsTypes().then((res) => res.data.data),
   });
+  useEffect(() => {
+    if (createSearchParam) {
+      setOpenModal({
+        open: true,
+        action: "დამატება",
+        orgTypeId: typeId,
+      });
+    }
+  }, [createSearchParam, typeId]);
 
   const { mutate: addMutate, isLoading: addLoading } = useMutation({
     mutationFn: (data) =>

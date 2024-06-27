@@ -19,7 +19,7 @@ import useWindowSize from "utilities/hooks/useWindowSize";
 import HeadersIcon from "components/icons/HeadersIcon";
 import AuthIcon from "components/icons/AuthIcon";
 import OrgIcon from "components/icons/OrgIcon";
-import AddUserIcon from "components/icons/AddUserIcon";
+// import AddUserIcon from "components/icons/AddUserIcon";
 import BillingIcon from "components/icons/BillingIcon";
 import TransactionIcon from "components/icons/TransactionIcon";
 import StatisticIcon from "components/icons/StatisticIcon";
@@ -451,39 +451,69 @@ const MenuDetailAuth = () => {
       })}
     >
       <div className="menu-detail-wrapper">
-        <NavLink to="/organizations/37" onClick={hideMenuDetail}>
-          <OrgIcon className={"w-6 h-6 mr-2"} />
-          სახელმწიფო უწყებები
-        </NavLink>
-        <NavLink to="/organizations" onClick={hideMenuDetail}>
-          <OrgIcon className={"w-6 h-6 mr-2"} />
-          ავტორიზირებული პირები
-        </NavLink>
-        <NavLink to="/roles" onClick={hideMenuDetail}>
-          <span className="la la-certificate"></span>
-          როლები
-        </NavLink>
-        <NavLink to="/user/create" onClick={hideMenuDetail}>
-          <AddUserIcon />
-          რეგისტრაცია
-        </NavLink>
-        <NavLink
-          to={
-            user.superAdmin
-              ? "users/all/all"
-              : `users/organisation/${user?.oid}`
-          }
-          onClick={hideMenuDetail}
-        >
-          <span className="la la-user-circle text-2xl leading-none ltr:mr-2 rtl:ml-2"></span>
-          მომხმარებლები
-        </NavLink>
         {user.superAdmin && (
-          <NavLink to={`/packages`} onClick={hideMenuDetail}>
-            <PackageIcon />
-            პაკეტები
-          </NavLink>
+          <MenuBarCollapse
+            icon={<OrgIcon className={"w-6 h-6 mr-2"} />}
+            label={"სახელმწიფო უწყებები"}
+          >
+            <NavLink to="/organizations/37" onClick={hideMenuDetail}>
+              უწყებები
+            </NavLink>
+            <NavLink to="/roles" onClick={hideMenuDetail}>
+              როლები
+            </NavLink>
+            <NavLink to="/organizations/37?create=1" onClick={hideMenuDetail}>
+              უწყების რეგისტრაცია
+            </NavLink>
+          </MenuBarCollapse>
         )}
+        <MenuBarCollapse
+          icon={<OrgIcon className={"w-6 h-6 mr-2"} />}
+          label={"ავტორიზირებული პირები"}
+        >
+          <NavLink to="/organizations" onClick={hideMenuDetail}>
+            ავტორიზირებულ პირების სია
+          </NavLink>
+          <NavLink to="/roles" onClick={hideMenuDetail}>
+            როლები
+          </NavLink>
+          <NavLink to="/organizations?create=1" onClick={hideMenuDetail}>
+            ავტ. პირთა რეგისტრაცია
+          </NavLink>
+        </MenuBarCollapse>
+
+        <MenuBarCollapse
+          icon={
+            <span className="la la-user-circle text-2xl leading-none ltr:mr-2 rtl:ml-2"></span>
+          }
+          label={"ადმინისტრაცია"}
+        >
+          <NavLink to="/roles" onClick={hideMenuDetail}>
+            {/* <span className="la la-certificate"></span> */}
+            როლები
+          </NavLink>
+          <NavLink to="/user/create" onClick={hideMenuDetail}>
+            {/* <AddUserIcon /> */}
+            რეგისტრაცია
+          </NavLink>
+          <NavLink
+            to={
+              user.superAdmin
+                ? "users/all/all"
+                : `users/organisation/${user?.oid}`
+            }
+            onClick={hideMenuDetail}
+          >
+            მომხმარებლები
+          </NavLink>
+          {user.superAdmin && (
+            <NavLink to={`/packages`} onClick={hideMenuDetail}>
+              {/* <PackageIcon /> */}
+              პაკეტები
+            </NavLink>
+          )}
+        </MenuBarCollapse>
+
         <hr />
       </div>
     </div>
