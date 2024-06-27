@@ -5,7 +5,8 @@ import useUsers from "./useUsers";
 import { Link } from "react-router-dom";
 
 const Users = () => {
-  const { users, departments, header, isLoading, type, id } = useUsers();
+  const { users, departments, header, isLoading, type, id, authorizedUser } =
+    useUsers();
   return (
     <main className="workspace">
       {/* {users.length ?<div></div> <Paths /> : <></>} */}
@@ -24,6 +25,14 @@ const Users = () => {
         </Link>
       ) : (
         <></>
+      )}
+      {!authorizedUser.superAdmin && (
+        <Link
+          to={`/activePackage/${authorizedUser.oid}`}
+          className="w-max mb-3"
+        >
+          მომხმარებლების პაკეტების შეძენა
+        </Link>
       )}
 
       <div className="card p-5">

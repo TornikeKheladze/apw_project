@@ -183,5 +183,5 @@ export const permissionsObj = {
   bil_agent_statistic_get_sum_paid_transactionCount:
     "სერვისის მიმღების ტრანზაქციების ჯამის ნახვა",
   bil_transactions_get_sum_amount: "ტრანზაქციების ჯამის წამოღება",
-  user_create_organisation: "ორგანიზაციის შექმნა",
+  user_create_organisation: "ავტ.პირის ან უწყების შექმნა",
 };

@@ -63,6 +63,12 @@ export const useRoles = () => {
     onError: () => afterRequestHandler("danger", "როლის შექმნა ვერ მოხერხდა"),
   });
 
+  // const roles = () => {
+  //   const roles = rolesData.roles || [];
+  //   if (authorizedUser.superAdmin) return roles;
+  //   return roles.filter((role) => role.oid === authorizedUser.oid) || [];
+  // };
+
   return {
     roles: rolesData.roles,
     isLoading: rolesDataLoading,

@@ -1,6 +1,7 @@
 import { APPLICATIONS } from "data/applications";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   getSuperAdminData,
@@ -19,7 +20,7 @@ const useUserRoles = () => {
   const { id } = useParams();
   const queriClient = useQueryClient();
 
-  // const { authorizedUser } = useSelector((store) => store.user);
+  const { authorizedUser } = useSelector((store) => store.user);
   // const uniqueAids = [...new Set(authorizedUser.roles.map((role) => role.aid))];
   // const {} = useQuery({
   //   queryKey: "getRolesAndPermissionsData",
@@ -76,10 +77,12 @@ const useUserRoles = () => {
     },
   });
 
-  const allRoles = useMemo(
-    () => permissionsData.roles || [],
-    [permissionsData.roles]
-  );
+  const allRoles = useMemo(() => {
+    const roles = permissionsData?.roles || [];
+    if (authorizedUser.superAdmin) return roles;
+    return roles.filter((role) => role.oid === authorizedUser.oid) || [];
+  }, [permissionsData.roles, authorizedUser]);
+
   const usersWithRoles = useMemo(
     () => permissionsData.users || [],
     [permissionsData.users]

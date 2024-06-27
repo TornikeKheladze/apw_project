@@ -80,6 +80,7 @@ import UserEditForm from "components/APPLICATIONS/authorization/users/userForm/U
 import UserStatistic from "components/APPLICATIONS/billing/statistic/UserStatistic";
 import ServiceStatistic from "components/APPLICATIONS/billing/statistic/ServiceStatistic";
 import TransactionStatistic from "components/APPLICATIONS/billing/statistic/TransactionStatistic";
+import ActivePackage from "components/APPLICATIONS/authorization/departments/ActivePackage";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -98,6 +99,7 @@ const Router = () => {
           <Route path="organization-type-edit" element={<OrganizationType />} />
           <Route path="organizations/:typeId?" element={<Organizations />} />
           <Route path="departments/:oid" element={<DepartmentsTree />} />
+          <Route path="activePackage/:oid" element={<ActivePackage />} />
           <Route path="positions/:oid/:did" element={<Positions />} />
           <Route path="users/:type/:id" element={<Users />} />
           <Route path="users/:type/:id/role" element={<GrantRoleToUsers />} />

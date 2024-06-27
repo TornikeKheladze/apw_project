@@ -146,7 +146,7 @@ const useUsers = () => {
   const isLoading =
     isUsersLoading || organizationsLoading || departmentsLoading;
 
-  return { users, departments, header, isLoading, type, id };
+  return { users, departments, header, isLoading, type, id, authorizedUser };
 };
 
 export default useUsers;
