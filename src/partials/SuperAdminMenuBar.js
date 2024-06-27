@@ -29,6 +29,8 @@ import PackageIcon from "components/icons/PackageIcon";
 import PuzzleIcon from "components/icons/PuzzleIcon";
 import AlgIcon from "components/icons/AlgIcon";
 import useCheckPermission, { useCheckAID } from "helpers/useCheckPermission";
+import { useQuery } from "react-query";
+import { getOrganizationById } from "services/organizations";
 
 const MenuBarContext = createContext();
 
@@ -443,6 +445,17 @@ const MenuDetailUI = () => {
 const MenuDetailAuth = () => {
   const { isOpen, hideMenuDetail } = useContext(MenuBarContext);
   const user = useSelector((state) => state.user.authorizedUser);
+  const { data: authorizedOrganization = {} } = useQuery({
+    queryKey: ["getOrganizationById", user.oid],
+    queryFn: () => getOrganizationById(user.oid).then((res) => res.data.data),
+    enabled: user.oid ? true : false,
+  });
+
+  const showSipMenu = () => {
+    if (user.superAdmin) return true;
+    if (+authorizedOrganization.type === 37) return true;
+    return false;
+  };
 
   return (
     <div
@@ -468,23 +481,22 @@ const MenuDetailAuth = () => {
           </MenuBarCollapse>
         )}
         {/* ვამოწმებ ავტორიზირებულ პირი არის თუ არა */}
-        {+user.oid === 37 ||
-          (user.superAdmin && (
-            <MenuBarCollapse
-              icon={<OrgIcon className={"w-6 h-6 mr-2"} />}
-              label={"ავტორიზირებული პირები"}
-            >
-              <NavLink to="/organizations" onClick={hideMenuDetail}>
-                ავტორიზირებულ პირების სია
-              </NavLink>
-              <NavLink to="/roles" onClick={hideMenuDetail}>
-                როლები
-              </NavLink>
-              <NavLink to="/organizations?create=1" onClick={hideMenuDetail}>
-                ავტ. პირთა რეგისტრაცია
-              </NavLink>
-            </MenuBarCollapse>
-          ))}
+        {showSipMenu() && (
+          <MenuBarCollapse
+            icon={<OrgIcon className={"w-6 h-6 mr-2"} />}
+            label={"ავტორიზირებული პირები"}
+          >
+            <NavLink to="/organizations" onClick={hideMenuDetail}>
+              ავტორიზირებულ პირების სია
+            </NavLink>
+            <NavLink to="/roles" onClick={hideMenuDetail}>
+              როლები
+            </NavLink>
+            <NavLink to="/organizations?create=1" onClick={hideMenuDetail}>
+              ავტ. პირთა რეგისტრაცია
+            </NavLink>
+          </MenuBarCollapse>
+        )}
 
         <MenuBarCollapse
           icon={
