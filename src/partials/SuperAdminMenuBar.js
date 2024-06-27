@@ -496,7 +496,14 @@ const MenuDetailAuth = () => {
             {/* <span className="la la-certificate"></span> */}
             როლები
           </NavLink>
-          <NavLink to="/user/create" onClick={hideMenuDetail}>
+          <NavLink
+            to={
+              user.superAdmin
+                ? "/user/create"
+                : `/user/create?oid=${user.oid}&did=${user.did}&pid=${user.pid}`
+            }
+            onClick={hideMenuDetail}
+          >
             {/* <AddUserIcon /> */}
             რეგისტრაცია
           </NavLink>
