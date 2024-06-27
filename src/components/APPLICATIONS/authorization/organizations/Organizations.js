@@ -37,11 +37,27 @@ const Organizations = () => {
     states: { choosenOrganization, alert, openModal },
     setStates: { setChoosenOrganization, setOpenModal },
     mutates: { deleteMutate, updateMutate, addMutate },
+    specialTypeId,
   } = useOrganization();
 
   const typeName = typeId
     ? types?.find((type) => type.id === +typeId)?.name
     : types[0]?.name;
+
+  const headerName =
+    typeId === "37" ? "სახელმწიფო უწყებები" : "ავტორიზირებული პირები";
+
+  // instead of 1
+
+  // instead of organizations i write orgs
+  const membersByType =
+    (members &&
+      members.filter((org) => {
+        if (authorizedUser.superAdmin) return org;
+        if (typeId === "37") return +org.type === 37;
+        return org;
+      })) ||
+    [];
 
   const tabHeaders =
     !orgsLoading && !orgTypesLoading ? (
@@ -96,12 +112,12 @@ const Organizations = () => {
                   }}
                   setChoosenItem={setChoosenOrganization}
                   items={currentOrganizations}
-                  title={"ორგანიზაციის დასახელება"}
+                  title={"დასახელება"}
                   toUsers={"/users/organisation/"}
                   toDepartments={"/departments/"}
                 />
               ) : (
-                <p>ორგანიზაციები არ მოიძებნა</p>
+                <p>ინფორმაცია არ მოიძებნა</p>
               )
             ) : (
               <></>
@@ -124,14 +140,14 @@ const Organizations = () => {
     "user_create_organisation"
   ) ? (
     <div className="flex justify-between items-center">
-      <h3>ორგანიზაციები</h3>
+      <h3>{headerName}</h3>
       <div className="flex items-end gap-1">
         <Button
           onClick={() =>
             setOpenModal({
               open: true,
               action: "დამატება",
-              orgTypeId: 1,
+              orgTypeId: specialTypeId,
             })
           }
           className="p-1 text-xs"
@@ -170,7 +186,9 @@ const Organizations = () => {
         }}
       >
         <ModalHeader>
-          {openModal.orgTypeId === 1 ? "უწყების " : "ავტორიზირებული პირის "}
+          {+openModal.orgTypeId === specialTypeId
+            ? "უწყების "
+            : "ავტორიზირებული პირის "}
           {openModal.action}
         </ModalHeader>
         {openModal.action === "შეცვლა" && (
@@ -201,7 +219,8 @@ const Organizations = () => {
             <AuthForm
               // formArray={orgArr}
               formArray={orgArr.filter((item) => {
-                if (openModal.orgTypeId === 1) return item.name !== "type";
+                if (openModal.orgTypeId === specialTypeId)
+                  return item.name !== "type";
                 return item;
               })}
               submitHandler={addMutate}
@@ -251,13 +270,13 @@ const Organizations = () => {
       {authorizedUser.superAdmin ? (
         <div className="card p-5">
           <div className="flex justify-between items-center">
-            <h3>ორგანიზაციები</h3>
+            <h3>{headerName}</h3>
             <Button
               onClick={() =>
                 setOpenModal({
                   open: true,
                   action: "დამატება",
-                  orgTypeId: 1,
+                  orgTypeId: specialTypeId,
                 })
               }
               className="p-2 md:text-sm text-xs"
@@ -275,7 +294,7 @@ const Organizations = () => {
                 className="p-1 md:text-sm text-xs"
                 onClick={() => navigate("/organization-type-edit")}
               >
-                ორგანიზაციის ტიპების მართვა
+                ტიპების მართვა
               </Button>
             </TabsNavigation>
             <TabsContent>{tabContents}</TabsContent>
@@ -304,14 +323,14 @@ const Organizations = () => {
               }}
               setChoosenItem={setChoosenOrganization}
               items={organizations}
-              title={"ორგანიზაციის დასახელება"}
+              title={"დასახელება"}
               toUsers={"/users/organisation/"}
               toDepartments={"/departments/"}
             />
           ) : (
-            <p>ორგანიზაციები არ მოიძებნა</p>
+            <p>{headerName} არ მოიძებნა</p>
           )}
-          {members && members.length && (
+          {membersByType && membersByType.length && (
             <div className="mt-3">
               <List
                 openDelete={() => {
@@ -327,8 +346,8 @@ const Organizations = () => {
                   });
                 }}
                 setChoosenItem={setChoosenOrganization}
-                items={members}
-                title={"ჩემი შექმნილი ორგანიზაციები"}
+                items={membersByType}
+                title={"ჩემი შექმნილი " + headerName}
                 toUsers={"/users/organisation/"}
                 toDepartments={"/departments/"}
               />

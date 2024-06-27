@@ -11,6 +11,8 @@ import {
 } from "services/organizations";
 
 const useOrganization = () => {
+  const specialTypeId = 37;
+
   const { typeId } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -45,9 +47,9 @@ const useOrganization = () => {
     mutationFn: (data) =>
       addOrganization({
         ...data,
-        type: openModal.orgTypeId === 1 ? 1 : data.type,
+        type: openModal.orgTypeId === specialTypeId ? specialTypeId : data.type,
       }),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries("getOrganizationsData");
       setAlert({
         type: "success",
@@ -58,6 +60,7 @@ const useOrganization = () => {
           open: false,
           action: "",
         });
+        navigate(`/departments/${data.data.id}`);
       }, 1500);
       setTimeout(() => {
         setAlert({
@@ -143,6 +146,7 @@ const useOrganization = () => {
     states: { choosenOrganization, alert, openModal },
     setStates: { setChoosenOrganization, setOpenModal },
     mutates: { deleteMutate, updateMutate, addMutate },
+    specialTypeId,
   };
 };
 

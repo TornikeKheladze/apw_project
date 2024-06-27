@@ -441,9 +441,13 @@ const MenuDetailAuth = () => {
       })}
     >
       <div className="menu-detail-wrapper">
+        <NavLink to="/organizations/37" onClick={hideMenuDetail}>
+          <OrgIcon className={"w-6 h-6 mr-2"} />
+          სახელმწიფო უწყებები
+        </NavLink>
         <NavLink to="/organizations" onClick={hideMenuDetail}>
           <OrgIcon className={"w-6 h-6 mr-2"} />
-          ორგანიზაციები
+          ავტორიზირებული პირები
         </NavLink>
         <NavLink to="/roles" onClick={hideMenuDetail}>
           <span className="la la-certificate"></span>

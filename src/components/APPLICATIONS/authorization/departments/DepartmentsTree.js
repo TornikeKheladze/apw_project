@@ -65,7 +65,7 @@ const DepartmentsTree = () => {
       <Alert message={alert.message} color={alert.type} dismissable />
 
       <div className="lg:col-span-2 xl:col-span-3 mb-4">
-        <h3 className="mb-3">ორგანიზაცია</h3>
+        <h3 className="mb-3">დასახელება</h3>
         <Dropdown
           content={
             <div className="dropdown-menu min-w-[12rem]">
