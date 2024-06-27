@@ -43,7 +43,7 @@ const UserEditForm = () => {
         afterRequestHandler("მომხმარებელი წარმატებით დაემატა", "success");
       },
       onError: () => {
-        afterRequestHandler("something went wrong", "danger");
+        afterRequestHandler("რეგისტრაცია ვერ მოხერხდა", "danger");
       },
     });
   const { mutate: updateUserMutate, isLoading: updateUserLoading } =
@@ -55,7 +55,7 @@ const UserEditForm = () => {
           "success"
         ),
       onError: () => {
-        afterRequestHandler("something went wrong", "danger");
+        afterRequestHandler("ცვლილება ვერ მოხერხდა", "danger");
       },
     });
 
