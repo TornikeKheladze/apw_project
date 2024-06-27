@@ -47,7 +47,7 @@ const Organizations = () => {
   const headerName =
     typeId === "37" ? "სახელმწიფო უწყებები" : "ავტორიზირებული პირები";
 
-  // instead of organizations i write orgs
+  // instead of members i write membersByType
   const membersByType =
     (members &&
       members.filter((org) => {
@@ -283,18 +283,22 @@ const Organizations = () => {
             </Button>
           </div>
           <Tabs activeIndex={types.length && types[0].id} className="mt-5">
-            <TabsNavigation className="flex items-center w-full justify-between border-none">
-              <div className="hidden lg:flex justify-start gap-2">
-                {tabHeaders}
-              </div>
-              <div className="lg:hidden flex">{dropdown}</div>
-              <Button
-                className="p-1 md:text-sm text-xs"
-                onClick={() => navigate("/organization-type-edit")}
-              >
-                ტიპების მართვა
-              </Button>
-            </TabsNavigation>
+            {+typeId === +specialTypeId ? (
+              <></>
+            ) : (
+              <TabsNavigation className="flex items-center w-full justify-between border-none">
+                <div className="hidden lg:flex justify-start gap-2">
+                  {tabHeaders}
+                </div>
+                <div className="lg:hidden flex">{dropdown}</div>
+                <Button
+                  className="p-1 md:text-sm text-xs"
+                  onClick={() => navigate("/organization-type-edit")}
+                >
+                  ტიპების მართვა
+                </Button>
+              </TabsNavigation>
+            )}
             <TabsContent>{tabContents}</TabsContent>
           </Tabs>
         </div>

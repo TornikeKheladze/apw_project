@@ -86,7 +86,7 @@ const OrganizationType = () => {
       <div className="lg:col-span-2 xl:col-span-3 mb-4">
         <div className="card p-5">
           <Label className="block mb-2" htmlFor="organization">
-            ორგანიზაციის ტიპის დამატება
+            ტიპის შექმნა
           </Label>
           <Input
             value={input}
