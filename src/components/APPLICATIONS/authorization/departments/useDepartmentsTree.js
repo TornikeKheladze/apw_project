@@ -199,6 +199,9 @@ const useDepartmentsTree = () => {
         return currentDate.toISOString().split("T")[0];
       }
       const selectedPackage = packages.find((p) => +p.id === +data.package_id);
+      const randomNumbers = Array.from({ length: 3 }, () =>
+        Math.floor(Math.random() * 10)
+      );
       const insertData = {
         oid,
         package_id: data.package_id,
@@ -208,7 +211,7 @@ const useDepartmentsTree = () => {
         template_id: templateForActiveOrganization.id,
         cat_id: templateForActiveOrganization.cat_id,
         // invoice_id: res.data.invoiceNumber,
-        invoice_id: "739-axc-543",
+        invoice_id: `${randomNumbers.join("")}-axc-${randomNumbers.join("")}`,
       };
 
       // templateColums.forEach((item) => {
