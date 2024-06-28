@@ -119,18 +119,26 @@ const ActivePackage = () => {
                     <td>
                       <Button
                         color={item.active === 1 ? "success" : "danger"}
-                        className={`text-xs rounded-lg p-1 w-20 justify-center ${
-                          authorizedUser.superAdmin
-                            ? "cursor-pointer"
-                            : "cursor-default"
-                        }`}
+                        className={`text-xs rounded-lg p-1 w-20 justify-center
+                           ${
+                             authorizedUser.superAdmin
+                               ? "cursor-pointer"
+                               : //  temporary
+                                 //  : "cursor-default"
+                                 "cursor-pointer"
+                           }
+                        `}
                         onClick={() => {
-                          if (authorizedUser.superAdmin) {
-                            setActivatePackateModal({
-                              isOpen: true,
-                              package: item,
-                            });
-                          }
+                          // if (authorizedUser.superAdmin) {
+                          //   setActivatePackateModal({
+                          //     isOpen: true,
+                          //     package: item,
+                          //   });
+                          // }
+                          setActivatePackateModal({
+                            isOpen: true,
+                            package: item,
+                          });
                         }}
                       >
                         {item.active === 1 ? "აქტიური" : "არააქტიური"}

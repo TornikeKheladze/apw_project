@@ -3,17 +3,25 @@ import CustomSelect from "components/form/CustomSelect";
 import Input from "components/form/Input";
 import Label from "components/form/Label";
 import { APPLICATIONS } from "data/applications";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PermissionSelect from "../PermissionSelect";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import { permissionsObj } from "data/permissions";
 import { getOrganizations } from "services/organizations";
 import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
 
 const AddRole = ({ add, loading, permissions }) => {
   const [aid, setAid] = useState(2);
   const [oid, setOid] = useState();
   const [input, setInput] = useState("");
+  const { authorizedUser } = useSelector((store) => store.user);
+
+  useEffect(() => {
+    if (!authorizedUser.superAdmin) {
+      setOid(authorizedUser.oid);
+    }
+  }, [authorizedUser]);
 
   const [selectedPermissions, setSelectedPermissions] = useState([]);
 
@@ -63,16 +71,21 @@ const AddRole = ({ add, loading, permissions }) => {
           </option>
         ))}
       </CustomSelect>
-      <Label className="block mb-2 mt-2" htmlFor="oid">
-        აირჩიეთ უწყება ან ავტორიზირებული პირი
-      </Label>
-      <CustomSelect id="oid" onChange={(e) => setOid(e.target.value)}>
-        {organizations.map((item) => (
-          <option className="p-3" key={item.id} value={item.id}>
-            {item.name}
-          </option>
-        ))}
-      </CustomSelect>
+      {authorizedUser.superAdmin && (
+        <>
+          <Label className="block mb-2 mt-2" htmlFor="oid">
+            აირჩიეთ უწყება ან ავტორიზირებული პირი
+          </Label>
+          <CustomSelect id="oid" onChange={(e) => setOid(e.target.value)}>
+            {organizations.map((item) => (
+              <option className="p-3" key={item.id} value={item.id}>
+                {item.name}
+              </option>
+            ))}
+          </CustomSelect>
+        </>
+      )}
+
       <PermissionSelect
         options={permissions.map((p) => {
           return { ...p, name: permissionsObj[p.name] };
