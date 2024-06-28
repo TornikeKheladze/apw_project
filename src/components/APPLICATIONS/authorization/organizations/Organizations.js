@@ -173,7 +173,7 @@ const Organizations = () => {
       >
         <ModalHeader>
           {+openModal.orgTypeId === SIPTYPEID
-            ? "უწყების "
+            ? "სახელმწიფო უწყების "
             : "ავტორიზირებული პირის "}
           {openModal.action}
         </ModalHeader>
