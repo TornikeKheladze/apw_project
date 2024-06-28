@@ -18,6 +18,7 @@ import Modal, { ModalBody, ModalFooter, ModalHeader } from "components/Modal";
 import AuthForm from "../authForm/AuthForm";
 import { orgArr } from "components/APPLICATIONS/billing/formArrays/authArr";
 import useCheckPermission from "helpers/useCheckPermission";
+import { SIPTYPEID } from "data/applications";
 
 const Organizations = () => {
   const {
@@ -37,7 +38,6 @@ const Organizations = () => {
     states: { choosenOrganization, alert, openModal },
     setStates: { setChoosenOrganization, setOpenModal },
     mutates: { deleteMutate, updateMutate, addMutate },
-    specialTypeId,
   } = useOrganization();
 
   const typeName = typeId
@@ -45,14 +45,14 @@ const Organizations = () => {
     : types[0]?.name;
 
   const headerName =
-    typeId === "37" ? "სახელმწიფო უწყებები" : "ავტორიზირებული პირები";
+    +typeId === +SIPTYPEID ? "სახელმწიფო უწყებები" : "ავტორიზირებული პირები";
 
   // instead of members i write membersByType
   const membersByType =
     (members &&
       members.filter((org) => {
         if (authorizedUser.superAdmin) return org;
-        if (typeId === "37") return +org.type === 37;
+        if (+typeId === +SIPTYPEID) return +org.type === SIPTYPEID;
         return org;
       })) ||
     [];
@@ -172,7 +172,7 @@ const Organizations = () => {
         }}
       >
         <ModalHeader>
-          {+openModal.orgTypeId === specialTypeId
+          {+openModal.orgTypeId === SIPTYPEID
             ? "უწყების "
             : "ავტორიზირებული პირის "}
           {openModal.action}
@@ -205,7 +205,7 @@ const Organizations = () => {
             <AuthForm
               // formArray={orgArr}
               formArray={orgArr.filter((item) => {
-                if (openModal.orgTypeId === specialTypeId)
+                if (openModal.orgTypeId === SIPTYPEID)
                   return item.name !== "type";
                 return item;
               })}
@@ -262,7 +262,7 @@ const Organizations = () => {
                 setOpenModal({
                   open: true,
                   action: "დამატება",
-                  orgTypeId: specialTypeId,
+                  orgTypeId: SIPTYPEID,
                 })
               }
               className="p-2 md:text-sm text-xs"
@@ -271,7 +271,7 @@ const Organizations = () => {
             </Button>
           </div>
           <Tabs activeIndex={types.length && types[0].id} className="mt-5">
-            {+typeId === +specialTypeId ? (
+            {+typeId === +SIPTYPEID ? (
               <></>
             ) : (
               <TabsNavigation className="flex items-center w-full justify-between border-none">
@@ -320,7 +320,7 @@ const Organizations = () => {
           ) : (
             <p>{headerName} არ მოიძებნა</p>
           )}
-          {membersByType && membersByType.length && (
+          {membersByType && membersByType.length ? (
             <div className="mt-3">
               <List
                 openDelete={() => {
@@ -342,6 +342,8 @@ const Organizations = () => {
                 toDepartments={"/departments/"}
               />
             </div>
+          ) : (
+            <></>
           )}
         </div>
       )}

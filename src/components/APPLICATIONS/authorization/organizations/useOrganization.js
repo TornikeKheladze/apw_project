@@ -1,3 +1,4 @@
+import { SIPTYPEID } from "data/applications";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
@@ -12,7 +13,6 @@ import {
 
 const useOrganization = () => {
   // instead of 1, this is type of spec organization
-  const specialTypeId = 37;
 
   const { typeId } = useParams();
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const useOrganization = () => {
     mutationFn: (data) =>
       addOrganization({
         ...data,
-        type: openModal.orgTypeId === specialTypeId ? specialTypeId : data.type,
+        type: openModal.orgTypeId === SIPTYPEID ? SIPTYPEID : data.type,
       }),
     onSuccess: (data) => {
       queryClient.invalidateQueries("getOrganizationsData");
@@ -158,7 +158,6 @@ const useOrganization = () => {
     states: { choosenOrganization, alert, openModal },
     setStates: { setChoosenOrganization, setOpenModal },
     mutates: { deleteMutate, updateMutate, addMutate },
-    specialTypeId,
   };
 };
 

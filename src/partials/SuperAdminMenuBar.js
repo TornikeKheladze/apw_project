@@ -31,6 +31,7 @@ import AlgIcon from "components/icons/AlgIcon";
 import useCheckPermission, { useCheckAID } from "helpers/useCheckPermission";
 import { useQuery } from "react-query";
 import { getOrganizationById } from "services/organizations";
+import { SIPTYPEID } from "data/applications";
 
 const MenuBarContext = createContext();
 
@@ -453,7 +454,7 @@ const MenuDetailAuth = () => {
 
   const showSipMenu = () => {
     if (user.superAdmin) return true;
-    if (+authorizedOrganization.type === 37) return true;
+    if (+authorizedOrganization.type === SIPTYPEID) return true;
     return false;
   };
 
@@ -469,13 +470,19 @@ const MenuDetailAuth = () => {
             icon={<OrgIcon className={"w-6 h-6 mr-2"} />}
             label={"სახელმწიფო უწყებები"}
           >
-            <NavLink to="/organizations/37" onClick={hideMenuDetail}>
+            <NavLink
+              to={`/organizations/${SIPTYPEID}`}
+              onClick={hideMenuDetail}
+            >
               უწყებები
             </NavLink>
             <NavLink to="/roles" onClick={hideMenuDetail}>
               როლები
             </NavLink>
-            <NavLink to="/organizations/37?create=1" onClick={hideMenuDetail}>
+            <NavLink
+              to={`/organizations/${SIPTYPEID}?create=1`}
+              onClick={hideMenuDetail}
+            >
               უწყების რეგისტრაცია
             </NavLink>
           </MenuBarCollapse>
