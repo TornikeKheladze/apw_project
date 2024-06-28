@@ -26,7 +26,7 @@ const Users = () => {
       ) : (
         <></>
       )}
-      {!authorizedUser.superAdmin && (
+      {!authorizedUser.superAdmin && +authorizedUser.oid === +id && (
         <Link
           to={`/activePackage/${authorizedUser.oid}`}
           className="w-max mb-3"

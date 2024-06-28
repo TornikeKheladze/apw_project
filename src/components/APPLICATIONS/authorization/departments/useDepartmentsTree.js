@@ -103,7 +103,6 @@ const useDepartmentsTree = () => {
           oid,
         }),
       onSuccess: (data) => {
-        console.log();
         queriClient.invalidateQueries(["departments", oid]);
         setAlert({
           message: "დეპარტამენტი წარმატებით შეიქმნა",

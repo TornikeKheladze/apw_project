@@ -39,8 +39,8 @@ const UserEditForm = () => {
     useMutation({
       mutationFn: createUser,
       onSuccess: (data) => {
-        // console.log(data);
         afterRequestHandler("მომხმარებელი წარმატებით დაემატა", "success");
+        localStorage.removeItem("formInputData");
       },
       onError: () => {
         afterRequestHandler("რეგისტრაცია ვერ მოხერხდა", "danger");
