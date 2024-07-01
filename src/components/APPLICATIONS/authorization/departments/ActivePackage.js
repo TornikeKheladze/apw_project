@@ -1,35 +1,219 @@
 import Footer from "partials/Footer";
 import Button from "components/Button";
 
-import useDepartmentsTree from "./useDepartmentsTree.js";
 import Alert from "components/Alert.js";
 import LoadingSpinner from "components/icons/LoadingSpinner.js";
 import Modal, { ModalHeader } from "components/Modal.js";
 import AuthForm from "../authForm/AuthForm.js";
 import { orgPackageArr } from "components/APPLICATIONS/billing/formArrays/packageArr.js";
 import DeleteModal from "components/customModal/DeleteModal.js";
+import { createInvoice } from "services/billingPackages.js";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+  createUserInvoiceDoc,
+  getAllTemplates,
+  getDocumentByUUID,
+} from "services/documents.js";
+import { activatePackage, getPackages } from "services/packages.js";
+import {
+  deleteOrgPackage,
+  getPaymentMethods,
+  insertOrgPackage,
+  searchOrgPackage,
+} from "services/orgPackages.js";
+import { downloadPDF } from "helpers/downloadPDF.js";
+import { getOrganizations } from "services/organizations.js";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 const ActivePackage = () => {
-  const {
-    packages,
-    bindOrgToPackage,
-    authorizedUser,
-    orgPackages,
-    mutates: {
-      deleteOrgPackageMutate,
-      getDocumentByUUIDMutate,
-      activatePackageMutate,
-    },
-    states: { alert, packageModal, deleteModal, activatePackageModal },
-    setStates: { setPackageModal, setDeleteModal, setActivatePackateModal },
-    loadings: {
-      insertOrgPackageLoading,
-      deleteOrgPackageLoading,
-      createInvoiceLoading,
-      getDocumentLoading,
-      activatePackageLoading,
-    },
-  } = useDepartmentsTree();
+  const queriClient = useQueryClient();
+  const { oid } = useParams();
+  const [alert, setAlert] = useState({
+    message: "",
+    type: "success",
+  });
+  const [packageModal, setPackageModal] = useState(false);
+  // eslint-disable-next-line
+  const [downloadLoading, setDownloadLoading] = useState(false);
+  const [deleteModal, setDeleteModal] = useState({
+    isOpen: false,
+  });
+  const [activatePackageModal, setActivatePackateModal] = useState({
+    isOpen: false,
+    package: {},
+  });
+  const [invoiceID, setInvoiceID] = useState("");
+
+  const { authorizedUser } = useSelector((store) => store.user);
+
+  const { data: organizationData = { data: [], member: null, dga: [] } } =
+    useQuery({
+      queryKey: "getOrganizationsData",
+      queryFn: () => getOrganizations().then((res) => res.data),
+    });
+
+  const { data: packages = [] } = useQuery({
+    queryKey: ["getPackages"],
+    queryFn: () => getPackages().then((res) => res.data),
+  });
+
+  const { isLoading: getDocumentLoading, mutate: getDocumentByUUIDMutate } =
+    useMutation({
+      mutationFn: getDocumentByUUID,
+      onSuccess: (data) => {
+        const doc = data.data.data[0];
+        if (doc) {
+          downloadPDF(doc.not_signature_doc, setDownloadLoading);
+        }
+      },
+    });
+
+  const { data: orgPackages = [] } = useQuery({
+    queryKey: ["searchOrgPackage", oid],
+    queryFn: () =>
+      searchOrgPackage({
+        fild: "oid",
+        value: oid,
+      }).then((res) => res.data),
+  });
+  const { mutate: createInvoiceMutate, isLoading: createInvoiceLoading } =
+    useMutation({
+      mutationFn: () =>
+        createUserInvoiceDoc({
+          invoice_number: invoiceID,
+        }),
+      onSuccess: () => {
+        setAlert({
+          message: "ინვოისი წარმატებით შეიქმნა",
+          type: "success",
+        });
+      },
+      onError: (data) => {
+        setAlert({
+          type: "danger",
+          message: data.response.data.message,
+        });
+      },
+    });
+
+  const { mutate: insertOrgPackageMutate, isLoading: insertOrgPackageLoading } =
+    useMutation({
+      mutationFn: insertOrgPackage,
+      onSuccess: () => {
+        createInvoiceMutate();
+        queriClient.invalidateQueries(["searchOrgPackage", oid]);
+        setAlert({
+          message: "პაკეტი წარმატებით დაემატა",
+          type: "success",
+        });
+        setPackageModal(false);
+        setTimeout(() => {
+          setAlert({
+            message: "",
+            type: "success",
+          });
+        }, 3000);
+      },
+      onError: (data) => {
+        setAlert({
+          type: "danger",
+          message: data.response.data.message,
+        });
+      },
+    });
+  const { mutate: deleteOrgPackageMutate, isLoading: deleteOrgPackageLoading } =
+    useMutation({
+      mutationFn: deleteOrgPackage,
+      onSuccess: () => {
+        queriClient.invalidateQueries(["searchOrgPackage", oid]);
+        setAlert({ message: "პაკეტი წარმატებით წაიშალა", type: "success" });
+        setDeleteModal({ isOpen: false });
+        setTimeout(() => {
+          setAlert({ message: "", type: "success" });
+        }, 3000);
+      },
+    });
+  const { mutate: activatePackageMutate, isLoading: activatePackageLoading } =
+    useMutation({
+      mutationFn: () => activatePackage(activatePackageModal.package.uuid),
+      onSuccess: () => {
+        queriClient.invalidateQueries(["searchOrgPackage", oid]);
+        setAlert({ message: "პაკეტი წარმატებით გააქტიურდა", type: "success" });
+        setActivatePackateModal({ isOpen: false, package: {} });
+        setTimeout(() => {
+          setAlert({ message: "", type: "success" });
+        }, 2500);
+      },
+    });
+
+  const { data: templates = [] } = useQuery({
+    queryKey: "getAllTemplates",
+    queryFn: () => getAllTemplates().then((res) => res.data.data),
+  });
+
+  const { data: paymentMethods = [] } = useQuery({
+    queryKey: "getPaymentMethods",
+    queryFn: () => getPaymentMethods().then((res) => res.data.data),
+  });
+
+  const templateForActiveOrganization =
+    templates.filter((template) => +template.org_id === +oid)[0] || {};
+
+  // const { data: templateColums = [] } = useQuery({
+  //   queryKey: [
+  //     "getTemplateColumnsByTemplateId",
+  //     templateForActiveOrganization.id,
+  //   ],
+  //   queryFn: () =>
+  //     getTemplateColumnsByTemplateId(templateForActiveOrganization.id).then(
+  //       (res) => res.data.data
+  //     ),
+  //   enabled: templateForActiveOrganization.id ? true : false,
+  // });
+
+  console.log(invoiceID);
+
+  const bindOrgToPackage = async (data) => {
+    try {
+      const res = await createInvoice({
+        ownerID: organizationData.dga[0].id,
+        agentID: oid,
+      });
+      console.log(res.data);
+      setInvoiceID(res.data.invoiceID);
+      function addMonthsToDate(months) {
+        const currentDate = new Date();
+        currentDate.setMonth(currentDate.getMonth() + months);
+        return currentDate.toISOString().split("T")[0];
+      }
+      const selectedPackage = packages.find((p) => +p.id === +data.package_id);
+
+      const insertData = {
+        oid,
+        package_id: data.package_id,
+        payment_period: data.payment_period,
+        count: selectedPackage.count,
+        start_date: new Date().toISOString().split("T")[0],
+        end_date: addMonthsToDate(selectedPackage.exp),
+        template_id: templateForActiveOrganization.id,
+        cat_id: templateForActiveOrganization.cat_id,
+        invoice_id: res.data.invoiceNumber,
+      };
+
+      // templateColums.forEach((item) => {
+      //   insertData[item.column_marker] = `test ${item.column_marker}`;
+      // });
+      insertOrgPackageMutate(insertData);
+    } catch (error) {
+      console.log(error);
+      setAlert({
+        message: "Something Went Wrong",
+        type: "danger",
+      });
+    }
+  };
 
   const renderPackages = authorizedUser.superAdmin
     ? packages
@@ -87,6 +271,7 @@ const ActivePackage = () => {
                   name: `მომხმარებელი:${item.count}, ვადა:${item.exp} თვე, ფასი: ${item.price}`,
                 };
               }),
+              payment_period: paymentMethods,
             }}
           />
         </div>

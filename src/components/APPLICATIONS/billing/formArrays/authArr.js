@@ -96,6 +96,7 @@ export const userArr = [
     name: "ring_number",
     label: "ბეჭდის ნომერი",
     type: "text",
+    notRequired: true,
   },
   {
     name: "date_expiration",

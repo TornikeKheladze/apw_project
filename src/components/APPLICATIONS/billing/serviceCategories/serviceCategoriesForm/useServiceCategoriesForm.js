@@ -64,14 +64,14 @@ export const useServiceCategoriesForm = () => {
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createCategory,
     onSuccess: (res) => {
-      mutateHandler(res, "კატეგორიის დამატება");
+      mutateHandler(res, "კატალოგის დამატება");
     },
   });
 
   const { mutate: updateMutate, isLoading: editLoading } = useMutation({
     mutationFn: updateCategory,
     onSuccess: (res) => {
-      mutateHandler(res, "კატეგორიის ცვლილება");
+      mutateHandler(res, "კატალოგის ცვლილება");
     },
   });
 

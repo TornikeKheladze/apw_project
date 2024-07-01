@@ -58,7 +58,7 @@ const GeneralForm = (props) => {
       onSubmit={handleSubmit(submitHandler)}
       className="flex flex-col gap-4"
     >
-      {formArray.map(({ name, label, type }) => {
+      {formArray.map(({ name, label, type, notRequired }) => {
         if (type === "select") {
           return (
             <div key={name}>
@@ -159,6 +159,8 @@ const GeneralForm = (props) => {
                           }
                         },
                       }
+                    : notRequired
+                    ? {}
                     : {
                         required: "ველი აუცილებელია",
                       }

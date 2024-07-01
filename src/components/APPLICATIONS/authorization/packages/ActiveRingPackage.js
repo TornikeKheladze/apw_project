@@ -238,7 +238,9 @@ const ActiveRingPackage = () => {
         <div className="p-5">
           <AuthForm
             isLoading={insertOrgPackageLoading || createInvoiceLoading}
-            formArray={orgPackageArr}
+            formArray={orgPackageArr.filter(
+              (item) => item.name !== "payment_period"
+            )}
             submitHandler={bindOrgToPackage}
             optionsObj={{
               package_id: renderPackages?.map((item) => {

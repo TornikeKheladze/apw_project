@@ -4,6 +4,10 @@ export const getOrgPackages = () => {
   return instance.get("/user/active/package");
 };
 
+export const getPaymentMethods = () => {
+  return instance.get("/active/package/payment/method");
+};
+
 export const getRingActivePackages = () => {
   return instance.get("/user/ring-active/package");
 };

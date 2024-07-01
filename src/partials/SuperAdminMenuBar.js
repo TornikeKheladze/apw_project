@@ -690,7 +690,7 @@ const MenuDetailBilling = () => {
           </NavLink>
           {useCheckPermission("bil_categories_get") && (
             <NavLink to="/billing/service-categories" onClick={hideMenuDetail}>
-              სერვისის კატეგორიები
+              სერვისის კატალოგები
             </NavLink>
           )}
           {useCheckPermission("bil_service_production_get") && (

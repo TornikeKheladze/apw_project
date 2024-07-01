@@ -26,7 +26,7 @@ const ServiceCategoriesForm = () => {
 
       <div className="card p-5 lg:w-2/3 lg:mx-auto">
         <h3 className="mb-3">
-          სერვისის კატეგორიის {action === "create" ? "დამატება" : "შეცვლა"}
+          სერვისის კატალოგის {action === "create" ? "დამატება" : "შეცვლა"}
         </h3>
         {isLoading || isFetching ? (
           <div className="flex flex-col items-center justify-center">

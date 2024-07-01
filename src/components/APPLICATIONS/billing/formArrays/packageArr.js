@@ -27,4 +27,9 @@ export const orgPackageArr = [
     label: "პაკეტი",
     type: "select",
   },
+  {
+    name: "payment_period",
+    label: "გადახდის პერიოდი",
+    type: "select",
+  },
 ];
