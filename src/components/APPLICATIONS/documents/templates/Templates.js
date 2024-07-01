@@ -1,6 +1,9 @@
 import AuthForm from "components/APPLICATIONS/authorization/authForm/AuthForm";
 import AuthTable from "components/APPLICATIONS/authorization/authTable/AuthTable";
-import { templateArr } from "components/APPLICATIONS/billing/formArrays/documentsArrs";
+import {
+  editTemplateArr,
+  templateArr,
+} from "components/APPLICATIONS/billing/formArrays/documentsArrs";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import Modal, { ModalBody, ModalFooter, ModalHeader } from "components/Modal";
@@ -30,7 +33,7 @@ const Templates = () => {
 
   const authorizedUser = useSelector((state) => state.user.authorizedUser);
 
-  const [filter, setFilter] = useState({});
+  const [filter, setFilter] = useState({ active: 1 });
   const [chosenCategory, setChosenCategory] = useState({});
 
   const buildCategoryTree = (categories, parentId = 0) => {
@@ -46,7 +49,7 @@ const Templates = () => {
     (item) => {
       return {
         ...item,
-        cat_id: idToName(catalogs, item.cat_id),
+        cat_id_displayName: idToName(catalogs, item.cat_id),
       };
     }
   );
@@ -71,7 +74,7 @@ const Templates = () => {
         {openModal.action === "შეცვლა" && (
           <div className="p-5">
             <AuthForm
-              formArray={templateArr}
+              formArray={editTemplateArr}
               submitHandler={editMutate}
               isLoading={editLoading}
               defaultValues={selectedTemplate}
@@ -82,6 +85,10 @@ const Templates = () => {
                     : item.org_id === authorizedUser?.oid
                 ),
                 org_id: organizations,
+                active: [
+                  { id: 1, label: "აქტიური" },
+                  { id: 0, label: "დაარქივებული" },
+                ],
               }}
             />
           </div>
@@ -128,13 +135,27 @@ const Templates = () => {
         )}
       </Modal>
       <div className="w-full flex justify-between mb-4">
-        <h3>შაბლონები</h3>
+        <h3>{filter?.active === 0 ? "დაარქივებული შაბლონები" : "შაბლონები"}</h3>
         <Button
           onClick={() => setOpenModal({ open: true, action: "დამატება" })}
         >
           <span>დამატება</span> <PlusIcon />
         </Button>
       </div>
+
+      <button
+        onClick={() => {
+          setFilter((prevState) => ({
+            ...prevState,
+            active: prevState.active === 0 ? 1 : 0,
+          }));
+        }}
+        className=" w-max block mb-4 underline px-2 py-1 rounded text-primary"
+      >
+        {filter?.active === 0
+          ? "აქტიური შაბლონების ნახვა"
+          : "დაარქივებული შაბლონების ნახვა"}
+      </button>
 
       <div className="card p-5 mb-4 !text-xs">
         <h2 className="text-sm mb-4">კატეგორიები</h2>

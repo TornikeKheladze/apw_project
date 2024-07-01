@@ -21,6 +21,14 @@ export const templateArr = [
   // { name: "template_code", label: "კოდი", type: "text" },
 ];
 
+export const editTemplateArr = [
+  { name: "template_name", label: "შაბლონის სახელი", type: "text" },
+  { name: "cat_id", label: "კატეგორია", type: "select" },
+  { name: "org_id", label: "ორგანიზაცია", type: "select" },
+  { name: "active", label: "აირჩიე სტატუსი", type: "select" },
+  // { name: "template_code", label: "კოდი", type: "text" },
+];
+
 export const templateColumnsArr = [
   { name: "column_placeholder", label: "სახელი (placeholder)", type: "text" },
   { name: "column_marker", label: "მარკერი", type: "text" },
