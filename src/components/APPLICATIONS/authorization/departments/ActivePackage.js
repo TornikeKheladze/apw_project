@@ -31,6 +31,10 @@ const ActivePackage = () => {
     },
   } = useDepartmentsTree();
 
+  const renderPackages = authorizedUser.superAdmin
+    ? packages
+    : packages.filter((item) => +item.oid === +authorizedUser.oid);
+
   return (
     <main className="workspace">
       <Alert message={alert.message} color={alert.type} dismissable />
@@ -77,7 +81,7 @@ const ActivePackage = () => {
             formArray={orgPackageArr}
             submitHandler={bindOrgToPackage}
             optionsObj={{
-              package_id: packages?.map((item) => {
+              package_id: renderPackages?.map((item) => {
                 return {
                   ...item,
                   name: `მომხმარებელი:${item.count}, ვადა:${item.exp} თვე, ფასი: ${item.price}`,
@@ -123,22 +127,16 @@ const ActivePackage = () => {
                            ${
                              authorizedUser.superAdmin
                                ? "cursor-pointer"
-                               : //  temporary
-                                 //  : "cursor-default"
-                                 "cursor-pointer"
+                               : "cursor-default"
                            }
                         `}
                         onClick={() => {
-                          // if (authorizedUser.superAdmin) {
-                          //   setActivatePackateModal({
-                          //     isOpen: true,
-                          //     package: item,
-                          //   });
-                          // }
-                          setActivatePackateModal({
-                            isOpen: true,
-                            package: item,
-                          });
+                          if (authorizedUser.superAdmin) {
+                            setActivatePackateModal({
+                              isOpen: true,
+                              package: item,
+                            });
+                          }
                         }}
                       >
                         {item.active === 1 ? "აქტიური" : "არააქტიური"}

@@ -14,11 +14,10 @@ import {
   createUserInvoiceDoc,
   getAllTemplates,
   getDocumentByUUID,
-  // getTemplateColumnsByTemplateId,
 } from "services/documents";
-// import { createInvoice } from "services/billingPackages";
 import { downloadPDF } from "helpers/downloadPDF";
 import { useSelector } from "react-redux";
+import { createInvoice } from "services/billingPackages";
 
 const useDepartmentsTree = () => {
   const queriClient = useQueryClient();
@@ -122,10 +121,10 @@ const useDepartmentsTree = () => {
     useMutation({
       mutationFn: insertOrgPackage,
       onSuccess: (data) => {
-        // createInvoiceMutate({
-        //   package_id: data.data.package_id,
-        //   invoice_id: data.data.uuid,
-        // });
+        createInvoiceMutate({
+          package_id: data.data.package_id,
+          invoice_id: data.data.uuid,
+        });
         queriClient.invalidateQueries(["searchOrgPackage", oid]);
         setAlert({
           message: "პაკეტი წარმატებით დაემატა",
@@ -188,19 +187,17 @@ const useDepartmentsTree = () => {
 
   const bindOrgToPackage = async (data) => {
     try {
-      // const res = await createInvoice({
-      //   ownerID: organizationData.dga[0].id,
-      //   agentID: oid,
-      // });
+      const res = await createInvoice({
+        ownerID: organizationData.dga[0].id,
+        agentID: oid,
+      });
       function addMonthsToDate(months) {
         const currentDate = new Date();
         currentDate.setMonth(currentDate.getMonth() + months);
         return currentDate.toISOString().split("T")[0];
       }
       const selectedPackage = packages.find((p) => +p.id === +data.package_id);
-      const randomNumbers = Array.from({ length: 3 }, () =>
-        Math.floor(Math.random() * 10)
-      );
+
       const insertData = {
         oid,
         package_id: data.package_id,
@@ -209,8 +206,7 @@ const useDepartmentsTree = () => {
         end_date: addMonthsToDate(selectedPackage.exp),
         template_id: templateForActiveOrganization.id,
         cat_id: templateForActiveOrganization.cat_id,
-        // invoice_id: res.data.invoiceNumber,
-        invoice_id: `${randomNumbers.join("")}-axc-${randomNumbers.join("")}`,
+        invoice_id: res.data.invoiceNumber,
       };
 
       // templateColums.forEach((item) => {

@@ -81,6 +81,8 @@ import UserStatistic from "components/APPLICATIONS/billing/statistic/UserStatist
 import ServiceStatistic from "components/APPLICATIONS/billing/statistic/ServiceStatistic";
 import TransactionStatistic from "components/APPLICATIONS/billing/statistic/TransactionStatistic";
 import ActivePackage from "components/APPLICATIONS/authorization/departments/ActivePackage";
+import RingPackages from "components/APPLICATIONS/authorization/packages/RingPackages";
+import ActiveRingPackage from "components/APPLICATIONS/authorization/packages/ActiveRingPackage";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -100,6 +102,10 @@ const Router = () => {
           <Route path="organizations/:typeId?" element={<Organizations />} />
           <Route path="departments/:oid" element={<DepartmentsTree />} />
           <Route path="activePackage/:oid" element={<ActivePackage />} />
+          <Route
+            path="activeRingPackage/:oid"
+            element={<ActiveRingPackage />}
+          />
           <Route path="positions/:oid/:did" element={<Positions />} />
           <Route path="users/:type/:id" element={<Users />} />
           <Route path="users/:type/:id/role" element={<GrantRoleToUsers />} />
@@ -118,6 +124,7 @@ const Router = () => {
           <Route path="/dashboard" element={<Dashboard />} />
 
           <Route path="/packages" element={<Packages />} />
+          <Route path="/ring-packages" element={<RingPackages />} />
 
           <Route path="/billing/userStatistic" element={<UserStatistic />} />
           <Route

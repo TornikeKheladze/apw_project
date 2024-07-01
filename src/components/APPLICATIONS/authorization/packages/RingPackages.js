@@ -3,12 +3,7 @@ import LoadingSpinner from "components/icons/LoadingSpinner";
 import Footer from "partials/Footer";
 import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import {
-  deletePackage,
-  getPackages,
-  insertPackage,
-  updatePackage,
-} from "services/packages";
+
 import AuthTable from "../authTable/AuthTable";
 import { packageArr } from "components/APPLICATIONS/billing/formArrays/packageArr";
 import Button from "components/Button";
@@ -17,8 +12,14 @@ import Modal, { ModalBody, ModalFooter, ModalHeader } from "components/Modal";
 import AuthForm from "../authForm/AuthForm";
 import { useSelector } from "react-redux";
 import { getOrganizations } from "services/organizations";
+import {
+  deleteRingPackage,
+  getRingPackages,
+  insertRingPackage,
+  updateRingPackage,
+} from "services/packages";
 
-const Packages = () => {
+const RingPackages = () => {
   const { authorizedUser } = useSelector((store) => store.user);
   const [alert, setAlert] = useState({
     type: "success",
@@ -32,8 +33,8 @@ const Packages = () => {
   const queryClient = useQueryClient();
 
   const { isLoading, data: packages = [] } = useQuery({
-    queryKey: ["getPackages"],
-    queryFn: () => getPackages().then((res) => res.data),
+    queryKey: ["getRingPackages"],
+    queryFn: () => getRingPackages().then((res) => res.data),
   });
 
   const { data: organizationData = { data: [], member: null, dga: [] } } =
@@ -47,7 +48,7 @@ const Packages = () => {
 
   const afterRequestHandler = (type, message) => {
     if (type === "success") {
-      queryClient.invalidateQueries("getPackages");
+      queryClient.invalidateQueries("getRingPackages");
     }
     setAlert({
       type: type,
@@ -63,36 +64,36 @@ const Packages = () => {
   };
 
   const { isLoading: createLoading, mutate: createMutate } = useMutation({
-    mutationFn: insertPackage,
+    mutationFn: insertRingPackage,
     onSuccess: () =>
-      afterRequestHandler("success", "პაკეტი წარმატებით დაემატა"),
+      afterRequestHandler("success", "ბეჭდის პაკეტი წარმატებით დაემატა"),
     onError: (data) =>
       afterRequestHandler("danger", data.response.data.message),
   });
   const { isLoading: deleteLoading, mutate: deleteMutate } = useMutation({
-    mutationFn: deletePackage,
+    mutationFn: deleteRingPackage,
     onSuccess: () =>
-      afterRequestHandler("success", "პაკეტი წარმატებით წაიშალა"),
+      afterRequestHandler("success", "ბეჭდის პაკეტი წარმატებით წაიშალა"),
     onError: () => afterRequestHandler("danger", "პაკეტის წაშლა ვერ მოხერხდა"),
   });
   const { isLoading: editLoading, mutate: editMutate } = useMutation({
-    mutationFn: updatePackage,
+    mutationFn: updateRingPackage,
     onSuccess: () =>
-      afterRequestHandler("success", "პაკეტი წარმატებით შეიცვალა"),
-    onError: () =>
-      afterRequestHandler("danger", "პაკეტის ცვლილება ვერ მოხერხდა"),
+      afterRequestHandler("success", "ბეჭდის პაკეტი წარმატებით შეიცვალა"),
+    onError: (data) =>
+      afterRequestHandler("danger", data.response.data.message),
   });
 
   const updatedPackageArr = authorizedUser.superAdmin
     ? [
-        ...packageArr,
+        ...packageArr.filter((item) => item.name !== "exp"),
         {
           name: "oid",
           label: "ავტ.პირი ან უწყება",
           type: "select",
         },
       ]
-    : packageArr;
+    : [...packageArr.filter((item) => item.name !== "exp")];
 
   const renderPackages = authorizedUser.superAdmin
     ? packages
@@ -110,11 +111,13 @@ const Packages = () => {
           setSelectedPackage({ id: "" });
         }}
       >
-        <ModalHeader>პაკეტის {openModal.action}</ModalHeader>
+        <ModalHeader>ბეჭდის პაკეტის {openModal.action}</ModalHeader>
         {openModal.action === "შეცვლა" && (
           <div className="p-5">
             <AuthForm
-              formArray={updatedPackageArr}
+              formArray={updatedPackageArr.filter(
+                (item) => item.name !== "oid"
+              )}
               submitHandler={editMutate}
               isLoading={editLoading}
               defaultValues={selectedPackage}
@@ -162,7 +165,7 @@ const Packages = () => {
         )}
       </Modal>
       <div className="w-full flex justify-between mb-4">
-        <h3>მომხმარებლის პაკეტები</h3>
+        <h3>ბეჭდის პაკეტები</h3>
         <Button
           onClick={() => setOpenModal({ open: true, action: "დამატება" })}
         >
@@ -199,7 +202,7 @@ const Packages = () => {
             }}
           />
         ) : (
-          <p>პაკეტები არ მოიძებნა</p>
+          <p>ბეჭდის პაკეტები არ მოიძებნა</p>
         )}
       </div>
 
@@ -208,4 +211,4 @@ const Packages = () => {
   );
 };
 
-export default Packages;
+export default RingPackages;

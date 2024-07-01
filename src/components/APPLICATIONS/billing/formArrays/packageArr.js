@@ -14,6 +14,11 @@ export const packageArr = [
     label: "ფასი",
     type: "text",
   },
+  {
+    name: "invoice_exp",
+    label: "ინვოისის მოქმედების ვადა (დღეები)",
+    type: "text",
+  },
 ];
 
 export const orgPackageArr = [

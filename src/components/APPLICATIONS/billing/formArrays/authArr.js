@@ -39,11 +39,11 @@ export const orgArr = [
     label: "ტიპი",
     type: "select",
   },
-  {
-    name: "reseller",
-    label: "რესელერი",
-    type: "select",
-  },
+  // {
+  //   name: "reseller",
+  //   label: "რესელერი",
+  //   type: "select",
+  // },
 ];
 
 export const userArr = [
@@ -86,6 +86,16 @@ export const userArr = [
     name: "active",
     label: "სტატუსი",
     type: "select",
+  },
+  {
+    name: "signature",
+    label: "ხელმომწერი პირი",
+    type: "select",
+  },
+  {
+    name: "ring_number",
+    label: "ბეჭდის ნომერი",
+    type: "text",
   },
   {
     name: "date_expiration",

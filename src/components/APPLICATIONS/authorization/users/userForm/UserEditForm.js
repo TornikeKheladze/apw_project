@@ -105,6 +105,10 @@ const UserEditForm = () => {
             { name: "ორგანიზაცია", id: 1 },
             { name: "ფიზიკური პირი", id: 0 },
           ],
+          signature: [
+            { name: "დიახ", id: 1 },
+            { name: "არა", id: 0 },
+          ],
         }}
         updateDataObj={action === "edit" ? fetchedUserData : null}
         isLoading={createUserLoading || updateUserLoading}

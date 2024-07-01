@@ -59,6 +59,7 @@ const useOrganization = () => {
     mutationFn: (data) =>
       addOrganization({
         ...data,
+        reseller: 1,
         type: openModal.orgTypeId === SIPTYPEID ? SIPTYPEID : data.type,
       }),
     onSuccess: (data) => {

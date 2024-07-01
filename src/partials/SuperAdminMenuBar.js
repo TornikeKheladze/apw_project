@@ -536,11 +536,40 @@ const MenuDetailAuth = () => {
           >
             მომხმარებლები
           </NavLink>
-          {user.superAdmin && (
+          {user.superAdmin || authorizedOrganization.member_id === null ? (
             <NavLink to={`/packages`} onClick={hideMenuDetail}>
               {/* <PackageIcon /> */}
-              პაკეტები
+              მომხმარებლის პაკეტები
             </NavLink>
+          ) : (
+            <></>
+          )}
+          {user.superAdmin || authorizedOrganization.member_id === null ? (
+            <NavLink to={`/ring-packages`} onClick={hideMenuDetail}>
+              {/* <PackageIcon /> */}
+              ბეჭდის პაკეტები
+            </NavLink>
+          ) : (
+            <></>
+          )}
+          {!user.superAdmin ? (
+            <NavLink
+              to={`/activeRingPackage/${user.oid}`}
+              onClick={hideMenuDetail}
+            >
+              {/* <PackageIcon /> */}
+              ბეჭდის პაკეტის შეძენა
+            </NavLink>
+          ) : (
+            <></>
+          )}
+          {!user.superAdmin ? (
+            <NavLink to={`/activePackage/${user.oid}`} onClick={hideMenuDetail}>
+              {/* <PackageIcon /> */}
+              მომხმარებლის პაკეტის შეძენა
+            </NavLink>
+          ) : (
+            <></>
           )}
         </MenuBarCollapse>
 

@@ -5,7 +5,7 @@ const Error404 = () => {
     <>
       <section className="top-bar">
         {/* Brand */}
-        <span className="brand">Yeti</span>
+        {/* <span className="brand">Yeti</span> */}
       </section>
 
       <div className="container flex items-center justify-center mt-20 py-10">
