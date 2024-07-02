@@ -128,7 +128,7 @@ Menu Bar
   .menu-detail {
     @apply absolute z-10 top-0 bottom-0 p-10 bg-foreground overflow-y-scroll;
     left: -220px;
-    width: 220px;
+    /* width: 220px; */
     @apply transition-all duration-200 ease-linear;
 
     &.open {

@@ -32,6 +32,7 @@ import useCheckPermission, { useCheckAID } from "helpers/useCheckPermission";
 import { useQuery } from "react-query";
 import { getOrganizationById } from "services/organizations";
 import { SIPTYPEID } from "data/applications";
+import MessageIcon from "components/icons/MessageIcon";
 
 const MenuBarContext = createContext();
 
@@ -536,7 +537,7 @@ const MenuDetailAuth = () => {
           >
             მომხმარებლები
           </NavLink>
-          {user.superAdmin || authorizedOrganization.member_id === null ? (
+          {user.superAdmin || user.isSip ? (
             <NavLink to={`/packages`} onClick={hideMenuDetail}>
               {/* <PackageIcon /> */}
               მომხმარებლის პაკეტები
@@ -544,7 +545,7 @@ const MenuDetailAuth = () => {
           ) : (
             <></>
           )}
-          {user.superAdmin || authorizedOrganization.member_id === null ? (
+          {user.superAdmin || user.isSip ? (
             <NavLink to={`/ring-packages`} onClick={hideMenuDetail}>
               {/* <PackageIcon /> */}
               ბეჭდის პაკეტები
@@ -552,7 +553,7 @@ const MenuDetailAuth = () => {
           ) : (
             <></>
           )}
-          {!user.superAdmin ? (
+          {!user.superAdmin && (
             <NavLink
               to={`/activeRingPackage/${user.oid}`}
               onClick={hideMenuDetail}
@@ -560,18 +561,37 @@ const MenuDetailAuth = () => {
               {/* <PackageIcon /> */}
               ბეჭდის პაკეტის შეძენა
             </NavLink>
-          ) : (
-            <></>
           )}
-          {!user.superAdmin ? (
+          {!user.superAdmin && (
             <NavLink to={`/activePackage/${user.oid}`} onClick={hideMenuDetail}>
               {/* <PackageIcon /> */}
               მომხმარებლის პაკეტის შეძენა
             </NavLink>
-          ) : (
-            <></>
           )}
         </MenuBarCollapse>
+        {user.superAdmin || user.isSip ? (
+          <>
+            <NavLink
+              to={user.superAdmin ? "/sms" : `/sms/${user.oid}`}
+              onClick={hideMenuDetail}
+            >
+              <MessageIcon />
+              SMS-ების გაგზავნა
+            </NavLink>
+          </>
+        ) : (
+          <></>
+        )}
+        {user.superAdmin ? (
+          <>
+            <NavLink to={"smsCrud"} onClick={hideMenuDetail}>
+              <MessageIcon />
+              SMS-ების მართვა
+            </NavLink>
+          </>
+        ) : (
+          <></>
+        )}
 
         <hr />
       </div>

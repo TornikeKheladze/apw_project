@@ -104,3 +104,26 @@ export const userArr = [
     type: "datetime-local",
   },
 ];
+
+export const smsArr = [
+  {
+    name: "message_type",
+    label: "ტიპი",
+    type: "select",
+  },
+  {
+    name: "subject",
+    label: "საგანი (subject)",
+    type: "textarea",
+  },
+  {
+    name: "content",
+    label: "შეტყობინება",
+    type: "textarea",
+  },
+  {
+    name: "email_content",
+    label: "ელ.ფოსტის შეტყობინება",
+    type: "textarea",
+  },
+];

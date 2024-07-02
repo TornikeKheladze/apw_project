@@ -80,9 +80,11 @@ import UserEditForm from "components/APPLICATIONS/authorization/users/userForm/U
 import UserStatistic from "components/APPLICATIONS/billing/statistic/UserStatistic";
 import ServiceStatistic from "components/APPLICATIONS/billing/statistic/ServiceStatistic";
 import TransactionStatistic from "components/APPLICATIONS/billing/statistic/TransactionStatistic";
-import ActivePackage from "components/APPLICATIONS/authorization/departments/ActivePackage";
+import ActivePackage from "components/APPLICATIONS/authorization/packages/ActivePackage";
 import RingPackages from "components/APPLICATIONS/authorization/packages/RingPackages";
 import ActiveRingPackage from "components/APPLICATIONS/authorization/packages/ActiveRingPackage";
+import Sms from "components/APPLICATIONS/authorization/sms/Sms";
+import SmsCrud from "components/APPLICATIONS/authorization/sms/SmsCrud";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -107,6 +109,8 @@ const Router = () => {
             element={<ActiveRingPackage />}
           />
           <Route path="positions/:oid/:did" element={<Positions />} />
+          <Route path="sms/:oid?" element={<Sms />} />
+          <Route path="smsCrud" element={<SmsCrud />} />
           <Route path="users/:type/:id" element={<Users />} />
           <Route path="users/:type/:id/role" element={<GrantRoleToUsers />} />
           <Route

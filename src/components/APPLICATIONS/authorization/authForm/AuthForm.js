@@ -60,6 +60,28 @@ const AuthForm = ({
               </CustomSelect>
             </div>
           );
+        } else if (type === "textarea") {
+          return (
+            <div key={name}>
+              <Label
+                className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
+              >
+                {label}
+              </Label>
+              <textarea
+                name={name}
+                step="any"
+                {...register(name, {
+                  validate: {
+                    pattern: (value) => value?.length > 0,
+                  },
+                })}
+                className={`${
+                  errors[name] ? "border-danger" : ""
+                } form-control`}
+              />
+            </div>
+          );
         } else {
           return (
             <div key={name}>

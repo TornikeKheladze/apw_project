@@ -6,6 +6,7 @@ const initialState = {
   authorizedUser: {
     roles: [],
     superAdmin: false,
+    isSip: false,
   },
 };
 

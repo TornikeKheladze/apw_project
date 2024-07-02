@@ -1,4 +1,3 @@
-import Footer from "partials/Footer";
 import Button from "components/Button";
 
 import Alert from "components/Alert.js";
@@ -25,7 +24,9 @@ import { downloadPDF } from "helpers/downloadPDF.js";
 import { getOrganizations } from "services/organizations.js";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import Dropdown from "components/Dropdown.js";
+import { truncateText } from "helpers/truncateText.js";
 
 const ActivePackage = () => {
   const queriClient = useQueryClient();
@@ -44,7 +45,6 @@ const ActivePackage = () => {
     isOpen: false,
     package: {},
   });
-  const [invoiceID, setInvoiceID] = useState("");
 
   const { authorizedUser } = useSelector((store) => store.user);
 
@@ -80,10 +80,7 @@ const ActivePackage = () => {
   });
   const { mutate: createInvoiceMutate, isLoading: createInvoiceLoading } =
     useMutation({
-      mutationFn: () =>
-        createUserInvoiceDoc({
-          invoice_number: invoiceID,
-        }),
+      mutationFn: createUserInvoiceDoc,
       onSuccess: () => {
         setAlert({
           message: "ინვოისი წარმატებით შეიქმნა",
@@ -101,8 +98,10 @@ const ActivePackage = () => {
   const { mutate: insertOrgPackageMutate, isLoading: insertOrgPackageLoading } =
     useMutation({
       mutationFn: insertOrgPackage,
-      onSuccess: () => {
-        createInvoiceMutate();
+      onSuccess: (data) => {
+        createInvoiceMutate({
+          invoice_number: data.data.id,
+        });
         queriClient.invalidateQueries(["searchOrgPackage", oid]);
         setAlert({
           message: "პაკეტი წარმატებით დაემატა",
@@ -146,6 +145,15 @@ const ActivePackage = () => {
           setAlert({ message: "", type: "success" });
         }, 2500);
       },
+      onError: (data) => {
+        setAlert({
+          type: "danger",
+          message: data.response.data.message,
+        });
+        setTimeout(() => {
+          setAlert({ message: "", type: "danger" });
+        }, 2500);
+      },
     });
 
   const { data: templates = [] } = useQuery({
@@ -173,16 +181,12 @@ const ActivePackage = () => {
   //   enabled: templateForActiveOrganization.id ? true : false,
   // });
 
-  console.log(invoiceID);
-
   const bindOrgToPackage = async (data) => {
     try {
       const res = await createInvoice({
         ownerID: organizationData.dga[0].id,
         agentID: oid,
       });
-      console.log(res.data);
-      setInvoiceID(res.data.invoiceID);
       function addMonthsToDate(months) {
         const currentDate = new Date();
         currentDate.setMonth(currentDate.getMonth() + months);
@@ -217,10 +221,14 @@ const ActivePackage = () => {
 
   const renderPackages = authorizedUser.superAdmin
     ? packages
-    : packages.filter((item) => +item.oid === +authorizedUser.oid);
+    : packages.filter((item) => +item.oid === +oid);
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data;
+  const organization = organizations.find((org) => +org?.id === +oid) || {};
 
   return (
-    <main className="workspace">
+    <main className={"workspace"}>
       <Alert message={alert.message} color={alert.type} dismissable />
 
       <Modal
@@ -284,6 +292,35 @@ const ActivePackage = () => {
         title={"პაკეტის წაშლა"}
       />
       <div className="card relative p-5 md:text-base text-xs">
+        {authorizedUser.isSip ? (
+          <>
+            <h4>ავტორიზირებული პირი</h4>
+            <Dropdown
+              content={
+                <div className="dropdown-menu min-w-[12rem]">
+                  {organizations
+                    ?.filter((org) => org.id !== organization.id)
+                    .map((org) => (
+                      <Link
+                        key={org.id + Math.random()}
+                        to={`/activePackage/${org.id}`}
+                      >
+                        {org.name}
+                      </Link>
+                    ))}
+                </div>
+              }
+            >
+              <Button className="uppercase mb-6 min-w-[12rem] flex justify-between w-1/2">
+                {truncateText(organization?.name, 40)}
+                <span className="ltr:ml-3 rtl:mr-3 la la-caret-down text-xl leading-none"></span>
+              </Button>
+            </Dropdown>
+          </>
+        ) : (
+          <></>
+        )}
+
         <div className="flex items-center justify-between">
           <h3 className="mb-3 text-base">მიმდინარე პაკეტები</h3>
           <Button onClick={() => setPackageModal(true)}>
@@ -310,13 +347,13 @@ const ActivePackage = () => {
                         color={item.active === 1 ? "success" : "danger"}
                         className={`text-xs rounded-lg p-1 w-20 justify-center
                            ${
-                             authorizedUser.superAdmin
+                             authorizedUser.isSip
                                ? "cursor-pointer"
                                : "cursor-default"
                            }
                         `}
                         onClick={() => {
-                          if (authorizedUser.superAdmin) {
+                          if (authorizedUser.isSip) {
                             setActivatePackateModal({
                               isOpen: true,
                               package: item,
@@ -360,7 +397,6 @@ const ActivePackage = () => {
           <p>პაკეტები არ მოიძებნა</p>
         )}
       </div>
-      <Footer />
     </main>
   );
 };

@@ -85,6 +85,12 @@ const ActiveRingPackage = () => {
           type: "success",
         });
       },
+      onError: (data) => {
+        setAlert({
+          type: "danger",
+          message: data.response.data.message,
+        });
+      },
     });
 
   const { mutate: insertOrgPackageMutate, isLoading: insertOrgPackageLoading } =
@@ -92,8 +98,7 @@ const ActiveRingPackage = () => {
       mutationFn: insertRingActivePackage,
       onSuccess: (data) => {
         createInvoiceMutate({
-          package_id: data.data.package_id,
-          invoice_id: data.data.uuid,
+          invoice_number: data.data.id,
         });
         queriClient.invalidateQueries(["searchRingPackage", oid]);
         setAlert({
