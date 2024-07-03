@@ -6,7 +6,7 @@ export const packageArr = [
   },
   {
     name: "exp",
-    label: "თვეების რაოდენობა",
+    label: "დღეების რაოდენობა",
     type: "text",
   },
   {

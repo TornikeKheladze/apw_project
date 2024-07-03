@@ -43,6 +43,7 @@ const ServiceCategoriesDetails = () => {
       serviceCategory.parentID
     ),
     ownerID: idToName(organizations, serviceCategory.ownerID),
+    catType: serviceCategory.catType === 1 ? "სერვისების პაკეტი" : "კატალოგი",
   };
 
   const categoriesTree = buildTreeMenu(categoriesArr, +id);
@@ -51,7 +52,7 @@ const ServiceCategoriesDetails = () => {
     <main className="workspace">
       <div className="mb-3 flex justify-between items-center">
         <h2>
-          კატეგორია: <br className="sm:hidden" /> {updatedData.categoryName}
+          კატალოგი: <br className="sm:hidden" /> {updatedData.categoryName}
         </h2>
         <Link
           to={`/billing/service-categories/edit/${id}`}
@@ -61,9 +62,9 @@ const ServiceCategoriesDetails = () => {
         </Link>
       </div>
       <div className="card p-5 mb-3">
-        <h4 className="mb-3">ქვეკატეგორიები</h4>
+        <h4 className="mb-3">ქვეკატალოგები</h4>
         {categoriesTree.length === 0 ? (
-          <p>ქვეკატეგორია ვერ მოიძებნა</p>
+          <p>ქვეკატალოგი ვერ მოიძებნა</p>
         ) : (
           <ServiceCategoryTreeMenu categories={categoriesTree} />
         )}

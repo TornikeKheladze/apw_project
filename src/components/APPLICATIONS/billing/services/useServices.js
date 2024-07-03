@@ -8,12 +8,14 @@ import { getCategories } from "services/serviceCategories";
 import { useQueryClient } from "react-query";
 import { statusBadge } from "helpers/CheckStatusForBilling";
 import { getOrganizations } from "services/organizations";
+import { useSelector } from "react-redux";
 
 export const useServices = () => {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState({});
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [chosenCategory, setChosenCategory] = useState({});
+  const { authorizedUser } = useSelector((store) => store.user);
 
   const { data: servicesData = [{}], isLoading: servicesLoading } = useQuery({
     queryKey: "getAllServices",
@@ -41,10 +43,16 @@ export const useServices = () => {
     },
   });
 
-  const services = servicesData.map((service) => ({
-    ...service,
-    id: service.serviceID,
-  }));
+  const services = servicesData
+    .map((service) => ({
+      ...service,
+      id: service.serviceID,
+    }))
+    .filter((service) => {
+      if (!authorizedUser.isSip && !authorizedUser.superAdmin)
+        return service.applicantRegistrationApi === 1;
+      return service;
+    });
 
   const categories = categoriesData.map((category) => ({
     ...category,

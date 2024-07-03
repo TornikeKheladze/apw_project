@@ -2,7 +2,7 @@ import Button from "components/Button";
 
 import Alert from "components/Alert.js";
 import LoadingSpinner from "components/icons/LoadingSpinner.js";
-import Modal, { ModalHeader } from "components/Modal.js";
+import Modal, { ModalBody, ModalHeader } from "components/Modal.js";
 import { orgPackageArr } from "components/APPLICATIONS/billing/formArrays/packageArr.js";
 import DeleteModal from "components/customModal/DeleteModal.js";
 import { createInvoice } from "services/billingPackages.js";
@@ -12,7 +12,11 @@ import {
   getAllTemplates,
   getDocumentByUUID,
 } from "services/documents.js";
-import { activatePackage, getPackages } from "services/packages.js";
+import {
+  activatePackage,
+  getPackages,
+  getPaymentDiagram,
+} from "services/packages.js";
 import {
   deleteOrgPackage,
   getPaymentMethods,
@@ -59,6 +63,7 @@ const ActivePackage = () => {
     isOpen: false,
     package: {},
   });
+  const [diagramModal, setDiagramModal] = useState(false);
 
   const { authorizedUser } = useSelector((store) => store.user);
 
@@ -180,6 +185,15 @@ const ActivePackage = () => {
     queryFn: () => getPaymentMethods().then((res) => res.data.data),
   });
 
+  const {
+    data: paymentDiagram = [],
+    isLoading: paymentDiagramLoading,
+    mutate: getPaymentDiagramMutate,
+  } = useMutation({
+    mutationFn: (id) => getPaymentDiagram(id).then((res) => res.data),
+    onSuccess: () => setDiagramModal(true),
+  });
+
   const templateForActiveOrganization =
     templates.filter((template) => +template.org_id === +oid)[0] || {};
 
@@ -273,9 +287,45 @@ const ActivePackage = () => {
   };
 
   return (
-    <main className={"workspace"}>
+    <main className="workspace">
       <Alert message={alert.message} color={alert.type} dismissable />
+      {getDocumentLoading || paymentDiagramLoading ? (
+        <LoadingSpinner blur />
+      ) : (
+        <></>
+      )}
 
+      <Modal
+        active={diagramModal}
+        centered
+        onClose={() => setDiagramModal(false)}
+      >
+        <ModalHeader>გადახდების დიაგრამა</ModalHeader>
+        <ModalBody>
+          <table>
+            <thead>
+              <tr>
+                <th className="pr-1">თარიღი</th>
+                <th className="pr-1">გადასახდელი</th>
+                <th className="pr-1">სრული</th>
+                <th className="pr-1">დარჩენილი</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paymentDiagram.map((item) => {
+                return (
+                  <tr key={item.id}>
+                    <td className="text-center">{item.month}</td>
+                    <td className="text-center">{item.pay}</td>
+                    <td className="text-center">{item.pay_after}</td>
+                    <td className="text-center">{item.to_sav}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </ModalBody>
+      </Modal>
       <Modal
         active={activatePackageModal.isOpen}
         centered
@@ -397,6 +447,7 @@ const ActivePackage = () => {
         loading={deleteOrgPackageLoading}
         title={"პაკეტის წაშლა"}
       />
+
       <div className="card relative p-5 md:text-base text-xs">
         {authorizedUser.isSip ? (
           <>
@@ -435,7 +486,6 @@ const ActivePackage = () => {
         </div>
         {orgPackages.length ? (
           <div className="overflow-x-auto mt-2">
-            {getDocumentLoading && <LoadingSpinner blur />}
             <table className="w-full">
               <thead>
                 <tr className="text-left">
@@ -443,6 +493,9 @@ const ActivePackage = () => {
                   <th>რაოდენობა</th>
                   <th>დაწყების თარიღი</th>
                   <th>დასრულების თარიღი</th>
+                  <th>გადახდის დიაგრამა</th>
+                  <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -473,6 +526,16 @@ const ActivePackage = () => {
                     <td>{item.count}</td>
                     <td>{item.start_date}</td>
                     <td>{item.end_date}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="dark:text-gray-700 text-sm leading-none"
+                        onClick={() => getPaymentDiagramMutate(item.id)}
+                      >
+                        ნახვა
+                        <span className="la la-eye ml-1"></span>
+                      </button>
+                    </td>
                     <td>
                       <button
                         onClick={() =>

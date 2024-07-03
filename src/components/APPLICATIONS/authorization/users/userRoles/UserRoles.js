@@ -17,8 +17,6 @@ export default function UserRoles() {
     alert,
   } = useUserRoles();
 
-  console.log(availableRoles);
-
   return (
     <div className=" relative h-max ">
       <Alert message={alert.message} color={alert.type} dismissable />

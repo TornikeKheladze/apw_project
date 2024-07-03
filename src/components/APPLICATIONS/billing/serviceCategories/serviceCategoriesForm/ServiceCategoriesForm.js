@@ -48,8 +48,12 @@ const ServiceCategoriesForm = () => {
               optionsObj={{
                 ownerID: organizations,
                 catType: [
-                  { name: "noli", id: 0 },
-                  { name: "erti", id: 1 },
+                  { name: "კატალოგი", id: 0 },
+                  { name: "სერვისების პაკეტი", id: 1 },
+                ],
+                applicantRegistrationApi: [
+                  { name: "სახელმწიფო უწყებებისთვის", id: 0 },
+                  { name: "ავტორიზირებული პირებისათვის", id: 1 },
                 ],
               }}
             />

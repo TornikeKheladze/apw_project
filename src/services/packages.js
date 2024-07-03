@@ -64,3 +64,7 @@ export const deleteRingPackage = async (id) => {
 export const activatePackage = (invoiceId) => {
   return instance.get(`/admin/package-active/${invoiceId}`);
 };
+
+export const getPaymentDiagram = (activePackageId) => {
+  return instance.get(`user/active/package/diagram/${activePackageId}`);
+};

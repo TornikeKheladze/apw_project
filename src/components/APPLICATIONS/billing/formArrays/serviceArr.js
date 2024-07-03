@@ -29,6 +29,11 @@ export const serviceCategoriesArr = [
   },
   { name: "parentID", label: "parentID", type: "select" },
   {
+    name: "applicantRegistrationApi",
+    label: "applicantRegistrationApi",
+    type: "select",
+  },
+  {
     name: "usedQuantity",
     label: "გამოყენებული რაოდენობა",
     type: "number",
@@ -78,6 +83,11 @@ export const serviceArr = [
   {
     name: "ownerID",
     label: "სერვისის მომწოდებელი",
+    type: "select",
+  },
+  {
+    name: "applicantRegistrationApi",
+    label: "applicantRegistrationApi",
     type: "select",
   },
   {
