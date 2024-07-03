@@ -17,7 +17,7 @@ export const updateCategory = async (data) => {
 };
 
 export const getCategoryById = async (id) => {
-  return instance.get(`/billing-java/categories/${id}`);
+  return instance.get(`/billing-java/categories/get/${id}`);
 };
 
 export const getCategoryProduction = async () => {

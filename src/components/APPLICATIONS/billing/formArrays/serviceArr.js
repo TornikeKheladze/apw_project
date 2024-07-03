@@ -2,7 +2,7 @@ export const serviceCategoriesArr = [
   {
     filter: "categoryName",
     name: "categoryName",
-    label: "კატეგორიის სახელი",
+    label: "კატალოგის სახელი",
     type: "text",
   },
   {
@@ -10,7 +10,7 @@ export const serviceCategoriesArr = [
     label: "კალკულაციის პერიოდი",
     type: "number",
   },
-  { name: "catType", label: "კატეგორიის ტიპი", type: "select" },
+  { name: "catType", label: "კატალოგის ტიპი", type: "select" },
   {
     name: "chargeCalculationEndDate",
     label: "მოსაკრებლის კალკულაციის დასრულების თარიღი",
@@ -67,7 +67,7 @@ export const serviceArr = [
   {
     filter: "select",
     name: "categoryID",
-    label: "კატეგორია",
+    label: "კატალოგი",
     type: "select",
   },
   {
@@ -118,7 +118,7 @@ export const serviceParametersArr = [
     label: "პარამეტრის ტიპი",
     type: "select",
   },
-  { filter: "select", name: "catID", label: "კატეგორია", type: "select" },
+  { filter: "select", name: "catID", label: "კატალოგი", type: "select" },
 ];
 
 export const serviceParametersTypeArr = [
@@ -186,7 +186,7 @@ export const chargesArr = [
   {
     filter: "select",
     name: "catID",
-    label: "კატეგორია",
+    label: "კატალოგი",
     type: "select",
   },
 ];
@@ -207,7 +207,7 @@ export const salesArr = [
   {
     filter: "select",
     name: "catID",
-    label: "კატეგორია",
+    label: "კატალოგი",
     type: "select",
   },
   {
@@ -382,7 +382,7 @@ export const categoryProductionArr = [
   {
     filter: "select",
     name: "catID",
-    label: "კატეგორია",
+    label: "კატალოგი",
     type: "select",
   },
 

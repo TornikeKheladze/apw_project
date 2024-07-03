@@ -25,7 +25,7 @@ const Services = () => {
   return (
     <main className="workspace overflow-hidden pb-8">
       <div className="card py-3 mb-3">
-        <h4 className="ml-3">სერვისის კატეგორიები</h4>
+        <h4 className="ml-3">სერვისის კატალოგები</h4>
         <ServiceCategoryTreeMenu
           categories={buildCategoryTree(categories)}
           chosenItem={chosenCategory}

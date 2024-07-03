@@ -44,6 +44,11 @@ export const orgArr = [
   //   label: "რესელერი",
   //   type: "select",
   // },
+  {
+    name: "user_quota",
+    label: "უფასო მომხმარებლების რაოდენობა",
+    type: "text",
+  },
 ];
 
 export const userArr = [

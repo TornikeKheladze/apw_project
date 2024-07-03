@@ -5,7 +5,7 @@ export const getAllServices = () => {
 };
 
 export const getServiceById = async (id) => {
-  return instance.get(`/billing-java/services/${id}`);
+  return instance.get(`/billing-java/services/get/${id}`);
 };
 
 export const createService = async (data) => {

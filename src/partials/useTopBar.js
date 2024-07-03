@@ -37,6 +37,7 @@ export const useTopBar = () => {
       );
     },
     onError: () => navigate("/login"),
+    retry: false,
   });
 
   const [darkMode, toggleDarkMode] = useDarkMode();

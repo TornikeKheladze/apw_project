@@ -3,7 +3,6 @@ import Button from "components/Button";
 import Alert from "components/Alert.js";
 import LoadingSpinner from "components/icons/LoadingSpinner.js";
 import Modal, { ModalHeader } from "components/Modal.js";
-import AuthForm from "../authForm/AuthForm.js";
 import { orgPackageArr } from "components/APPLICATIONS/billing/formArrays/packageArr.js";
 import DeleteModal from "components/customModal/DeleteModal.js";
 import { createInvoice } from "services/billingPackages.js";
@@ -27,8 +26,23 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Dropdown from "components/Dropdown.js";
 import { truncateText } from "helpers/truncateText.js";
+import { useForm, useWatch } from "react-hook-form";
+import Label from "components/form/Label.js";
+import CustomSelect from "components/form/CustomSelect.js";
 
 const ActivePackage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm({});
+
+  const payment_period = useWatch({
+    control,
+    name: "payment_period",
+  });
+
   const queriClient = useQueryClient();
   const { oid } = useParams();
   const [alert, setAlert] = useState({
@@ -100,7 +114,7 @@ const ActivePackage = () => {
       mutationFn: insertOrgPackage,
       onSuccess: (data) => {
         createInvoiceMutate({
-          invoice_number: data.data.id,
+          invoice_number: data.data.data.id,
         });
         queriClient.invalidateQueries(["searchOrgPackage", oid]);
         setAlert({
@@ -195,9 +209,8 @@ const ActivePackage = () => {
       const selectedPackage = packages.find((p) => +p.id === +data.package_id);
 
       const insertData = {
+        ...data,
         oid,
-        package_id: data.package_id,
-        payment_period: data.payment_period,
         count: selectedPackage.count,
         start_date: new Date().toISOString().split("T")[0],
         end_date: addMonthsToDate(selectedPackage.exp),
@@ -226,6 +239,38 @@ const ActivePackage = () => {
     ? [...organizationData.member, ...organizationData.data]
     : organizationData.data;
   const organization = organizations.find((org) => +org?.id === +oid) || {};
+
+  const optionsObj = {
+    package_id: renderPackages?.map((item) => {
+      return {
+        ...item,
+        name: `მომხმარებელი:${item.count}, ვადა:${item.exp} თვე, ფასი: ${item.price}`,
+      };
+    }),
+    payment_period: paymentMethods,
+  };
+
+  const formArr =
+    +payment_period === 5
+      ? [
+          ...orgPackageArr,
+          {
+            name: "payment_methos_data",
+            label: "აირჩიეთ თარიღი",
+            type: "date",
+          },
+        ]
+      : orgPackageArr;
+
+  const today = new Date();
+  const endOfYear = new Date(today.getFullYear(), 11, 31);
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
   return (
     <main className={"workspace"}>
@@ -268,20 +313,81 @@ const ActivePackage = () => {
       >
         <ModalHeader>პაკეტის დამატება</ModalHeader>
         <div className="p-5">
-          <AuthForm
-            isLoading={insertOrgPackageLoading || createInvoiceLoading}
-            formArray={orgPackageArr}
-            submitHandler={bindOrgToPackage}
-            optionsObj={{
-              package_id: renderPackages?.map((item) => {
-                return {
-                  ...item,
-                  name: `მომხმარებელი:${item.count}, ვადა:${item.exp} თვე, ფასი: ${item.price}`,
-                };
-              }),
-              payment_period: paymentMethods,
-            }}
-          />
+          <form
+            onSubmit={handleSubmit(bindOrgToPackage)}
+            // onSubmit={handleSubmit((დატა) => console.log(დატა))}
+            className="flex flex-col gap-4"
+          >
+            {formArr.map(({ name, label, type }) => {
+              if (type === "select") {
+                return (
+                  <div key={name}>
+                    <Label
+                      className={`block mb-1  ${
+                        errors[name] ? "text-danger" : ""
+                      }`}
+                    >
+                      {label}
+                    </Label>
+                    <CustomSelect
+                      name={name}
+                      register={register}
+                      className={`${errors[name] ? "border-danger" : ""}`}
+                      rules={{ required: "ველი აუცილებელია" }}
+                    >
+                      <option value="">{label}</option>
+                      {optionsObj &&
+                        optionsObj[name]?.map((item) => (
+                          <option
+                            className="p-3"
+                            key={item.id.toString() + item.name}
+                            value={item.id}
+                          >
+                            {item.label || item.name}
+                          </option>
+                        ))}
+                    </CustomSelect>
+                  </div>
+                );
+              } else {
+                return (
+                  <div key={name}>
+                    <Label
+                      className={`block mb-1  ${
+                        errors[name] ? "text-danger" : ""
+                      }`}
+                    >
+                      {label}
+                    </Label>
+                    <input
+                      type="date"
+                      name={name}
+                      min={formatDate(today)}
+                      max={formatDate(endOfYear)}
+                      {...register(name, {
+                        required: "ველი აუცილებელია",
+                      })}
+                      className={`${
+                        errors[name] ? "border-danger" : ""
+                      } form-control`}
+                    />
+                  </div>
+                );
+              }
+            })}
+            <div className="flex items-center justify-between">
+              <Button
+                disabled={insertOrgPackageLoading || createInvoiceLoading}
+                className="w-max"
+              >
+                {insertOrgPackageLoading || createInvoiceLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  "დადასტურება"
+                )}
+              </Button>
+            </div>
+          </form>
         </div>
       </Modal>
       <DeleteModal
