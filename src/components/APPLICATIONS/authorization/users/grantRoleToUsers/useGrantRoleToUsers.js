@@ -1,4 +1,3 @@
-import { APPLICATIONS } from "data/applications";
 import { buildMemberList } from "helpers/treeMenuBuilder";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -84,8 +83,8 @@ const useGrantRoleToUsers = () => {
 
   const submitHandler = async () => {
     const aid = rolesData.roles.find((role) => +role.id === +selectedRole).aid;
-    const url = APPLICATIONS.find((app) => +app.id === +aid).url;
-    setRoleMutate({ aid, url, role_id: selectedRole, user_id: selectedUsers });
+    // const url = APPLICATIONS.find((app) => +app.id === +aid).url;
+    setRoleMutate({ aid, role_id: selectedRole, user_id: selectedUsers });
   };
 
   const idFields = {

@@ -1,4 +1,3 @@
-import { APPLICATIONS } from "data/applications";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
@@ -119,7 +118,7 @@ const useUserRoles = () => {
     setRolesMutate({
       role_id: role.id,
       user_id: [id],
-      url: APPLICATIONS.find((app) => +app.id === +role.aid).url,
+      // url: APPLICATIONS.find((app) => +app.id === +role.aid).url,
     });
   };
 
@@ -128,7 +127,7 @@ const useUserRoles = () => {
       aid: data.aid,
       role_id: data.id,
       user_id: [id],
-      url: APPLICATIONS.find((app) => +app.id === +data.aid).url,
+      // url: APPLICATIONS.find((app) => +app.id === +data.aid).url,
     });
   };
 

@@ -7,7 +7,7 @@ import Tabs, {
   TabsNavigationItem,
 } from "components/Tabs";
 import Button from "components/Button";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import UserRoles from "./userRoles/UserRoles";
 import { useSelector } from "react-redux";
 // import SuperAdminDetails from "./userForm/SuperAdminDetails";
@@ -18,7 +18,6 @@ const UserEdit = () => {
   const navigate = useNavigate();
   const { authorizedUser } = useSelector((store) => store.user);
   // const { action, id } = useParams();
-  const { id } = useParams();
 
   // const regularUserEditing =
   //   authorizedUser.id !== undefined &&
@@ -34,8 +33,10 @@ const UserEdit = () => {
             <TabsNavigation>
               <TabsNavigationItem index={1}>დეტალები</TabsNavigationItem>
               <TabsNavigationItem index={2}>როლები</TabsNavigationItem>
-              {+authorizedUser.id === +id && (
+              {authorizedUser.superAdmin || authorizedUser.isSip ? (
                 <TabsNavigationItem index={3}>უსაფრთხოება</TabsNavigationItem>
+              ) : (
+                <></>
               )}
             </TabsNavigation>
             <TabsContent>

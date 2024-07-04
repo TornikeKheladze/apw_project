@@ -15,11 +15,9 @@ const UserList = ({ users, isLoading, departments }) => {
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState({ id: "" });
-  const [successMessage, setSuccessMessage] = useState("");
+  const [alert, setAlert] = useState({ message: "", type: "success" });
   const queryClient = useQueryClient();
   const { type, id } = useParams();
-
-  // console.log(departments);
 
   // const userCreateUrl = `/user/create${type}`;
 
@@ -35,44 +33,50 @@ const UserList = ({ users, isLoading, departments }) => {
       return `/user/create`;
     }
   };
+  const afterRequestHandler = (message, type) => {
+    if (type === "success") queryClient.invalidateQueries("getUsers");
+    setAlert({
+      message,
+      type,
+    });
+    setTimeout(() => {
+      setOpenModal(false);
+    }, 1600);
+    setTimeout(() => {
+      setAlert({
+        message: "",
+        type,
+      });
+    }, 3000);
+  };
 
   const { isLoading: activateLoading, mutate: editMutate } = useMutation({
     mutationFn: updateUserData,
-    onSuccess: () => {
-      queryClient.invalidateQueries("getUsers");
-      setSuccessMessage(
+    onSuccess: () =>
+      afterRequestHandler(
         `მომხმარებელი ${selectedUser.name} ${
           selectedUser.active ? "არა აქტიურია" : "აქტიურია"
-        }`
-      );
-      setTimeout(() => {
-        setOpenModal(false);
-      }, 1600);
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
-    },
+        }`,
+        "success"
+      ),
+    onError: (data) =>
+      afterRequestHandler(data.response.data.description, "danger"),
   });
 
   const { mutate: deleteMutate, isLoading: deleteLoading } = useMutation({
     mutationFn: () => deleteUser(selectedUser.id),
-    onSuccess: () => {
-      queryClient.invalidateQueries("getUsers");
-      setSuccessMessage(
-        `მომხმარებელი ${selectedUser.name} ${selectedUser.l_name} წაიშალა`
-      );
-      setTimeout(() => {
-        setDeleteModal(false);
-      }, 1600);
-      setTimeout(() => {
-        setSuccessMessage("");
-      }, 3000);
-    },
+    onSuccess: () =>
+      afterRequestHandler(
+        `მომხმარებელი ${selectedUser.name} ${selectedUser.l_name} წაიშალა`,
+        "success"
+      ),
+    onError: (data) =>
+      afterRequestHandler(data.response.data.description, "danger"),
   });
 
   return (
     <>
-      <Alert message={successMessage} color="success" dismissable />
+      <Alert message={alert.message} color={alert.type} dismissable />
       <Modal active={openModal} centered onClose={() => setOpenModal(false)}>
         <ModalHeader>მომხმარებლის სტატუსი</ModalHeader>
         <div className="p-5">

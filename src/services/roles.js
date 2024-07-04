@@ -26,19 +26,16 @@ export const deleteSuperAdminRole = async (data) => {
 };
 
 export const setRolesToUser = (data) => {
-  return instance.post(`${data.url}/permissions/user-pas-permission`, data);
+  return instance.post("user/users/user-pas-permission", data);
 };
 
 export const removeRolesFromUser = async (data) => {
-  return instance.post(
-    `${data.url}/permissions/user-pas-permission-remove`,
-    data
-  );
+  return instance.post("user/users/user-pas-permission-remove", data);
 };
 
-export const createRole = (data) => {
-  return instance.post(`/${data.url}/permissions/role`, data);
-};
+// export const createRole = (data) => {
+//   return instance.post(`/${data.url}/permissions/role`, data);
+// };
 
 export const deleteRoleById = async (data, app) => {
   const response = await instance.post(`/${app}/permissions/remove-role`, data);

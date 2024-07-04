@@ -21,37 +21,40 @@ const NewPasswordForm = ({ login }) => {
     <>
       <Alert message={alert.message} color={alert.type} dismissable />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-5">
-          <Label className="block mb-2" htmlFor="old_password">
-            {login ? "ერთჯერადი პაროლი" : "მიმდინარე პაროლი"}
-          </Label>
-          <label
-            className={`form-control-addon-within ${
-              errors.old_password ? "border-danger border" : ""
-            }`}
-          >
-            <CustomInput
-              id="old_password"
-              type={isPasswordVisible ? "text" : "password"}
-              className="border-none"
-              register={register}
-              name="old_password"
-              invalid={true}
-              rules={{
-                required: "პაროლის ველი აუცილებელია",
-                minLength: { value: 4, message: "მინიმუმ 4 სიმბოლო" },
-              }}
-              placeholder="******"
-            />
-            <span className="flex items-center ltr:pr-4 rtl:pl-4">
-              <button
-                type="button"
-                className="text-gray-300 dark:text-gray-700 la la-eye text-xl leading-none"
-                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-              ></button>
-            </span>
-          </label>
-        </div>
+        {login && (
+          <div className="mb-5">
+            <Label className="block mb-2" htmlFor="old_password">
+              {login ? "ერთჯერადი პაროლი" : "მიმდინარე პაროლი"}
+            </Label>
+            <label
+              className={`form-control-addon-within ${
+                errors.old_password ? "border-danger border" : ""
+              }`}
+            >
+              <CustomInput
+                id="old_password"
+                type={isPasswordVisible ? "text" : "password"}
+                className="border-none"
+                register={register}
+                name="old_password"
+                invalid={true}
+                rules={{
+                  required: "პაროლის ველი აუცილებელია",
+                  minLength: { value: 4, message: "მინიმუმ 4 სიმბოლო" },
+                }}
+                placeholder="******"
+              />
+              <span className="flex items-center ltr:pr-4 rtl:pl-4">
+                <button
+                  type="button"
+                  className="text-gray-300 dark:text-gray-700 la la-eye text-xl leading-none"
+                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                ></button>
+              </span>
+            </label>
+          </div>
+        )}
+
         <div className="mb-5">
           <Label className="block mb-2" htmlFor="password">
             პაროლი

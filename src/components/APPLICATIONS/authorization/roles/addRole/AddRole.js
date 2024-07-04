@@ -12,10 +12,20 @@ import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 
 const AddRole = ({ add, loading, permissions }) => {
-  const [aid, setAid] = useState(2);
+  const [aid, setAid] = useState("1");
   const [oid, setOid] = useState();
   const [input, setInput] = useState("");
   const { authorizedUser } = useSelector((store) => store.user);
+
+  const permissionByAid = () => {
+    if (aid === "1") {
+      return permissions.filter((item) => item.name.startsWith("user"));
+    } else if (aid === "2") {
+      return permissions.filter((item) => item.name.startsWith("doc"));
+    } else if (aid === "4") {
+      return permissions.filter((item) => item.name.startsWith("bil"));
+    }
+  };
 
   useEffect(() => {
     if (!authorizedUser.superAdmin) {
@@ -87,7 +97,7 @@ const AddRole = ({ add, loading, permissions }) => {
       )}
 
       <PermissionSelect
-        options={permissions.map((p) => {
+        options={permissionByAid().map((p) => {
           return { ...p, name: permissionsObj[p.name] };
         })}
         selectedPermissions={selectedPermissions}
