@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   deletePackage,
+  getPackageDetails,
   getPackages,
   insertPackage,
   updatePackage,
@@ -35,6 +36,19 @@ const Packages = () => {
     queryKey: ["getPackages"],
     queryFn: () => getPackages().then((res) => res.data),
   });
+
+  const { isLoading: packageDetailsLoading, mutate: packageDetailsMutate } =
+    useMutation({
+      mutationFn: (id) => getPackageDetails(id).then((res) => res.data),
+      onSuccess: (data) => {
+        setSelectedPackage((prevState) => ({
+          ...prevState,
+          ...data,
+          id: prevState.id,
+        }));
+        setOpenModal({ open: true, action: "შეცვლა" });
+      },
+    });
 
   const { data: organizationData = { data: [], member: null, dga: [] } } =
     useQuery({
@@ -101,6 +115,7 @@ const Packages = () => {
   return (
     <main className="workspace overflow-hidden">
       <Alert message={alert.message} color={alert.type} dismissable />
+      {packageDetailsLoading && <LoadingSpinner blur />}
 
       <Modal
         active={openModal.open}
@@ -112,9 +127,11 @@ const Packages = () => {
       >
         <ModalHeader>პაკეტის {openModal.action}</ModalHeader>
         {openModal.action === "შეცვლა" && (
-          <div className="p-5">
+          <div className="p-5 overflow-y-auto h-[90vh]">
             <AuthForm
-              formArray={updatedPackageArr}
+              formArray={updatedPackageArr.filter(
+                (item) => item.name !== "oid"
+              )}
               submitHandler={editMutate}
               isLoading={editLoading}
               defaultValues={selectedPackage}
@@ -122,7 +139,7 @@ const Packages = () => {
           </div>
         )}
         {openModal.action === "დამატება" && (
-          <div className="p-5">
+          <div className="p-5 overflow-y-auto h-[90vh]">
             <AuthForm
               formArray={updatedPackageArr}
               submitHandler={(data) =>
@@ -177,7 +194,13 @@ const Packages = () => {
           </div>
         ) : renderPackages?.length ? (
           <AuthTable
-            staticArr={updatedPackageArr}
+            staticArr={updatedPackageArr.filter(
+              (item) =>
+                item.name !== "description" &&
+                item.name !== "conditions" &&
+                item.name !== "obligations" &&
+                item.name !== "additional_terms"
+            )}
             fetchedArr={renderPackages.map((item) => ({
               ...item,
               oid:
@@ -186,7 +209,7 @@ const Packages = () => {
             }))}
             actions={{
               editClick: (item) => {
-                setOpenModal({ open: true, action: "შეცვლა" });
+                packageDetailsMutate(item.id);
                 setSelectedPackage(item);
               },
               deleteClick: (item) => {

@@ -2,7 +2,7 @@ import { userArr } from "components/APPLICATIONS/billing/formArrays/authArr";
 import GeneralForm from "components/APPLICATIONS/billing/generalForm/GeneralForm";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { createUser, getUserDetails, updateUserData } from "services/users";
 import Alert from "components/Alert";
 import { useSelector } from "react-redux";
@@ -10,9 +10,13 @@ import { useSelector } from "react-redux";
 const UserEditForm = () => {
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const { action, id } = useParams();
+  const [searchParam] = useSearchParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { authorizedUser } = useSelector((store) => store.user);
+  const oid = searchParam.get("oid");
+  const did = searchParam.get("did");
+  const pid = searchParam.get("pid");
 
   const afterRequestHandler = (message, type) => {
     setAlert({
@@ -28,12 +32,12 @@ const UserEditForm = () => {
     }, 2500);
   };
 
-  const { data: userData = [] } = useQuery({
+  const { data: userData = {} } = useQuery({
     queryKey: ["getUserDetails", id],
     queryFn: () => getUserDetails(id).then((res) => res.data.users),
     enabled: action === "edit",
   });
-  const fetchedUserData = userData[0] || {};
+  const fetchedUserData = userData || {};
 
   const { mutate: createUserMutate, isLoading: createUserLoading } =
     useMutation({
@@ -61,9 +65,9 @@ const UserEditForm = () => {
 
   const onSubmit = async (data) => {
     const userData = {
-      oid: data?.oid.id,
-      did: data?.did.id,
-      pid: data?.pid.id,
+      oid: oid || data?.oid.id,
+      did: did || data?.did.id,
+      pid: pid || data?.pid.id,
     };
     if (action === "create") {
       createUserMutate({

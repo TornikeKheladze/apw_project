@@ -1,33 +1,31 @@
 import { instance } from "./axios";
 
-export const getPackages = async () => {
-  const response = await instance.get("/user/package");
-  return response;
+export const getPackages = () => {
+  return instance.get("/user/package");
 };
 
-export const getRingPackages = async () => {
-  const response = await instance.get("/user/ring-package");
-  return response;
+export const getPackageDetails = (packageId) => {
+  return instance.get(`/user/package/details/${packageId}`);
 };
 
-export const getPackageById = async (id) => {
-  const response = await instance.get(`/user/package/get/${id}`);
-  return response;
+export const getRingPackages = () => {
+  return instance.get("/user/ring-package");
 };
 
-export const getRingPackageById = async (id) => {
-  const response = await instance.get(`/user/ring-package/get/${id}`);
-  return response;
+export const getPackageById = (id) => {
+  return instance.get(`/user/package/get/${id}`);
 };
 
-export const searchPackage = async (data) => {
-  const response = await instance.post("/user/package/search", data);
-  return response;
+export const getRingPackageById = (id) => {
+  return instance.get(`/user/ring-package/get/${id}`);
 };
 
-export const searchRingPackage = async (data) => {
-  const response = await instance.post("/user/ring-package/search", data);
-  return response;
+export const searchPackage = (data) => {
+  return instance.post("/user/package/search", data);
+};
+
+export const searchRingPackage = (data) => {
+  return instance.post("/user/ring-package/search", data);
 };
 
 export const insertPackage = (data) => {
@@ -38,27 +36,20 @@ export const insertRingPackage = (data) => {
   return instance.post("/user/ring-package/insert", data);
 };
 
-export const updatePackage = async (data) => {
-  const response = await instance.put(`/user/package/update/${data.id}`, data);
-  return response;
+export const updatePackage = (data) => {
+  return instance.put(`/user/package/update/${data.id}`, data);
 };
 
-export const updateRingPackage = async (data) => {
-  const response = await instance.put(
-    `/user/ring-package/update/${data.id}`,
-    data
-  );
-  return response;
+export const updateRingPackage = (data) => {
+  return instance.put(`/user/ring-package/update/${data.id}`, data);
 };
 
-export const deletePackage = async (id) => {
-  const response = await instance.delete(`/user/package/delete/${id}`);
-  return response;
+export const deletePackage = (id) => {
+  return instance.delete(`/user/package/delete/${id}`);
 };
 
-export const deleteRingPackage = async (id) => {
-  const response = await instance.delete(`/user/ring-package/delete/${id}`);
-  return response;
+export const deleteRingPackage = (id) => {
+  return instance.delete(`/user/ring-package/delete/${id}`);
 };
 
 export const activatePackage = (invoiceId) => {

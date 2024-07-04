@@ -19,6 +19,26 @@ export const packageArr = [
     label: "ინვოისის მოქმედების ვადა (დღეები)",
     type: "text",
   },
+  {
+    name: "description",
+    label: "აღწერილობა",
+    type: "text",
+  },
+  {
+    name: "conditions",
+    label: "სარგებლობის პირობები",
+    type: "text",
+  },
+  {
+    name: "obligations",
+    label: "ვალდებულებები",
+    type: "text",
+  },
+  {
+    name: "additional_terms",
+    label: "დამატებითი პირობები",
+    type: "text",
+  },
 ];
 
 export const orgPackageArr = [

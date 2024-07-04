@@ -25,7 +25,7 @@ export const deleteSuperAdminRole = async (data) => {
   return response;
 };
 
-export const setRolesToUser = async (data) => {
+export const setRolesToUser = (data) => {
   return instance.post(`${data.url}/permissions/user-pas-permission`, data);
 };
 
