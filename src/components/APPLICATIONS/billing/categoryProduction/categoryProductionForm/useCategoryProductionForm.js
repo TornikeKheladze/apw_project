@@ -47,10 +47,13 @@ export const useCategoryProductionForm = () => {
     }
   );
 
-  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+  const { data: organizationData = [{}], isLoading: orgLoading } = useQuery({
     queryKey: "organizations",
     queryFn: () => getOrganizations().then((res) => res.data.data),
   });
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data || [];
 
   const categories = categoriesArr.map((cat) => ({
     ...cat,

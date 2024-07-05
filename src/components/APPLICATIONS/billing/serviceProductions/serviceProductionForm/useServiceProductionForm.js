@@ -44,10 +44,13 @@ export const useServiceProductionForm = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+  const { data: organizationData = [{}], isLoading: orgLoading } = useQuery({
     queryKey: "organizations",
     queryFn: () => getOrganizations().then((res) => res.data.data),
   });
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data || [];
 
   const mutateHandler = (response, message) => {
     if (response.data.message || response.data.error) {

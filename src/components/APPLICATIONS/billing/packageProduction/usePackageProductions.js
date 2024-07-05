@@ -48,10 +48,14 @@ export const usePackageProductions = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+  const { data: organizationData = [{}], isLoading: orgLoading } = useQuery({
     queryKey: "organizations",
     queryFn: () => getOrganizations().then((res) => res.data.data),
   });
+
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data || [];
 
   const services = servicesData.map((service) => ({
     ...service,
