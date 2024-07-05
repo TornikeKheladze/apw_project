@@ -43,8 +43,14 @@ const CategoryProductionForm = () => {
             <GeneralForm
               submitHandler={submitHandler}
               formArray={categoryProductionArr.filter(
-                (item) => item.name !== "usedQuantity" && item.name !== "catID"
+                (item) =>
+                  item.name !== "usedQuantity" &&
+                  item.name !== "catID" &&
+                  item.name !== "ownerID"
               )}
+              // formArray={categoryProductionArr.filter(
+              //   (item) => item.name !== "usedQuantity" && item.name !== "catID"
+              // )}
               isLoading={actionLoading}
               updateDataObj={action === "edit" ? categoryProduction : null}
               optionsObj={{

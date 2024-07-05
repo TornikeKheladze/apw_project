@@ -48,9 +48,12 @@ export const usePackageProductions = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: organizationData = [{}], isLoading: orgLoading } = useQuery({
+  const {
+    data: organizationData = { data: [], member: null, dga: [] },
+    isLoading: orgLoading,
+  } = useQuery({
     queryKey: "organizations",
-    queryFn: () => getOrganizations().then((res) => res.data.data),
+    queryFn: () => getOrganizations().then((res) => res.data),
   });
 
   const organizations = organizationData.member

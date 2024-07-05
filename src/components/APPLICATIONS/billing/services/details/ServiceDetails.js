@@ -20,10 +20,18 @@ const ServiceDetails = () => {
     queryKey: "getCategories",
     queryFn: () => getCategories().then((res) => res.data),
   });
-  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+  const {
+    data: organizationData = { data: [], member: null, dga: [] },
+    isLoading: orgLoading,
+  } = useQuery({
     queryKey: "organizations",
-    queryFn: () => getOrganizations().then((res) => res.data.data),
+    queryFn: () => getOrganizations().then((res) => res.data),
   });
+
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data || [];
+
   const {
     data: serviceParameters = [{}],
     isLoading: serviceParametersLoading,

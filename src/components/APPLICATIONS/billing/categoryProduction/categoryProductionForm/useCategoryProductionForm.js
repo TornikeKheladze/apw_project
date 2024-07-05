@@ -9,11 +9,13 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getOrganizations } from "services/organizations";
+import { useSelector } from "react-redux";
 
 export const useCategoryProductionForm = () => {
   const { action, id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { authorizedUser } = useSelector((store) => store.user);
 
   const [chosenCategory, setChosenCategory] = useState({});
   const [alert, setAlert] = useState({
@@ -46,11 +48,14 @@ export const useCategoryProductionForm = () => {
       queryFn: () => getCategories().then((res) => res.data),
     }
   );
-
-  const { data: organizationData = [{}], isLoading: orgLoading } = useQuery({
+  const {
+    data: organizationData = { data: [], member: null, dga: [] },
+    isLoading: orgLoading,
+  } = useQuery({
     queryKey: "organizations",
-    queryFn: () => getOrganizations().then((res) => res.data.data),
+    queryFn: () => getOrganizations().then((res) => res.data),
   });
+
   const organizations = organizationData.member
     ? [...organizationData.member, ...organizationData.data]
     : organizationData.data || [];
@@ -103,7 +108,12 @@ export const useCategoryProductionForm = () => {
 
   const submitHandler = (data) => {
     if (action === "create") {
-      createMutate({ ...data, usedQuantity: 0, catID: chosenCategory.id });
+      createMutate({
+        ...data,
+        usedQuantity: 0,
+        ownerID: authorizedUser.oid,
+        catID: chosenCategory.id,
+      });
     } else {
       updateMutate({
         ...data,

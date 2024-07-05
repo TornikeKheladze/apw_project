@@ -39,7 +39,8 @@ const PackageProductionForm = () => {
               agentID: organizations,
             }}
             updateDataObj={action === "edit" ? packageProduction : null}
-            formArray={formFields}
+            // formArray={formFields}
+            formArray={formFields.filter((item) => item.name !== "ownerID")}
             isLoading={actionLoading}
           />
         )}

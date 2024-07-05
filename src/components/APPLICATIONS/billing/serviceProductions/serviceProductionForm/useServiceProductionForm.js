@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
 import { getAllServices } from "services/services";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -18,6 +18,7 @@ export const useServiceProductionForm = () => {
   const { action, id } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { authorizedUser } = useSelector((store) => store.user);
 
   const ownerID = searchParams.get("ownerID");
   const [alert, setAlert] = useState({
@@ -44,10 +45,14 @@ export const useServiceProductionForm = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: organizationData = [{}], isLoading: orgLoading } = useQuery({
+  const {
+    data: organizationData = { data: [], member: null, dga: [] },
+    isLoading: orgLoading,
+  } = useQuery({
     queryKey: "organizations",
-    queryFn: () => getOrganizations().then((res) => res.data.data),
+    queryFn: () => getOrganizations().then((res) => res.data),
   });
+
   const organizations = organizationData.member
     ? [...organizationData.member, ...organizationData.data]
     : organizationData.data || [];
@@ -105,6 +110,7 @@ export const useServiceProductionForm = () => {
     if (action === "create") {
       createMutate({
         ...requestData,
+        ownerID: authorizedUser.oid,
         usedTransactionQuantity: 0,
         usedTransactionSum: 0,
       });
@@ -117,10 +123,13 @@ export const useServiceProductionForm = () => {
     }
   };
 
+  // const formFields = serviceProductionArr.filter(
+  //   (item) =>
+  //     item.name !== "usedTransactionQuantity" &&
+  //     (!ownerID || item.name !== "ownerID")
+  // );
   const formFields = serviceProductionArr.filter(
-    (item) =>
-      item.name !== "usedTransactionQuantity" &&
-      (!ownerID || item.name !== "ownerID")
+    (item) => item.name !== "usedTransactionQuantity" && item.name !== "ownerID"
   );
 
   return {

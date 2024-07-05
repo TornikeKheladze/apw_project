@@ -12,12 +12,14 @@ import {
 } from "services/billingPackages";
 import { packageProductionsArr } from "../../formArrays/serviceArr";
 import { getOrganizations } from "services/organizations";
+import { useSelector } from "react-redux";
 
 export const usePackageProductionForm = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { action, id } = useParams();
   const [searchParams] = useSearchParams();
+  const { authorizedUser } = useSelector((store) => store.user);
 
   const ownerID = searchParams.get("ownerID");
 
@@ -89,10 +91,17 @@ export const usePackageProductionForm = () => {
     queryFn: () => getAllServices().then((res) => res.data),
   });
 
-  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+  const {
+    data: organizationData = { data: [], member: null, dga: [] },
+    isLoading: orgLoading,
+  } = useQuery({
     queryKey: "organizations",
-    queryFn: () => getOrganizations().then((res) => res.data.data),
+    queryFn: () => getOrganizations().then((res) => res.data),
   });
+
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data || [];
 
   const services = servicesData.map((service) => ({
     ...service,
@@ -108,8 +117,9 @@ export const usePackageProductionForm = () => {
   const submitHandler = (data) => {
     if (action === "create") {
       createMutate({
-        ownerID,
         ...data,
+        // temporary
+        ownerID: authorizedUser.oid,
         usedTransactionQuantity: 0,
       });
     } else {
