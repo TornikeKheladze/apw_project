@@ -99,6 +99,7 @@ const ServiceDetails = () => {
           service.categoryID
         ),
         ownerID: idToName(organizations, service.ownerID),
+        active: service.active === 1 ? "აქტიური" : "არააქტიური",
       }}
       loading={
         serviceLoading ||

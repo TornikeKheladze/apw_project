@@ -27,7 +27,7 @@ export const serviceCategoriesArr = [
     label: "სერვისის მომწოდებელი",
     type: "select",
   },
-  { name: "parentID", label: "parentID", type: "select" },
+  { name: "parentID", label: "მშობელი", type: "select" },
   {
     name: "applicantRegistrationApi",
     label: "applicantRegistrationApi",
