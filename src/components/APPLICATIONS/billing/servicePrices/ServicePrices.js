@@ -5,6 +5,7 @@ import BilHeader from "../bilHeader/BilHeader";
 import { servicePricesArr } from "../formArrays/serviceArr";
 import Alert from "components/Alert";
 import useServicePrices from "./useServicePrices";
+import { Link } from "react-router-dom";
 
 const ServicePrices = () => {
   const {
@@ -20,6 +21,28 @@ const ServicePrices = () => {
 
   return (
     <main className="workspace overflow-hidden pb-8">
+      <div className="card p-3 mb-3">
+        <div className="flex gap-2 flex-wrap">
+          <Link
+            to={`/billing/services/details/${service.serviceID}`}
+            className="btn btn_primary btn_outlined p-1 text-xs"
+          >
+            სერვისის დეტალები
+          </Link>
+          <Link
+            to={`/billing/service-parameters?serviceID=${service.serviceID}`}
+            className="btn btn_primary btn_outlined p-1 text-xs"
+          >
+            სერვისის პარამეტრები
+          </Link>
+          <Link
+            to={`/billing/spec-prices?serviceID=${service.serviceID}`}
+            className="btn btn_primary btn_outlined p-1 text-xs"
+          >
+            სერვისის სპეც ფასები
+          </Link>
+        </div>
+      </div>
       <BilHeader
         visible={true}
         text={"სერვისის ფასები"}

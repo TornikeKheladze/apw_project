@@ -26,7 +26,7 @@ const CategoryProductionForm = () => {
 
       <div className="card p-5 lg:w-2/3 lg:mx-auto">
         <h3 className="mb-3">
-          კატეგორიის მიწოდების {action === "create" ? "დამატება" : "შეცვლა"}
+          კატალოგის მიწოდების {action === "create" ? "დამატება" : "შეცვლა"}
         </h3>
         {isLoading ? (
           <div className="flex flex-col items-center justify-center">
@@ -34,7 +34,7 @@ const CategoryProductionForm = () => {
           </div>
         ) : (
           <>
-            <p className="label mb-3">აირჩიეთ კატეგორია</p>
+            <p className="label mb-3">აირჩიეთ კატალოგი</p>
             <ServiceCategoryTreeMenu
               categories={buildCategoryTree(categories)}
               chosenItem={chosenCategory}

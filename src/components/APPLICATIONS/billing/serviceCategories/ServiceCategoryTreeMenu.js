@@ -1,4 +1,6 @@
 import DownArrowIcon from "components/icons/DownArrowIcon";
+import FolderIcon from "components/icons/FolderIcon";
+import PackageIcon from "components/icons/PackageIcon";
 import RightArrowIcon from "components/icons/RIghtArrowIcon";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -40,7 +42,7 @@ const ServiceCategoryTreeMenu = ({
               </span>
             </div>
             <button
-              className={`DO_NOT_CLOSE_MODAL ${
+              className={`DO_NOT_CLOSE_MODAL flex items-center ${
                 category.catID === chosenItem?.id
                   ? "border-b-2 border-primary"
                   : ""
@@ -59,6 +61,12 @@ const ServiceCategoryTreeMenu = ({
               }}
             >
               {category.categoryName || category?.name}
+
+              {category.catType === 1 ? (
+                <FolderIcon className="ml-2 !w-4 !h-4" />
+              ) : (
+                <PackageIcon className="ml-2 !w-4 !h-4" />
+              )}
             </button>
           </div>
           {expandedCategories.includes(category.catID) &&

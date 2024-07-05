@@ -19,6 +19,8 @@ export const useServiceCategoriesForm = () => {
   const [searchParams] = useSearchParams();
 
   const ownerID = searchParams.get("ownerID");
+  const parentID = searchParams.get("parentID") || 0;
+  const catType = searchParams.get("catType");
 
   const [chosenCategory, setChosenCategory] = useState({});
 
@@ -114,16 +116,22 @@ export const useServiceCategoriesForm = () => {
   );
 
   const submitHandler = (data) => {
-    const parentID = chosenCategory.catID || 0;
+    // const parentID = chosenCategory.catID || 0;
 
     if (action === "create") {
-      createMutate({ ...data, ownerID, parentID, usedQuantity: 0 });
+      createMutate({
+        ownerID,
+        ...data,
+        parentID,
+        catType: data.catType || catType,
+        usedQuantity: 0,
+      });
     } else {
       updateMutate({
         ownerID,
         ...data,
+        parentID: data.parentID || parentID,
         catID: id,
-        parentID,
         usedQuantity: category.usedQuantity,
       });
     }
@@ -133,7 +141,9 @@ export const useServiceCategoriesForm = () => {
     (item) =>
       item.name !== "usedQuantity" &&
       item.name !== "parentID" &&
-      (!ownerID || item.name !== "ownerID")
+      (!ownerID || item.name !== "ownerID") &&
+      (!parentID || item.name !== "parentID") &&
+      (!catType || item.name !== "catType")
   );
 
   return {
@@ -149,5 +159,6 @@ export const useServiceCategoriesForm = () => {
     setChosenCategory,
     formFields,
     organizations,
+    catType,
   };
 };

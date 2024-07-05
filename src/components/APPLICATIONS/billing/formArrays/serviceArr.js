@@ -2,25 +2,25 @@ export const serviceCategoriesArr = [
   {
     filter: "categoryName",
     name: "categoryName",
-    label: "კატალოგის სახელი",
+    label: "დასახელება",
     type: "text",
   },
-  {
-    name: "calculationPeriod",
-    label: "კალკულაციის პერიოდი",
-    type: "number",
-  },
+  // {
+  //   name: "calculationPeriod",
+  //   label: "კალკულაციის პერიოდი",
+  //   type: "number",
+  // },
   { name: "catType", label: "კატალოგის ტიპი", type: "select" },
-  {
-    name: "chargeCalculationEndDate",
-    label: "მოსაკრებლის კალკულაციის დასრულების თარიღი",
-    type: "datetime-local",
-  },
-  {
-    name: "chargeCalculationStartDate",
-    label: "მოსაკრებლის კალკულაციის დაწყების თარიღი",
-    type: "datetime-local",
-  },
+  // {
+  //   name: "chargeCalculationEndDate",
+  //   label: "მოსაკრებლის კალკულაციის დასრულების თარიღი",
+  //   type: "datetime-local",
+  // },
+  // {
+  //   name: "chargeCalculationStartDate",
+  //   label: "მოსაკრებლის კალკულაციის დაწყების თარიღი",
+  //   type: "datetime-local",
+  // },
   {
     filter: "select",
     name: "ownerID",
@@ -30,8 +30,8 @@ export const serviceCategoriesArr = [
   { name: "parentID", label: "მშობელი", type: "select" },
   {
     name: "applicantRegistrationApi",
-    label: "applicantRegistrationApi",
-    type: "select",
+    label: "დაშვება იურიდიული პირებისათვის",
+    type: "radio",
   },
   {
     name: "usedQuantity",
@@ -55,7 +55,7 @@ export const serviceArr = [
   {
     filter: "search",
     name: "name",
-    label: "სახელი",
+    label: "დასახელება",
     type: "text",
   },
   {
@@ -77,7 +77,7 @@ export const serviceArr = [
   },
   {
     name: "priceCalculationPeriod",
-    label: "ფასის კალკულაციის პერიოდი",
+    label: "ფასის კალკულაციის პერიოდი (დღეები)",
     type: "number",
   },
   {
@@ -87,8 +87,8 @@ export const serviceArr = [
   },
   {
     name: "applicantRegistrationApi",
-    label: "applicantRegistrationApi",
-    type: "select",
+    label: "დაშვება იურიდიული პირებისათვის",
+    type: "radio",
   },
   {
     name: "serviceUrl",
@@ -103,13 +103,13 @@ export const serviceParametersArr = [
   {
     filter: "search",
     name: "parameterName",
-    label: "ტექნიკური სახელი",
+    label: "ტექნიკური სახელწოდება (ლათინურად)",
     type: "text",
   },
   {
     filter: "search",
     name: "parameterPlaceholder",
-    label: "სახელი",
+    label: "სახელწოდება",
     type: "text",
   },
   {

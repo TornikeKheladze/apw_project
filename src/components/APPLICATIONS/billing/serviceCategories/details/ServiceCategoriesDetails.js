@@ -48,6 +48,8 @@ const ServiceCategoriesDetails = () => {
 
   const categoriesTree = buildTreeMenu(categoriesArr, +id);
 
+  const isPaket = serviceCategory?.catType === 1 ? true : false;
+
   return (
     <main className="workspace">
       <div className="mb-3 flex justify-between items-center">
@@ -69,17 +71,32 @@ const ServiceCategoriesDetails = () => {
           <ServiceCategoryTreeMenu categories={categoriesTree} />
         )}
       </div>
-
-      <Link
-        className="btn btn_primary mb-3 w-48"
-        to={`/billing/services/create?categoryID=${id}`}
-      >
-        სერვისის დამატება
-      </Link>
-
+      {isPaket ? (
+        <Link
+          className="btn btn_primary mb-3 w-48"
+          to={`/billing/services/create?categoryID=${id}`}
+        >
+          სერვისის დამატება
+        </Link>
+      ) : (
+        <div className="flex w-full gap-2">
+          <Link
+            className="btn btn_primary mb-3"
+            to={`/billing/service-categories/create?parentID=${id}&catType=0`}
+          >
+            კატალოგის დამატება
+          </Link>
+          <Link
+            className="btn btn_primary mb-3"
+            to={`/billing/service-categories/create?parentID=${id}&catType=1`}
+          >
+            სერვისების პაკეტის დამატება
+          </Link>
+        </div>
+      )}
       <div className="card p-5 relative">
         <div className="flex justify-between items-center">
-          <h4>კატეგორიის დეტალები</h4>
+          <h4>კატალოგის დეტალები</h4>
         </div>
         {categoryLoading || categoriesLoading || orgLoading ? (
           <LoadingSpinner blur />

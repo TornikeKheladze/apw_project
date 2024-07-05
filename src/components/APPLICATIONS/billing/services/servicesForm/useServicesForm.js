@@ -50,7 +50,7 @@ const useServicesForm = () => {
     queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
-  const mutateHandler = (response, message) => {
+  const mutateHandler = (response, message, serviceID) => {
     if (response.data.message) {
       setAlert({
         message: `${message} ვერ მოხერხდა`,
@@ -64,7 +64,7 @@ const useServicesForm = () => {
       });
       setTimeout(() => {
         queryClient.invalidateQueries(["getServiceById", id]);
-        navigate(-1);
+        navigate(`/billing/services/details/${serviceID}`);
       }, 1500);
     }
   };
@@ -76,14 +76,14 @@ const useServicesForm = () => {
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createService,
     onSuccess: (res) => {
-      mutateHandler(res, "სერვისის დამატება");
+      mutateHandler(res, "სერვისის დამატება", res.data.serviceID);
     },
   });
 
   const { mutate: updateMutate, isLoading: editLoading } = useMutation({
     mutationFn: updateService,
     onSuccess: (res) => {
-      mutateHandler(res, "სერვისის ცვლილება");
+      mutateHandler(res, "სერვისის ცვლილება", res.data.serviceID);
     },
   });
 
@@ -117,7 +117,7 @@ const useServicesForm = () => {
     };
     if (!chosenCategory.id) {
       setAlert({
-        message: "აირჩიეთ კატეგორია",
+        message: "აირჩიეთ კატალოგი",
         type: "danger",
       });
       return;
@@ -147,6 +147,7 @@ const useServicesForm = () => {
     chosenCategory,
     setChosenCategory,
     formFields,
+    categoryID: categoryID,
   };
 };
 

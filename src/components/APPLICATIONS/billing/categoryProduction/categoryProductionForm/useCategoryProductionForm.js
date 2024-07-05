@@ -61,14 +61,14 @@ export const useCategoryProductionForm = () => {
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createCategoryProduction,
     onSuccess: (res) => {
-      mutateHandler(res, "კატეგორიის მიწოდების დამატება");
+      mutateHandler(res, "კატალოგის მიწოდების დამატება");
     },
   });
 
   const { mutate: updateMutate, isLoading: editLoading } = useMutation({
     mutationFn: updateCategoryProduction,
     onSuccess: (res) => {
-      mutateHandler(res, "კატეგორიის მიწოდების ცვლილება");
+      mutateHandler(res, "კატალოგის მიწოდების ცვლილება");
     },
   });
 

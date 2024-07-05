@@ -31,7 +31,7 @@ const ChargesForm = () => {
           </div>
         ) : (
           <>
-            <p className="label mb-3">აირჩიეთ კატეგორია</p>
+            <p className="label mb-3">აირჩიეთ კატალოგი</p>
             <ServiceCategoryTreeMenu
               categories={buildCategoryTree(categories)}
               chosenItem={chosenCategory}

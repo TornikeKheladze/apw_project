@@ -18,6 +18,7 @@ const ServicesForm = () => {
     setChosenCategory,
     formFields,
     organizations,
+    categoryID,
   } = useServicesForm();
 
   return (
@@ -34,12 +35,16 @@ const ServicesForm = () => {
           </div>
         ) : (
           <>
-            <p className="label mb-3">აირჩიეთ კატეგორია</p>
-            <ServiceCategoryTreeMenu
-              categories={buildCategoryTree(categories)}
-              chosenItem={chosenCategory}
-              setChosenItem={setChosenCategory}
-            />
+            {!categoryID && (
+              <>
+                <p className="label mb-3">აირჩიეთ კატალოგი</p>
+                <ServiceCategoryTreeMenu
+                  categories={buildCategoryTree(categories)}
+                  chosenItem={chosenCategory}
+                  setChosenItem={setChosenCategory}
+                />
+              </>
+            )}
 
             <GeneralForm
               optionsObj={{
@@ -49,8 +54,8 @@ const ServicesForm = () => {
                   { name: "აქტიური", id: 1 },
                 ],
                 applicantRegistrationApi: [
-                  { name: "სახელმწიფო უწყებებისთვის", id: 0 },
-                  { name: "ავტორიზირებული პირებისათვის", id: 1 },
+                  { name: "არა", id: 0 },
+                  { name: "დიახ", id: 1 },
                 ],
               }}
               submitHandler={submitHandler}

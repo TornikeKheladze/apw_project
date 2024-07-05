@@ -720,7 +720,7 @@ const MenuDetailBilling = () => {
           )}
           {useCheckPermission("bil_category_production_get") && (
             <NavLink to="/billing/category-production" onClick={hideMenuDetail}>
-              კატეგორიის მიწოდება
+              კატალოგის მიწოდება
             </NavLink>
           )}
         </MenuBarCollapse>

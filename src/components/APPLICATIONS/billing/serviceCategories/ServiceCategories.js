@@ -10,6 +10,7 @@ const ServiceCategories = () => {
     <main className="workspace overflow-hidden pb-8">
       <BilHeader
         visible={useCheckPermission("bil_categories_get")}
+        // visible={false}
         text={"სერვისის კატალოგები"}
         url={"/billing/service-categories/create"}
       />
