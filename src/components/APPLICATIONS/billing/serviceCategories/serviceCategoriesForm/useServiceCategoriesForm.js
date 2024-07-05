@@ -57,9 +57,11 @@ export const useServiceCategoriesForm = () => {
     queryFn: () => getOrganizations().then((res) => res.data.data),
   });
 
-  const categories = categoriesArr.map((cat) => {
-    return { ...cat, name: cat.categoryName, id: cat.catID };
-  });
+  const categories = categoriesArr
+    .map((cat) => {
+      return { ...cat, name: cat.categoryName, id: cat.catID };
+    })
+    .filter((cat) => +cat.catType === 0);
 
   const { mutate: createMutate, isLoading: createLoading } = useMutation({
     mutationFn: createCategory,

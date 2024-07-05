@@ -34,7 +34,7 @@ const ServiceCategoriesForm = () => {
           </div>
         ) : (
           <>
-            <p className="label mb-3">აირჩიეთ parentID</p>
+            <p className="label mb-3">აირჩიეთ მშობელი</p>
             <ServiceCategoryTreeMenu
               categories={categoriesTree}
               chosenItem={chosenCategory}
