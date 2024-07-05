@@ -62,7 +62,7 @@ const ServiceCategoryTreeMenu = ({
             >
               {category.categoryName || category?.name}
 
-              {category.catType === 1 ? (
+              {category.catType === 0 ? (
                 <FolderIcon className="ml-2 !w-4 !h-4" />
               ) : (
                 <PackageIcon className="ml-2 !w-4 !h-4" />

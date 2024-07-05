@@ -11,12 +11,14 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { buildCategoryTree } from "helpers/treeMenuBuilder";
 import { serviceCategoriesArr } from "../../formArrays/serviceArr";
 import { getOrganizations } from "services/organizations";
+import { useSelector } from "react-redux";
 
 export const useServiceCategoriesForm = () => {
   const { action, id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
+  const { authorizedUser } = useSelector((store) => store.user);
 
   const ownerID = searchParams.get("ownerID");
   const parentID = searchParams.get("parentID") || 0;
@@ -120,9 +122,10 @@ export const useServiceCategoriesForm = () => {
 
     if (action === "create") {
       createMutate({
-        ownerID,
+        // ownerID,
         ...data,
         parentID,
+        ownerID: authorizedUser.oid,
         catType: data.catType || catType,
         usedQuantity: 0,
       });
@@ -137,11 +140,19 @@ export const useServiceCategoriesForm = () => {
     }
   };
 
+  // const formFields = serviceCategoriesArr.filter(
+  //   (item) =>
+  //     item.name !== "usedQuantity" &&
+  //     item.name !== "parentID" &&
+  //     (!ownerID || item.name !== "ownerID") &&
+  //     (!parentID || item.name !== "parentID") &&
+  //     (!catType || item.name !== "catType")
+  // );
   const formFields = serviceCategoriesArr.filter(
     (item) =>
       item.name !== "usedQuantity" &&
       item.name !== "parentID" &&
-      (!ownerID || item.name !== "ownerID") &&
+      item.name !== "ownerID" &&
       (!parentID || item.name !== "parentID") &&
       (!catType || item.name !== "catType")
   );

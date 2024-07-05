@@ -10,12 +10,14 @@ import { useNavigate } from "react-router-dom";
 import { getCategories } from "services/serviceCategories";
 import { serviceArr } from "../../formArrays/serviceArr";
 import { getOrganizations } from "services/organizations";
+import { useSelector } from "react-redux";
 
 const useServicesForm = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { action, id } = useParams();
   const [searchParams] = useSearchParams();
+  const { authorizedUser } = useSelector((store) => store.user);
 
   const ownerID = searchParams.get("ownerID");
   const categoryID = searchParams.get("categoryID");
@@ -124,15 +126,18 @@ const useServicesForm = () => {
     }
 
     if (action === "create") {
-      createMutate({ ...requestData });
+      createMutate({ ...requestData, ownerID: authorizedUser.oid });
     } else {
       updateMutate({ ...requestData, serviceID: id });
     }
   };
 
+  // const formFields = serviceArr.filter(
+  //   (item) =>
+  //     item.name !== "categoryID" && (!ownerID || item.name !== "ownerID")
+  // );
   const formFields = serviceArr.filter(
-    (item) =>
-      item.name !== "categoryID" && (!ownerID || item.name !== "ownerID")
+    (item) => item.name !== "categoryID" && item.name !== "ownerID"
   );
 
   return {
