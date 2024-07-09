@@ -24,3 +24,25 @@ export const deleteOrganization = async (id) => {
 
 export const getOrganizationById = (id) =>
   instance.get(`/user/organisations/get/${id}`);
+
+export const getStatements = () => {
+  return instance.get("/auth-user/gov-get-auth");
+};
+
+export const getStatementById = (id) => {
+  return instance.post("/auth-user/gov-get", {
+    auth_id: id,
+  });
+};
+
+export const getSips = () => {
+  return instance.get("/user/organisations/sip");
+};
+
+export const secondStep = (data) => {
+  return instance.post(`/second-step/${data.action}`, data);
+};
+
+export const firstStep = (data) => {
+  return instance.post(`/first-step/${data.action}`, data);
+};

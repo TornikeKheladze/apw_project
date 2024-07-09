@@ -85,6 +85,7 @@ import RingPackages from "components/APPLICATIONS/authorization/packages/RingPac
 import ActiveRingPackage from "components/APPLICATIONS/authorization/packages/ActiveRingPackage";
 import Sms from "components/APPLICATIONS/authorization/sms/Sms";
 import SmsCrud from "components/APPLICATIONS/authorization/sms/SmsCrud";
+import Statements from "components/APPLICATIONS/authorization/statements/Statements";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -129,6 +130,7 @@ const Router = () => {
 
           <Route path="/packages" element={<Packages />} />
           <Route path="/ring-packages" element={<RingPackages />} />
+          <Route path="/statements" element={<Statements />} />
 
           <Route path="/billing/userStatistic" element={<UserStatistic />} />
           <Route

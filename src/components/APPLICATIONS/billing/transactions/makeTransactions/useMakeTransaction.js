@@ -35,10 +35,17 @@ export const useMakeTransaction = () => {
     enabled: authorizedUser.oid ? true : false,
   });
 
-  const { data: organizations = [{}], isLoading: orgLoading } = useQuery({
+  const {
+    data: organizationData = { data: [], member: null, dga: [] },
+    isLoading: orgLoading,
+  } = useQuery({
     queryKey: "organizations",
-    queryFn: () => getOrganizations().then((res) => res.data.data),
+    queryFn: () => getOrganizations().then((res) => res.data),
   });
+
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data || [];
 
   const { data: salesData = [], isLoading: salesLoading } = useQuery({
     queryKey: "getSales",

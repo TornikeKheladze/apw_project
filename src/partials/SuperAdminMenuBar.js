@@ -33,6 +33,8 @@ import { useQuery } from "react-query";
 import { getOrganizationById } from "services/organizations";
 import { SIPTYPEID } from "data/applications";
 import MessageIcon from "components/icons/MessageIcon";
+import StatementIcon from "components/icons/StatementIcon";
+import AgreementIcon from "components/icons/AgreementIcon";
 
 const MenuBarContext = createContext();
 
@@ -593,6 +595,40 @@ const MenuDetailAuth = () => {
           <></>
         )}
 
+        <NavLink to={"statements"} onClick={hideMenuDetail}>
+          <StatementIcon className="w-6 h-6 mr-2" />
+          განცხადებები
+        </NavLink>
+
+        <MenuBarCollapse
+          icon={<AgreementIcon className="w-6 h-6 mr-2" />}
+          label={"ხელშეკრულებები"}
+          height={"300px"}
+        >
+          <NavLink to="/agreements/create" onClick={hideMenuDetail}>
+            ახალი ხელშეკრულება
+          </NavLink>
+          <NavLink to="/agreements/pending" onClick={hideMenuDetail}>
+            ქმედების მოლოდინში
+          </NavLink>
+          <NavLink to="/agreements/active" onClick={hideMenuDetail}>
+            აქტიური ხელშეკრულება
+          </NavLink>
+          <MenuBarCollapse label={"არქივი"}>
+            <NavLink to="/archive/agreements" onClick={hideMenuDetail}>
+              გაკეთებული განცხადებები
+            </NavLink>
+            <NavLink to="/archive/invoice" onClick={hideMenuDetail}>
+              ინვოისის ვადის გამო <br /> გაუქმებული
+            </NavLink>
+            <NavLink to="/archive/expired" onClick={hideMenuDetail}>
+              ვადა ამოწურული <br /> ხელშეკრულებები
+            </NavLink>
+            <NavLink to="/archive/templates" onClick={hideMenuDetail}>
+              მონახაზები
+            </NavLink>
+          </MenuBarCollapse>
+        </MenuBarCollapse>
         <hr />
       </div>
     </div>

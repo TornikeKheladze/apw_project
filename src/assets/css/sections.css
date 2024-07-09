@@ -126,7 +126,7 @@ Menu Bar
   Menu Detail
   */
   .menu-detail {
-    @apply absolute z-10 top-0 bottom-0 p-10 bg-foreground overflow-y-scroll;
+    @apply absolute z-10 top-0 bottom-0 py-10 px-6 bg-foreground overflow-y-scroll;
     left: -220px;
     /* width: 220px; */
     @apply transition-all duration-200 ease-linear;

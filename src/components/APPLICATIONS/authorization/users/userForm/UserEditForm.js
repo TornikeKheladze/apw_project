@@ -46,8 +46,8 @@ const UserEditForm = () => {
         afterRequestHandler("მომხმარებელი წარმატებით დაემატა", "success");
         localStorage.removeItem("formInputData");
       },
-      onError: () => {
-        afterRequestHandler("რეგისტრაცია ვერ მოხერხდა", "danger");
+      onError: (data) => {
+        afterRequestHandler(data.response.data.message, "danger");
       },
     });
   const { mutate: updateUserMutate, isLoading: updateUserLoading } =
@@ -58,8 +58,8 @@ const UserEditForm = () => {
           "მომხმარებლის მონაცემები წარმატებით შეიცვალა",
           "success"
         ),
-      onError: () => {
-        afterRequestHandler("ცვლილება ვერ მოხერხდა", "danger");
+      onError: (data) => {
+        afterRequestHandler(data.response.data.message, "danger");
       },
     });
 

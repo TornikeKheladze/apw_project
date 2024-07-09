@@ -76,14 +76,20 @@ function Collapse({ label, children, mainInfo }) {
 
 export default Collapse;
 
-export const MenuBarCollapse = ({ label, children, icon, className }) => {
+export const MenuBarCollapse = ({
+  label,
+  children,
+  icon,
+  className,
+  height,
+}) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  const h = children.length * 40 + "px";
+  const h = height || children.length * 40 + "px";
 
   return (
     <div className={className || ""}>
