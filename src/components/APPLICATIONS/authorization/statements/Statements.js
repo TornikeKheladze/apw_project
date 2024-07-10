@@ -103,7 +103,7 @@ const Statements = () => {
         <table>
           <thead>
             <tr className="border-y border-gray-700">
-              <th className="border-x border-gray-700 px-1">იურიდიული პირი</th>
+              <th className="border-x border-gray-700 px-1">განმცხადებელი</th>
               <th className="border-x border-gray-700 px-1">
                 უფლებამოსილი პირი
               </th>

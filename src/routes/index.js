@@ -86,6 +86,9 @@ import ActiveRingPackage from "components/APPLICATIONS/authorization/packages/Ac
 import Sms from "components/APPLICATIONS/authorization/sms/Sms";
 import SmsCrud from "components/APPLICATIONS/authorization/sms/SmsCrud";
 import Statements from "components/APPLICATIONS/authorization/statements/Statements";
+import NewAgreement from "components/APPLICATIONS/authorization/agreements/NewAgreement";
+import Sips from "components/APPLICATIONS/authorization/organizations/Sips";
+import Agreements from "components/APPLICATIONS/authorization/agreements/Agreements";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -103,6 +106,7 @@ const Router = () => {
           {/* test routes */}
           <Route path="organization-type-edit" element={<OrganizationType />} />
           <Route path="organizations/:typeId?" element={<Organizations />} />
+          <Route path="sips" element={<Sips />} />
           <Route path="departments/:oid" element={<DepartmentsTree />} />
           <Route path="activePackage/:oid" element={<ActivePackage />} />
           <Route
@@ -131,6 +135,9 @@ const Router = () => {
           <Route path="/packages" element={<Packages />} />
           <Route path="/ring-packages" element={<RingPackages />} />
           <Route path="/statements" element={<Statements />} />
+
+          <Route path="/agreements" element={<Agreements />} />
+          <Route path="/agreements/create" element={<NewAgreement />} />
 
           <Route path="/billing/userStatistic" element={<UserStatistic />} />
           <Route

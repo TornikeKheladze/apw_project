@@ -30,7 +30,7 @@ import PuzzleIcon from "components/icons/PuzzleIcon";
 import AlgIcon from "components/icons/AlgIcon";
 import useCheckPermission, { useCheckAID } from "helpers/useCheckPermission";
 import { useQuery } from "react-query";
-import { getOrganizationById } from "services/organizations";
+import { getOrganizationById, getStatements } from "services/organizations";
 import { SIPTYPEID } from "data/applications";
 import MessageIcon from "components/icons/MessageIcon";
 import StatementIcon from "components/icons/StatementIcon";
@@ -460,6 +460,10 @@ const MenuDetailAuth = () => {
     if (+authorizedOrganization.type === SIPTYPEID) return true;
     return false;
   };
+  const { data: statementData = { data: [], request_chanel: [] } } = useQuery({
+    queryKey: "getStatements",
+    queryFn: () => getStatements().then((res) => res.data),
+  });
 
   return (
     <div
@@ -468,6 +472,45 @@ const MenuDetailAuth = () => {
       })}
     >
       <div className="menu-detail-wrapper">
+        <NavLink to={"statements"} onClick={hideMenuDetail}>
+          <StatementIcon className="w-6 h-6 mr-2" />
+          <p className="relative">
+            განცხადებები
+            <span className="absolute -top-2 -right-6 rounded-full !text-white !bg-danger !text-[14px] px-[3px]">
+              {statementData.data.length !== 0 && statementData.data.length}
+            </span>
+          </p>
+        </NavLink>
+
+        <MenuBarCollapse
+          icon={<AgreementIcon className="w-6 h-6 mr-2" />}
+          label={"ხელშეკრულებები"}
+          height={"300px"}
+        >
+          <NavLink to="/agreements" onClick={hideMenuDetail}>
+            ახალი ხელშეკრულება
+          </NavLink>
+          <NavLink to="/agreements/pending" onClick={hideMenuDetail}>
+            ქმედების მოლოდინში
+          </NavLink>
+          <NavLink to="/agreements/active" onClick={hideMenuDetail}>
+            აქტიური ხელშეკრულება
+          </NavLink>
+          <MenuBarCollapse label={"არქივი"}>
+            <NavLink to="/archive/agreements" onClick={hideMenuDetail}>
+              გაკეთებული განცხადებები
+            </NavLink>
+            <NavLink to="/archive/invoice" onClick={hideMenuDetail}>
+              ინვოისის ვადის გამო <br /> გაუქმებული
+            </NavLink>
+            <NavLink to="/archive/expired" onClick={hideMenuDetail}>
+              ვადა ამოწურული <br /> ხელშეკრულებები
+            </NavLink>
+            <NavLink to="/archive/templates" onClick={hideMenuDetail}>
+              მონახაზები
+            </NavLink>
+          </MenuBarCollapse>
+        </MenuBarCollapse>
         {user.superAdmin && (
           <MenuBarCollapse
             icon={<OrgIcon className={"w-6 h-6 mr-2"} />}
@@ -595,40 +638,6 @@ const MenuDetailAuth = () => {
           <></>
         )}
 
-        <NavLink to={"statements"} onClick={hideMenuDetail}>
-          <StatementIcon className="w-6 h-6 mr-2" />
-          განცხადებები
-        </NavLink>
-
-        <MenuBarCollapse
-          icon={<AgreementIcon className="w-6 h-6 mr-2" />}
-          label={"ხელშეკრულებები"}
-          height={"300px"}
-        >
-          <NavLink to="/agreements/create" onClick={hideMenuDetail}>
-            ახალი ხელშეკრულება
-          </NavLink>
-          <NavLink to="/agreements/pending" onClick={hideMenuDetail}>
-            ქმედების მოლოდინში
-          </NavLink>
-          <NavLink to="/agreements/active" onClick={hideMenuDetail}>
-            აქტიური ხელშეკრულება
-          </NavLink>
-          <MenuBarCollapse label={"არქივი"}>
-            <NavLink to="/archive/agreements" onClick={hideMenuDetail}>
-              გაკეთებული განცხადებები
-            </NavLink>
-            <NavLink to="/archive/invoice" onClick={hideMenuDetail}>
-              ინვოისის ვადის გამო <br /> გაუქმებული
-            </NavLink>
-            <NavLink to="/archive/expired" onClick={hideMenuDetail}>
-              ვადა ამოწურული <br /> ხელშეკრულებები
-            </NavLink>
-            <NavLink to="/archive/templates" onClick={hideMenuDetail}>
-              მონახაზები
-            </NavLink>
-          </MenuBarCollapse>
-        </MenuBarCollapse>
         <hr />
       </div>
     </div>
