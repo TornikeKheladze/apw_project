@@ -111,7 +111,7 @@ const NewAgreement = () => {
 
   // console.log(selectedBilPackage);
 
-  console.log(additionalFiles);
+  // console.log(additionalFiles);
 
   return (
     <main className="workspace">
@@ -299,17 +299,10 @@ const NewAgreement = () => {
             </Button>
             {additionalFiles.map((item) => {
               return (
-                <div className="mb-1" key={item}>
-                  <Label
-                    onClick={() =>
-                      setAdditionalFiles((prevState) =>
-                        prevState.filter((i) => i !== item)
-                      )
-                    }
-                    className={`block mb-1 text-danger cursor-pointer`}
-                  >
-                    ფაილის წაშლა
-                  </Label>
+                <div
+                  className="mb-1 flex items-center justify-between"
+                  key={item}
+                >
                   <CustomInput
                     // temporary
                     name={`${item}-file`}
@@ -317,7 +310,19 @@ const NewAgreement = () => {
                     step="any"
                     register={register}
                     rules={{}}
+                    className="w-4/5"
                   />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setAdditionalFiles((prevState) =>
+                        prevState.filter((i) => i !== item)
+                      )
+                    }
+                    className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
+                  >
+                    <span className="la la-trash-alt"></span>
+                  </button>
                 </div>
               );
             })}
@@ -645,18 +650,19 @@ const NewAgreement = () => {
                   key={item + Math.random()}
                   className="border p-3 mt-2 rounded-md"
                 >
-                  <Button
-                    type="button"
-                    color="danger"
-                    className="mb-2"
-                    onClick={() =>
-                      setAuthUserForm((prevState) =>
-                        prevState.filter((i) => i !== item)
-                      )
-                    }
-                  >
-                    წაშლა
-                  </Button>
+                  <div className="text-right">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setAuthUserForm((prevState) =>
+                          prevState.filter((i) => i !== item)
+                        )
+                      }
+                      className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
+                    >
+                      <span className="la la-trash-alt"></span>
+                    </button>
+                  </div>
                   <div>
                     <Label
                       className={`block mb-1  ${
@@ -809,17 +815,10 @@ const NewAgreement = () => {
               </Button>
               {authFiles.map((item) => {
                 return (
-                  <div className="mb-1" key={item}>
-                    <Label
-                      onClick={() =>
-                        setAuthFiles((prevState) =>
-                          prevState.filter((i) => i !== item)
-                        )
-                      }
-                      className={`block mb-1 text-danger cursor-pointer`}
-                    >
-                      ფაილის წაშლა
-                    </Label>
+                  <div
+                    className="mb-1 flex items-center justify-between"
+                    key={item}
+                  >
                     <CustomInput
                       // temporary
                       name={`${item}-file-auth`}
@@ -827,7 +826,19 @@ const NewAgreement = () => {
                       step="any"
                       register={register}
                       rules={{}}
+                      className="w-4/5"
                     />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setAuthFiles((prevState) =>
+                          prevState.filter((i) => i !== item)
+                        )
+                      }
+                      className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
+                    >
+                      <span className="la la-trash-alt"></span>
+                    </button>
                   </div>
                 );
               })}
