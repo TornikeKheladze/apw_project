@@ -5,6 +5,7 @@ import CustomInput from "components/form/CustomInput";
 import CustomSelect from "components/form/CustomSelect";
 import Label from "components/form/Label";
 import PlusIcon from "components/icons/PlusIcon";
+import { IDENTIFY_CODE_SIP } from "data/applications";
 import { useState } from "react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
@@ -140,7 +141,7 @@ const NewAgreement = () => {
     console.log(data);
     const firstStepObj = {
       id: 1,
-      identify_code: data.identify_code,
+      identify_code: IDENTIFY_CODE_SIP,
       contract_exp:
         contract_exp === "choose"
           ? data.contract_exp_date
@@ -338,25 +339,6 @@ const NewAgreement = () => {
           <div>
             <Label
               className={`block mb-1  ${
-                errors.identify_code ? "text-danger" : ""
-              }`}
-            >
-              საიდენტიფიკაციო კოდი *
-            </Label>
-            <CustomInput
-              name="identify_code"
-              type="text"
-              step="any"
-              register={register}
-              rules={{
-                required: "ველი აუცილებელია",
-              }}
-              className={`${errors.identify_code ? "border-danger" : ""}`}
-            />
-          </div>
-          <div>
-            <Label
-              className={`block mb-1  ${
                 errors.contract_exp ? "text-danger" : ""
               }`}
             >
@@ -476,7 +458,7 @@ const NewAgreement = () => {
           </div>
           <div>
             <Label className={`block mb-1  `}>
-              ინფორმაცია რომლის დამატებით მოწოდებაც საჭიროდ მიგაჩიათ (250
+              ინფორმაცია რომლის დამატებით მოწოდებაც საჭიროდ მიგაჩნიათ (250
               სიმბოლო)
             </Label>
             <CustomInput
@@ -686,7 +668,7 @@ const NewAgreement = () => {
               </div>
               <div>
                 <Label className={`block mb-1 `}>
-                  დამატებით საკონტაქტო ინფორმაცია
+                  დამატებითი საკონტაქტო ინფორმაცია
                 </Label>
 
                 <CustomInput
@@ -903,7 +885,7 @@ const NewAgreement = () => {
 
             <div className="mt-2">
               <Label className={`block mb-1  `}>
-                ინფორმაცია რომლის დამატებით მოწოდებაც საჭიროდ მიგაჩიათ (250
+                ინფორმაცია რომლის დამატებით მოწოდებაც საჭიროდ მიგაჩნიათ (250
                 სიმბოლო)
               </Label>
               <CustomInput

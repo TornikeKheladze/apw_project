@@ -5,3 +5,5 @@ export const APPLICATIONS = [
 ];
 
 export const SIPTYPEID = 37;
+
+export const IDENTIFY_CODE_SIP = 202238621;

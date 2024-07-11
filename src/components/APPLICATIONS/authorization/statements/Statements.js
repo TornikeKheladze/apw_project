@@ -2,6 +2,7 @@ import Alert from "components/Alert";
 import Button from "components/Button";
 import Modal, { ModalBody, ModalHeader } from "components/Modal";
 import LoadingSpinner from "components/icons/LoadingSpinner";
+import { IDENTIFY_CODE_SIP } from "data/applications";
 import { convertDate } from "helpers/convertDate";
 import { downloadPDF } from "helpers/downloadPDF";
 import { useState } from "react";
@@ -28,7 +29,10 @@ const Statements = () => {
   const { data: statementData = { data: [], request_chanel: [] }, isLoading } =
     useQuery({
       queryKey: "getStatements",
-      queryFn: () => getStatements().then((res) => res.data),
+      queryFn: () =>
+        getStatements({
+          identify_code: IDENTIFY_CODE_SIP,
+        }).then((res) => res.data),
     });
 
   const {
@@ -148,7 +152,6 @@ const Statements = () => {
       <Modal active={modal} centered onClose={() => setModal(false)}>
         <ModalHeader>განცხადება</ModalHeader>
         <ModalBody>
-          {console.log(getDocumentLoading, downloadLoading, firstStepLoading)}
           <div className="p-5 overflow-y-auto h-[80vh]">
             <div className="relative">
               {getDocumentLoading || downloadLoading || firstStepLoading ? (

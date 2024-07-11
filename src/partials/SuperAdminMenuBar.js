@@ -31,7 +31,7 @@ import AlgIcon from "components/icons/AlgIcon";
 import useCheckPermission, { useCheckAID } from "helpers/useCheckPermission";
 import { useQuery } from "react-query";
 import { getOrganizationById, getStatements } from "services/organizations";
-import { SIPTYPEID } from "data/applications";
+import { IDENTIFY_CODE_SIP, SIPTYPEID } from "data/applications";
 import MessageIcon from "components/icons/MessageIcon";
 import StatementIcon from "components/icons/StatementIcon";
 import AgreementIcon from "components/icons/AgreementIcon";
@@ -462,7 +462,10 @@ const MenuDetailAuth = () => {
   };
   const { data: statementData = { data: [], request_chanel: [] } } = useQuery({
     queryKey: "getStatements",
-    queryFn: () => getStatements().then((res) => res.data),
+    queryFn: () =>
+      getStatements({
+        identify_code: IDENTIFY_CODE_SIP,
+      }).then((res) => res.data),
   });
 
   return (
