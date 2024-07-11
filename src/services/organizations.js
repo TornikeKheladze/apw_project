@@ -50,3 +50,10 @@ export const firstStep = (data) => {
 export const getGovInfo = () => {
   return instance.get("/gov-info");
 };
+
+export const firstStepInsert = (data) => {
+  return instance.post("auth-user/gov-insert", data);
+};
+export const secondStepInsert = (data) => {
+  return instance.post("second-step/insert", data);
+};

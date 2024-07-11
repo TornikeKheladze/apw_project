@@ -75,8 +75,12 @@ const Statements = () => {
         setAlert({ message: "", type: "success" });
       }, 2500);
     },
-    onError: (data) =>
-      setAlert({ message: data.response.data.message, type: "danger" }),
+    onError: (data) => {
+      setAlert({ message: data.response.data.message, type: "danger" });
+      setTimeout(() => {
+        setAlert({ message: "", type: "danger" });
+      }, 2500);
+    },
   });
 
   const conviction = statement.document.find(
@@ -110,8 +114,11 @@ const Statements = () => {
             </tr>
           </thead>
           <tbody>
-            {statementData.data.map((item) => (
-              <tr key={item.id} className="border-b border-gray-400">
+            {statementData.data.map((item, index) => (
+              <tr
+                key={item.id + index + Math.random()}
+                className="border-b border-gray-400"
+              >
                 <td className="border-x border-gray-400 px-1">{item.name}</td>
                 <td className="border-x border-gray-400 px-1">{`${item.user_name} ${item.user_l_name}`}</td>
                 <td className="border-x border-gray-400 px-1">
@@ -141,6 +148,7 @@ const Statements = () => {
       <Modal active={modal} centered onClose={() => setModal(false)}>
         <ModalHeader>განცხადება</ModalHeader>
         <ModalBody>
+          {console.log(getDocumentLoading, downloadLoading, firstStepLoading)}
           <div className="p-5 overflow-y-auto h-[80vh]">
             <div className="relative">
               {getDocumentLoading || downloadLoading || firstStepLoading ? (

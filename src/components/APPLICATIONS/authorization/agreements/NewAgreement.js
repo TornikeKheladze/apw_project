@@ -1,3 +1,4 @@
+import Alert from "components/Alert";
 import Button from "components/Button";
 import Checkbox from "components/form/Checkbox";
 import CustomInput from "components/form/CustomInput";
@@ -5,11 +6,13 @@ import CustomSelect from "components/form/CustomSelect";
 import Label from "components/form/Label";
 import PlusIcon from "components/icons/PlusIcon";
 import { useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { useQuery } from "react-query";
-import { getBillingPackages } from "services/billingPackages";
-import { getPaymentMethods } from "services/orgPackages";
-import { getPackages } from "services/packages";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import { useMutation, useQuery } from "react-query";
+import {
+  firstStepInsert,
+  getGovInfo,
+  secondStepInsert,
+} from "services/organizations";
 
 const NewAgreement = () => {
   const {
@@ -20,9 +23,9 @@ const NewAgreement = () => {
   } = useForm({
     // defaultValues,
   });
+  const [alert, setAlert] = useState({ message: "", type: "success" });
   const [additionalFiles, setAdditionalFiles] = useState([]);
   const [authFiles, setAuthFiles] = useState([]);
-  const [authUserForm, setAuthUserForm] = useState([]);
   const payment_period = useWatch({
     control,
     name: "payment_period",
@@ -33,24 +36,169 @@ const NewAgreement = () => {
     name: "contract_exp",
   });
 
+  const secondStepUsers = useWatch({
+    control,
+    name: "user",
+  });
+
   const [selectedUserPackage, setSelectedUserPackage] = useState([]);
-  const [selectedBilPackage, setSelectedBilPackage] = useState([]);
-  const { data: paymentMethods = [] } = useQuery({
-    queryKey: "getPaymentMethods",
-    queryFn: () => getPaymentMethods().then((res) => res.data.data),
+  const [selectedCatalog, setSelectedCatalog] = useState([]);
+  const [selectedService, setSelectedService] = useState([]);
+
+  const {
+    data: govInfo = {
+      catalog: [],
+      payment_period: [],
+      services: [],
+      user_packages: [],
+    },
+  } = useQuery({
+    queryKey: ["getGovInfo"],
+    queryFn: () => getGovInfo().then((res) => res.data.data),
   });
-  const { data: billingPackages = [] } = useQuery({
-    queryKey: "getBillingPackages",
-    queryFn: () => getBillingPackages().then((res) => res.data),
+
+  const { mutate: secondStepMutate } = useMutation({
+    mutationFn: secondStepInsert,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (data) => {
+      setAlert({
+        message: data.response.data.message,
+        type: "danger",
+      });
+      setTimeout(() => {
+        setAlert({
+          message: "",
+          type: "danger",
+        });
+      }, 3000);
+    },
   });
-  const { data: packages = [] } = useQuery({
-    queryKey: ["getPackages"],
-    queryFn: () => getPackages().then((res) => res.data),
+
+  const { mutate: firstStepInsertMutate } = useMutation({
+    mutationFn: firstStepInsert,
+    onSuccess: (data) => {
+      if (data.data.status === true) {
+        secondStepMutate({ id: 5, oid: data.data.data, user: secondStepUsers });
+      } else {
+        setAlert({
+          message: "შეცდომა",
+          type: "danger",
+        });
+        setTimeout(() => {
+          setAlert({
+            message: "",
+            type: "success",
+          });
+        }, 3000);
+      }
+    },
+    onError: (data) => {
+      setAlert({
+        message: data.response.data.message,
+        type: "danger",
+      });
+      setTimeout(() => {
+        setAlert({
+          message: "",
+          type: "danger",
+        });
+      }, 3000);
+    },
   });
+
+  function addMonthsToDate(months) {
+    const currentDate = new Date();
+    currentDate.setMonth(currentDate.getMonth() + months);
+    return currentDate.toISOString().split("T")[0];
+  }
 
   const submitHandler = (data) => {
     console.log(data);
+    const firstStepObj = {
+      id: 5,
+      identify_code: data.identify_code,
+      contract_exp:
+        contract_exp === "choose"
+          ? data.contract_exp_date
+          : addMonthsToDate(data.contract_exp),
+      // contract_exp: 1,
+      payment_period: "5",
+
+      // conviction_doc: {
+      //   doc_id: "6633970bbd4cd27b533dd6e6",
+      //   user_email: "test_23@test.ge",
+      // },
+      // health_doc: {
+      //   doc_id: "66337be0bd4cd27b533dd5c8",
+      //   user_email: "test_23@test.ge",
+      // },
+      desc: data.desc,
+      // additional_doc: {
+      //   1: {
+      //     doc_name: "name",
+      //     doc_id: "6633970bbd4cd27b533dd6e6",
+      //   },
+      //   2: {
+      //     doc_name: "name",
+      //     doc_id: "6633970bbd4cd27b533dd6e7",
+      //   },
+      // },
+
+      user: {
+        name: data.user_name,
+        lname: data.user_lname,
+        personl_number: data.user_personl_number,
+        contact: {
+          tell: data.user_tell,
+          email: data.user_email,
+          // contact_info
+        },
+      },
+
+      legal: {
+        name: data.legal_name,
+        identifi_number: data.legal_identifi_number,
+        lagel_addres: data.legal_lagel_addres,
+        contact: {
+          legal_tell: data.legal_tell,
+          legal_email: data.legal_email,
+          // legal_contact_info
+        },
+        authorized: {
+          name: data.authorized_name,
+          lname: data.authorized_lname,
+          personl_number: data.authorized_personl_number,
+          contact: {
+            tell: data.authorized_tell,
+            email: data.authorized_email,
+          },
+          // authorized_contact_info
+          // auth_desc
+        },
+      },
+      package: {
+        user_package: selectedUserPackage,
+        billing_package: {
+          services: selectedService,
+          catalog: selectedCatalog,
+        },
+      },
+    };
+    firstStepInsertMutate(firstStepObj);
+    const secondStepObj = {
+      oid: 139,
+      user: data.user,
+    };
+    console.log(secondStepObj);
   };
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "user",
+  });
+
   const handleCheckboxChange = (event, userId) => {
     const isChecked = event.target.checked;
 
@@ -62,13 +210,24 @@ const NewAgreement = () => {
       );
     }
   };
-  const handleBillingCheckboxChange = (event, userId) => {
+  const handleCatalogCheckboxChange = (event, userId) => {
     const isChecked = event.target.checked;
 
     if (isChecked) {
-      setSelectedBilPackage((prevState) => [...prevState, userId]);
+      setSelectedCatalog((prevState) => [...prevState, userId]);
     } else {
-      setSelectedBilPackage((prevState) =>
+      setSelectedCatalog((prevState) =>
+        prevState.filter((id) => id !== userId)
+      );
+    }
+  };
+  const handleServiceCheckboxChange = (event, userId) => {
+    const isChecked = event.target.checked;
+
+    if (isChecked) {
+      setSelectedService((prevState) => [...prevState, userId]);
+    } else {
+      setSelectedService((prevState) =>
         prevState.filter((id) => id !== userId)
       );
     }
@@ -107,14 +266,9 @@ const NewAgreement = () => {
     },
   ];
 
-  // console.log(selectedUserPackage);
-
-  // console.log(selectedBilPackage);
-
-  // console.log(additionalFiles);
-
   return (
     <main className="workspace">
+      <Alert color={alert.type} message={alert.message} />
       <div className="card p-5 ">
         <h3 className="mb-2">ახალი ხელშეკრულება</h3>
         <form
@@ -124,7 +278,7 @@ const NewAgreement = () => {
           <div className="border p-2 rounded-md">
             <h4>ავტორიზირებული პირის სერვისები</h4>
             <div className="flex flex-wrap gap-2 mb-3">
-              {packages?.map((uPackage) => (
+              {govInfo.user_packages?.map((uPackage) => (
                 <Checkbox
                   key={uPackage.id + Math.random().toString()}
                   label={`მომხმარებელი:${uPackage.count}, ვადა:${uPackage.exp} თვე, ფასი: ${uPackage.price}`}
@@ -135,19 +289,53 @@ const NewAgreement = () => {
             </div>
           </div>
           <div className="border p-2 rounded-md">
-            <h4>საბილინგო სისტემის სერვისები</h4>
+            <h4>კატალოგები</h4>
             <div className="flex flex-wrap gap-2 mb-3">
-              {billingPackages?.map((bPackage) => (
+              {govInfo.catalog?.map((catalog) => (
                 <Checkbox
-                  key={bPackage.packageID + Math.random().toString()}
-                  label={`რაოდენობა:${bPackage.quantity}, ვადა:${bPackage.expiration} თვე, ფასი: ${bPackage.price}`}
-                  checked={selectedBilPackage.includes(bPackage.packageID)}
+                  key={catalog.catID + Math.random().toString()}
+                  label={catalog.categoryName}
+                  checked={selectedCatalog.includes(catalog.catID)}
                   onChange={(event) =>
-                    handleBillingCheckboxChange(event, bPackage.packageID)
+                    handleCatalogCheckboxChange(event, catalog.catID)
                   }
                 />
               ))}
             </div>
+          </div>
+          <div className="border p-2 rounded-md">
+            <h4>კატალოგის სერვისები</h4>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {govInfo.services?.map((service) => (
+                <Checkbox
+                  key={service.serviceID + Math.random().toString()}
+                  label={service.name}
+                  checked={selectedService.includes(service.serviceID)}
+                  onChange={(event) =>
+                    handleServiceCheckboxChange(event, service.serviceID)
+                  }
+                />
+              ))}
+            </div>
+          </div>
+          <div>
+            <Label
+              className={`block mb-1  ${
+                errors.identify_code ? "text-danger" : ""
+              }`}
+            >
+              საიდენტიფიკაციო კოდი *
+            </Label>
+            <CustomInput
+              name="identify_code"
+              type="text"
+              step="any"
+              register={register}
+              rules={{
+                required: "ველი აუცილებელია",
+              }}
+              className={`${errors.identify_code ? "border-danger" : ""}`}
+            />
           </div>
           <div>
             <Label
@@ -208,7 +396,7 @@ const NewAgreement = () => {
               rules={{ required: "ველი აუცილებელია" }}
             >
               <option value="">გადახდის პერიოდულობა</option>
-              {paymentMethods?.map((item) => (
+              {govInfo.payment_period?.map((item) => (
                 <option
                   className="p-3"
                   key={item.id.toString() + item.name}
@@ -601,17 +789,7 @@ const NewAgreement = () => {
                     }`}
                   />
                 </div>
-                <div>
-                  <Label className={`block mb-1 `}>იურიდიული მისამართი</Label>
-                  <CustomInput
-                    // temporary
-                    name="authorized_legal_addres"
-                    type="text"
-                    step="any"
-                    register={register}
-                    rules={{}}
-                  />
-                </div>
+
                 <div>
                   <Label className={`block mb-1 `}>
                     დამატებითი საკონტაქტო ინფორმაცია
@@ -630,160 +808,82 @@ const NewAgreement = () => {
           </div>
           <div className="border border-gray-400 p-2 rounded-md">
             <h4>ინფორმაცია ავტორიზირებული პირის წარმომადგენლების შესახებ</h4>
+
+            {fields.map((item, index) => (
+              <div key={item.id} className="border p-3 mt-2 rounded-md">
+                <div className="text-right">
+                  <button
+                    onClick={() => remove(index)}
+                    type="button"
+                    className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
+                  >
+                    <span className="la la-trash-alt"></span>
+                  </button>
+                </div>
+                <label className="label">სახელი *</label>
+                <input
+                  className="form-control"
+                  {...register(`user.${index}.name`)}
+                  placeholder="სახელი"
+                  required
+                />
+                <label className="label">გვარი *</label>
+                <input
+                  className="form-control"
+                  {...register(`user.${index}.lname`)}
+                  placeholder="გვარი"
+                  required
+                />
+
+                <label className="label">პირადი ნომერი *</label>
+                <input
+                  className="form-control"
+                  {...register(`user.${index}.personal_number`)}
+                  placeholder="პირადი ნომერი"
+                  required
+                />
+                <label className="label">ტელეფონი</label>
+                <input
+                  className="form-control"
+                  {...register(`user.${index}.tell`)}
+                  placeholder="ტელეფონი"
+                  required
+                />
+                <label className="label">ელ-ფოსტა</label>
+                <input
+                  className="form-control"
+                  {...register(`user.${index}.email`)}
+                  placeholder="ელ-ფოსტა"
+                  required
+                />
+                <label className="label">
+                  დამატებითი საკონტაქტო ინფორმაცია
+                </label>
+                <input
+                  className="form-control"
+                  {...register(`user.${index}.contact_info`)}
+                  placeholder="დამატებითი საკონტაქტო ინფორმაცია"
+                />
+              </div>
+            ))}
             <Button
               type="button"
               className="p-2 mb-3"
               onClick={() =>
-                setAuthUserForm((prevState) => [
-                  ...prevState,
-                  prevState.length + 1,
-                ])
+                append({
+                  contact_info: "",
+                  email: "",
+                  lname: "",
+                  name: "",
+                  personal_number: "",
+                  tell: "",
+                })
               }
             >
               დამატება
               <PlusIcon />
             </Button>
 
-            {authUserForm.map((item) => {
-              return (
-                <div
-                  key={item + Math.random()}
-                  className="border p-3 mt-2 rounded-md"
-                >
-                  <div className="text-right">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setAuthUserForm((prevState) =>
-                          prevState.filter((i) => i !== item)
-                        )
-                      }
-                      className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
-                    >
-                      <span className="la la-trash-alt"></span>
-                    </button>
-                  </div>
-                  <div>
-                    <Label
-                      className={`block mb-1  ${
-                        errors[`${item}_name`] ? "text-danger" : ""
-                      }`}
-                    >
-                      სახელი *
-                    </Label>
-                    <CustomInput
-                      name={`${item}_name`}
-                      type="text"
-                      step="any"
-                      register={register}
-                      rules={{
-                        required: "ველი აუცილებელია",
-                      }}
-                      className={`${
-                        errors[`${item}_name`] ? "border-danger" : ""
-                      }`}
-                    />
-                  </div>
-                  <div>
-                    <Label
-                      className={`block mb-1  ${
-                        errors[`${item}_lname`] ? "text-danger" : ""
-                      }`}
-                    >
-                      გვარი *
-                    </Label>
-                    <CustomInput
-                      name={`${item}_lname`}
-                      type="text"
-                      step="any"
-                      register={register}
-                      rules={{
-                        required: "ველი აუცილებელია",
-                      }}
-                      className={`${
-                        errors[`${item}_lname`] ? "border-danger" : ""
-                      }`}
-                    />
-                  </div>
-                  <div>
-                    <Label
-                      className={`block mb-1  ${
-                        errors[`${item}_personl_number`] ? "text-danger" : ""
-                      }`}
-                    >
-                      პირადი ნომერი *
-                    </Label>
-                    <CustomInput
-                      name={`${item}_personl_number`}
-                      type="text"
-                      step="any"
-                      register={register}
-                      rules={{
-                        required: "ველი აუცილებელია",
-                      }}
-                      className={`${
-                        errors[`${item}_personl_number`] ? "border-danger" : ""
-                      }`}
-                    />
-                  </div>
-                  <div>
-                    <Label
-                      className={`block mb-1  ${
-                        errors[`${item}_tell`] ? "text-danger" : ""
-                      }`}
-                    >
-                      ტელეფონი *
-                    </Label>
-                    <CustomInput
-                      name={`${item}_tell`}
-                      type="text"
-                      step="any"
-                      register={register}
-                      rules={{
-                        required: "ველი აუცილებელია",
-                      }}
-                      className={`${
-                        errors[`${item}_tell`] ? "border-danger" : ""
-                      }`}
-                    />
-                  </div>
-                  <div>
-                    <Label
-                      className={`block mb-1  ${
-                        errors[`${item}_email`] ? "text-danger" : ""
-                      }`}
-                    >
-                      ელ-ფოსტა *
-                    </Label>
-                    <CustomInput
-                      name={`${item}_email`}
-                      type="text"
-                      step="any"
-                      register={register}
-                      rules={{
-                        required: "ველი აუცილებელია",
-                      }}
-                      className={`${
-                        errors[`${item}_email`] ? "border-danger" : ""
-                      }`}
-                    />
-                  </div>
-                  <div>
-                    <Label className={`block mb-1 `}>
-                      დამატებითი საკონტაქტო ინფორმაცია
-                    </Label>
-                    <CustomInput
-                      // temporary
-                      name={`${item}_contact_info`}
-                      type="text"
-                      step="any"
-                      register={register}
-                      rules={{}}
-                    />
-                  </div>
-                </div>
-              );
-            })}
             <div className="mt-2">
               <Label className={`block mb-1  `}>
                 ინფორმაცია რომლის დამატებით მოწოდებაც საჭიროდ მიგაჩიათ (250
@@ -844,6 +944,7 @@ const NewAgreement = () => {
               })}
             </div>
           </div>
+
           <Button type="submit">დადასტურება</Button>
         </form>
       </div>
