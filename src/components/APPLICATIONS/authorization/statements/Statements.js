@@ -2,7 +2,6 @@ import Alert from "components/Alert";
 import Button from "components/Button";
 import Modal, { ModalBody, ModalHeader } from "components/Modal";
 import LoadingSpinner from "components/icons/LoadingSpinner";
-import LupaIcon from "components/icons/LupaIcon";
 import { convertDate } from "helpers/convertDate";
 import { downloadPDF } from "helpers/downloadPDF";
 import { useState } from "react";
@@ -99,19 +98,15 @@ const Statements = () => {
     <main className="workspace">
       <Alert color={alert.type} message={alert.message} />
       <div className="card p-5">
-        <h3>განცხადებები</h3>
-        <table>
+        <h3 className="mb-2">განცხადებები</h3>
+        <table className="table table_bordered w-full mt-3 text-xs">
           <thead>
-            <tr className="border-y border-gray-700">
-              <th className="border-x border-gray-700 px-1">განმცხადებელი</th>
-              <th className="border-x border-gray-700 px-1">
-                უფლებამოსილი პირი
-              </th>
-              <th className="border-x border-gray-700 px-1">
-                განცხადების ინიცირების არხი
-              </th>
-              <th className="border-x border-gray-700 px-1">თარიღი</th>
-              <th className="border-x border-gray-700 px-1"></th>
+            <tr className="">
+              <th className="">განმცხადებელი</th>
+              <th className="">უფლებამოსილი პირი</th>
+              <th className="">განცხადების ინიცირების არხი</th>
+              <th className="">თარიღი</th>
+              <th className=""></th>
             </tr>
           </thead>
           <tbody>
@@ -131,9 +126,11 @@ const Statements = () => {
                 </td>
                 <td
                   onClick={() => getStatementMutate(item.id)}
-                  className="border-x border-gray-400 px-1 cursor-pointer"
+                  className="cursor-pointer"
                 >
-                  <LupaIcon />
+                  <Button className="rounded-lg text-white flex gap-1 p-2 text-lg w-full font-normal justify-center">
+                    <span className="la la-search text-white w-4"></span>
+                  </Button>
                 </td>
               </tr>
             ))}
