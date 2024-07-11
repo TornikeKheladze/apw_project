@@ -8,12 +8,12 @@ const Agreements = () => {
         <Link to="/agreements/create" className="card p-5">
           <h3 className="text-center">ავტორიზირებული პირი</h3>
         </Link>
-        <Link to="/agreements/create" className="card p-5">
+        {/* <Link to="/agreements/create" className="card p-5">
           <h3 className="text-center">ავტორიზირებული პირი</h3>
         </Link>
         <Link to="/agreements/create" className="card p-5">
           <h3 className="text-center">ავტორიზირებული პირი</h3>
-        </Link>
+        </Link> */}
         {/* <Link to="/agreements/create" className="card p-5">
           <h3>ახალი ხელშეკრულება</h3>
         </Link>

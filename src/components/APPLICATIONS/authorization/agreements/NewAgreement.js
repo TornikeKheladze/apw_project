@@ -60,7 +60,29 @@ const NewAgreement = () => {
   const { mutate: secondStepMutate } = useMutation({
     mutationFn: secondStepInsert,
     onSuccess: (data) => {
-      console.log(data);
+      if (data.data.status === true) {
+        setAlert({
+          message: "ქმედება წარმატებულია",
+          type: "success",
+        });
+        setTimeout(() => {
+          setAlert({
+            message: "",
+            type: "success",
+          });
+        }, 3000);
+      } else {
+        setAlert({
+          message: "შეცდომა",
+          type: "danger",
+        });
+        setTimeout(() => {
+          setAlert({
+            message: "",
+            type: "success",
+          });
+        }, 3000);
+      }
     },
     onError: (data) => {
       setAlert({
@@ -80,7 +102,7 @@ const NewAgreement = () => {
     mutationFn: firstStepInsert,
     onSuccess: (data) => {
       if (data.data.status === true) {
-        secondStepMutate({ id: 5, oid: data.data.data, user: secondStepUsers });
+        secondStepMutate({ id: 1, oid: data.data.data, user: secondStepUsers });
       } else {
         setAlert({
           message: "შეცდომა",
@@ -117,7 +139,7 @@ const NewAgreement = () => {
   const submitHandler = (data) => {
     console.log(data);
     const firstStepObj = {
-      id: 5,
+      id: 1,
       identify_code: data.identify_code,
       contract_exp:
         contract_exp === "choose"
@@ -149,7 +171,7 @@ const NewAgreement = () => {
       user: {
         name: data.user_name,
         lname: data.user_lname,
-        personl_number: data.user_personl_number,
+        personal_number: data.user_personal_number,
         contact: {
           tell: data.user_tell,
           email: data.user_email,
@@ -169,7 +191,7 @@ const NewAgreement = () => {
         authorized: {
           name: data.authorized_name,
           lname: data.authorized_lname,
-          personl_number: data.authorized_personl_number,
+          personal_number: data.authorized_personal_number,
           contact: {
             tell: data.authorized_tell,
             email: data.authorized_email,
@@ -187,11 +209,6 @@ const NewAgreement = () => {
       },
     };
     firstStepInsertMutate(firstStepObj);
-    const secondStepObj = {
-      oid: 139,
-      user: data.user,
-    };
-    console.log(secondStepObj);
   };
 
   const { fields, append, remove } = useFieldArray({
@@ -542,7 +559,7 @@ const NewAgreement = () => {
               <div>
                 <Label className={`block mb-1`}>პირადი ნომერი</Label>
                 <CustomInput
-                  name="user_personl_number"
+                  name="user_personal_number"
                   type="text"
                   step="any"
                   register={register}
@@ -729,13 +746,13 @@ const NewAgreement = () => {
                 <div>
                   <Label
                     className={`block mb-1  ${
-                      errors.authorized_personl_number ? "text-danger" : ""
+                      errors.authorized_personal_number ? "text-danger" : ""
                     }`}
                   >
                     პირადი ნომერი *
                   </Label>
                   <CustomInput
-                    name="authorized_personl_number"
+                    name="authorized_personal_number"
                     type="text"
                     step="any"
                     register={register}
@@ -743,7 +760,7 @@ const NewAgreement = () => {
                       required: "ველი აუცილებელია",
                     }}
                     className={`${
-                      errors.authorized_personl_number ? "border-danger" : ""
+                      errors.authorized_personal_number ? "border-danger" : ""
                     }`}
                   />
                 </div>
