@@ -287,7 +287,7 @@ const NewAgreement = () => {
     <main className="workspace">
       <Alert color={alert.type} message={alert.message} />
       <div className="card p-5 ">
-        <h3 className="mb-2">ახალი ხელშეკრულება</h3>
+        <h3 className="mb-2">ახალი განცხადება</h3>
         <form
           onSubmit={handleSubmit(submitHandler)}
           className="flex flex-col gap-4"
