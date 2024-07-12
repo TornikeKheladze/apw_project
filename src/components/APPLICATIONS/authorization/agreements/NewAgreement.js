@@ -833,7 +833,6 @@ const NewAgreement = () => {
                   placeholder="გვარი"
                   required
                 />
-
                 <label className="label">პირადი ნომერი *</label>
                 <input
                   className="form-control"
@@ -853,6 +852,19 @@ const NewAgreement = () => {
                   className="form-control"
                   {...register(`user.${index}.email`)}
                   placeholder="ელ-ფოსტა"
+                  required
+                />
+                <label className="label">მინდობილობის როლი</label>
+                <input
+                  className="form-control"
+                  {...register(`user.${index}.comment`)}
+                  required
+                />
+                <label className="label">მინდობილობის ვადა</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  {...register(`user.${index}.user_date_expiration`)}
                   required
                 />
                 <label className="label">
@@ -876,6 +888,8 @@ const NewAgreement = () => {
                   name: "",
                   personal_number: "",
                   tell: "",
+                  user_date_expiration: "",
+                  comment: "",
                 })
               }
             >
