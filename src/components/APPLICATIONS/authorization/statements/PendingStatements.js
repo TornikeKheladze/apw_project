@@ -14,7 +14,7 @@ import {
   getStatements,
 } from "services/organizations";
 
-const Statements = () => {
+const PendingStatements = () => {
   const queryClient = useQueryClient();
   const [modal, setModal] = useState(false);
   const [commentInput, setCommentInput] = useState({
@@ -103,33 +103,33 @@ const Statements = () => {
 
   const loading = statementLoading || isLoading;
 
-  const govStatements =
+  const pendingStatements =
     statementData.data.filter(
-      (statement) => +statement.gov === 5 && +statement.status === 2
+      (statement) => +statement.status === 2 && +statement.gov === 1
     ) || [];
-
   return (
     <main className="workspace">
       <Alert color={alert.type} message={alert.message} />
       <div className="card p-5">
-        <h3 className="mb-2">განცხადებები</h3>
+        <h3 className="mb-2">განცხადებები ქმედების მოლოდინში</h3>
         <table className="table table_bordered w-full mt-3 text-xs">
           <thead>
             <tr className="">
               <th className="">განმცხადებელი</th>
               <th className="">უფლებამოსილი პირი</th>
               <th className="">განცხადების ინიცირების არხი</th>
+              <th className="">ხელშეკრულების სტატუსი</th>
               <th className="">თარიღი</th>
               <th className=""></th>
             </tr>
           </thead>
           <tbody>
-            {govStatements.length === 0 && !loading ? (
+            {pendingStatements.length === 0 && !loading ? (
               <tr>
                 <td colSpan={6}>ხელშეკრულება არ მოიძებნა</td>
               </tr>
             ) : (
-              govStatements.map((item, index) => (
+              pendingStatements.map((item, index) => (
                 <tr
                   key={item.id + index + Math.random()}
                   className="border-b border-gray-400"
@@ -142,6 +142,9 @@ const Statements = () => {
                         (channel) => channel.id === item.gov
                       )?.app_name
                     }
+                  </td>
+                  <td className="border-x border-gray-400 px-1">
+                    ქმედების მოლოდინში
                   </td>
                   <td className="border-x border-gray-400 px-1">
                     {convertDate(item.created_at)}
@@ -313,4 +316,4 @@ const Statements = () => {
   );
 };
 
-export default Statements;
+export default PendingStatements;

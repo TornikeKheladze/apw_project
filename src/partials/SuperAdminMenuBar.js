@@ -467,6 +467,10 @@ const MenuDetailAuth = () => {
         identify_code: IDENTIFY_CODE_SIP,
       }).then((res) => res.data),
   });
+  const govStatements =
+    statementData.data.filter(
+      (statement) => +statement.gov === 5 && +statement.status === 2
+    ) || [];
 
   return (
     <div
@@ -480,7 +484,7 @@ const MenuDetailAuth = () => {
           <p className="relative">
             განცხადებები
             <span className="absolute -top-2 -right-6 rounded-full !text-white !bg-danger !text-[14px] px-[3px]">
-              {statementData.data.length !== 0 && statementData.data.length}
+              {govStatements.length !== 0 && govStatements.length}
             </span>
           </p>
         </NavLink>
@@ -490,7 +494,7 @@ const MenuDetailAuth = () => {
           label={"ხელშეკრულებები"}
           height={"300px"}
         >
-          <NavLink to="/agreements" onClick={hideMenuDetail}>
+          <NavLink to="/agreement" onClick={hideMenuDetail}>
             ახალი ხელშეკრულება
           </NavLink>
           <NavLink to="/agreements/pending" onClick={hideMenuDetail}>

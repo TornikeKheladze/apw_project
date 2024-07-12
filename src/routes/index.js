@@ -89,6 +89,11 @@ import Statements from "components/APPLICATIONS/authorization/statements/Stateme
 import NewAgreement from "components/APPLICATIONS/authorization/agreements/NewAgreement";
 import Sips from "components/APPLICATIONS/authorization/organizations/Sips";
 import Agreements from "components/APPLICATIONS/authorization/agreements/Agreements";
+import PendingStatements from "components/APPLICATIONS/authorization/statements/PendingStatements";
+import ActiveStatements from "components/APPLICATIONS/authorization/statements/ActiveStatements";
+import ArchivedStatements from "components/APPLICATIONS/authorization/statements/ArchivedStatements";
+import ExpInvoiceStatements from "components/APPLICATIONS/authorization/statements/ExpInvoiceStatements";
+import ExpiredStatements from "components/APPLICATIONS/authorization/statements/ExpiredStatements";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -136,8 +141,13 @@ const Router = () => {
           <Route path="/ring-packages" element={<RingPackages />} />
           <Route path="/statements" element={<Statements />} />
 
-          <Route path="/agreements" element={<Agreements />} />
+          <Route path="/agreement" element={<Agreements />} />
           <Route path="/agreements/create" element={<NewAgreement />} />
+          <Route path="/agreements/pending" element={<PendingStatements />} />
+          <Route path="/agreements/active" element={<ActiveStatements />} />
+          <Route path="/archive/agreements" element={<ArchivedStatements />} />
+          <Route path="/archive/invoice" element={<ExpInvoiceStatements />} />
+          <Route path="/archive/expired" element={<ExpiredStatements />} />
 
           <Route path="/billing/userStatistic" element={<UserStatistic />} />
           <Route
