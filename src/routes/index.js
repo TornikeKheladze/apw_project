@@ -94,6 +94,7 @@ import ActiveStatements from "components/APPLICATIONS/authorization/statements/A
 import ArchivedStatements from "components/APPLICATIONS/authorization/statements/ArchivedStatements";
 import ExpInvoiceStatements from "components/APPLICATIONS/authorization/statements/ExpInvoiceStatements";
 import ExpiredStatements from "components/APPLICATIONS/authorization/statements/ExpiredStatements";
+import BankRegister from "components/APPLICATIONS/billing/bankRegister/BankRegister";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -140,6 +141,7 @@ const Router = () => {
           <Route path="/packages" element={<Packages />} />
           <Route path="/ring-packages" element={<RingPackages />} />
           <Route path="/statements" element={<Statements />} />
+          <Route path="/registerBank" element={<BankRegister />} />
 
           <Route path="/agreement" element={<Agreements />} />
           <Route path="/agreements/create" element={<NewAgreement />} />

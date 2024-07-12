@@ -19,3 +19,7 @@ export const updateService = async (data) => {
 export const deleteService = async (id) => {
   return instance.delete(`/billing-java/services/${id}`);
 };
+
+export const registerBank = (data) => {
+  return instance.post("/v1/register", data);
+};

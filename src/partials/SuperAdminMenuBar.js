@@ -777,6 +777,10 @@ const MenuDetailBilling = () => {
           )}
         </MenuBarCollapse>
 
+        <NavLink to="registerBank" end onClick={hideMenuDetail}>
+          <TransactionIcon /> ბანკის რეგისტრაცია
+        </NavLink>
+
         {useCheckPermission("dga_admin") && (
           <>
             <NavLink to="/billing/charges" onClick={hideMenuDetail}>

@@ -854,12 +854,37 @@ const NewAgreement = () => {
                   placeholder="ელ-ფოსტა"
                   required
                 />
-                <label className="label">მინდობილობის როლი</label>
+                {/* <label className="label">მინდობილობის როლი</label>
                 <input
                   className="form-control"
                   {...register(`user.${index}.comment`)}
                   required
-                />
+                /> */}
+                <label className="label">მინდობილობის როლი</label>
+                <CustomSelect
+                  name={`user.${index}.comment`}
+                  register={register}
+                  rules={{ required: "ველი აუცილებელია" }}
+                >
+                  {[
+                    {
+                      name: "მენეჯერი",
+                      value: "manager",
+                    },
+                    {
+                      name: "ოპერატორი",
+                      value: "operator",
+                    },
+                  ].map((item) => (
+                    <option
+                      className="p-3"
+                      key={item.value + item.name}
+                      value={item.value}
+                    >
+                      {item.name}
+                    </option>
+                  ))}
+                </CustomSelect>
                 <label className="label">მინდობილობის ვადა</label>
                 <input
                   type="date"

@@ -450,3 +450,136 @@ export const apiCredentialsArr = [
     type: "number",
   },
 ];
+
+export const bankRegisterArr = [
+  {
+    name: "bankName",
+    label: "ბანკის სახელი",
+    type: "text",
+  },
+  {
+    name: "bankContactPhone",
+    label: "ბანკის საკონტაქტო ტელეფონი",
+    type: "text",
+  },
+  {
+    name: "email",
+    label: "ელ-ფოსტა",
+    type: "text",
+  },
+  {
+    name: "password",
+    label: "პაროლი",
+    type: "text",
+  },
+  {
+    name: "riskLevel",
+    label: "რისკის დონე",
+    type: "text",
+  },
+  {
+    name: "legalForm",
+    label: "სამართლებრივი ფორმა",
+    type: "text",
+  },
+  {
+    name: "legalName",
+    label: "სამართლებრივი სახელი",
+    type: "text",
+  },
+  {
+    name: "legalAddress",
+    label: "სამართლებრივი მისამართი",
+    type: "text",
+  },
+  {
+    name: "physicalAddress",
+    label: "ფიზიკური მისამართი",
+    type: "text",
+  },
+  {
+    name: "identificationCode",
+    label: "საიდენტიფიკაციო კოდი",
+    type: "text",
+  },
+  {
+    name: "ipAddress",
+    label: "IP მისამართი",
+    type: "text",
+  },
+  {
+    name: "registrationCountry",
+    label: "რეგისტრაციის ქვეყანა",
+    type: "text",
+  },
+  {
+    name: "registrationCity",
+    label: "რეგისტრაციის ქალაქი",
+    type: "text",
+  },
+  {
+    name: "postalCode",
+    label: "საფოსტო კოდი",
+    type: "text",
+  },
+  {
+    name: "contractNumber",
+    label: "კონტრაქტის ნომერი",
+    type: "text",
+  },
+  {
+    name: "contractDate",
+    label: "კონტრაქტის თარიღი",
+    type: "date",
+  },
+  {
+    name: "director",
+    label: "დირექტორი",
+    type: "text",
+  },
+  {
+    name: "servicingBanker",
+    label: "მომსახურე ბანკირი",
+    type: "text",
+  },
+  {
+    name: "bankSwiftCode",
+    label: "SWIFT კოდი",
+    type: "text",
+  },
+  {
+    name: "bankAccountNumber",
+    label: "ბანკის ანგარიშის ნომერი",
+    type: "text",
+  },
+  {
+    name: "intermediaryBankDetails",
+    label: "შუამავალი ბანკის დეტალები",
+    type: "text",
+  },
+  {
+    name: "authorizationPhoneNumber",
+    label: "ავტორიზაციის ტელეფონის ნომერი",
+    type: "text",
+  },
+  {
+    name: "actSignerPosition",
+    label: "აქტის ხელმომწერის პოზიცია",
+    type: "text",
+  },
+  {
+    name: "actSigner",
+    label: "აქტის ხელმომწერი",
+    type: "text",
+  },
+  {
+    name: "status",
+    label: "სტატუსი",
+    type: "text",
+  },
+  {
+    name: "role",
+    label: "როლი",
+    type: "text",
+  },
+];
