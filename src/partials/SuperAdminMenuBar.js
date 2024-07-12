@@ -597,9 +597,8 @@ const MenuDetailAuth = () => {
           ) : (
             <></>
           )}
-          {user.superAdmin || user.isSip ? (
+          {/* {user.superAdmin || user.isSip ? (
             <NavLink to={`/ring-packages`} onClick={hideMenuDetail}>
-              {/* <PackageIcon /> */}
               ბეჭდის პაკეტები
             </NavLink>
           ) : (
@@ -610,10 +609,9 @@ const MenuDetailAuth = () => {
               to={`/activeRingPackage/${user.oid}`}
               onClick={hideMenuDetail}
             >
-              {/* <PackageIcon /> */}
               ბეჭდის პაკეტის შეძენა
             </NavLink>
-          )}
+          )} */}
           {!user.superAdmin && (
             <NavLink to={`/activePackage/${user.oid}`} onClick={hideMenuDetail}>
               {/* <PackageIcon /> */}
