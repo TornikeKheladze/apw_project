@@ -1,6 +1,6 @@
 import Alert from "components/Alert";
 import Button from "components/Button";
-import Modal, { ModalBody, ModalHeader } from "components/Modal";
+import Modal, { ModalHeader } from "components/Modal";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import { IDENTIFY_CODE_SIP } from "data/applications";
 import { convertDate } from "helpers/convertDate";
@@ -40,6 +40,7 @@ const Statements = () => {
       package: [],
       auth_user: {},
       document: [],
+      users: [{}],
     },
     mutate: getStatementMutate,
     isLoading: statementLoading,
@@ -107,6 +108,11 @@ const Statements = () => {
     statementData.data.filter(
       (statement) => +statement.gov === 5 && +statement.status === 2
     ) || [];
+  function addMonthsToDate(months) {
+    const currentDate = new Date();
+    currentDate.setMonth(currentDate.getMonth() + months);
+    return currentDate.toISOString().split("T")[0];
+  }
 
   return (
     <main className="workspace">
@@ -163,150 +169,185 @@ const Statements = () => {
 
       <Modal active={modal} centered onClose={() => setModal(false)}>
         <ModalHeader>განცხადება</ModalHeader>
-        <ModalBody>
-          <div className="p-5 overflow-y-auto h-[80vh]">
-            <div className="relative">
-              {getDocumentLoading || downloadLoading || firstStepLoading ? (
-                <LoadingSpinner blur />
-              ) : (
-                <></>
-              )}
-              <p>კრიტერიუმები: </p>
-              <p>ხელშეკრულების ვადა: {statement.package[0]?.end_date} </p>
-              <p>
-                გადახდის პერიოდულობა: {statement.package[0]?.payment_period}{" "}
-              </p>
-              <p>ინფორმაცია:{statement.auth_user.description}</p>
-
-              {conviction && (
-                <div className="flex justify-between items-center w-full border-b border-gray-700">
-                  {conviction.doc_name}
-                  <button
-                    onClick={() => getDocumentByUUIDMutate(conviction.uuid)}
-                    className="btn-icon btn_outlined flex justify-center items-center"
-                  >
-                    <span className="la la-download"></span>
-                  </button>
-                </div>
-              )}
-              {health && (
-                <div className="flex justify-between items-center w-full border-b border-gray-700">
-                  {health.doc_name}
-                  <button
-                    onClick={() => getDocumentByUUIDMutate(health.uuid)}
-                    className="btn-icon btn_outlined flex justify-center items-center"
-                  >
-                    <span className="la la-download"></span>
-                  </button>
-                </div>
-              )}
-              {additionalFiles.length > 0 && (
-                <div>
-                  <p>დამატებითი ფაილები: </p>
-                  {additionalFiles.map((item) => (
-                    <div
-                      className="flex justify-between items-center w-full border-b border-gray-700"
-                      key={item.id}
-                    >
-                      {item.doc_name}
-                      <button
-                        onClick={() => getDocumentByUUIDMutate(item.uuid)}
-                        className="btn-icon btn_outlined flex justify-center items-center"
-                      >
-                        <span className="la la-download"></span>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            {commentInput.show && (
-              <div className="my-2">
-                <label className="label" htmlFor="comment">
-                  {commentInput.label}
-                </label>
-                <textarea
-                  id="comment"
-                  className="form-control"
-                  value={commentInput.value}
-                  onChange={(e) =>
-                    setCommentInput((prevState) => ({
-                      ...prevState,
-                      value: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-            )}
-            {commentInput.show ? (
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => setCommentInput({ show: false, value: "" })}
-                  color="secondary"
-                  className="p-1 text-sm"
-                >
-                  გაუქმება
-                </Button>
-                <Button
-                  onClick={() =>
-                    firstStepMutate({
-                      action: commentInput.actionUrl,
-                      comment: commentInput.value,
-                      oid: statement.auth_user.id,
-                    })
-                  }
-                  color="primary"
-                  className="p-1 text-sm"
-                  disabled={!commentInput.value}
-                >
-                  დადასტურება
-                </Button>
-              </div>
+        {/* <ModalBody> */}
+        <div className="p-5 overflow-y-auto h-[90vh]">
+          <div className="relative">
+            {getDocumentLoading || downloadLoading || firstStepLoading ? (
+              <LoadingSpinner blur />
             ) : (
-              <div className="flex gap-2 mt-2">
-                <Button
-                  onClick={() => {
-                    setCommentInput({
-                      show: true,
-                      value: "",
-                      label: "უარყოფის მიზეზი",
-                      actionUrl: "failed",
-                    });
-                  }}
-                  className="p-1 text-sm"
-                  color="danger"
+              <></>
+            )}
+            <p>
+              <strong>ხელშეკრულების ვადა : </strong>
+              {addMonthsToDate(0)} - {statement.package[0]?.end_date}
+            </p>
+            <p>
+              <strong>გადახდის პერიოდულობა : </strong>{" "}
+              {statement.package[0]?.payment_period}{" "}
+              {statement.package[0]?.payment_period.includes("კონკრეტული") &&
+                `(${addMonthsToDate(0)})`}
+            </p>
+            <p>
+              <strong>ინფორმაცია : </strong> {statement.auth_user.description}
+            </p>
+
+            {conviction && (
+              <div className="flex justify-between items-center w-full border-b border-gray-400">
+                <span className="text-primary-600 font-bold">
+                  {conviction.doc_name}
+                </span>
+                <button
+                  onClick={() => getDocumentByUUIDMutate(conviction.uuid)}
+                  className="btn-icon btn_outlined flex justify-center items-center"
                 >
-                  უარყოფა
-                </Button>
-                <Button
-                  onClick={() => {
-                    setCommentInput({
-                      show: true,
-                      value: "",
-                      label: "დახარვეზების მიზეზი",
-                      actionUrl: "comment",
-                    });
-                  }}
-                  className="p-1 text-sm"
-                >
-                  დახარვეზება
-                </Button>
-                <Button
-                  onClick={() =>
-                    firstStepMutate({
-                      oid: statement.auth_user.id,
-                      action: "success",
-                    })
-                  }
-                  className="p-1 text-sm"
-                  color="success"
-                >
-                  დადასტურება
-                </Button>
+                  <span className="la la-download"></span>
+                </button>
               </div>
             )}
+            {health && (
+              <div className="flex justify-between items-center w-full border-b border-gray-400">
+                <span className="text-primary-600 font-bold">
+                  {health.doc_name}
+                </span>
+                <button
+                  onClick={() => getDocumentByUUIDMutate(health.uuid)}
+                  className="btn-icon btn_outlined flex justify-center items-center"
+                >
+                  <span className="la la-download"></span>
+                </button>
+              </div>
+            )}
+            {additionalFiles.length > 0 && (
+              <div className="mt-3">
+                <strong>დამატებითი ფაილები: </strong>
+                {additionalFiles.map((item) => (
+                  <div
+                    className="flex justify-between items-center w-full border-b border-gray-400"
+                    key={item.id}
+                  >
+                    <span className="text-primary-600 font-bold">
+                      {item.doc_name}
+                    </span>
+                    <button
+                      onClick={() => getDocumentByUUIDMutate(item.uuid)}
+                      className="btn-icon btn_outlined flex justify-center items-center"
+                    >
+                      <span className="la la-download"></span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="mt-2 border rounded-md p-1">
+              <h4>ფიზიკური პირი</h4>
+              <p>სახელი: {statement.users[1]?.name}</p>
+              <p>გვარი: {statement.users[1]?.l_name}</p>
+              <p>პირადი ნომერი: {statement.users[1]?.personal_number}</p>
+            </div>
+            <div className="mt-2 border rounded-md p-1">
+              <div>
+                <h4>იურიდიული პირი</h4>
+                <p>დასახელება: {statement.auth_user.name}</p>
+                <p>
+                  საიდენტიფიკაციო ნომერი: {statement.auth_user.identify_code}
+                </p>
+                <p>იურიდიული მისამართი: {statement.auth_user.address}</p>
+              </div>
+              <div className="p-2">
+                <h4>უფლებამოსილი პირი</h4>
+                <p>სახელი: {statement.users[0]?.name}</p>
+                <p>გვარი: {statement.users[0]?.l_name}</p>
+                <p>პირადი ნომერი: {statement.users[0]?.personal_number}</p>
+              </div>
+            </div>
           </div>
-        </ModalBody>
+          {commentInput.show && (
+            <div className="my-2">
+              <label className="label" htmlFor="comment">
+                {commentInput.label}
+              </label>
+              <textarea
+                id="comment"
+                className="form-control"
+                value={commentInput.value}
+                onChange={(e) =>
+                  setCommentInput((prevState) => ({
+                    ...prevState,
+                    value: e.target.value,
+                  }))
+                }
+              />
+            </div>
+          )}
+          {commentInput.show ? (
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setCommentInput({ show: false, value: "" })}
+                color="secondary"
+                className="p-1 text-sm rounded-lg"
+              >
+                გაუქმება
+              </Button>
+              <Button
+                onClick={() =>
+                  firstStepMutate({
+                    action: commentInput.actionUrl,
+                    comment: commentInput.value,
+                    oid: statement.auth_user.id,
+                  })
+                }
+                color="primary"
+                className="p-1 text-sm rounded-lg"
+                disabled={!commentInput.value}
+              >
+                დადასტურება
+              </Button>
+            </div>
+          ) : (
+            <div className="flex gap-2 mt-2">
+              <Button
+                onClick={() => {
+                  setCommentInput({
+                    show: true,
+                    value: "",
+                    label: "უარყოფის მიზეზი",
+                    actionUrl: "failed",
+                  });
+                }}
+                className="p-1 text-sm rounded-lg"
+                color="danger"
+              >
+                უარყოფა
+              </Button>
+              <Button
+                onClick={() => {
+                  setCommentInput({
+                    show: true,
+                    value: "",
+                    label: "დახარვეზების მიზეზი",
+                    actionUrl: "comment",
+                  });
+                }}
+                className="p-1 text-sm rounded-lg"
+              >
+                დახარვეზება
+              </Button>
+              <Button
+                onClick={() =>
+                  firstStepMutate({
+                    oid: statement.auth_user.id,
+                    action: "success",
+                  })
+                }
+                className="p-1 text-sm rounded-lg"
+                color="success"
+              >
+                დადასტურება
+              </Button>
+            </div>
+          )}
+        </div>
+        {/* </ModalBody> */}
       </Modal>
       {loading && <LoadingSpinner blur />}
     </main>

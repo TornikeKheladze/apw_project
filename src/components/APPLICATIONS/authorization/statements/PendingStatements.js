@@ -40,6 +40,7 @@ const PendingStatements = () => {
       package: [],
       auth_user: {},
       document: [],
+      users: [],
     },
     mutate: getStatementMutate,
     isLoading: statementLoading,
@@ -174,10 +175,9 @@ const PendingStatements = () => {
               ) : (
                 <></>
               )}
-              <p>კრიტერიუმები: </p>
               <p>ხელშეკრულების ვადა: {statement.package[0]?.end_date} </p>
               <p>
-                გადახდის პერიოდულობა: {statement.package[0]?.payment_period}{" "}
+                გადახდის პერიოდულობა: {statement.package[0]?.payment_period}
               </p>
               <p>ინფორმაცია:{statement.auth_user.description}</p>
 

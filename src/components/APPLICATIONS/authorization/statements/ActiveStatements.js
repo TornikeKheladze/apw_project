@@ -170,7 +170,6 @@ const ActiveStatements = () => {
               ) : (
                 <></>
               )}
-              <p>კრიტერიუმები: </p>
               <p>ხელშეკრულების ვადა: {statement.package[0]?.end_date} </p>
               <p>
                 გადახდის პერიოდულობა: {statement.package[0]?.payment_period}{" "}
