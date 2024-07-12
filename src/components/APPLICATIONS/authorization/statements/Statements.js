@@ -132,7 +132,7 @@ const Statements = () => {
           <tbody>
             {govStatements.length === 0 && !loading ? (
               <tr>
-                <td colSpan={6}>ხელშეკრულება არ მოიძებნა</td>
+                <td colSpan={6}>განცხადება არ მოიძებნა</td>
               </tr>
             ) : (
               govStatements.map((item, index) => (

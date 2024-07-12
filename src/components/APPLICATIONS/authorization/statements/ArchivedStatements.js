@@ -121,7 +121,7 @@ const ArchivedStatements = () => {
           <tbody>
             {statementData.data.length === 0 && !loading ? (
               <tr>
-                <td colSpan={6}>ხელშეკრულება არ მოიძებნა</td>
+                <td colSpan={6}>განცხადება არ მოიძებნა</td>
               </tr>
             ) : (
               statementData.data.map((item, index) => (
