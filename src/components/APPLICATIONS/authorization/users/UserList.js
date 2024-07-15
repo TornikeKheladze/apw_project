@@ -7,8 +7,9 @@ import ErrorIcon from "components/icons/ErrorIcon";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import PlusIcon from "components/icons/PlusIcon";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
+import { getPositionById } from "services/positions";
 import { deleteUser, updateUserData } from "services/users";
 
 const UserList = ({ users, isLoading, departments }) => {
@@ -19,7 +20,15 @@ const UserList = ({ users, isLoading, departments }) => {
   const queryClient = useQueryClient();
   const { type, id } = useParams();
 
-  // const userCreateUrl = `/user/create${type}`;
+  const { data: positionByIdData = { member: [], data: [] } } = useQuery({
+    queryKey: ["getPositionById", id],
+    queryFn: () => getPositionById(id).then((res) => res.data),
+    enabled: type === "positions",
+  });
+
+  const position = positionByIdData.member?.length
+    ? positionByIdData.member[0]
+    : positionByIdData.data[0] || {};
 
   const createUserUrl = () => {
     if (type === "organisation") {
@@ -28,7 +37,7 @@ const UserList = ({ users, isLoading, departments }) => {
       const department = departments.find((d) => +d.id === +id) || {};
       return `/user/create?oid=${department.oid}&did=${department.id}`;
     } else if (type === "positions") {
-      return `/user/create`;
+      return `/user/create?oid=${position.oid}&did=${position.did}&pid=${position.id}`;
     } else {
       return `/user/create`;
     }

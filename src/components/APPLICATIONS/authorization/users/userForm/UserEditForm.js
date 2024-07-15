@@ -1,6 +1,6 @@
 import { userArr } from "components/APPLICATIONS/billing/formArrays/authArr";
 import GeneralForm from "components/APPLICATIONS/billing/generalForm/GeneralForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { createUser, getUserDetails, updateUserData } from "services/users";
@@ -17,6 +17,9 @@ const UserEditForm = () => {
   const oid = searchParam.get("oid");
   const did = searchParam.get("did");
   const pid = searchParam.get("pid");
+  useEffect(() => {
+    localStorage.removeItem("formInputData");
+  }, []);
 
   const afterRequestHandler = (message, type) => {
     setAlert({
@@ -43,8 +46,18 @@ const UserEditForm = () => {
     useMutation({
       mutationFn: createUser,
       onSuccess: (data) => {
-        afterRequestHandler("მომხმარებელი წარმატებით დაემატა", "success");
+        setAlert({
+          message: "მომხმარებელი წარმატებით დაემატა",
+          type: "success",
+        });
         localStorage.removeItem("formInputData");
+        setTimeout(() => {
+          setAlert({
+            message: "",
+          });
+          queryClient.invalidateQueries(["getUserDetails", id]);
+          navigate(`/user/edit/${data.data.user.id}?activeIndex=2`);
+        }, 2500);
       },
       onError: (data) => {
         afterRequestHandler(data.response.data.message, "danger");

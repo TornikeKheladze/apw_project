@@ -7,7 +7,7 @@ import Tabs, {
   TabsNavigationItem,
 } from "components/Tabs";
 import Button from "components/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import UserRoles from "./userRoles/UserRoles";
 import { useSelector } from "react-redux";
 // import SuperAdminDetails from "./userForm/SuperAdminDetails";
@@ -17,6 +17,8 @@ import UserEditForm from "./userForm/UserEditForm";
 const UserEdit = () => {
   const navigate = useNavigate();
   const { authorizedUser } = useSelector((store) => store.user);
+  const [searchParam] = useSearchParams();
+  const activeIndex = searchParam.get("activeIndex");
   // const { action, id } = useParams();
 
   // const regularUserEditing =
@@ -29,7 +31,7 @@ const UserEdit = () => {
       <div className="w-full md:flex justify-center">
         <div className="card p-5 md:w-2/3">
           <Button onClick={() => navigate(-1)}>უკან</Button>
-          <Tabs activeIndex={1} className="mt-5">
+          <Tabs activeIndex={activeIndex ? +activeIndex : 1} className="mt-5">
             <TabsNavigation>
               <TabsNavigationItem index={1}>დეტალები</TabsNavigationItem>
               <TabsNavigationItem index={2}>როლები</TabsNavigationItem>

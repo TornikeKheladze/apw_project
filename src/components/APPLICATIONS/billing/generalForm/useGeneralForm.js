@@ -24,6 +24,11 @@ const useGeneralForm = (formArray, updateDataObj) => {
     control,
     name: "serviceID",
   });
+  const has_ring_number = useWatch({
+    control,
+    name: "has_ring_number",
+  });
+
   useEffect(() => {
     // only for make transactions
     if (serviceID && pathname === "/billing/transactions/make-transaction") {
@@ -68,10 +73,11 @@ const useGeneralForm = (formArray, updateDataObj) => {
       });
     } else if (localStorage.getItem("formInputData")) {
       formArray.forEach((field) => {
-        setValue(
-          field.name,
-          JSON.parse(localStorage.getItem("formInputData"))[field.name]
-        );
+        if (field.name !== "tell")
+          setValue(
+            field.name,
+            JSON.parse(localStorage.getItem("formInputData"))[field.name]
+          );
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,6 +92,7 @@ const useGeneralForm = (formArray, updateDataObj) => {
     setValue,
     imageForDisplay,
     formObject: { ...formObject, control },
+    has_ring_number,
   };
 };
 

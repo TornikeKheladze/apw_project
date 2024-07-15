@@ -96,25 +96,11 @@ const AuthForm = ({
                 type={type}
                 step="any"
                 register={register}
-                rules={
-                  name === "tell"
-                    ? {
-                        validate: (val) => {
-                          const regex = /^995\d*/;
-                          if (!regex.test(val)) {
-                            return "არასწორი ფორმატი (995)";
-                          }
-                        },
-                      }
-                    : {
-                        required: "ველი აუცილებელია",
-                      }
-                }
+                rules={{
+                  required: "ველი აუცილებელია",
+                }}
                 className={`${errors[name] ? "border-danger" : ""}`}
               />
-              {name === "tell" && errors[name] && (
-                <p className="text-danger text-xs">{errors[name].message}</p>
-              )}
             </div>
           );
         }

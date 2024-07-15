@@ -5,6 +5,11 @@ export const orgArr = [
     type: "text",
   },
   {
+    name: "short_name",
+    label: "შემოკლებული სახელწოდება",
+    type: "text",
+  },
+  {
     name: "identify_code",
     label: "საიდენტიფიკაციო კოდი",
     type: "text",
@@ -32,6 +37,11 @@ export const orgArr = [
   {
     name: "bank_number",
     label: "ბანკის ნომერი",
+    type: "text",
+  },
+  {
+    name: "treasury_code",
+    label: "ხაზინის კოდი",
     type: "text",
   },
   {
@@ -98,15 +108,15 @@ export const userArr = [
     type: "select",
   },
   {
-    name: "ring_number",
-    label: "ბეჭდის ნომერი",
-    type: "text",
-    notRequired: true,
+    name: "date_expiration",
+    label: "უფლებამოსილების ვადის გასვლის თარიღი",
+    type: "datetime-local",
   },
   {
-    name: "date_expiration",
-    label: "ვადის გასვლის თარიღი",
-    type: "datetime-local",
+    name: "has_ring_number",
+    label: "შტამპი",
+    type: "radio",
+    notRequired: true,
   },
 ];
 

@@ -24,3 +24,7 @@ export const updatePosition = async (data) => {
   const response = await instance.put("/user/positions", data);
   return response;
 };
+
+export const getPositionById = (id) => {
+  return instance.get(`/user/positions/get/${id}`);
+};

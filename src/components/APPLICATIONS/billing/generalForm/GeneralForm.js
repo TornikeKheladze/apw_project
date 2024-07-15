@@ -27,6 +27,7 @@ const GeneralForm = (props) => {
     // imageForDisplay,
     setValue,
     formObject,
+    has_ring_number,
   } = useGeneralForm(formArray, updateDataObj);
   // const navigate = useNavigate();
   // onSubmit={handleSubmit(async (data) => {
@@ -52,13 +53,26 @@ const GeneralForm = (props) => {
     }
   }, [setValue, externalFields]);
 
+  const fields =
+    +has_ring_number === 1
+      ? [
+          ...formArray,
+          {
+            name: "ring_number",
+            label: "მიუთითეთ შტამპის ნომერი",
+            type: "text",
+            notRequired: true,
+          },
+        ]
+      : formArray;
+
   return (
     <form
       onChange={handleFormChange}
       onSubmit={handleSubmit(submitHandler)}
       className="flex flex-col gap-4"
     >
-      {formArray.map(({ name, label, type, notRequired }) => {
+      {fields.map(({ name, label, type, notRequired }) => {
         if (type === "select") {
           return (
             <div key={name}>
@@ -149,6 +163,7 @@ const GeneralForm = (props) => {
                 type={type}
                 step="any"
                 register={register}
+                defaultValue={name === "tell" ? "995" : ""}
                 rules={
                   name === "tell"
                     ? {

@@ -18,14 +18,11 @@ import Modal, { ModalBody, ModalFooter, ModalHeader } from "components/Modal";
 import AuthForm from "../authForm/AuthForm";
 import { orgArr } from "components/APPLICATIONS/billing/formArrays/authArr";
 import useCheckPermission from "helpers/useCheckPermission";
-import { SIPTYPEID } from "data/applications";
 
 const Organizations = () => {
   const {
     organizations,
-    members,
     types,
-    authorizedUser,
     typeId,
     navigate,
     loadings: {
@@ -44,18 +41,7 @@ const Organizations = () => {
     ? types?.find((type) => type.id === +typeId)?.name
     : types[0]?.name;
 
-  const headerName =
-    +typeId === +SIPTYPEID ? "სახელმწიფო უწყებები" : "ავტორიზირებული პირები";
-
-  // instead of members i write membersByType
-  const membersByType =
-    (members &&
-      members.filter((org) => {
-        if (authorizedUser.superAdmin) return org;
-        if (+typeId === +SIPTYPEID) return +org.type === SIPTYPEID;
-        return org;
-      })) ||
-    [];
+  const headerName = "ავტორიზირებული პირები";
 
   const tabHeaders =
     !orgsLoading && !orgTypesLoading ? (
@@ -94,7 +80,7 @@ const Organizations = () => {
         return (
           <TabsContentItem key={type.id + i} index={type.id}>
             {!orgsLoading && !orgTypesLoading ? (
-              organizations.length ? (
+              currentOrganizations.length ? (
                 <List
                   openDelete={() => {
                     setOpenModal({
@@ -134,29 +120,6 @@ const Organizations = () => {
     </Dropdown>
   );
 
-  const createOrgButtonForRegularUser = useCheckPermission(
-    "user_create_organisation"
-  ) ? (
-    <div className="flex justify-between items-center">
-      <h3>{headerName}</h3>
-      <div className="flex items-end gap-1">
-        <Button
-          onClick={() =>
-            setOpenModal({
-              open: true,
-              action: "დამატება",
-            })
-          }
-          className="p-1 text-xs"
-        >
-          ავტორიზირებული პირის რეგისტრაცია
-        </Button>
-      </div>
-    </div>
-  ) : (
-    <></>
-  );
-
   return (
     <main className="workspace">
       {/* <Paths /> */}
@@ -171,16 +134,14 @@ const Organizations = () => {
           setChoosenOrganization({ id: "" });
         }}
       >
-        <ModalHeader>
-          {+openModal.orgTypeId === SIPTYPEID
-            ? "სახელმწიფო უწყების "
-            : "ავტორიზირებული პირის "}
-          {openModal.action}
-        </ModalHeader>
+        <ModalHeader>ავტორიზირებული პირის {openModal.action}</ModalHeader>
         {openModal.action === "შეცვლა" && (
           <div className="p-5 overflow-y-auto h-[90vh]">
             <AuthForm
-              formArray={orgArr}
+              formArray={orgArr.filter(
+                (item) =>
+                  item.name !== "treasury_code" && item.name !== "short_name"
+              )}
               submitHandler={updateMutate}
               isLoading={updateLoading}
               defaultValues={choosenOrganization}
@@ -203,12 +164,10 @@ const Organizations = () => {
         {openModal.action === "დამატება" && (
           <div className="p-5 overflow-y-auto h-[90vh] min-w-80">
             <AuthForm
-              // formArray={orgArr}
-              formArray={orgArr.filter((item) => {
-                if (openModal.orgTypeId === SIPTYPEID)
-                  return item.name !== "type";
-                return item;
-              })}
+              formArray={orgArr.filter(
+                (item) =>
+                  item.name !== "treasury_code" && item.name !== "short_name"
+              )}
               submitHandler={addMutate}
               isLoading={addLoading}
               optionsObj={{
@@ -252,101 +211,41 @@ const Organizations = () => {
         )}
       </Modal>
 
-      {/* temporary admin check */}
-      {authorizedUser.superAdmin ? (
-        <div className="card p-5">
-          <div className="flex justify-between items-center">
-            <h3>{headerName}</h3>
+      <div className="card p-5">
+        <div className="flex justify-between items-center">
+          <h3>{headerName}</h3>
+          {useCheckPermission("user_create_organisation") ? (
             <Button
               onClick={() =>
                 setOpenModal({
                   open: true,
                   action: "დამატება",
-                  orgTypeId: SIPTYPEID,
                 })
               }
-              className="p-2 md:text-sm text-xs"
+              className="p-1 text-xs"
             >
-              უწყების რეგისტრაცია
+              ავტორიზირებული პირის რეგისტრაცია
             </Button>
-          </div>
-          <Tabs activeIndex={types.length && types[0].id} className="mt-5">
-            {+typeId === +SIPTYPEID ? (
-              <></>
-            ) : (
-              <TabsNavigation className="flex items-center w-full justify-between border-none">
-                <div className="hidden lg:flex justify-start gap-2">
-                  {tabHeaders}
-                </div>
-                <div className="lg:hidden flex">{dropdown}</div>
-                <Button
-                  className="p-1 md:text-sm text-xs"
-                  onClick={() => navigate("/organization-type-edit")}
-                >
-                  ტიპების მართვა
-                </Button>
-              </TabsNavigation>
-            )}
-            <TabsContent>{tabContents}</TabsContent>
-          </Tabs>
-        </div>
-      ) : (
-        <div className="card p-5">
-          {createOrgButtonForRegularUser}
-          {orgsLoading && orgTypesLoading ? (
-            <div className="flex flex-col items-center justify-center">
-              იტვირთება... <LoadingSpinner />
-            </div>
-          ) : organizations?.length ? (
-            <List
-              openDelete={() => {
-                setOpenModal({
-                  open: true,
-                  action: "წაშლა",
-                });
-              }}
-              openEdit={() => {
-                setOpenModal({
-                  open: true,
-                  action: "შეცვლა",
-                });
-              }}
-              setChoosenItem={setChoosenOrganization}
-              items={organizations}
-              title={"დასახელება"}
-              toUsers={"/users/organisation/"}
-              toDepartments={"/departments/"}
-            />
-          ) : (
-            <p>{headerName} არ მოიძებნა</p>
-          )}
-          {membersByType && membersByType.length ? (
-            <div className="mt-3">
-              <List
-                openDelete={() => {
-                  setOpenModal({
-                    open: true,
-                    action: "წაშლა",
-                  });
-                }}
-                openEdit={() => {
-                  setOpenModal({
-                    open: true,
-                    action: "შეცვლა",
-                  });
-                }}
-                setChoosenItem={setChoosenOrganization}
-                items={membersByType}
-                title={headerName}
-                toUsers={"/users/organisation/"}
-                toDepartments={"/departments/"}
-              />
-            </div>
           ) : (
             <></>
           )}
         </div>
-      )}
+        <Tabs activeIndex={types.length && types[0].id} className="mt-5">
+          <TabsNavigation className="flex items-center w-full justify-between border-none">
+            <div className="hidden lg:flex justify-start gap-2">
+              {tabHeaders}
+            </div>
+            <div className="lg:hidden flex">{dropdown}</div>
+            <Button
+              className="p-1 md:text-sm text-xs"
+              onClick={() => navigate("/organization-type-edit")}
+            >
+              ტიპების მართვა
+            </Button>
+          </TabsNavigation>
+          <TabsContent>{tabContents}</TabsContent>
+        </Tabs>
+      </div>
 
       <Footer />
     </main>

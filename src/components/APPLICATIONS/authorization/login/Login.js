@@ -157,6 +157,7 @@ const Login = () => {
         <ModalHeader>შეიყვანეთ SMS კოდი</ModalHeader>
         <ModalBody>
           <Input
+            autoFocus
             placeholder="SMS კოდი"
             value={sms.value}
             onChange={(e) =>

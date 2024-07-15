@@ -27,7 +27,6 @@ const Sips = () => {
   const createSearchParam = searchParam.get("create");
 
   const [choosenOrganization, setChoosenOrganization] = useState({});
-  // const [successMessage, setSuccessMessage] = useState("");
   const [alert, setAlert] = useState({
     type: "success",
     message: "",
@@ -38,16 +37,15 @@ const Sips = () => {
     orgTypeId: 0,
   });
 
-  const {
-    data: organizationData = { data: [], member: null, dga: [] },
-    isLoading: orgsLoading,
-  } = useQuery({
-    queryKey: "getOrganizationsData",
-    queryFn: () => getOrganizations().then((res) => res.data),
-  });
-  const organizations = organizationData.member
-    ? [...organizationData.member, ...organizationData.data]
-    : organizationData.data || [];
+  const { data: organizationData = { data: [] }, isLoading: orgsLoading } =
+    useQuery({
+      queryKey: "getOrganizationsData",
+      queryFn: () => getOrganizations().then((res) => res.data),
+    });
+
+  const organizations = organizationData.data.filter(
+    (item) => item.member_id === null
+  );
 
   const { data: types = [] } = useQuery({
     queryKey: "organizationTypes",
@@ -68,7 +66,7 @@ const Sips = () => {
       addOrganization({
         ...data,
         reseller: 1,
-        type: openModal.orgTypeId === SIPTYPEID ? SIPTYPEID : data.type,
+        type: SIPTYPEID,
       }),
     onSuccess: (data) => {
       queryClient.invalidateQueries("getOrganizationsData");
@@ -166,7 +164,10 @@ const Sips = () => {
         {openModal.action === "შეცვლა" && (
           <div className="p-5 overflow-y-auto h-[90vh]">
             <AuthForm
-              formArray={orgArr}
+              // formArray={orgArr}
+              formArray={orgArr.filter(
+                (item) => item.name !== "type" && item.name !== "user_quota"
+              )}
               submitHandler={updateMutate}
               isLoading={updateLoading}
               defaultValues={choosenOrganization}
@@ -190,11 +191,9 @@ const Sips = () => {
           <div className="p-5 overflow-y-auto h-[90vh] min-w-80">
             <AuthForm
               // formArray={orgArr}
-              formArray={orgArr.filter((item) => {
-                if (openModal.orgTypeId === SIPTYPEID)
-                  return item.name !== "type";
-                return item;
-              })}
+              formArray={orgArr.filter(
+                (item) => item.name !== "type" && item.name !== "user_quota"
+              )}
               submitHandler={addMutate}
               isLoading={addLoading}
               optionsObj={{

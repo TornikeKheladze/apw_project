@@ -15,7 +15,7 @@ import useOnClickOutside from "utilities/hooks/useOnClickOutside";
 import useBrandedMenu from "utilities/hooks/useBrandedMenu";
 import useMenuType from "utilities/hooks/useMenuType";
 import useWindowSize from "utilities/hooks/useWindowSize";
-// import HomeIcon from "components/icons/HomeIcon";
+import HomeIcon from "components/icons/HomeIcon";
 import HeadersIcon from "components/icons/HeadersIcon";
 import AuthIcon from "components/icons/AuthIcon";
 import OrgIcon from "components/icons/OrgIcon";
@@ -30,8 +30,8 @@ import PuzzleIcon from "components/icons/PuzzleIcon";
 import AlgIcon from "components/icons/AlgIcon";
 import useCheckPermission, { useCheckAID } from "helpers/useCheckPermission";
 import { useQuery } from "react-query";
-import { getOrganizationById, getStatements } from "services/organizations";
-import { IDENTIFY_CODE_SIP, SIPTYPEID } from "data/applications";
+import { getStatements } from "services/organizations";
+import { IDENTIFY_CODE_SIP } from "data/applications";
 import MessageIcon from "components/icons/MessageIcon";
 import StatementIcon from "components/icons/StatementIcon";
 import AgreementIcon from "components/icons/AgreementIcon";
@@ -162,7 +162,7 @@ const SuperAdminMenuBar = () => {
             <hr className="mx-8 my-4" />
           </div>
           {/* მენიუები მაქ დაკომენტარებული აქ */}
-          {/* <Tippy content="Dashboard" singleton={target}>
+          <Tippy content="HOME" singleton={target}>
             <Link
               to="/"
               onClick={() => activateMenu("dashboard", false)}
@@ -170,7 +170,7 @@ const SuperAdminMenuBar = () => {
             >
               <HomeIcon />
             </Link>
-          </Tippy> */}
+          </Tippy>
 
           {/* AUTH */}
           <Tippy content="ადმინისტრირება" singleton={target}>
@@ -449,23 +449,14 @@ const MenuDetailUI = () => {
 const MenuDetailAuth = () => {
   const { isOpen, hideMenuDetail } = useContext(MenuBarContext);
   const user = useSelector((state) => state.user.authorizedUser);
-  const { data: authorizedOrganization = {} } = useQuery({
-    queryKey: ["getOrganizationById", user.oid],
-    queryFn: () => getOrganizationById(user.oid).then((res) => res.data.data),
-    enabled: user.oid ? true : false,
-  });
 
-  const showSipMenu = () => {
-    if (user.superAdmin) return true;
-    if (+authorizedOrganization.type === SIPTYPEID) return true;
-    return false;
-  };
   const { data: statementData = { data: [], request_chanel: [] } } = useQuery({
     queryKey: "getStatements",
     queryFn: () =>
       getStatements({
         identify_code: IDENTIFY_CODE_SIP,
       }).then((res) => res.data),
+    retry: false,
   });
   const govStatements =
     statementData.data.filter(
@@ -479,69 +470,68 @@ const MenuDetailAuth = () => {
       })}
     >
       <div className="menu-detail-wrapper">
-        <NavLink to={"statements"} onClick={hideMenuDetail}>
-          <StatementIcon className="w-6 h-6 mr-2" />
-          <p className="relative">
-            განცხადებები
-            <span className="absolute -top-2 -right-6 rounded-full !text-white !bg-danger !text-[14px] px-[3px]">
-              {govStatements.length !== 0 && govStatements.length}
-            </span>
-          </p>
-        </NavLink>
+        {useCheckPermission("user_gov_auth_user_get_auth") && (
+          <NavLink to={"statements"} onClick={hideMenuDetail}>
+            <StatementIcon className="w-6 h-6 mr-2" />
+            <p className="relative">
+              განცხადებები
+              <span className="absolute -top-2 -right-6 rounded-full !text-white !bg-danger !text-[14px] px-[3px]">
+                {govStatements.length !== 0 && govStatements.length}
+              </span>
+            </p>
+          </NavLink>
+        )}
 
-        <MenuBarCollapse
-          icon={<AgreementIcon className="w-6 h-6 mr-2" />}
-          label={"ხელშეკრულებები"}
-          height={"300px"}
-        >
-          <NavLink to="/agreement" onClick={hideMenuDetail}>
-            ახალი ხელშეკრულება
-          </NavLink>
-          <NavLink to="/agreements/pending" onClick={hideMenuDetail}>
-            ქმედების მოლოდინში
-          </NavLink>
-          <NavLink to="/agreements/active" onClick={hideMenuDetail}>
-            აქტიური ხელშეკრულება
-          </NavLink>
-          <MenuBarCollapse label={"არქივი"}>
-            <NavLink to="/archive/agreements" onClick={hideMenuDetail}>
-              გაკეთებული განცხადებები
+        {useCheckPermission("user_gov_auth_user_get_auth") && (
+          <MenuBarCollapse
+            icon={<AgreementIcon className="w-6 h-6 mr-2" />}
+            label={"ხელშეკრულებები"}
+            height={"300px"}
+          >
+            <NavLink to="/agreement" onClick={hideMenuDetail}>
+              ახალი ხელშეკრულება
             </NavLink>
-            <NavLink to="/archive/invoice" onClick={hideMenuDetail}>
-              ინვოისის ვადის გამო <br /> გაუქმებული
+            <NavLink to="/agreements/pending" onClick={hideMenuDetail}>
+              ქმედების მოლოდინში
             </NavLink>
-            <NavLink to="/archive/expired" onClick={hideMenuDetail}>
-              ვადა ამოწურული <br /> ხელშეკრულებები
+            <NavLink to="/agreements/active" onClick={hideMenuDetail}>
+              აქტიური ხელშეკრულება
             </NavLink>
-            <NavLink to="/archive/templates" onClick={hideMenuDetail}>
-              მონახაზები
-            </NavLink>
+            <MenuBarCollapse label={"არქივი"}>
+              <NavLink to="/archive/agreements" onClick={hideMenuDetail}>
+                გაკეთებული განცხადებები
+              </NavLink>
+              <NavLink to="/archive/invoice" onClick={hideMenuDetail}>
+                ინვოისის ვადის გამო <br /> გაუქმებული
+              </NavLink>
+              <NavLink to="/archive/expired" onClick={hideMenuDetail}>
+                ვადა ამოწურული <br /> ხელშეკრულებები
+              </NavLink>
+              <NavLink to="/archive/templates" onClick={hideMenuDetail}>
+                მონახაზები
+              </NavLink>
+            </MenuBarCollapse>
           </MenuBarCollapse>
-        </MenuBarCollapse>
+        )}
+
         {user.superAdmin && (
           <MenuBarCollapse
             icon={<OrgIcon className={"w-6 h-6 mr-2"} />}
             label={"სახელმწიფო უწყებები"}
           >
-            <NavLink
-              to={`/organizations/${SIPTYPEID}`}
-              onClick={hideMenuDetail}
-            >
+            <NavLink to={`/sips`} onClick={hideMenuDetail}>
               უწყებები
             </NavLink>
             <NavLink to="/roles" onClick={hideMenuDetail}>
               როლები
             </NavLink>
-            <NavLink
-              to={`/organizations/${SIPTYPEID}?create=1`}
-              onClick={hideMenuDetail}
-            >
+            <NavLink to={`/sips?create=1`} onClick={hideMenuDetail}>
               უწყების რეგისტრაცია
             </NavLink>
           </MenuBarCollapse>
         )}
         {/* ვამოწმებ ავტორიზირებულ პირი არის თუ არა */}
-        {showSipMenu() && (
+        {user.isSip && (
           <MenuBarCollapse
             icon={<OrgIcon className={"w-6 h-6 mr-2"} />}
             label={"ავტორიზირებული პირები"}
@@ -589,6 +579,14 @@ const MenuDetailAuth = () => {
           >
             მომხმარებლები
           </NavLink>
+          {!user.superAdmin ? (
+            <NavLink to={`departments/${user?.oid}`} onClick={hideMenuDetail}>
+              დეპარტამენტები
+            </NavLink>
+          ) : (
+            <></>
+          )}
+
           {user.superAdmin || user.isSip ? (
             <NavLink to={`/packages`} onClick={hideMenuDetail}>
               {/* <PackageIcon /> */}

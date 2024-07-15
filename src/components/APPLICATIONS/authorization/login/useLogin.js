@@ -60,7 +60,12 @@ export const useLogin = () => {
     onSuccess: (res) => {
       localStorage.setItem("token", res.data.user.token);
       if (res.data.user.password_verified_at) {
-        navigate("/organizations");
+        if (res.data.user.roles[0].name === "Super-Admin") {
+          navigate("/sips");
+        } else {
+          // navigate(`/users/organisation/${res.data.user.oid}`);
+          navigate(`/organizations`);
+        }
       } else {
         setSms((prevState) => ({
           ...prevState,

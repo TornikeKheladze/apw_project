@@ -10,6 +10,7 @@ import { permissionsObj } from "data/permissions";
 import { getOrganizations } from "services/organizations";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import { convertGeorgianToEnglish } from "helpers/convertGeorgianToEnglish";
 
 const AddRole = ({ add, loading, permissions }) => {
   const [aid, setAid] = useState("1");
@@ -47,12 +48,28 @@ const AddRole = ({ add, loading, permissions }) => {
     : organizationData.data;
 
   const handleInputChange = (e) => {
+    // const input = e.target.value;
+    // const regex = /^[A-Za-z]+$/;
+    // if (input === "" || regex.test(input)) {
+    //   setInput(input);
+    // }
     const input = e.target.value;
-    const regex = /^[A-Za-z]+$/;
+    const regex = /^\S*$/;
     if (input === "" || regex.test(input)) {
       setInput(input);
     }
   };
+  const activeOrganization =
+    organizations.find((item) => +item.id === +oid) || {};
+  const activeApplication =
+    APPLICATIONS.find((item) => +item.id === +aid) || {};
+
+  const actualRoleName =
+    convertGeorgianToEnglish(activeOrganization.short_name || "") +
+    "_" +
+    activeApplication.nameEng +
+    "_" +
+    convertGeorgianToEnglish(input);
 
   return (
     <div className="card p-5 mb-4">
@@ -65,7 +82,7 @@ const AddRole = ({ add, loading, permissions }) => {
         onChange={handleInputChange}
         id="role"
         className="mb-4"
-        placeholder="როლის სახელი ლათინური სიმბოლოებით"
+        placeholder="როლის სახელი"
       />
       <Label className="block mb-2" htmlFor="aid">
         აირჩიეთ აპლიკაცია
@@ -103,6 +120,11 @@ const AddRole = ({ add, loading, permissions }) => {
         selectedPermissions={selectedPermissions}
         setSelectedPermissions={setSelectedPermissions}
       />
+      {input && (
+        <p className="mt-1">
+          როლის სახელი იქნება: <strong>{actualRoleName}</strong>
+        </p>
+      )}
 
       <Button
         disabled={!input || !aid || !oid}
@@ -110,7 +132,7 @@ const AddRole = ({ add, loading, permissions }) => {
           add({
             aid,
             permission: selectedPermissions.map((p) => p.id),
-            role_name: input,
+            role_name: actualRoleName,
             oid,
             url: APPLICATIONS.find((app) => +app.id === +aid).url,
           });

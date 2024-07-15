@@ -195,8 +195,8 @@ export const permissionsObj = {
   user_update: "მომხმარებლის რედაქტირება",
   user_delete: "მომხმარებლის წაშლა",
   user_gov_info: "my.gov.ge-ს ინფორმაციის წამოღება",
-  user_gov_auth_user_get_auth: "my.gov.ge-ს ინფორმაციის წამოღება",
-  user_gov_auth_user_get: "my.gov.ge-ს ინფორმაციის წამოღება",
+  user_gov_auth_user_get_auth: "my.gov.ge-ს ხელშეკრულებების წამოღება",
+  user_gov_auth_user_get: "my.gov.ge-ს სრული ინფორმაციის წამოღება",
   user_gov_auth_user_comment: "my.gov.ge-ს ინფორმაციის კომენტარების წამოღება",
   user_gov_auth_user_insert: "ავტორიზირებული პირის დამატება",
   user_gov_auth_user_update: "ავტორიზირებული პირის ცვლილება",
@@ -208,4 +208,12 @@ export const permissionsObj = {
     "რეგისტრაციის პირველი ეტაპის კომენტარის გაკეთება",
   user_gov_second_step_get: "რეგისტრაციის პირველი ეტაპის წამოღება",
   user_gov_second_step_insert: "რეგისტრაციის პირველი ეტაპის დასრულება",
+  user_gov_second_step_update: "რეგისტრაციის პირველი ეტაპის რედაქტირება",
+  user_gov_second_step_delete: "რეგისტრაციის პირველი ეტაპის წაშლა",
+  user_gov_second_stage_success:
+    "რეგისტრაციის მეორე ეტაპის წარმატებით დასრულება",
+  user_gov_second_stage_failed:
+    "რეგისტრაციის მეორე ეტაპის წარუმატებლად დასრულება",
+  user_gov_second_stage_comment:
+    "რეგისტრაციის მეორე ეტაპის კომენტარის გაკეთება",
 };

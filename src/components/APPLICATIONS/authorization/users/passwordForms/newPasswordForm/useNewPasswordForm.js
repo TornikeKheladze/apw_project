@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
-import { updatePassword } from "services/users";
+import { useParams } from "react-router-dom";
+import { getUserDetails, updatePassword } from "services/users";
 
 export const useNewPasswordForm = (login) => {
   const {
@@ -15,6 +16,13 @@ export const useNewPasswordForm = (login) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { authorizedUser } = useSelector((state) => state.user);
   const [alert, setAlert] = useState({ message: "", type: "success" });
+  const { id, action } = useParams();
+  const { data: userData = {} } = useQuery({
+    queryKey: ["getUserDetails", id],
+    queryFn: () => getUserDetails(id).then((res) => res.data.users),
+    enabled: action === "edit",
+  });
+  console.log(userData);
 
   const { mutate: updateMutate, isLoading } = useMutation({
     mutationFn: updatePassword,
@@ -56,7 +64,8 @@ export const useNewPasswordForm = (login) => {
         message: "პაროლები უნდა ემთხვეოდეს",
       });
     } else {
-      updateMutate({ ...authorizedUser, ...data });
+      const userToUpdate = login ? authorizedUser : userData || {};
+      updateMutate({ ...userToUpdate, ...data });
     }
   };
 

@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { useTopBar } from "./useTopBar";
 import Search from "./search/Search";
 // import Logo from "components/icons/Logo";
+import logoSrc from "../assets/images/Public_Service_Hall.svg.png";
 
 const TopBar = () => {
   const {
@@ -22,6 +23,7 @@ const TopBar = () => {
     menuBarVisible,
     authorizedUser,
     dispatch,
+    navigate,
   } = useTopBar();
 
   const userInitials = () => {
@@ -43,7 +45,22 @@ const TopBar = () => {
       ></button>
 
       {/* Brand */}
-      <span className="brand">{/* <Logo /> */}</span>
+      <span
+        onClick={() => {
+          if (authorizedUser.superAdmin) {
+            navigate("/sips");
+          } else if (authorizedUser.isSip) {
+            navigate("/organizations");
+          } else {
+            navigate(`/users/organisation/${authorizedUser.oid}`);
+          }
+        }}
+        className="brand cursor-pointer"
+      >
+        {/* <Logo /> */}
+
+        <img className="w-9" src={logoSrc} alt="justice house" />
+      </span>
 
       {/* Search */}
       <Search />

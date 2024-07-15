@@ -8,6 +8,7 @@ import { getSales } from "services/sales";
 import { getServiceParametersByServiceID } from "services/serviceParameters";
 import { useSelector } from "react-redux";
 import { getOrganizationById, getOrganizations } from "services/organizations";
+import { getServiceProduction } from "services/serviceProduction";
 
 export const useMakeTransaction = () => {
   const queryClient = useQueryClient();
@@ -25,6 +26,12 @@ export const useMakeTransaction = () => {
     queryKey: "getAllServices",
     queryFn: () => getAllServices().then((res) => res.data),
   });
+  const { data: productionsData = [{}], isLoading: productionsLoading } =
+    useQuery({
+      queryKey: "getServiceProduction",
+      queryFn: () => getServiceProduction().then((res) => res.data),
+    });
+  console.log(servicesData, productionsData);
 
   // გატარებისას რო გავიგო რესელერია თუ არა ორგანიზაცია რომელიც ავტორიზებული
   // იუზერის მივედვით მომაქვს
@@ -78,9 +85,18 @@ export const useMakeTransaction = () => {
     }
   };
 
-  const services = servicesData.map((service) => ({
+  const productions = authorizedUser.superAdmin
+    ? productionsData
+    : productionsData.filter((item) => +item.ownerID === +authorizedUser.oid);
+
+  // სერვისების ნაცვლად სერვის ფროდაქშენს ვატან ასარჩევში
+  // const services = servicesData.map((service) => ({
+  //   ...service,
+  //   id: service.serviceID,
+  // }));
+  const services = productions.map((service) => ({
     ...service,
-    id: service.serviceID,
+    id: service.serviceProductionID,
   }));
 
   const sales = salesData.map((sale) => ({
@@ -135,7 +151,8 @@ export const useMakeTransaction = () => {
     : makeTransactionsArr;
 
   return {
-    isLoading: orgLoading || servicesLoading || salesLoading,
+    isLoading:
+      orgLoading || servicesLoading || salesLoading || productionsLoading,
     actionLoading: createLoading,
     submitHandler,
     alert,

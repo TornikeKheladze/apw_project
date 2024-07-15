@@ -1,4 +1,3 @@
-import { SIPTYPEID } from "data/applications";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
@@ -30,7 +29,6 @@ const useOrganization = () => {
   const [openModal, setOpenModal] = useState({
     open: false,
     action: "",
-    orgTypeId: 0,
   });
 
   const {
@@ -50,7 +48,6 @@ const useOrganization = () => {
       setOpenModal({
         open: true,
         action: "დამატება",
-        orgTypeId: typeId,
       });
     }
   }, [createSearchParam, typeId]);
@@ -60,7 +57,6 @@ const useOrganization = () => {
       addOrganization({
         ...data,
         reseller: 1,
-        type: openModal.orgTypeId === SIPTYPEID ? SIPTYPEID : data.type,
       }),
     onSuccess: (data) => {
       queryClient.invalidateQueries("getOrganizationsData");
@@ -142,9 +138,12 @@ const useOrganization = () => {
     },
   });
 
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data || [];
+
   return {
-    organizations: organizationData.data,
-    members: organizationData.member,
+    organizations: organizations.filter((item) => item.member_id !== null),
     types: types.filter((item) => item.name !== "dga"),
     authorizedUser,
     typeId,

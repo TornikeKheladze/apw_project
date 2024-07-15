@@ -9,6 +9,7 @@ import { Link, useParams } from "react-router-dom";
 
 import { getDepartmentById, getDepartments } from "services/departments";
 import { getOrganizations } from "services/organizations";
+import { getPositionById } from "services/positions";
 import { getAllUsers, getUsersByTypeAndId } from "services/users";
 
 const useUsers = () => {
@@ -62,6 +63,15 @@ const useUsers = () => {
     queryFn: () => getDepartments(department.oid).then((res) => res.data),
     enabled: type === "departments" && department.oid ? true : false,
   });
+  const { data: positionByIdData = { member: [], data: [] } } = useQuery({
+    queryKey: ["getPositionById", id],
+    queryFn: () => getPositionById(id).then((res) => res.data),
+    enabled: type === "positions",
+  });
+
+  const position = positionByIdData.member?.length
+    ? positionByIdData.member[0]
+    : positionByIdData.data[0] || {};
 
   const oid = type === "departments" ? department.oid : organization.id;
 
@@ -139,7 +149,7 @@ const useUsers = () => {
         </>
       );
     } else if (type === "positions") {
-      return `პოზიცია: ${users.length && users[0]?.position_name}`;
+      return `პოზიცია: ${position?.position_name}`;
     }
   };
 
