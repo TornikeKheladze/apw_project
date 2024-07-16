@@ -134,14 +134,14 @@ const GeneralForm = (props) => {
                 </Label>
                 <Radio
                   name={name}
-                  label="დიახ"
+                  label={name === "has_ring_number" ? "ჩართვა" : "დიახ"}
                   register={register}
                   value="1"
                   checked={formData[name]?.toString() === "1"}
                 />
                 <Radio
                   name={name}
-                  label="არა"
+                  label={name === "has_ring_number" ? "გამორთვა" : "არა"}
                   register={register}
                   value="0"
                   checked={formData[name]?.toString() === "0"}

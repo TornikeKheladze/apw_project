@@ -114,7 +114,7 @@ export const userArr = [
   },
   {
     name: "has_ring_number",
-    label: "შტამპი",
+    label: "ელ. კვალიფიციური შტამპის ფუნქციონალით სარგებლობა",
     type: "radio",
     notRequired: true,
   },

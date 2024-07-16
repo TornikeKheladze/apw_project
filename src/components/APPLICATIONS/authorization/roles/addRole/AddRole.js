@@ -75,7 +75,7 @@ const AddRole = ({ add, loading, permissions }) => {
     <div className="card p-5 mb-4">
       <h3 className="mb-6">ახალი როლის შექმნა</h3>
       <Label className="block mb-2" htmlFor="aid">
-        აირჩიეთ აპლიკაცია
+        აირჩიეთ მოდული
       </Label>
       <CustomSelect id="aid" onChange={(e) => setAid(e.target.value)}>
         {APPLICATIONS.map((item) => (
