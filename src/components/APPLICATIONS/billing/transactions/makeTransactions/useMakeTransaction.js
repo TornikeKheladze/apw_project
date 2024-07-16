@@ -31,7 +31,6 @@ export const useMakeTransaction = () => {
       queryKey: "getServiceProduction",
       queryFn: () => getServiceProduction().then((res) => res.data),
     });
-  console.log(servicesData, productionsData);
 
   // გატარებისას რო გავიგო რესელერია თუ არა ორგანიზაცია რომელიც ავტორიზებული
   // იუზერის მივედვით მომაქვს
@@ -90,13 +89,14 @@ export const useMakeTransaction = () => {
     : productionsData.filter((item) => +item.ownerID === +authorizedUser.oid);
 
   // სერვისების ნაცვლად სერვის ფროდაქშენს ვატან ასარჩევში
-  // const services = servicesData.map((service) => ({
-  //   ...service,
-  //   id: service.serviceID,
-  // }));
-  const services = productions.map((service) => ({
+  const services = servicesData.map((service) => ({
     ...service,
-    id: service.serviceProductionID,
+    id: service.serviceID,
+  }));
+  const serviceProductions = productions.map((sp) => ({
+    ...sp,
+    name: services.find((item) => item.serviceID === sp.serviceID)?.name,
+    id: sp.serviceProductionID,
   }));
 
   const sales = salesData.map((sale) => ({
@@ -120,7 +120,7 @@ export const useMakeTransaction = () => {
 
   const selectOptions = {
     agentID: organizations,
-    serviceID: services,
+    serviceID: serviceProductions,
     saleID: [{ id: 0, name: "სეილის გარეშე" }, ...sales],
   };
 

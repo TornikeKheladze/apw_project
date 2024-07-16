@@ -96,6 +96,7 @@ const AuthForm = ({
                 type={type}
                 step="any"
                 register={register}
+                defaultValue={name === "tell" ? "995" : ""}
                 rules={{
                   required: "ველი აუცილებელია",
                 }}

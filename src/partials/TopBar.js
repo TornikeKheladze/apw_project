@@ -9,7 +9,7 @@ import Tooltip from "components/Tooltip";
 
 import { Link } from "react-router-dom";
 import { useTopBar } from "./useTopBar";
-import Search from "./search/Search";
+// import Search from "./search/Search";
 // import Logo from "components/icons/Logo";
 import logoSrc from "../assets/images/Public_Service_Hall.svg.png";
 
@@ -63,7 +63,7 @@ const TopBar = () => {
       </span>
 
       {/* Search */}
-      <Search />
+      {/* <Search /> */}
 
       {/* Right */}
       <div className="flex items-center ltr:ml-auto rtl:mr-auto">

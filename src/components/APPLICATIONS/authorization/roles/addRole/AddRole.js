@@ -74,16 +74,6 @@ const AddRole = ({ add, loading, permissions }) => {
   return (
     <div className="card p-5 mb-4">
       <h3 className="mb-6">ახალი როლის შექმნა</h3>
-      <Label className="block mb-2 mt-4" htmlFor="role">
-        როლის დასახელება
-      </Label>
-      <Input
-        value={input}
-        onChange={handleInputChange}
-        id="role"
-        className="mb-4"
-        placeholder="როლის სახელი"
-      />
       <Label className="block mb-2" htmlFor="aid">
         აირჩიეთ აპლიკაცია
       </Label>
@@ -120,8 +110,18 @@ const AddRole = ({ add, loading, permissions }) => {
         selectedPermissions={selectedPermissions}
         setSelectedPermissions={setSelectedPermissions}
       />
+      <Label className="block mb-2 mt-4" htmlFor="role">
+        როლის დასახელება
+      </Label>
+      <Input
+        value={input}
+        onChange={handleInputChange}
+        id="role"
+        className="mb-4"
+        placeholder="როლის სახელი"
+      />
       {input && (
-        <p className="mt-1">
+        <p className="-mt-1 mb-1">
           როლის სახელი იქნება: <strong>{actualRoleName}</strong>
         </p>
       )}
