@@ -15,14 +15,14 @@ export const templatePackageArr = [
 ];
 
 export const templateArr = [
-  { name: "template_name", label: "შაბლონის სახელი", type: "text" },
+  { name: "template_name", label: "შაბლონის სახელი", type: "textarea" },
   { name: "cat_id", label: "კატეგორია", type: "select" },
   { name: "org_id", label: "ორგანიზაცია", type: "select" },
   // { name: "template_code", label: "კოდი", type: "text" },
 ];
 
 export const editTemplateArr = [
-  { name: "template_name", label: "შაბლონის სახელი", type: "text" },
+  { name: "template_name", label: "შაბლონის სახელი", type: "textarea" },
   { name: "cat_id", label: "კატეგორია", type: "select" },
   { name: "org_id", label: "ორგანიზაცია", type: "select" },
   { name: "active", label: "აირჩიე სტატუსი", type: "select" },
@@ -43,7 +43,7 @@ export const templateColumnsInTemplatesArr = [
 ];
 
 export const documentsArr = [
-  { name: "document_name", label: "დოკუმენტის სახელი", type: "text" },
+  { name: "document_name", label: "დოკუმენტის სახელი", type: "textarea" },
   { name: "cat_id", label: "კატეგორია", type: "text" },
   { name: "template_id", label: "შაბლონი", type: "select" },
 ];

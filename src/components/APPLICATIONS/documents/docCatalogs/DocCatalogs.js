@@ -1,21 +1,20 @@
 import AuthForm from "components/APPLICATIONS/authorization/authForm/AuthForm";
-import AuthTable from "components/APPLICATIONS/authorization/authTable/AuthTable";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import Modal, { ModalBody, ModalFooter, ModalHeader } from "components/Modal";
 import LoadingSpinner from "components/icons/LoadingSpinner";
-import PlusIcon from "components/icons/PlusIcon";
-import { idToName } from "helpers/idToName";
 import { removeEmpty } from "helpers/removeEmpty";
 import Footer from "partials/Footer";
 import CatalogTreeMenu from "./CatalogTreeMenu";
 import { useDocCatalogs } from "./useDocCatalogs";
+import FolderIcon from "components/icons/FolderIcon";
+import PackageIcon from "components/icons/PackageIcon";
+import { buildDepartmentTree } from "helpers/treeMenuBuilder";
 
 const DocCatalogs = () => {
   const {
     catalogs,
-    catalogsTree,
-    catalogTypes,
+    catalogsByOrg,
     fields,
     organizations,
     mutates: { createMutate, deleteMutate, editMutate },
@@ -25,8 +24,11 @@ const DocCatalogs = () => {
     authorizedUser,
   } = useDocCatalogs();
 
+  // console.log(selectedCatalog);
+
   return (
     <main className="workspace overflow-hidden">
+      {loading && <LoadingSpinner blur />}
       <Alert message={alert.message} color={alert.type} dismissable />
 
       <Modal
@@ -38,7 +40,7 @@ const DocCatalogs = () => {
         }}
       >
         <ModalHeader>კატეგორიის {openModal.action}</ModalHeader>
-        {openModal.action === "შეცვლა" && (
+        {openModal.action === "რედაქტირება" && (
           <div className="p-5">
             <AuthForm
               formArray={fields}
@@ -48,7 +50,6 @@ const DocCatalogs = () => {
               optionsObj={{
                 org_id: organizations,
                 parent_id: catalogs,
-                type: catalogTypes,
               }}
             />
           </div>
@@ -57,12 +58,15 @@ const DocCatalogs = () => {
           <div className="p-5">
             <AuthForm
               formArray={fields}
-              submitHandler={(data) => createMutate(removeEmpty(data))}
+              submitHandler={(data) =>
+                createMutate(
+                  removeEmpty({ ...data, org_id: authorizedUser.oid })
+                )
+              }
               isLoading={createLoading}
               optionsObj={{
                 org_id: organizations,
                 parent_id: catalogs,
-                type: catalogTypes,
               }}
             />
           </div>
@@ -92,62 +96,45 @@ const DocCatalogs = () => {
         )}
       </Modal>
       <div className="w-full flex justify-between mb-4">
-        <h3>კატალოგები</h3>
-        <Button
-          onClick={() => setOpenModal({ open: true, action: "დამატება" })}
-        >
-          <span>დამატება</span> <PlusIcon />
-        </Button>
+        <h3>კატეგორიები</h3>
+        <div className="flex gap-1">
+          <Button
+            className="p-1 text-sm"
+            onClick={() =>
+              setOpenModal({ open: true, action: "დამატება", type: 0 })
+            }
+          >
+            <span>კატეგორიის შექმნა</span>{" "}
+            <FolderIcon className="ml-2 !w-4 !h-4" />
+          </Button>
+          <Button
+            className="p-1 text-sm"
+            onClick={() =>
+              setOpenModal({ open: true, action: "დამატება", type: 1 })
+            }
+          >
+            <span>დოკუმენტის პაკეტის შექმნა</span>{" "}
+            <PackageIcon className="ml-2 !w-4 !h-4" />
+          </Button>
+        </div>
       </div>
 
-      <div className="card p-5 overflow-x-auto">
-        {loading ? (
-          <div className="flex flex-col items-center justify-center">
-            იტვირთება... <LoadingSpinner />
-          </div>
-        ) : catalogs?.length ? (
-          <AuthTable
-            staticArr={fields}
-            fetchedArr={catalogs
-              ?.filter((item) =>
+      {Object.keys(catalogsByOrg).map((key) => (
+        <div key={key} className="card p-5 mt-4">
+          <h4 className="text-base">
+            {organizations.find((item) => +item.id === +key)?.name}
+          </h4>
+          <CatalogTreeMenu
+            catalogs={buildDepartmentTree(
+              catalogsByOrg[key]?.filter((item) =>
                 authorizedUser?.superAdmin
                   ? item
                   : item.org_id === authorizedUser?.oid
               )
-              .map((item) => {
-                return {
-                  ...item,
-                  org_id_displayName: idToName(organizations, item.org_id),
-                  parent_id_displayName: idToName(catalogs, item.parent_id),
-                  type_displayName: idToName(catalogTypes, item.type),
-                };
-              })}
-            actions={{
-              editClick: (item) => {
-                setOpenModal({ open: true, action: "შეცვლა" });
-                setSelectedCatalog(item);
-              },
-              deleteClick: (item) => {
-                setOpenModal({
-                  open: true,
-                  action: "წაშლა",
-                });
-                setSelectedCatalog(item);
-              },
-            }}
+            )}
           />
-        ) : (
-          <p>კატალოგები არ მოიძებნა</p>
-        )}
-      </div>
-
-      <div className="card p-5 mt-4">
-        <CatalogTreeMenu
-          setChosenItem={setSelectedCatalog}
-          chosenItem={selectedCatalog}
-          catalogs={catalogsTree}
-        />
-      </div>
+        </div>
+      ))}
 
       <Footer />
     </main>

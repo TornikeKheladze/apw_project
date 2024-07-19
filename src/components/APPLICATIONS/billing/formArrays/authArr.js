@@ -26,8 +26,14 @@ export const orgArr = [
   },
   {
     name: "address",
-    label: "მისამართი",
+    label: "იურიდიული მისამართი",
     type: "text",
+  },
+  {
+    name: "physical_address",
+    label: "ფიზიკური მისამართი",
+    type: "text",
+    notRequired: true,
   },
   {
     name: "bank_account_number",

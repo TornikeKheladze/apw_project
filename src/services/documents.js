@@ -6,7 +6,7 @@ export const getAllCatalogs = () => {
 };
 
 // Get a category by ID
-export const getCategoryById = (id) => {
+export const getDocCategoryById = (id) => {
   return instance.get(`document/catalog/${id}`);
 };
 

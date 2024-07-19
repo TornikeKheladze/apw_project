@@ -33,11 +33,14 @@ const DocumentForm = () => {
     handleSubmit,
     setValue,
   } = useForm();
-  const { data: templates = [] } = useQuery({
+  const { data: templatesData = [] } = useQuery({
     queryKey: "getTemplates",
     queryFn: () => getAllTemplates().then((res) => res.data.data),
   });
+  const templates = templatesData.filter((item) => item.active === 1);
+
   const templateId = useWatch({ name: "template_id", control });
+
   const { data: columns = [], isLoading: columnLoading } = useQuery({
     queryKey: ["getTemplateColumnsByTemplateId", templateId],
     queryFn: () =>
@@ -143,13 +146,18 @@ const DocumentForm = () => {
           >
             {"დოკუმენტის სახელი"}
           </Label>
-          <CustomInput
-            name={"document_name"}
-            type={"text"}
+
+          <textarea
+            name="document_name"
             step="any"
-            register={register}
-            rules={{ required: "ველი აუცილებელია" }}
-            className={`${errors["document_name"] ? "border-danger" : ""}`}
+            {...register("document_name", {
+              validate: {
+                pattern: (value) => value?.length > 0,
+              },
+            })}
+            className={`${
+              errors.document_name ? "border-danger" : ""
+            } form-control`}
           />
         </div>
         <div>

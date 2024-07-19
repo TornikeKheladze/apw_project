@@ -1,12 +1,11 @@
 import { docCatalogsArr } from "components/APPLICATIONS/billing/formArrays/documentsArrs";
-import { buildDepartmentTree } from "helpers/treeMenuBuilder";
+import { groupBy } from "helpers/objectFunctions";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import {
   createCatalog,
   deleteCategory,
-  getAllCatalogTypes,
   getAllCatalogs,
   updateCategory,
 } from "services/documents";
@@ -25,29 +24,34 @@ export const useDocCatalogs = () => {
   const [selectedCatalog, setSelectedCatalog] = useState({ id: "" });
   const queryClient = useQueryClient();
 
-  const { data: catalogs = [], isLoading } = useQuery({
+  const { data: catalogsData = [], isLoading } = useQuery({
     queryKey: "getAllCatalogs",
     queryFn: () => getAllCatalogs().then((res) => res.data.data),
   });
+  const catalogs = authorizedUser.superAdmin
+    ? catalogsData
+    : catalogsData.filter((catalog) => +catalog.org_id === +authorizedUser.oid);
 
-  const { data: organizations = [], isLoading: organizationsLoading } =
-    useQuery({
-      queryKey: "getOrganizations",
-      queryFn: () => getOrganizations().then((res) => res.data.data),
-    });
-
-  const { data: catalogTypes = [], isLoading: catalogTypesLoading } = useQuery({
-    queryKey: "getAllCatalogTypes",
-    queryFn: () => getAllCatalogTypes().then((res) => res.data.data),
+  const {
+    data: organizationData = { data: [], member: null },
+    isLoading: organizationsLoading,
+  } = useQuery({
+    queryKey: "getOrganizations",
+    queryFn: () => getOrganizations().then((res) => res.data),
   });
+
+  const organizations = organizationData.member
+    ? [...organizationData.member, ...organizationData.data]
+    : organizationData.data || [];
 
   const { isLoading: createLoading, mutate: createMutate } = useMutation({
     mutationFn: (data) =>
       createCatalog({
         ...data,
         org_id: authorizedUser.superAdmin ? data.org_id : authorizedUser.oid,
+        type: openModal.type,
       }),
-    onSuccess: afterRequestHandler("კატალოგი წარმატებით დაემატა", "success"),
+    onSuccess: afterRequestHandler("კატეგორია წარმატებით დაემატა", "success"),
     onError: afterRequestHandler("error.response.data.message", "danger"),
   });
 
@@ -73,23 +77,20 @@ export const useDocCatalogs = () => {
       }, 1500);
     };
   }
+  const catalogsByOrg = groupBy(catalogs, "org_id");
 
-  const catalogsTree = buildDepartmentTree(
-    catalogs?.filter((item) =>
-      authorizedUser?.superAdmin ? item : item.org_id === authorizedUser?.oid
-    )
+  const fields = docCatalogsArr.filter(
+    (item) =>
+      item.name !== "org_id" &&
+      item.name !== "parent_id" &&
+      item.name !== "type"
   );
 
-  const fields = authorizedUser.superAdmin
-    ? docCatalogsArr
-    : docCatalogsArr.filter((item) => item.name !== "org_id");
-
-  const loading = isLoading || organizationsLoading || catalogTypesLoading;
+  const loading = isLoading || organizationsLoading;
 
   return {
     catalogs,
-    catalogsTree,
-    catalogTypes,
+    catalogsByOrg,
     organizations,
     fields,
     authorizedUser,

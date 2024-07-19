@@ -28,6 +28,7 @@ import TransactionDetails from "components/APPLICATIONS/billing/transactions/det
 import MakeTransaction from "components/APPLICATIONS/billing/transactions/makeTransactions/MakeTransaction";
 import TransactionByCat from "components/APPLICATIONS/billing/transactions/makeTransactions/TransactionByCat";
 import DocCatalogs from "components/APPLICATIONS/documents/docCatalogs/DocCatalogs";
+import DocCategoryDetails from "components/APPLICATIONS/documents/docCatalogs/DocCategoryDetails";
 import DocumentEdit from "components/APPLICATIONS/documents/documentEdit/DocumentEdit";
 import Documents from "components/APPLICATIONS/documents/documents/Documents";
 import TemplateColumns from "components/APPLICATIONS/documents/templateColumns/TemplateColumns";
@@ -240,6 +241,11 @@ export const routePermissions = [
     route: "/documents/categories",
     permission: "doc_catalog_get",
     element: <DocCatalogs />,
+  },
+  {
+    route: "/documents/categories/:id",
+    permission: "doc_catalog_get",
+    element: <DocCategoryDetails />,
   },
   // TEMPLATES
   {

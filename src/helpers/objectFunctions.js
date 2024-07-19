@@ -7,3 +7,17 @@ export function isEmptyObject(obj) {
   // If obj is not an object or is null, return false (not empty)
   return false;
 }
+
+export function groupBy(array, key) {
+  return array.reduce((result, currentValue) => {
+    // Get the value of the key for the current object
+    const groupKey = currentValue[key];
+    // If the group doesn't exist yet, create it
+    if (!result[groupKey]) {
+      result[groupKey] = [];
+    }
+    // Add the current object to the group
+    result[groupKey].push(currentValue);
+    return result;
+  }, {});
+}

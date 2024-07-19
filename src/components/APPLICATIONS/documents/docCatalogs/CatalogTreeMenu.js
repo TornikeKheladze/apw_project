@@ -1,14 +1,17 @@
 import DownArrowIcon from "components/icons/DownArrowIcon";
+import FolderIcon from "components/icons/FolderIcon";
+import PackageIcon from "components/icons/PackageIcon";
 import RightArrowIcon from "components/icons/RIghtArrowIcon";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CatalogTreeMenu = ({
   catalogs = [],
-  type,
-  chosenItem,
-  setChosenItem,
+  chosenItem = {},
+  setChosenItem = () => {},
 }) => {
   const [expandedCatalogs, setExpandedCatalogs] = useState([]);
+  const navigate = useNavigate();
 
   const toggleCatalog = (catalogId) => {
     if (expandedCatalogs.includes(catalogId)) {
@@ -19,15 +22,15 @@ const CatalogTreeMenu = ({
   };
 
   return (
-    <ul className="text-lg DO_NOT_CLOSE_MODAL">
+    <ul className="text-lg ">
       {catalogs.map((catalog) => (
-        <li key={catalog.id} className="pl-4 DO_NOT_CLOSE_MODAL">
-          <div className="flex items-center DO_NOT_CLOSE_MODAL">
+        <li key={catalog.id} className="pl-4 ">
+          <div className="flex items-center ">
             <div
               onClick={() => toggleCatalog(catalog.id)}
-              className="DO_NOT_CLOSE_MODAL text-blue-600 mr-2 focus:outline-none flex items-center justify-center cursor-pointer"
+              className=" text-blue-600 mr-2 focus:outline-none flex items-center justify-center cursor-pointer"
             >
-              <span className="DO_NOT_CLOSE_MODAL">
+              <span className="">
                 {expandedCatalogs.includes(catalog.id) ? (
                   <DownArrowIcon />
                 ) : (
@@ -36,16 +39,20 @@ const CatalogTreeMenu = ({
               </span>
             </div>
             <button
-              className={`DO_NOT_CLOSE_MODAL ${
-                catalog.id === chosenItem?.id && type === "dropdown"
-                  ? "border-b-2 border-primary"
-                  : ""
+              className={`flex gap-1 items-center ${
+                catalog.id === chosenItem?.id ? "border-b-2 border-primary" : ""
               }`}
               onClick={() => {
                 setChosenItem(catalog);
+                navigate(`/documents/categories/${catalog.id}`);
               }}
             >
               {catalog.name}
+              {catalog.type === 0 ? (
+                <FolderIcon className="ml-2 !w-4 !h-4" />
+              ) : (
+                <PackageIcon className="ml-2 !w-4 !h-4" />
+              )}
             </button>
           </div>
           {expandedCatalogs.includes(catalog.id) &&
@@ -54,7 +61,6 @@ const CatalogTreeMenu = ({
               <CatalogTreeMenu
                 setChosenItem={setChosenItem}
                 chosenItem={chosenItem}
-                type={type}
                 catalogs={catalog.children}
               />
             )}

@@ -12,7 +12,6 @@ import PlusIcon from "components/icons/PlusIcon";
 import { idToName } from "helpers/idToName";
 import Footer from "partials/Footer";
 import { useTemplates } from "./useTemplates";
-import { truncateText } from "helpers/truncateText";
 import { useEffect, useState } from "react";
 import { filterArray } from "helpers/filterArray";
 import { removeEmpty } from "helpers/removeEmpty";
@@ -75,7 +74,15 @@ const Templates = () => {
           <div className="p-5">
             <AuthForm
               formArray={editTemplateArr}
-              submitHandler={editMutate}
+              submitHandler={(data) => {
+                // const currentTemplateCode = templates.find(
+                //   (item) => item.id === data.id
+                // )?.template_code;
+                // console.log(selectedTemplate.template_code);
+                // console.log(templates.find((item) => item.id === data.id));
+                // console.log(data);
+                editMutate(data);
+              }}
               isLoading={editLoading}
               defaultValues={selectedTemplate}
               optionsObj={{
@@ -199,7 +206,6 @@ const Templates = () => {
               ?.map((item) => {
                 return {
                   ...item,
-                  template_code: truncateText(item?.template_code, 40),
                   org_id_displayName: idToName(organizations, item.org_id),
                   cat_id_displayName: idToName(catalogs, item.cat_id),
                 };

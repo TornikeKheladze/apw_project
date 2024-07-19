@@ -89,7 +89,7 @@ const useUserRoles = () => {
 
   useEffect(() => {
     if (usersWithRoles.length > 0) {
-      const editedUser = usersWithRoles.find((user) => +user.id === +id);
+      const editedUser = usersWithRoles.find((user) => +user.id === +id) || {};
       const editedUserRoles = editedUser.roles || [];
       setSelectedRoles(editedUserRoles);
     }
