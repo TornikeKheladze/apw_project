@@ -29,7 +29,7 @@ const ApiCredentials = () => {
             filter={{ filter, setFilter }}
             staticArr={apiCredentialsArr}
             fetchedArr={apiCredentials}
-            actions={{ delete: deleteItem }}
+            actions={{ delete: deleteItem, edit: true }}
           />
         )}
 

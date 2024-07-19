@@ -15,3 +15,7 @@ export const createApiCredentials = (data) => {
 export const deleteApiCredentials = (id) => {
   return instance.delete(`/billing-java/api-credential/${id}`);
 };
+
+export const updateApiCredentials = (data) => {
+  return instance.put(`/billing-java/api-credential`, data);
+};

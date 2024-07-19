@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import {
   createApiCredentials,
   getApiCredentialsById,
+  updateApiCredentials,
 } from "services/apiCredentials";
 
 export const useApiCredentialsForm = () => {
@@ -49,12 +50,12 @@ export const useApiCredentialsForm = () => {
     },
   });
 
-  // const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
-  //   mutationFn: updateCharge,
-  //   onSuccess(data) {
-  //     mutateHandler(data, "charge ცვლილება");
-  //   },
-  // });
+  const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
+    mutationFn: updateApiCredentials,
+    onSuccess(data) {
+      mutateHandler(data, "api credential ცვლილება");
+    },
+  });
 
   const {
     data: apiCredential = {},
@@ -74,10 +75,10 @@ export const useApiCredentialsForm = () => {
     if (action === "create") {
       createMutate(data);
     } else {
-      // updateMutate({
-      //   ...data,
-      //   id,
-      // });
+      updateMutate({
+        ...data,
+        id,
+      });
     }
   };
 
@@ -93,7 +94,7 @@ export const useApiCredentialsForm = () => {
     action,
     loading: isLoading || isFetching,
     submitHandler,
-    actionLoading: createLoading,
+    actionLoading: createLoading || updateLoading,
     alert,
     apiCredential,
   };
