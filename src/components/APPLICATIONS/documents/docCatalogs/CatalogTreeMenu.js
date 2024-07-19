@@ -3,7 +3,7 @@ import FolderIcon from "components/icons/FolderIcon";
 import PackageIcon from "components/icons/PackageIcon";
 import RightArrowIcon from "components/icons/RIghtArrowIcon";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const CatalogTreeMenu = ({
   catalogs = [],
@@ -12,6 +12,7 @@ const CatalogTreeMenu = ({
 }) => {
   const [expandedCatalogs, setExpandedCatalogs] = useState([]);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const toggleCatalog = (catalogId) => {
     if (expandedCatalogs.includes(catalogId)) {
@@ -43,8 +44,14 @@ const CatalogTreeMenu = ({
                 catalog.id === chosenItem?.id ? "border-b-2 border-primary" : ""
               }`}
               onClick={() => {
-                setChosenItem(catalog);
-                navigate(`/documents/categories/${catalog.id}`);
+                if (
+                  pathname === "/documents/templates" ||
+                  pathname === "/documents/documents"
+                ) {
+                  setChosenItem(catalog);
+                } else {
+                  navigate(`/documents/categories/${catalog.id}`);
+                }
               }}
             >
               {catalog.name}

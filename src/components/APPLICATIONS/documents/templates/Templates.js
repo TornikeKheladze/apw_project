@@ -15,8 +15,9 @@ import { useTemplates } from "./useTemplates";
 import { useEffect, useState } from "react";
 import { filterArray } from "helpers/filterArray";
 import { removeEmpty } from "helpers/removeEmpty";
-import ServiceCategoryTreeMenu from "components/APPLICATIONS/billing/serviceCategories/ServiceCategoryTreeMenu";
 import { useSelector } from "react-redux";
+import CatalogTreeMenu from "../docCatalogs/CatalogTreeMenu";
+import { convertDate } from "helpers/convertDate";
 
 const Templates = () => {
   const {
@@ -149,25 +150,25 @@ const Templates = () => {
           <span>დამატება</span> <PlusIcon />
         </Button>
       </div>
-
-      <button
-        onClick={() => {
-          setFilter((prevState) => ({
-            ...prevState,
-            active: prevState.active === 0 ? 1 : 0,
-          }));
-        }}
-        className=" w-max block mb-4 underline px-2 py-1 rounded text-primary"
-      >
-        {filter?.active === 0
-          ? "აქტიური შაბლონების ნახვა"
-          : "დაარქივებული შაბლონების ნახვა"}
-      </button>
-
+      <div className="mb-2">
+        <Button
+          onClick={() => {
+            setFilter((prevState) => ({
+              ...prevState,
+              active: prevState.active === 0 ? 1 : 0,
+            }));
+          }}
+          className="p-1 text-xs"
+        >
+          {filter?.active === 0
+            ? "აქტიური შაბლონების ნახვა"
+            : "შაბლონების ისტორიის ნახვა"}
+        </Button>
+      </div>
       <div className="card p-5 mb-4 !text-xs">
         <h2 className="text-sm mb-4">კატეგორიები</h2>
-        <ServiceCategoryTreeMenu
-          categories={buildCategoryTree(
+        <CatalogTreeMenu
+          catalogs={buildCategoryTree(
             catalogs
               ?.filter((item) =>
                 authorizedUser?.superAdmin
@@ -187,6 +188,12 @@ const Templates = () => {
           chosenItem={chosenCategory}
           setChosenItem={setChosenCategory}
         />
+        <Button
+          onClick={() => setChosenCategory({})}
+          className="p-1 text-xs mt-2"
+        >
+          ფილტრის მოხსნა
+        </Button>
       </div>
 
       <div className="card p-5 overflow-x-auto">
@@ -196,7 +203,15 @@ const Templates = () => {
           </div>
         ) : updatedList?.length ? (
           <AuthTable
-            staticArr={templateArr}
+            staticArr={
+              filter.active === 1
+                ? templateArr
+                : [
+                    ...templateArr,
+                    { name: "created_at", label: "შექმნის თარიღი" },
+                    { name: "updated_at", label: "ბოლო რედაქტირების თარიღი" },
+                  ]
+            }
             fetchedArr={updatedList
               ?.filter((item) =>
                 authorizedUser?.superAdmin
@@ -208,6 +223,8 @@ const Templates = () => {
                   ...item,
                   org_id_displayName: idToName(organizations, item.org_id),
                   cat_id_displayName: idToName(catalogs, item.cat_id),
+                  created_at: convertDate(item.created_at),
+                  updated_at: convertDate(item.updated_at),
                 };
               })}
             actions={{

@@ -13,9 +13,9 @@ import { getDocumentById } from "services/documents";
 import { useEffect, useState } from "react";
 import { filterArray } from "helpers/filterArray";
 import { removeEmpty } from "helpers/removeEmpty";
-import ServiceCategoryTreeMenu from "components/APPLICATIONS/billing/serviceCategories/ServiceCategoryTreeMenu";
 import { downloadPDF } from "helpers/downloadPDF";
 import { useSelector } from "react-redux";
+import CatalogTreeMenu from "../docCatalogs/CatalogTreeMenu";
 
 const Documents = () => {
   const {
@@ -392,8 +392,8 @@ const Documents = () => {
 
       <div className="card p-5 mb-4 !text-xs">
         <h2 className="text-sm mb-4">კატეგორიები</h2>
-        <ServiceCategoryTreeMenu
-          categories={buildCategoryTree(
+        <CatalogTreeMenu
+          catalogs={buildCategoryTree(
             catalogs
               ?.filter((item) =>
                 authorizedUser?.superAdmin
@@ -413,6 +413,12 @@ const Documents = () => {
           chosenItem={chosenCategory}
           setChosenItem={setChosenCategory}
         />
+        <Button
+          onClick={() => setChosenCategory({})}
+          className="p-1 text-xs mt-2"
+        >
+          ფილტრის მოხსნა
+        </Button>
       </div>
 
       <div className="card p-5 overflow-x-auto">

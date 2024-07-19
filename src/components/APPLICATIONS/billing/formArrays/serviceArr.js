@@ -449,6 +449,11 @@ export const apiCredentialsArr = [
     label: "API KEY",
     type: "number",
   },
+  {
+    name: "apiUrl",
+    label: "API URL",
+    type: "text",
+  },
 ];
 
 export const bankRegisterArr = [
