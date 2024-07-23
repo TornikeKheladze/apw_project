@@ -35,6 +35,22 @@ const ArchivedStatements = () => {
         }).then((res) => res.data),
     });
 
+  const expiredStatements =
+    statementData.data.filter((item) => {
+      function addMonthsToDate(months) {
+        const currentDate = new Date();
+        currentDate.setMonth(currentDate.getMonth() + months);
+        return currentDate.toISOString().split("T")[0];
+      }
+      const endDate = new Date(item.end_date);
+      const oneMonthLater = new Date(addMonthsToDate(1));
+      if (endDate < oneMonthLater) {
+        return true;
+      } else {
+        return false;
+      }
+    }) || [];
+
   const {
     data: statement = {
       package: [],
@@ -119,12 +135,12 @@ const ArchivedStatements = () => {
             </tr>
           </thead>
           <tbody>
-            {statementData.data.length === 0 && !loading ? (
+            {expiredStatements.length === 0 && !loading ? (
               <tr>
                 <td colSpan={6}>განცხადება არ მოიძებნა</td>
               </tr>
             ) : (
-              statementData.data.map((item, index) => (
+              expiredStatements.map((item, index) => (
                 <tr
                   key={item.id + index + Math.random()}
                   className="border-b border-gray-400"

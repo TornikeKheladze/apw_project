@@ -29,6 +29,10 @@ export const getStatements = (data) => {
   return instance.post("/auth-user/gov-get-auth", data);
 };
 
+export const getStatementsExpDate = (data) => {
+  return instance.post("/auth-user/gov-get-auth-package", data);
+};
+
 export const getStatementById = (id) => {
   return instance.post("/auth-user/gov-get", {
     auth_id: id,

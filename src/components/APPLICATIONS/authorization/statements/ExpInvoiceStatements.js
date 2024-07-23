@@ -8,21 +8,34 @@ import { downloadPDF } from "helpers/downloadPDF";
 import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { getDocumentByUUID } from "services/documents";
-import { getStatementById, getStatements } from "services/organizations";
+import { getStatementById, getStatementsExpDate } from "services/organizations";
 
 const ExpInvoiceStatements = () => {
   const [modal, setModal] = useState(false);
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [alert, setAlert] = useState({ message: "", type: "success" });
 
-  const { data: statementData = { data: [], request_chanel: [] }, isLoading } =
-    useQuery({
-      queryKey: "getStatements",
-      queryFn: () =>
-        getStatements({
-          identify_code: IDENTIFY_CODE_SIP,
-        }).then((res) => res.data),
-    });
+  const {
+    data: statementDataExpDate = { data: [], request_chanel: [] },
+    isLoading,
+  } = useQuery({
+    queryKey: "getStatementsExpDate",
+    queryFn: () =>
+      getStatementsExpDate({
+        identify_code: IDENTIFY_CODE_SIP,
+      }).then((res) => res.data),
+  });
+
+  // ინვოისის გამო ვადაგასულებს ვფილტრავ პახოდუ სტატუსი რო ნოლი არქონდეს
+  const expiredStatements = statementDataExpDate.data.filter((item) => {
+    const invoiceExpDate = new Date(item.invoice_exp);
+    const today = new Date();
+    if (invoiceExpDate < today && +item.status !== 0) {
+      return true;
+    } else {
+      return false;
+    }
+  });
 
   const {
     data: statement = {
@@ -74,8 +87,8 @@ const ExpInvoiceStatements = () => {
 
   const loading = statementLoading || isLoading;
 
-  const expiredStatements =
-    statementData.data.filter((statement) => +statement.status === 0) || [];
+  // const expiredStatements =
+  //   statementData.data.filter((statement) => +statement.status === 0) || [];
   return (
     <main className="workspace">
       <Alert color={alert.type} message={alert.message} />
@@ -107,7 +120,7 @@ const ExpInvoiceStatements = () => {
                   <td className="border-x border-gray-400 px-1">{`${item.user_name} ${item.user_l_name}`}</td>
                   <td className="border-x border-gray-400 px-1">
                     {
-                      statementData.request_chanel.find(
+                      statementDataExpDate.request_chanel.find(
                         (channel) => channel.id === item.gov
                       )?.app_name
                     }

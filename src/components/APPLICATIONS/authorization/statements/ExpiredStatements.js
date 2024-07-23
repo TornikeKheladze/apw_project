@@ -24,6 +24,17 @@ const ExpiredStatements = () => {
         }).then((res) => res.data),
     });
 
+  const expiredStatements =
+    statementData.data.filter((item) => {
+      const endDate = new Date(item.end_date);
+      const today = new Date();
+      if (endDate < today && +item.status !== 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }) || [];
+
   const {
     data: statement = {
       package: [],
@@ -74,8 +85,6 @@ const ExpiredStatements = () => {
 
   const loading = statementLoading || isLoading;
 
-  const expiredStatements =
-    statementData.data.filter((statement) => +statement.status === 0) || [];
   return (
     <main className="workspace">
       <Alert color={alert.type} message={alert.message} />
@@ -95,7 +104,7 @@ const ExpiredStatements = () => {
           <tbody>
             {expiredStatements.length === 0 && !loading ? (
               <tr>
-                <td colSpan={6}>განცხადება არ მოიძებნა</td>
+                <td colSpan={6}>ჩანაწერი არ მოიძებნა</td>
               </tr>
             ) : (
               expiredStatements.map((item, index) => (

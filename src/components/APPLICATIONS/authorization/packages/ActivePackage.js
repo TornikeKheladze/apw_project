@@ -120,6 +120,7 @@ const ActivePackage = () => {
       onSuccess: (data) => {
         createInvoiceMutate({
           invoice_number: data.data.data.id,
+          oid,
         });
         queriClient.invalidateQueries(["searchOrgPackage", oid]);
         setAlert({
