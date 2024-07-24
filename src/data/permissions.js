@@ -216,4 +216,10 @@ export const permissionsObj = {
     "რეგისტრაციის მეორე ეტაპის წარუმატებლად დასრულება",
   user_gov_second_stage_comment:
     "რეგისტრაციის მეორე ეტაპის კომენტარის გაკეთება",
+  user_create_package: "მომხმარებლების პაკეტის დამატება",
+  user_update_package: "მომხმარებლების პაკეტის რედაქტირება",
+  user_delete_package: "მომხმარებლების პაკეტის წაშლა",
+  user_create_active_package: "მომხმარებლის პაკეტის შეძენა",
+  user_update_active_package: "მომხმარებლების პაკეტის შეცვლა",
+  user_delete_active_package: "შეძენილი პაკეტის წაშლა",
 };

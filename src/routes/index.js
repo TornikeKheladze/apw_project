@@ -95,6 +95,7 @@ import ArchivedStatements from "components/APPLICATIONS/authorization/statements
 import ExpInvoiceStatements from "components/APPLICATIONS/authorization/statements/ExpInvoiceStatements";
 import ExpiredStatements from "components/APPLICATIONS/authorization/statements/ExpiredStatements";
 import BankRegister from "components/APPLICATIONS/billing/bankRegister/BankRegister";
+import Logs from "components/APPLICATIONS/authorization/logs/Logs";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -160,6 +161,7 @@ const Router = () => {
             path="/billing/transactionStatistic"
             element={<TransactionStatistic />}
           />
+          <Route path="/logs" element={<Logs />} />
 
           {routes}
 

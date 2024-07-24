@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { createUser, getUserDetails, updateUserData } from "services/users";
 import Alert from "components/Alert";
-import { useSelector } from "react-redux";
 
 const UserEditForm = () => {
   const [alert, setAlert] = useState({ message: "", type: "success" });
@@ -13,7 +12,6 @@ const UserEditForm = () => {
   const [searchParam] = useSearchParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { authorizedUser } = useSelector((store) => store.user);
   const oid = searchParam.get("oid");
   const did = searchParam.get("did");
   const pid = searchParam.get("pid");
@@ -108,10 +106,11 @@ const UserEditForm = () => {
       }
     >
       <GeneralForm
-        formArray={userArr.filter((item) => {
-          if (authorizedUser.superAdmin) return item.name !== "date_expiration";
-          return item;
-        })}
+        formArray={userArr}
+        // formArray={userArr.filter((item) => {
+        //   if (authorizedUser.superAdmin) return item.name !== "date_expiration";
+        //   return item;
+        // })}
         submitHandler={onSubmit}
         optionsObj={{
           active: [

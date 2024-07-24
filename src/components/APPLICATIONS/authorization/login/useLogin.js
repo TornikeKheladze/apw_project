@@ -11,7 +11,7 @@ export const useLogin = () => {
   const [isFullscreen, toggleFullscreen] = useFullscreen();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [passwordModal, setPasswordModal] = useState(false);
-  const [smsError, setSmsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [sms, setSms] = useState({
     open: false,
     value: "",
@@ -58,24 +58,41 @@ export const useLogin = () => {
         sms_code: sms.value,
       }),
     onSuccess: (res) => {
-      localStorage.setItem("token", res.data.user.token);
-      if (res.data.user.password_verified_at) {
-        if (res.data.user.roles[0].name === "Super-Admin") {
-          navigate("/sips");
-        } else {
-          // navigate(`/users/organisation/${res.data.user.oid}`);
-          navigate(`/organizations`);
-        }
+      const user = res.data.user;
+      localStorage.setItem("token", user.token);
+      if (user.active === 0) {
+        setErrorMessage("მომხმარებელი არ არის აქტიური");
       } else {
-        setSms((prevState) => ({
-          ...prevState,
-          open: false,
-        }));
-        setPasswordModal(true);
+        if (user.date_expiration === null) {
+          navigate("/sips");
+          return;
+        }
+        if (user.password_verified_at) {
+          const date_expiration = new Date(user.date_expiration);
+          const today = new Date();
+          if (date_expiration < today) {
+            setErrorMessage("მომხმარებელს ვადა გაუვიდა");
+          } else if (user.roles.length === 0) {
+            setErrorMessage("მომხმარებელს უფლება არ აქვს");
+          } else {
+            if (user.roles[0].name === "Super-Admin") {
+              navigate("/sips");
+            } else {
+              // navigate(`/users/organisation/${user.oid}`);
+              navigate(`/organizations`);
+            }
+          }
+        } else {
+          setSms((prevState) => ({
+            ...prevState,
+            open: false,
+          }));
+          setPasswordModal(true);
+        }
       }
     },
     onError: () => {
-      setSmsError(true);
+      setErrorMessage("SMS კოდი არასწორია");
     },
   });
 
@@ -99,7 +116,7 @@ export const useLogin = () => {
       isPasswordVisible,
       passwordModal,
       sms,
-      smsError,
+      errorMessage,
     },
     setStates: {
       toggleDarkMode,
@@ -107,7 +124,6 @@ export const useLogin = () => {
       setIsPasswordVisible,
       setPasswordModal,
       setSms,
-      setSmsError,
     },
   };
 };

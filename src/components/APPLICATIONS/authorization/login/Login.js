@@ -25,7 +25,7 @@ const Login = () => {
       isPasswordVisible,
       passwordModal,
       sms,
-      smsError,
+      errorMessage,
     },
     setStates: {
       toggleDarkMode,
@@ -169,10 +169,10 @@ const Login = () => {
           />
           <p
             className={`text-danger mt-2 ${
-              smsError ? "opacity-90" : "opacity-0"
+              errorMessage ? "opacity-90" : "opacity-0"
             }`}
           >
-            SMS კოდი არასწორია
+            {errorMessage}
           </p>
         </ModalBody>
         <ModalFooter>

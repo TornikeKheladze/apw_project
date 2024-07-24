@@ -163,7 +163,7 @@ const ActiveStatements = () => {
       <Modal active={modal} centered onClose={() => setModal(false)}>
         <ModalHeader>განცხადება</ModalHeader>
         <ModalBody>
-          <div className="p-5 overflow-y-auto h-[80vh]">
+          <div className="p-5 overflow-y-auto h-[80vh] w-[94vw]">
             <div className="relative">
               {getDocumentLoading || downloadLoading || firstStepLoading ? (
                 <LoadingSpinner blur />

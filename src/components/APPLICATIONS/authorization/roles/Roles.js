@@ -5,9 +5,9 @@ import AddRole from "./addRole/AddRole";
 
 import { useRoles } from "./useRoles";
 import DeleteModal from "components/customModal/DeleteModal";
-import List from "components/list/List";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import Alert from "components/Alert";
+import RoleList from "components/list/RoleList";
 
 const Roles = () => {
   const {
@@ -49,7 +49,7 @@ const Roles = () => {
             იტვირთება... <LoadingSpinner />
           </div>
         ) : roles?.length ? (
-          <List
+          <RoleList
             items={roles}
             openDelete={setIsDeleteModalOpen}
             openEdit={setIsEditModalOpen}

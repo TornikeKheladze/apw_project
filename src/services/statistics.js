@@ -25,3 +25,7 @@ export const getUsersDepartmentsStatistic = (data) => {
 export const getUsersPositionsStatistic = (data) => {
   return instance.post(`/user/statistic/auth/positions`, data);
 };
+
+export const getLogInfo = () => {
+  return instance.post(`/log/info?page=${1532}`);
+};
