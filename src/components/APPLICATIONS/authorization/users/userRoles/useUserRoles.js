@@ -144,6 +144,7 @@ const useUserRoles = () => {
     availableRoles,
     actionLoading,
     alert,
+    authorizedUser,
   };
 };
 

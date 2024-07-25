@@ -15,6 +15,7 @@ export default function UserRoles() {
     availableRoles,
     actionLoading,
     alert,
+    authorizedUser,
   } = useUserRoles();
 
   return (
@@ -80,11 +81,15 @@ export default function UserRoles() {
                     className="badge badge_primary w-max"
                   >
                     {selectedRole.name}
-                    <button
-                      type="button"
-                      className="ltr:ml-1 rtl:mr-1 la la-times"
-                      onClick={() => removeFromSelectedRoles(selectedRole)}
-                    ></button>
+                    {authorizedUser.superAdmin || authorizedUser.isSip ? (
+                      <button
+                        type="button"
+                        className="ltr:ml-1 rtl:mr-1 la la-times"
+                        onClick={() => removeFromSelectedRoles(selectedRole)}
+                      ></button>
+                    ) : (
+                      <></>
+                    )}
                   </span>
                 ))}
               </span>

@@ -531,7 +531,7 @@ const MenuDetailAuth = () => {
           </MenuBarCollapse>
         )}
         {/* ვამოწმებ ავტორიზირებულ პირი არის თუ არა */}
-        {user.isSip && (
+        {user.isSip && !user.superAdmin && (
           <MenuBarCollapse
             icon={<OrgIcon className={"w-6 h-6 mr-2"} />}
             label={"ავტორიზირებული პირები"}

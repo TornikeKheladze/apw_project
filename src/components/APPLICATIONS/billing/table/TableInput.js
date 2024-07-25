@@ -38,13 +38,15 @@ const TableInput = ({
           type={type}
           className="mb-2"
           onChange={(e) =>
-            setFilter({ ...filter, [`${fieldName}_start`]: e.target.value })
+            // setFilter({ ...filter, [`${fieldName}_start`]: e.target.value })
+            setFilter({ ...filter, [`start`]: e.target.value })
           }
         />
         <Input
           type={type}
           onChange={(e) =>
-            setFilter({ ...filter, [`${fieldName}_end`]: e.target.value })
+            // setFilter({ ...filter, [`${fieldName}_end`]: e.target.value })
+            setFilter({ ...filter, [`end`]: e.target.value })
           }
         />
       </>

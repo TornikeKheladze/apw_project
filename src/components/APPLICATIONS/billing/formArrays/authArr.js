@@ -148,3 +148,10 @@ export const smsArr = [
     type: "textarea",
   },
 ];
+
+export const logArr = [
+  { name: "created_at", label: "თარიღი", filter: "date" },
+  { name: "email", label: "ელ. ფოსტა", filter: "text" },
+  { name: "ip_address", label: "IP მისამართი", filter: "text" },
+  { name: "url", label: "URL", filter: "text" },
+];
