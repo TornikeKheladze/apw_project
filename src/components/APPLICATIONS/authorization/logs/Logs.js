@@ -39,6 +39,7 @@ const Logs = () => {
   const requestBody = Array.isArray(JSON.parse(modal.data.request))
     ? null
     : JSON.parse(modal.data.request);
+  console.log(requestBody);
 
   return (
     <main className="workspace">
