@@ -52,6 +52,7 @@ const NewAgreement = () => {
       payment_period: [],
       services: [],
       user_packages: [],
+      types: [],
     },
   } = useQuery({
     queryKey: ["getGovInfo"],
@@ -379,6 +380,30 @@ const NewAgreement = () => {
             ) : (
               <></>
             )}
+          </div>
+          <div>
+            <Label
+              className={`block mb-1  ${errors.type ? "text-danger" : ""}`}
+            >
+              ტიპი *
+            </Label>
+            <CustomSelect
+              name="type"
+              register={register}
+              className={`${errors.type ? "border-danger" : ""}`}
+              rules={{ required: "ველი აუცილებელია" }}
+            >
+              <option value="">ტიპი</option>
+              {govInfo.types?.map((item) => (
+                <option
+                  className="p-3"
+                  key={item.id + item.name}
+                  value={item.id}
+                >
+                  {item.name}
+                </option>
+              ))}
+            </CustomSelect>
           </div>
           <div>
             <Label

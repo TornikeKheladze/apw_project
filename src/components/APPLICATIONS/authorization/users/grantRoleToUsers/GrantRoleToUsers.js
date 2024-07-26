@@ -9,6 +9,7 @@ const GrantRoleToUsers = () => {
   const {
     roles,
     selectedUsers,
+    setSelectedUsers,
     users,
     isLoading,
     roleChangeHandler,
@@ -25,6 +26,20 @@ const GrantRoleToUsers = () => {
         <h3 className="text-base sm:text-lg mb-4 text-primary">
           მომხმარებლებლები
         </h3>
+        {users.length > 0 && (
+          <button
+            className="rounded-md border-primary border-[1px] mb-2 p-1"
+            onClick={() =>
+              setSelectedUsers(
+                selectedUsers.length === users.length
+                  ? []
+                  : [...users.map((user) => user.id)]
+              )
+            }
+          >
+            ყველას მონიშვნა
+          </button>
+        )}
         <div className="  grid gap-y-4 sm:grid-cols-3 grid-cols-1  w-full ">
           {isLoading ? (
             <div className="flex flex-col gap-2 items-center mx-auto col-span-3">

@@ -98,6 +98,7 @@ const useGrantRoleToUsers = () => {
   return {
     roles: rolesData.roles,
     selectedUsers,
+    setSelectedUsers,
     selectedRole,
     users,
     isLoading: rolesDataLoading || isUsersLoading,
