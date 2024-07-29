@@ -106,7 +106,11 @@ const UserEditForm = () => {
       }
     >
       <GeneralForm
-        formArray={userArr}
+        formArray={
+          action === "create"
+            ? userArr.filter((item) => item.name !== "active")
+            : userArr
+        }
         // formArray={userArr.filter((item) => {
         //   if (authorizedUser.superAdmin) return item.name !== "date_expiration";
         //   return item;

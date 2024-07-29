@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
-  getSuperAdminData,
+  getRolesData,
   removeRolesFromUser,
   setRolesToUser,
 } from "services/roles";
@@ -29,10 +29,15 @@ const useUserRoles = () => {
   //     ),
   // });
 
-  const { data: permissionsData = {}, isLoading } = useQuery({
-    queryKey: "getSuperAdminData",
-    queryFn: () => getSuperAdminData().then((res) => res.data.data),
-  });
+  // const { data: permissionsData = {}, isLoading } = useQuery({
+  //   queryKey: "getSuperAdminData",
+  //   queryFn: () => getSuperAdminData().then((res) => res.data.data),
+  // });
+  const { data: permissionsData = { roles: [], permission: [] }, isLoading } =
+    useQuery({
+      queryKey: "getRolesData",
+      queryFn: () => getRolesData().then((res) => res.data.data),
+    });
 
   const afterRequestHandler = (message, type) => {
     queriClient.invalidateQueries("getSuperAdminData");
@@ -78,9 +83,10 @@ const useUserRoles = () => {
 
   const allRoles = useMemo(() => {
     const roles = permissionsData?.roles || [];
-    if (authorizedUser.superAdmin) return roles;
-    return roles.filter((role) => role.oid === authorizedUser.oid) || [];
-  }, [permissionsData.roles, authorizedUser]);
+    // if (authorizedUser.superAdmin) return roles;
+    // return roles.filter((role) => role.oid === authorizedUser.oid) || [];
+    return roles;
+  }, [permissionsData.roles]);
 
   const usersWithRoles = useMemo(
     () => permissionsData.users || [],
