@@ -22,7 +22,6 @@ export const useNewPasswordForm = (login) => {
     queryFn: () => getUserDetails(id).then((res) => res.data.users),
     enabled: action === "edit",
   });
-  console.log(userData);
 
   const { mutate: updateMutate, isLoading } = useMutation({
     mutationFn: updatePassword,

@@ -33,11 +33,10 @@ const useUserRoles = () => {
   //   queryKey: "getSuperAdminData",
   //   queryFn: () => getSuperAdminData().then((res) => res.data.data),
   // });
-  const { data: permissionsData = { roles: [], permission: [] }, isLoading } =
-    useQuery({
-      queryKey: "getRolesData",
-      queryFn: () => getRolesData().then((res) => res.data.data),
-    });
+  const { data: permissionsData = {}, isLoading } = useQuery({
+    queryKey: "getRolesData",
+    queryFn: () => getRolesData().then((res) => res.data.data),
+  });
 
   const afterRequestHandler = (message, type) => {
     queriClient.invalidateQueries("getSuperAdminData");

@@ -33,7 +33,7 @@ export default function UserRoles() {
                 {searchQuery
                   ? filteredRoles?.map((role) => (
                       <div
-                        key={role.id}
+                        key={role.id + Math.random()}
                         className="item"
                         onClick={() => roleChooseHandler(role)}
                       >
@@ -42,7 +42,7 @@ export default function UserRoles() {
                     ))
                   : availableRoles?.map((role) => (
                       <div
-                        key={role.id}
+                        key={role.id + Math.random()}
                         className="item"
                         onClick={() => roleChooseHandler(role)}
                       >
@@ -77,7 +77,7 @@ export default function UserRoles() {
               <span className="flex gap-1 items-center ltr:pl-2 rtl:pr-2 md:w-[30%]  w-2/3 flex-wrap">
                 {selectedRoles.map((selectedRole) => (
                   <span
-                    key={selectedRole.id}
+                    key={selectedRole.id + Math.random()}
                     className="badge badge_primary w-max"
                   >
                     {selectedRole.name}
