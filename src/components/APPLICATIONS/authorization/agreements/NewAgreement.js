@@ -185,9 +185,11 @@ const NewAgreement = () => {
         name: data.legal_name,
         identifi_number: data.legal_identifi_number,
         lagel_addres: data.legal_lagel_addres,
+        type: data.legal_type,
         contact: {
           legal_tell: data.legal_tell,
           legal_email: data.legal_email,
+
           // legal_contact_info
         },
         authorized: {
@@ -380,30 +382,6 @@ const NewAgreement = () => {
             ) : (
               <></>
             )}
-          </div>
-          <div>
-            <Label
-              className={`block mb-1  ${errors.type ? "text-danger" : ""}`}
-            >
-              ტიპი *
-            </Label>
-            <CustomSelect
-              name="type"
-              register={register}
-              className={`${errors.type ? "border-danger" : ""}`}
-              rules={{ required: "ველი აუცილებელია" }}
-            >
-              <option value="">ტიპი</option>
-              {govInfo.types?.map((item) => (
-                <option
-                  className="p-3"
-                  key={item.id + item.name}
-                  value={item.id}
-                >
-                  {item.name}
-                </option>
-              ))}
-            </CustomSelect>
           </div>
           <div>
             <Label
@@ -649,6 +627,30 @@ const NewAgreement = () => {
                     errors.legal_identifi_number ? "border-danger" : ""
                   }`}
                 />
+              </div>
+              <div>
+                <Label
+                  className={`block mb-1  ${errors.type ? "text-danger" : ""}`}
+                >
+                  ტიპი *
+                </Label>
+                <CustomSelect
+                  name="legal_type"
+                  register={register}
+                  className={`${errors.legal_type ? "border-danger" : ""}`}
+                  rules={{ required: "ველი აუცილებელია" }}
+                >
+                  <option value="">ტიპი</option>
+                  {govInfo.types?.map((item) => (
+                    <option
+                      className="p-3"
+                      key={item.id + item.name}
+                      value={item.id}
+                    >
+                      {item.name}
+                    </option>
+                  ))}
+                </CustomSelect>
               </div>
               <div>
                 <Label

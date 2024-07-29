@@ -63,7 +63,7 @@ const GrantRoleToUsers = () => {
           <CustomSelect value={selectedRole} onChange={roleChangeHandler}>
             <option>აირჩიეთ როლი</option>
             {roles?.map((role) => (
-              <option key={role.id} value={role.id}>
+              <option key={role.id + Math.random()} value={role.id}>
                 {role.name}
               </option>
             ))}
