@@ -66,6 +66,7 @@ const Sips = () => {
       addOrganization({
         ...data,
         reseller: 1,
+        sip: 1,
         type: SIPTYPEID,
       }),
     onSuccess: (data) => {

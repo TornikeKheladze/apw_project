@@ -20,7 +20,7 @@ export const useTopBar = () => {
     queryFn: () =>
       getOrganizationById(authorizedUser.oid).then((res) => res.data.data),
     onSuccess: (data) => {
-      if (data.member_id === null) {
+      if (data.sip === 1) {
         dispatch(saveAuthorizedUser({ ...authorizedUser, isSip: true }));
       }
     },

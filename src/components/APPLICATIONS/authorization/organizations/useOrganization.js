@@ -57,6 +57,7 @@ const useOrganization = () => {
       addOrganization({
         ...data,
         reseller: 1,
+        sip: 0,
       }),
     onSuccess: (data) => {
       queryClient.invalidateQueries("getOrganizationsData");

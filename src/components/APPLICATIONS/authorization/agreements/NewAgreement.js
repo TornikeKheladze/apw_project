@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import Checkbox from "components/form/Checkbox";
@@ -186,10 +187,10 @@ const NewAgreement = () => {
         identifi_number: data.legal_identifi_number,
         lagel_addres: data.legal_lagel_addres,
         type: data.legal_type,
+        sip: data.legal_sip,
         contact: {
           legal_tell: data.legal_tell,
           legal_email: data.legal_email,
-
           // legal_contact_info
         },
         authorized: {
@@ -692,6 +693,13 @@ const NewAgreement = () => {
                   register={register}
                   rules={{}}
                 />
+              </div>
+              <div className="my-2">
+                <label className={classNames("custom-checkbox")}>
+                  <input type="checkbox" {...register("legal_sip")} />
+                  <span></span>
+                  <span>სახელმწიფო უწყება</span>
+                </label>
               </div>
               <div>
                 <Label className={`block mb-1 `}>
