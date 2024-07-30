@@ -249,7 +249,7 @@ const ActivePackage = () => {
 
   const renderPackages = authorizedUser.superAdmin
     ? packages
-    : packages.filter((item) => +item.oid === +oid);
+    : packages.filter((item) => +item.oid === +authorizedUser.oid);
   const organizations = organizationData.member
     ? [...organizationData.member, ...organizationData.data]
     : organizationData.data;

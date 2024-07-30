@@ -183,7 +183,7 @@ const SuperAdminMenuBar = () => {
               }
             >
               <AuthIcon />
-              <span className="title uppercase mt-1">ადმინისტრირება</span>
+              <span className="title mt-1">ადმინისტრირება</span>
             </button>
           </Tippy>
           {menuType === "wide" ? (
@@ -202,7 +202,7 @@ const SuperAdminMenuBar = () => {
                   })}
                 >
                   <BillingIcon />
-                  <span className="title uppercase mt-1">ბილინგი</span>
+                  <span className="title mt-1">ბილინგი</span>
                 </button>
               </Tippy>
               {menuType === "wide" ? (
@@ -223,7 +223,7 @@ const SuperAdminMenuBar = () => {
                   })}
                 >
                   <DocumentIcon className="h-7 w-7 mx-auto" />
-                  <span className="title uppercase mt-1">დოკუმენტები</span>
+                  <span className="title mt-1">დოკუმენტები</span>
                 </button>
               </Tippy>
               {menuType === "wide" ? (
