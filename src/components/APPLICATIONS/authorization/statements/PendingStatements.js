@@ -106,7 +106,7 @@ const PendingStatements = () => {
 
   const pendingStatements =
     statementData.data.filter(
-      (statement) => +statement.status === 2 && +statement.gov === 1
+      (statement) => +statement.status === 2 && +statement.gov === 5
     ) || [];
   return (
     <main className="workspace">
