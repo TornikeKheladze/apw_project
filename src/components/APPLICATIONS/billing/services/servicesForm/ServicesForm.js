@@ -54,8 +54,12 @@ const ServicesForm = () => {
                   { name: "აქტიური", id: 1 },
                 ],
                 applicantRegistrationApi: [
-                  { name: "არა", id: 0, value: "0" },
-                  { name: "დიახ", id: 1, value: "1" },
+                  {
+                    name: "განმცხადებელი - ფიზიკური/იურიდიული პირი",
+                    id: 0,
+                    value: "0",
+                  },
+                  { name: "სსიპ", id: 1, value: "1" },
                 ],
               }}
               submitHandler={submitHandler}

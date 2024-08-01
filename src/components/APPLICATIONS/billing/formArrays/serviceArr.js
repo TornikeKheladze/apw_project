@@ -21,6 +21,10 @@ export const serviceCategoriesArr = [
   //   label: "მოსაკრებლის კალკულაციის დაწყების თარიღი",
   //   type: "datetime-local",
   // },
+  { name: "categoryDescription", label: "სერვისის აღწერილობა", type: "text" },
+  { name: "usageTerms", label: "სარგებლობის პირობები", type: "text" },
+  { name: "additionalTerms", label: "დამატებითი პირობები", type: "text" },
+  // { name: "obligations", label: "ვალდებულებები", type: "text" },
   {
     filter: "select",
     name: "ownerID",
@@ -31,7 +35,7 @@ export const serviceCategoriesArr = [
   {
     name: "applicantRegistrationApi",
     label: "დაშვება იურიდიული პირებისათვის",
-    type: "radio",
+    type: "select",
   },
   {
     name: "usedQuantity",
@@ -88,7 +92,7 @@ export const serviceArr = [
   {
     name: "applicantRegistrationApi",
     label: "დაშვება იურიდიული პირებისათვის",
-    type: "radio",
+    type: "select",
   },
   {
     name: "serviceUrl",

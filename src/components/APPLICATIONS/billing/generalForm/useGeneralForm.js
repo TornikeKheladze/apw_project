@@ -18,7 +18,9 @@ const useGeneralForm = (formArray, updateDataObj) => {
     setValue,
     control,
     ...formObject
-  } = useForm();
+  } = useForm({
+    defaultValues: updateDataObj ? updateDataObj : {},
+  });
 
   const serviceID = useWatch({
     control,

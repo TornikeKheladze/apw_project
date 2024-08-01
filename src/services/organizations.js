@@ -51,8 +51,8 @@ export const firstStep = (data) => {
   return instance.post(`/first-step/${data.action}`, data);
 };
 
-export const getGovInfo = () => {
-  return instance.get("/gov-info");
+export const getGovInfo = (data) => {
+  return instance.post("/gov-info", data);
 };
 
 export const firstStepInsert = (data) => {

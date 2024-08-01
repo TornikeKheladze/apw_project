@@ -1,7 +1,7 @@
 import Alert from "components/Alert";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import { useServiceCategoriesForm } from "./useServiceCategoriesForm";
-import GeneralForm from "../../generalForm/GeneralForm";
+import CustomServiceForm from "./CustomServiceForm";
 // import ServiceCategoryTreeMenu from "../ServiceCategoryTreeMenu";
 
 const ServiceCategoriesForm = () => {
@@ -42,7 +42,7 @@ const ServiceCategoriesForm = () => {
               chosenItem={chosenCategory}
               setChosenItem={setChosenCategory}
             /> */}
-            <GeneralForm
+            <CustomServiceForm
               submitHandler={submitHandler}
               formArray={formFields}
               isLoading={actionLoading}

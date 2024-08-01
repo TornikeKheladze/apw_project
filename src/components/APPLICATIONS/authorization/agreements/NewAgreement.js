@@ -57,7 +57,10 @@ const NewAgreement = () => {
     },
   } = useQuery({
     queryKey: ["getGovInfo"],
-    queryFn: () => getGovInfo().then((res) => res.data.data),
+    queryFn: () =>
+      getGovInfo({ identify_code: IDENTIFY_CODE_SIP }).then(
+        (res) => res.data.data
+      ),
   });
 
   const { mutate: secondStepMutate } = useMutation({

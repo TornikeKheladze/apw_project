@@ -8,7 +8,6 @@ const useServiceCategories = () => {
   const { data: categoriesData = [{}], isLoading } = useQuery({
     queryKey: "getCategories",
     queryFn: () => getCategories().then((res) => res.data),
-    staleTime: Infinity,
   });
 
   const categories = categoriesData

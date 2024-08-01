@@ -126,6 +126,9 @@ export const useServiceCategoriesForm = () => {
 
   const submitHandler = (data) => {
     // const parentID = chosenCategory.catID || 0;
+    const obligations = data.obligations
+      ? JSON.stringify(data.obligations.map((item) => item.name))
+      : "";
 
     if (action === "create") {
       createMutate({
@@ -135,6 +138,7 @@ export const useServiceCategoriesForm = () => {
         ownerID: authorizedUser.oid,
         catType: data.catType || catType,
         usedQuantity: 0,
+        obligations,
       });
     } else {
       updateMutate({
@@ -143,6 +147,7 @@ export const useServiceCategoriesForm = () => {
         parentID: data.parentID || parentID,
         catID: id,
         usedQuantity: category.usedQuantity,
+        obligations,
       });
     }
   };
