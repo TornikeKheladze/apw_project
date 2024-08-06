@@ -11,6 +11,11 @@ export const serviceCategoriesArr = [
   //   type: "number",
   // },
   { name: "catType", label: "კატალოგის ტიპი", type: "select" },
+  {
+    name: "applicantRegistrationApi",
+    label: "კატალოგის მომხმარებლის ტიპი",
+    type: "select",
+  },
   // {
   //   name: "chargeCalculationEndDate",
   //   label: "მოსაკრებლის კალკულაციის დასრულების თარიღი",
@@ -21,9 +26,13 @@ export const serviceCategoriesArr = [
   //   label: "მოსაკრებლის კალკულაციის დაწყების თარიღი",
   //   type: "datetime-local",
   // },
-  { name: "categoryDescription", label: "სერვისის აღწერილობა", type: "text" },
-  { name: "usageTerms", label: "სარგებლობის პირობები", type: "text" },
-  { name: "additionalTerms", label: "დამატებითი პირობები", type: "text" },
+  {
+    name: "categoryDescription",
+    label: "სერვისის აღწერილობა",
+    type: "textarea",
+  },
+  { name: "usageTerms", label: "სარგებლობის პირობები", type: "textarea" },
+  { name: "additionalTerms", label: "დამატებითი პირობები", type: "textarea" },
   // { name: "obligations", label: "ვალდებულებები", type: "text" },
   {
     filter: "select",
@@ -32,11 +41,6 @@ export const serviceCategoriesArr = [
     type: "select",
   },
   { name: "parentID", label: "მშობელი", type: "select" },
-  {
-    name: "applicantRegistrationApi",
-    label: "დაშვება იურიდიული პირებისათვის",
-    type: "select",
-  },
   {
     name: "usedQuantity",
     label: "გამოყენებული რაოდენობა",
@@ -91,7 +95,7 @@ export const serviceArr = [
   },
   {
     name: "applicantRegistrationApi",
-    label: "დაშვება იურიდიული პირებისათვის",
+    label: "კატალოგის მომხმარებლის ტიპი",
     type: "select",
   },
   {

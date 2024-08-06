@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  users: [],
   user: {},
+  authOrg: {},
   authorizedUser: {
     roles: [],
     superAdmin: false,
@@ -14,11 +14,8 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    saveUsers: (state, action) => {
-      state.users = action.payload;
-    },
-    saveUser: (state, action) => {
-      state.user = action.payload;
+    saveAuthOrg: (state, action) => {
+      state.authOrg = action.payload;
     },
     saveAuthorizedUser: (state, action) => {
       state.authorizedUser = action.payload;
@@ -26,6 +23,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { saveUsers, saveUser, saveAuthorizedUser } = userSlice.actions;
+export const { saveAuthOrg, saveAuthorizedUser } = userSlice.actions;
 
 export default userSlice.reducer;

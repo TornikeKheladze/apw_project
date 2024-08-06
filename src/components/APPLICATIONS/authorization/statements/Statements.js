@@ -13,10 +13,16 @@ import {
   getStatementById,
   getStatements,
 } from "services/organizations";
+// import StatementTable from "./StatementTable";
+// import Pagination from "components/Pagination";
+// import { useNavigate } from "react-router-dom";
+// import { statementArr } from "components/APPLICATIONS/billing/formArrays/agreementArr";
 
 const Statements = () => {
   const queryClient = useQueryClient();
   const [modal, setModal] = useState(false);
+  // const [filter, setFilter] = useState({});
+  // const [page, setPage] = useState(1);
   const [commentInput, setCommentInput] = useState({
     show: false,
     value: "",
@@ -25,6 +31,7 @@ const Statements = () => {
   });
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [alert, setAlert] = useState({ message: "", type: "success" });
+  // const navigate = useNavigate();
 
   const { data: statementData = { data: [], request_chanel: [] }, isLoading } =
     useQuery({
@@ -121,12 +128,11 @@ const Statements = () => {
         <h3 className="mb-2">განცხადებები</h3>
         <table className="table table_bordered w-full mt-3 text-xs">
           <thead>
-            <tr className="">
-              <th className="">განმცხადებელი</th>
-              <th className="">უფლებამოსილი პირი</th>
-              <th className="">განცხადების ინიცირების არხი</th>
-              <th className="">თარიღი</th>
-              <th className=""></th>
+            <tr>
+              <th>განმცხადებელი</th>
+              <th>განცხადების ინიცირების არხი</th>
+              <th>თარიღი</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -140,8 +146,10 @@ const Statements = () => {
                   key={item.id + index + Math.random()}
                   className="border-b border-gray-400"
                 >
-                  <td className="border-x border-gray-400 px-1">{item.name}</td>
-                  <td className="border-x border-gray-400 px-1">{`${item.user_name} ${item.user_l_name}`}</td>
+                  <td className="border-x border-gray-400 px-1">
+                    {item.name} / {`${item.user_name} ${item.user_l_name}`}
+                  </td>
+                  {/* <td className="border-x border-gray-400 px-1">{`${item.user_name} ${item.user_l_name}`}</td> */}
                   <td className="border-x border-gray-400 px-1">
                     {
                       statementData.request_chanel.find(
@@ -166,6 +174,41 @@ const Statements = () => {
           </tbody>
         </table>
       </div>
+      {/* <div className="card p-5 overflow-x-auto">
+        <StatementTable
+          staticArr={statementArr}
+          fetchedArr={govStatements.map((item) => ({
+            ...item,
+            name: `${item.name} / ${item.user_name} ${item.user_l_name}`,
+            channel: statementData.request_chanel.find(
+              (channel) => channel.id === item.gov
+            )?.app_name,
+            created_at: item.created_at ? convertDate(item.created_at) : "",
+          }))}
+          filter={{ filter, setFilter }}
+          page={{ page, setPage }}
+          search={() => console.log(filter)}
+          actions={{
+            detailClick: (item) => navigate(`/agreements/details/${item.id}`),
+          }}
+        />
+      </div> */}
+      {/* {isLoading ? (
+        <></>
+      ) : (
+        <div className="mt-5">
+          <Pagination
+            currentPage={page}
+            totalCount={logData.total}
+            pageSize={logData.per_page}
+            onPageChange={(page) => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              setPage(page);
+              mutate(filter);
+            }}
+          />
+        </div>
+      )} */}
 
       <Modal active={modal} centered onClose={() => setModal(false)}>
         <ModalHeader>განცხადება</ModalHeader>

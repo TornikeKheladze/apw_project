@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import Checkbox from "components/form/Checkbox";
@@ -6,7 +5,6 @@ import CustomInput from "components/form/CustomInput";
 import CustomSelect from "components/form/CustomSelect";
 import Label from "components/form/Label";
 import PlusIcon from "components/icons/PlusIcon";
-import { IDENTIFY_CODE_SIP } from "data/applications";
 import { useState } from "react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
@@ -15,15 +13,41 @@ import {
   getGovInfo,
   secondStepInsert,
 } from "services/organizations";
+import { useFormRefresh } from "./useFormRefresh";
+import { buildFormObject } from "./helpers";
+import { useSelector } from "react-redux";
+import {
+  fizikuriArr,
+  legalUser,
+  uflebamosiliArr,
+} from "components/APPLICATIONS/billing/formArrays/agreementArr";
+import { BuildAvtFields, BuildFields } from "./BuildFields";
 
 const NewAgreement = () => {
+  const { authOrg } = useSelector((state) => state.user);
+  const [formData, setFormData] = useState({});
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
   } = useForm({
-    // defaultValues,
+    defaultValues: {
+      user: [
+        {
+          contact_info: "",
+          email: "",
+          lname: "",
+          name: "",
+          personal_number: "",
+          tell: "",
+          user_date_expiration: "",
+          comment: "",
+        },
+      ],
+    },
   });
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [additionalFiles, setAdditionalFiles] = useState([]);
@@ -44,6 +68,7 @@ const NewAgreement = () => {
   });
 
   const [selectedUserPackage, setSelectedUserPackage] = useState([]);
+  // eslint-disable-next-line
   const [selectedCatalog, setSelectedCatalog] = useState([]);
   const [selectedService, setSelectedService] = useState([]);
 
@@ -55,13 +80,17 @@ const NewAgreement = () => {
       user_packages: [],
       types: [],
     },
+    isFetched: isGovInfoFetched,
   } = useQuery({
     queryKey: ["getGovInfo"],
     queryFn: () =>
-      getGovInfo({ identify_code: IDENTIFY_CODE_SIP }).then(
+      getGovInfo({ identify_code: authOrg.identify_code }).then(
         (res) => res.data.data
       ),
+    enabled: authOrg.identify_code ? true : false,
   });
+
+  console.log(formData);
 
   const { mutate: secondStepMutate } = useMutation({
     mutationFn: secondStepInsert,
@@ -136,92 +165,43 @@ const NewAgreement = () => {
     },
   });
 
-  function addMonthsToDate(months) {
-    const currentDate = new Date();
-    currentDate.setMonth(currentDate.getMonth() + months);
-    return currentDate.toISOString().split("T")[0];
-  }
-
   const submitHandler = (data) => {
-    console.log(data);
-    const firstStepObj = {
-      id: 1,
-      identify_code: IDENTIFY_CODE_SIP,
-      contract_exp:
-        contract_exp === "choose"
-          ? data.contract_exp_date
-          : addMonthsToDate(data.contract_exp),
-      // contract_exp: 1,
-      payment_period: "5",
-
-      // conviction_doc: {
-      //   doc_id: "6633970bbd4cd27b533dd6e6",
-      //   user_email: "test_23@test.ge",
-      // },
-      // health_doc: {
-      //   doc_id: "66337be0bd4cd27b533dd5c8",
-      //   user_email: "test_23@test.ge",
-      // },
-      desc: data.desc,
-      // additional_doc: {
-      //   1: {
-      //     doc_name: "name",
-      //     doc_id: "6633970bbd4cd27b533dd6e6",
-      //   },
-      //   2: {
-      //     doc_name: "name",
-      //     doc_id: "6633970bbd4cd27b533dd6e7",
-      //   },
-      // },
-
-      user: {
-        name: data.user_name,
-        lname: data.user_lname,
-        personal_number: data.user_personal_number,
-        contact: {
-          tell: data.user_tell,
-          email: data.user_email,
-          // contact_info
-        },
-      },
-
-      legal: {
-        name: data.legal_name,
-        identifi_number: data.legal_identifi_number,
-        lagel_addres: data.legal_lagel_addres,
-        type: data.legal_type,
-        sip: data.legal_sip,
-        contact: {
-          legal_tell: data.legal_tell,
-          legal_email: data.legal_email,
-          // legal_contact_info
-        },
-        authorized: {
-          name: data.authorized_name,
-          lname: data.authorized_lname,
-          personal_number: data.authorized_personal_number,
-          contact: {
-            tell: data.authorized_tell,
-            email: data.authorized_email,
-          },
-          // authorized_contact_info
-          // auth_desc
-        },
-      },
-      package: {
-        user_package: selectedUserPackage,
-        billing_package: {
-          services: selectedService,
-          catalog: selectedCatalog,
-        },
-      },
-    };
+    const firstStepObj = buildFormObject(
+      { ...data, identify_code: authOrg.identify_code },
+      contract_exp,
+      selectedUserPackage,
+      selectedService,
+      selectedCatalog
+    );
     firstStepInsertMutate(firstStepObj);
+  };
+
+  const saveForm = () => {
+    const form = buildFormObject(
+      { ...formData, identify_code: authOrg.identify_code },
+      contract_exp,
+      selectedUserPackage,
+      selectedService,
+      selectedCatalog
+    );
+    firstStepInsertMutate(form);
+    console.log(form);
   };
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "user",
+  });
+
+  const { handleFormChange } = useFormRefresh({
+    setFormData,
+    setValue,
+    formData,
+    selectedUserPackage,
+    selectedService,
+    setSelectedUserPackage,
+    setSelectedService,
+    isGovInfoFetched,
   });
 
   const handleCheckboxChange = (event, userId) => {
@@ -235,17 +215,17 @@ const NewAgreement = () => {
       );
     }
   };
-  const handleCatalogCheckboxChange = (event, userId) => {
-    const isChecked = event.target.checked;
+  // const handleCatalogCheckboxChange = (event, userId) => {
+  //   const isChecked = event.target.checked;
 
-    if (isChecked) {
-      setSelectedCatalog((prevState) => [...prevState, userId]);
-    } else {
-      setSelectedCatalog((prevState) =>
-        prevState.filter((id) => id !== userId)
-      );
-    }
-  };
+  //   if (isChecked) {
+  //     setSelectedCatalog((prevState) => [...prevState, userId]);
+  //   } else {
+  //     setSelectedCatalog((prevState) =>
+  //       prevState.filter((id) => id !== userId)
+  //     );
+  //   }
+  // };
   const handleServiceCheckboxChange = (event, userId) => {
     const isChecked = event.target.checked;
 
@@ -266,23 +246,23 @@ const NewAgreement = () => {
   // temporary
   const contractDates = [
     {
-      name: "ერთი",
+      name: "ერთი თვე",
       value: 1,
     },
     {
-      name: "ორი",
+      name: "ორი თვე",
       value: 2,
     },
     {
-      name: "ექვსი",
+      name: "ექვსი თვე",
       value: 6,
     },
     {
-      name: "თორმეტი",
+      name: "თორმეტი თვე",
       value: 12,
     },
     {
-      name: "საანგარიშო წლის ბოლოს (31 დეკემბერი)",
+      name: "საანგარიშო წლის ბოლო (31 დეკემბერი)",
       value: 13,
     },
     {
@@ -290,6 +270,20 @@ const NewAgreement = () => {
       value: "choose",
     },
   ];
+
+  const legalOptions = {
+    legal_sip: [
+      {
+        name: "არა",
+        id: 0,
+      },
+      {
+        name: "დიახ",
+        id: 1,
+      },
+    ],
+    legal_type: govInfo.types || [],
+  };
 
   return (
     <main className="workspace">
@@ -299,9 +293,10 @@ const NewAgreement = () => {
         <form
           onSubmit={handleSubmit(submitHandler)}
           className="flex flex-col gap-4"
+          onChange={handleFormChange}
         >
           <div className="border p-2 rounded-md">
-            <h4>ავტორიზირებული პირის სერვისები</h4>
+            <h4>მომხმარებლების სერვისები</h4>
             <div className="flex flex-wrap gap-2 mb-3">
               {govInfo.user_packages?.map((uPackage) => (
                 <Checkbox
@@ -313,7 +308,7 @@ const NewAgreement = () => {
               ))}
             </div>
           </div>
-          <div className="border p-2 rounded-md">
+          {/* <div className="border p-2 rounded-md">
             <h4>კატალოგები</h4>
             <div className="flex flex-wrap gap-2 mb-3">
               {govInfo.catalog?.map((catalog) => (
@@ -327,7 +322,7 @@ const NewAgreement = () => {
                 />
               ))}
             </div>
-          </div>
+          </div> */}
           <div className="border p-2 rounded-md">
             <h4>კატალოგის სერვისები</h4>
             <div className="flex flex-wrap gap-2 mb-3">
@@ -406,9 +401,9 @@ const NewAgreement = () => {
                 <option
                   className="p-3"
                   key={item.id.toString() + item.name}
-                  value={item.id}
+                  value={+item.id}
                 >
-                  {item.label || item.name || item.category_name}
+                  {item.name}
                 </option>
               ))}
             </CustomSelect>
@@ -468,16 +463,18 @@ const NewAgreement = () => {
               ინფორმაცია რომლის დამატებით მოწოდებაც საჭიროდ მიგაჩნიათ (250
               სიმბოლო)
             </Label>
-            <CustomInput
+            <textarea
               name="desc"
-              type="text"
+              rows="1"
+              type="textarea"
               step="any"
-              register={register}
-              rules={{}}
+              {...register("desc")}
+              className="form-control"
+              maxLength={250}
             />
           </div>
           <div className="border p-2 rounded-md">
-            <h4>დამატებითი ფაილები</h4>
+            <h4>ფაილები დამატებითი ინფორმაციების საილუსტრაციოდ</h4>
             <Button
               type="button"
               className="p-2 mb-3"
@@ -525,321 +522,28 @@ const NewAgreement = () => {
             <h4 className="mb-2">ინფორმაცია განმცხადებლის შესახებ</h4>
             <div className="border p-2 mb-2 rounded-md">
               <h4>ფიზიკური პირი</h4>
-              <div>
-                <Label className={`block mb-1`}>სახელი</Label>
-                <CustomInput
-                  name="user_name"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{}}
-                />
-              </div>
-              <div>
-                <Label className={`block mb-1`}>გვარი</Label>
-                <CustomInput
-                  name="user_lname"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{}}
-                />
-              </div>
-              <div>
-                <Label className={`block mb-1`}>პირადი ნომერი</Label>
-                <CustomInput
-                  name="user_personal_number"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{}}
-                />
-              </div>
-              <div>
-                <Label className={`block mb-1`}>ტელეფონი</Label>
-                <CustomInput
-                  name="user_tell"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{}}
-                />
-              </div>
-              <div>
-                <Label className={`block mb-1`}>ელ-ფოსტა</Label>
-                <CustomInput
-                  name="user_email"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{}}
-                />
-              </div>
-              <div>
-                <Label className={`block mb-1`}>
-                  დამატებითი საკონტაქტო ინფორმაცია
-                </Label>
-                <CustomInput
-                  // temporary
-                  name="contact_info"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{}}
-                />
-              </div>
+              <BuildFields
+                errors={errors}
+                register={register}
+                staticArr={fizikuriArr}
+              />
             </div>
             <div className="border p-2 border-gray-500 rounded-md">
               <h4>იურიდიული პირი *</h4>
+              <BuildFields
+                errors={errors}
+                register={register}
+                staticArr={legalUser}
+                selectOptions={legalOptions}
+              />
 
-              <div>
-                <Label
-                  className={`block mb-1  ${
-                    errors.legal_name ? "text-danger" : ""
-                  }`}
-                >
-                  დასახელება *
-                </Label>
-                <CustomInput
-                  name="legal_name"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{
-                    required: "ველი აუცილებელია",
-                  }}
-                  className={`${errors.legal_name ? "border-danger" : ""}`}
-                />
-              </div>
-              <div>
-                <Label
-                  className={`block mb-1  ${
-                    errors.legal_identifi_number ? "text-danger" : ""
-                  }`}
-                >
-                  საიდენტიფიკაციო ნომერი *
-                </Label>
-                <CustomInput
-                  name="legal_identifi_number"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{
-                    required: "ველი აუცილებელია",
-                  }}
-                  className={`${
-                    errors.legal_identifi_number ? "border-danger" : ""
-                  }`}
-                />
-              </div>
-              <div>
-                <Label
-                  className={`block mb-1  ${errors.type ? "text-danger" : ""}`}
-                >
-                  ტიპი *
-                </Label>
-                <CustomSelect
-                  name="legal_type"
-                  register={register}
-                  className={`${errors.legal_type ? "border-danger" : ""}`}
-                  rules={{ required: "ველი აუცილებელია" }}
-                >
-                  <option value="">ტიპი</option>
-                  {govInfo.types?.map((item) => (
-                    <option
-                      className="p-3"
-                      key={item.id + item.name}
-                      value={item.id}
-                    >
-                      {item.name}
-                    </option>
-                  ))}
-                </CustomSelect>
-              </div>
-              <div>
-                <Label
-                  className={`block mb-1  ${
-                    errors.legal_lagel_addres ? "text-danger" : ""
-                  }`}
-                >
-                  იურიდიული მისამართი *
-                </Label>
-                <CustomInput
-                  name="legal_lagel_addres"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{
-                    required: "ველი აუცილებელია",
-                  }}
-                  className={`${
-                    errors.legal_lagel_addres ? "border-danger" : ""
-                  }`}
-                />
-              </div>
-              <div>
-                <Label className={`block mb-1`}>ტელეფონი</Label>
-                <CustomInput
-                  name="legal_tell"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{}}
-                />
-              </div>
-              <div>
-                <Label className={`block mb-1 `}>ელ-ფოსტა</Label>
-                <CustomInput
-                  name="legal_email"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{}}
-                />
-              </div>
-              <div className="my-2">
-                <label className={classNames("custom-checkbox")}>
-                  <input type="checkbox" {...register("legal_sip")} />
-                  <span></span>
-                  <span>სახელმწიფო უწყება</span>
-                </label>
-              </div>
-              <div>
-                <Label className={`block mb-1 `}>
-                  დამატებითი საკონტაქტო ინფორმაცია
-                </Label>
-
-                <CustomInput
-                  // temporary
-                  name="legal_contact_info"
-                  type="text"
-                  step="any"
-                  register={register}
-                  rules={{}}
-                />
-              </div>
               <div className="border p-3 mt-2 rounded-md">
                 <h4>უფლებამოსილი პირი *</h4>
-
-                <div>
-                  <Label
-                    className={`block mb-1  ${
-                      errors.authorized_name ? "text-danger" : ""
-                    }`}
-                  >
-                    სახელი *
-                  </Label>
-                  <CustomInput
-                    name="authorized_name"
-                    type="text"
-                    step="any"
-                    register={register}
-                    rules={{
-                      required: "ველი აუცილებელია",
-                    }}
-                    className={`${
-                      errors.authorized_name ? "border-danger" : ""
-                    }`}
-                  />
-                </div>
-                <div>
-                  <Label
-                    className={`block mb-1  ${
-                      errors.authorized_lname ? "text-danger" : ""
-                    }`}
-                  >
-                    გვარი *
-                  </Label>
-                  <CustomInput
-                    name="authorized_lname"
-                    type="text"
-                    step="any"
-                    register={register}
-                    rules={{
-                      required: "ველი აუცილებელია",
-                    }}
-                    className={`${
-                      errors.authorized_lname ? "border-danger" : ""
-                    }`}
-                  />
-                </div>
-                <div>
-                  <Label
-                    className={`block mb-1  ${
-                      errors.authorized_personal_number ? "text-danger" : ""
-                    }`}
-                  >
-                    პირადი ნომერი *
-                  </Label>
-                  <CustomInput
-                    name="authorized_personal_number"
-                    type="text"
-                    step="any"
-                    register={register}
-                    rules={{
-                      required: "ველი აუცილებელია",
-                    }}
-                    className={`${
-                      errors.authorized_personal_number ? "border-danger" : ""
-                    }`}
-                  />
-                </div>
-                <div>
-                  <Label
-                    className={`block mb-1  ${
-                      errors.authorized_tell ? "text-danger" : ""
-                    }`}
-                  >
-                    ტელეფონი *
-                  </Label>
-                  <CustomInput
-                    name="authorized_tell"
-                    type="text"
-                    step="any"
-                    register={register}
-                    rules={{
-                      required: "ველი აუცილებელია",
-                    }}
-                    className={`${
-                      errors.authorized_tell ? "border-danger" : ""
-                    }`}
-                  />
-                </div>
-                <div>
-                  <Label
-                    className={`block mb-1  ${
-                      errors.authorized_email ? "text-danger" : ""
-                    }`}
-                  >
-                    ელ-ფოსტა *
-                  </Label>
-                  <CustomInput
-                    name="authorized_email"
-                    type="text"
-                    step="any"
-                    register={register}
-                    rules={{
-                      required: "ველი აუცილებელია",
-                    }}
-                    className={`${
-                      errors.authorized_email ? "border-danger" : ""
-                    }`}
-                  />
-                </div>
-
-                <div>
-                  <Label className={`block mb-1 `}>
-                    დამატებითი საკონტაქტო ინფორმაცია
-                  </Label>
-                  <CustomInput
-                    // temporary
-                    name="authorized_contact_info"
-                    type="text"
-                    step="any"
-                    register={register}
-                    rules={{}}
-                  />
-                </div>
+                <BuildFields
+                  errors={errors}
+                  register={register}
+                  staticArr={uflebamosiliArr}
+                />
               </div>
             </div>
           </div>
@@ -857,92 +561,12 @@ const NewAgreement = () => {
                     <span className="la la-trash-alt"></span>
                   </button>
                 </div>
-                <label className="label">სახელი *</label>
-                <input
-                  className="form-control"
-                  {...register(`user.${index}.name`)}
-                  placeholder="სახელი"
-                  required
-                />
-                <label className="label">გვარი *</label>
-                <input
-                  className="form-control"
-                  {...register(`user.${index}.lname`)}
-                  placeholder="გვარი"
-                  required
-                />
-                <label className="label">პირადი ნომერი *</label>
-                <input
-                  className="form-control"
-                  {...register(`user.${index}.personal_number`)}
-                  placeholder="პირადი ნომერი"
-                  required
-                />
-                <label className="label">ტელეფონი</label>
-                <input
-                  className="form-control"
-                  {...register(`user.${index}.tell`)}
-                  placeholder="ტელეფონი"
-                  required
-                />
-                <label className="label">ელ-ფოსტა</label>
-                <input
-                  className="form-control"
-                  {...register(`user.${index}.email`)}
-                  placeholder="ელ-ფოსტა"
-                  required
-                />
-                {/* <label className="label">მინდობილობის როლი</label>
-                <input
-                  className="form-control"
-                  {...register(`user.${index}.comment`)}
-                  required
-                /> */}
-                <label className="label">მინდობილობის როლი</label>
-                <CustomSelect
-                  name={`user.${index}.comment`}
-                  register={register}
-                  rules={{ required: "ველი აუცილებელია" }}
-                >
-                  {[
-                    {
-                      name: "მენეჯერი",
-                      value: "manager",
-                    },
-                    {
-                      name: "ოპერატორი",
-                      value: "operator",
-                    },
-                  ].map((item) => (
-                    <option
-                      className="p-3"
-                      key={item.value + item.name}
-                      value={item.value}
-                    >
-                      {item.name}
-                    </option>
-                  ))}
-                </CustomSelect>
-                <label className="label">მინდობილობის ვადა</label>
-                <input
-                  type="date"
-                  className="form-control"
-                  {...register(`user.${index}.user_date_expiration`)}
-                  required
-                />
-                <label className="label">
-                  დამატებითი საკონტაქტო ინფორმაცია
-                </label>
-                <input
-                  className="form-control"
-                  {...register(`user.${index}.contact_info`)}
-                  placeholder="დამატებითი საკონტაქტო ინფორმაცია"
-                />
+                <BuildAvtFields index={index} register={register} />
               </div>
             ))}
             <Button
               type="button"
-              className="p-2 mb-3"
+              className="p-2 my-3"
               onClick={() =>
                 append({
                   contact_info: "",
@@ -956,7 +580,7 @@ const NewAgreement = () => {
                 })
               }
             >
-              დამატება
+              ახალი წარმომადგენლის დამატება
               <PlusIcon />
             </Button>
 
@@ -965,13 +589,14 @@ const NewAgreement = () => {
                 ინფორმაცია რომლის დამატებით მოწოდებაც საჭიროდ მიგაჩნიათ (250
                 სიმბოლო)
               </Label>
-              <CustomInput
-                // temporary
+              <textarea
                 name="auth_desc"
-                type="text"
+                rows="1"
+                type="textarea"
                 step="any"
-                register={register}
-                rules={{}}
+                {...register("auth_desc")}
+                className="form-control"
+                maxLength={250}
               />
             </div>
             <div className="border p-2 rounded-md mt-2">
@@ -1020,8 +645,14 @@ const NewAgreement = () => {
               })}
             </div>
           </div>
-
-          <Button type="submit">დადასტურება</Button>
+          <div className="flex gap-2">
+            <Button onClick={saveForm} type="button">
+              დამახსოვრება
+            </Button>
+            <Button color="success" type="submit">
+              დადასტურება
+            </Button>
+          </div>
         </form>
       </div>
     </main>

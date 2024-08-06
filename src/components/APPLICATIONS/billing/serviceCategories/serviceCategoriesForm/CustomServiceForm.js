@@ -84,6 +84,28 @@ const CustomServiceForm = (props) => {
               </CustomSelect>
             </div>
           );
+        } else if (type === "textarea") {
+          return (
+            <div key={name}>
+              <Label
+                className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
+              >
+                {label}
+              </Label>
+              <textarea
+                name={name}
+                step="any"
+                {...register(name, {
+                  validate: {
+                    pattern: (value) => value?.length > 0,
+                  },
+                })}
+                className={`${
+                  errors[name] ? "border-danger" : ""
+                } form-control`}
+              />
+            </div>
+          );
         } else {
           return (
             <div key={name}>
@@ -126,8 +148,12 @@ const CustomServiceForm = (props) => {
           </div>
         ))}
         <div>
-          <Button type="button" className="p-2 my-2" onClick={() => append()}>
-            დამატება
+          <Button
+            type="button"
+            className="p-[1px] my-2 text-[10px]"
+            onClick={() => append()}
+          >
+            ვალდებულების დამატება
             <PlusIcon />
           </Button>
         </div>

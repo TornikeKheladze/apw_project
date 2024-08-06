@@ -96,6 +96,7 @@ import ExpInvoiceStatements from "components/APPLICATIONS/authorization/statemen
 import ExpiredStatements from "components/APPLICATIONS/authorization/statements/ExpiredStatements";
 import BankRegister from "components/APPLICATIONS/billing/bankRegister/BankRegister";
 import Logs from "components/APPLICATIONS/authorization/logs/Logs";
+import AgreementDetails from "components/APPLICATIONS/authorization/agreements/AgreementDetails";
 
 const Router = () => {
   const routes = routePermissions.map(({ route, permission, element }) => (
@@ -146,6 +147,10 @@ const Router = () => {
 
           <Route path="/agreement" element={<Agreements />} />
           <Route path="/agreements/create" element={<NewAgreement />} />
+          <Route
+            path="/agreements/details/:id"
+            element={<AgreementDetails />}
+          />
           <Route path="/agreements/pending" element={<PendingStatements />} />
           <Route path="/agreements/active" element={<ActiveStatements />} />
           <Route path="/archive/agreements" element={<ArchivedStatements />} />

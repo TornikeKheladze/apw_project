@@ -1,7 +1,7 @@
 import useDarkMode from "utilities/hooks/useDarkMode";
 import useFullscreen from "utilities/hooks/useFullScreen";
 import { getAuthorizedUser } from "services/users";
-import { saveAuthorizedUser } from "reducers/UserReducer";
+import { saveAuthOrg, saveAuthorizedUser } from "reducers/UserReducer";
 import { useNavigate } from "react-router-dom";
 import { logout } from "services/authorization";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +20,7 @@ export const useTopBar = () => {
     queryFn: () =>
       getOrganizationById(authorizedUser.oid).then((res) => res.data.data),
     onSuccess: (data) => {
+      dispatch(saveAuthOrg(data));
       if (data.sip === 1) {
         dispatch(saveAuthorizedUser({ ...authorizedUser, isSip: true }));
       }

@@ -28,7 +28,7 @@ const ServiceCategoriesForm = () => {
       <div className="card p-5 lg:w-2/3 lg:mx-auto">
         <h3 className="mb-3">
           {catType === "1" ? "სერვისების პაკეტის" : "სერვისის კატალოგის"}{" "}
-          {action === "create" ? "დამატება" : "შეცვლა"}
+          {action === "create" ? "დამატება" : "რედაქტირება"}
         </h3>
         {isLoading || isFetching ? (
           <div className="flex flex-col items-center justify-center">
@@ -54,8 +54,12 @@ const ServiceCategoriesForm = () => {
                   { name: "სერვისების პაკეტი", id: 1 },
                 ],
                 applicantRegistrationApi: [
-                  { name: "დიახ", id: 0, value: "0" },
-                  { name: "არა", id: 1, value: "1" },
+                  {
+                    name: "განმცხადებელი - ფიზიკური/იურიდიული პირი",
+                    id: 0,
+                    value: "0",
+                  },
+                  { name: "სსიპ", id: 1, value: "1" },
                 ],
               }}
             />
