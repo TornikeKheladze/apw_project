@@ -1,4 +1,4 @@
-import { instance } from "./axios";
+import { fileInstance, instance } from "./axios";
 
 // Get all categories
 export const getAllCatalogs = () => {
@@ -135,3 +135,8 @@ export const getDocumentByUUID = (uuid) => {
 };
 
 // https://test-dga-authorisation.apw.ge/api/document/doc-file/html-tu-pdf-download/662a57c16982aa213dba530a
+
+export const uploadDocument = (data) => {
+  console.log(data);
+  return fileInstance.post("/document/doc-file/html-tu-pdf-upload", data);
+};

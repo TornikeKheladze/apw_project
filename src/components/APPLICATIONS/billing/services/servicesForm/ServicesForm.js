@@ -1,9 +1,9 @@
 import Alert from "components/Alert";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import useServicesForm from "./useServicesForm";
-import GeneralForm from "../../generalForm/GeneralForm";
 import ServiceCategoryTreeMenu from "../../serviceCategories/ServiceCategoryTreeMenu";
 import { buildCategoryTree } from "helpers/treeMenuBuilder";
+import CustomServiceForm from "../../serviceCategories/serviceCategoriesForm/CustomServiceForm";
 
 const ServicesForm = () => {
   const {
@@ -46,7 +46,7 @@ const ServicesForm = () => {
               </>
             )}
 
-            <GeneralForm
+            <CustomServiceForm
               optionsObj={{
                 ownerID: organizations,
                 active: [

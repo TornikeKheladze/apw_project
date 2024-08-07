@@ -22,6 +22,7 @@ import {
   uflebamosiliArr,
 } from "components/APPLICATIONS/billing/formArrays/agreementArr";
 import { BuildAvtFields, BuildFields } from "./BuildFields";
+import { uploadDocument } from "services/documents";
 
 const NewAgreement = () => {
   const { authOrg } = useSelector((state) => state.user);
@@ -89,8 +90,6 @@ const NewAgreement = () => {
       ),
     enabled: authOrg.identify_code ? true : false,
   });
-
-  console.log(formData);
 
   const { mutate: secondStepMutate } = useMutation({
     mutationFn: secondStepInsert,
@@ -188,9 +187,21 @@ const NewAgreement = () => {
     console.log(form);
   };
 
-  const { fields, append, remove } = useFieldArray({
+  const {
+    fields: userFields,
+    append: userAppend,
+    remove: userRemove,
+  } = useFieldArray({
     control,
     name: "user",
+  });
+  const {
+    fields: danartiFields,
+    append: danartiAppend,
+    remove: danartiRemove,
+  } = useFieldArray({
+    control,
+    name: "danarti",
   });
 
   const { handleFormChange } = useFormRefresh({
@@ -238,10 +249,17 @@ const NewAgreement = () => {
     }
   };
 
-  // const handleFileChange = (event) => {
-  //   const file = event.target.files[0];
-  //   // setAdditionalFiles((prevState) => [...prevState, file]);
-  // };
+  const { mutate: uploadDocumentMutate } = useMutation({
+    mutationFn: uploadDocument,
+  });
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    const fileFormData = new FormData();
+    fileFormData.append("file", file);
+    uploadDocumentMutate(fileFormData);
+    // setAdditionalFiles((prevState) => [...prevState, file]);
+  };
 
   // temporary
   const contractDates = [
@@ -445,6 +463,7 @@ const NewAgreement = () => {
               step="any"
               register={register}
               rules={{}}
+              onChange={handleFileChange}
             />
           </div>
           <div>
@@ -550,11 +569,11 @@ const NewAgreement = () => {
           <div className="border border-gray-400 p-2 rounded-md">
             <h4>ინფორმაცია ავტორიზირებული პირის წარმომადგენლების შესახებ</h4>
 
-            {fields.map((item, index) => (
+            {userFields.map((item, index) => (
               <div key={item.id} className="border p-3 mt-2 rounded-md">
                 <div className="text-right">
                   <button
-                    onClick={() => remove(index)}
+                    onClick={() => userRemove(index)}
                     type="button"
                     className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
                   >
@@ -568,7 +587,7 @@ const NewAgreement = () => {
               type="button"
               className="p-2 my-3"
               onClick={() =>
-                append({
+                userAppend({
                   contact_info: "",
                   email: "",
                   lname: "",
@@ -644,6 +663,46 @@ const NewAgreement = () => {
                 );
               })}
             </div>
+          </div>
+          <div className="border p-2 rounded-md mt-2">
+            <h4>დანართების დამატება</h4>
+            <Button
+              type="button"
+              className="p-2 mb-3"
+              onClick={() =>
+                danartiAppend({
+                  file: "",
+                })
+              }
+            >
+              ფაილის დამატება
+              <PlusIcon />
+            </Button>
+
+            {danartiFields.map((item, index) => {
+              return (
+                <div
+                  className="mb-1 flex items-center justify-between"
+                  key={item.id}
+                >
+                  <CustomInput
+                    name={`danarti.${index}.file`}
+                    type="file"
+                    step="any"
+                    register={register}
+                    rules={{}}
+                    className="w-4/5"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => danartiRemove(index)}
+                    className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
+                  >
+                    <span className="la la-trash-alt"></span>
+                  </button>
+                </div>
+              );
+            })}
           </div>
           <div className="flex gap-2">
             <Button onClick={saveForm} type="button">

@@ -4,7 +4,8 @@ import CustomSelect from "components/form/CustomSelect";
 import Label from "components/form/Label";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import PlusIcon from "components/icons/PlusIcon";
-import { useFieldArray, useForm } from "react-hook-form";
+import { addDaysToDate, daysDifference } from "helpers/dateFunctions";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 
 const CustomServiceForm = (props) => {
   const {
@@ -32,6 +33,9 @@ const CustomServiceForm = (props) => {
     defaultValues: updateDataObj
       ? {
           ...updateDataObj,
+          priceCalculationPeriod: addDaysToDate(
+            updateDataObj?.priceCalculationPeriod
+          ),
           obligations: Array.isArray(obligationsArr())
             ? obligationsArr().map((item) => {
                 return { name: item };
@@ -43,6 +47,11 @@ const CustomServiceForm = (props) => {
         },
   });
 
+  const priceCalculationPeriod = useWatch({
+    control,
+    name: "priceCalculationPeriod",
+  });
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "obligations",
@@ -50,27 +59,42 @@ const CustomServiceForm = (props) => {
 
   return (
     <form
-      onSubmit={handleSubmit(submitHandler)}
+      onSubmit={handleSubmit((data) =>
+        submitHandler(
+          priceCalculationPeriod
+            ? {
+                ...data,
+                priceCalculationPeriod: daysDifference(priceCalculationPeriod),
+              }
+            : data
+        )
+      )}
       className="flex flex-col gap-4"
     >
-      {formArray.map(({ name, label, type }) => {
+      {formArray.map(({ name, label, type, required }) => {
         if (type === "select") {
           return (
             <div key={name}>
               <Label
                 className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
               >
-                {label}
+                {label} {required && <span className="text-danger">*</span>}
               </Label>
               <CustomSelect
                 name={name}
                 register={register}
                 className={`${errors[name] ? "border-danger" : ""}`}
-                rules={{
-                  required: "ველი აუცილებელია",
-                }}
+                rules={
+                  required
+                    ? {
+                        required: "ველი აუცილებელია",
+                      }
+                    : {}
+                }
               >
-                <option value="">{label}</option>
+                <option disabled value="">
+                  {label}
+                </option>
                 {optionsObj &&
                   optionsObj[name]?.map((item) => (
                     <option
@@ -90,15 +114,13 @@ const CustomServiceForm = (props) => {
               <Label
                 className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
               >
-                {label}
+                {label} {required && <span className="text-danger">*</span>}
               </Label>
               <textarea
                 name={name}
                 step="any"
                 {...register(name, {
-                  validate: {
-                    pattern: (value) => value?.length > 0,
-                  },
+                  required: required || false,
                 })}
                 className={`${
                   errors[name] ? "border-danger" : ""
@@ -112,7 +134,10 @@ const CustomServiceForm = (props) => {
               <Label
                 className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
               >
-                {label}
+                {label} {required && <span className="text-danger">*</span>}{" "}
+                {name === "priceCalculationPeriod" &&
+                  daysDifference(priceCalculationPeriod) &&
+                  `(${daysDifference(priceCalculationPeriod)} დღე)`}
               </Label>
 
               <CustomInput
@@ -120,9 +145,13 @@ const CustomServiceForm = (props) => {
                 type={type}
                 step="any"
                 register={register}
-                rules={{
-                  required: "ველი აუცილებელია",
-                }}
+                rules={
+                  required
+                    ? {
+                        required: "ველი აუცილებელია",
+                      }
+                    : {}
+                }
                 className={`${errors[name] ? "border-danger" : ""}`}
               />
             </div>

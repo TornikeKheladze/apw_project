@@ -23,7 +23,7 @@ const ServiceParametersForm = () => {
       <div className="card p-5 lg:w-2/3 lg:mx-auto">
         <h3 className="mb-3">სერვისი:"{service.name}"</h3>
         <h4 className="mb-3">
-          სერვისის პარამეტრის {action === "create" ? "დამატება" : "შეცვლა"}
+          ტექნიკური პარამეტრის {action === "create" ? "დამატება" : "შეცვლა"}
         </h4>
         {loading ? (
           <div className="flex flex-col items-center justify-center">

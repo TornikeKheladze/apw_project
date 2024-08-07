@@ -4,17 +4,19 @@ export const serviceCategoriesArr = [
     name: "categoryName",
     label: "დასახელება",
     type: "text",
+    required: true,
   },
   // {
   //   name: "calculationPeriod",
   //   label: "კალკულაციის პერიოდი",
   //   type: "number",
   // },
-  { name: "catType", label: "კატალოგის ტიპი", type: "select" },
+  { name: "catType", label: "კატალოგის ტიპი", type: "select", required: true },
   {
     name: "applicantRegistrationApi",
     label: "კატალოგის მომხმარებლის ტიპი",
     type: "select",
+    required: true,
   },
   // {
   //   name: "chargeCalculationEndDate",
@@ -59,12 +61,14 @@ export const serviceArr = [
     name: "active",
     label: "სტატუსი",
     type: "select",
+    required: true,
   },
   {
     filter: "search",
     name: "name",
     label: "დასახელება",
     type: "text",
+    required: true,
   },
   {
     filter: "search",
@@ -85,8 +89,9 @@ export const serviceArr = [
   },
   {
     name: "priceCalculationPeriod",
-    label: "ფასის კალკულაციის პერიოდი (დღეები)",
-    type: "number",
+    label: "ფასის კალკულაციის პერიოდი",
+    type: "date",
+    required: true,
   },
   {
     name: "ownerID",
@@ -95,8 +100,9 @@ export const serviceArr = [
   },
   {
     name: "applicantRegistrationApi",
-    label: "კატალოგის მომხმარებლის ტიპი",
+    label: "სერვისის მომხმარებლის ტიპი",
     type: "select",
+    required: true,
   },
   {
     name: "serviceUrl",

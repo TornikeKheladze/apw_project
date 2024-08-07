@@ -45,12 +45,12 @@ const ServiceDetails = () => {
       links={
         <div className="card p-3 mb-3">
           <h4 className="mb-2">მახასიათებლები</h4>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-3 flex-wrap">
             <Link
               to={`/billing/service-parameters?serviceID=${id}`}
               className="btn btn_primary btn_outlined p-1 text-xs"
             >
-              სერვისის პარამეტრები
+              ტექნიკური პარამეტრები
             </Link>
             <Link
               to={`/billing/service-prices?serviceID=${id}`}

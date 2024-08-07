@@ -1,11 +1,11 @@
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import Table from "../table/Table";
 
-import BilHeader from "../bilHeader/BilHeader";
 import useServiceParameters from "./useServiceParameters";
 import { serviceParametersArr } from "../formArrays/serviceArr";
 import Alert from "components/Alert";
 import { Link } from "react-router-dom";
+import Button from "components/Button";
 
 const ServiceParameters = () => {
   const {
@@ -14,15 +14,20 @@ const ServiceParameters = () => {
     alert,
     filter,
     setFilter,
+    setUrlInput,
+    urlInput,
     selectOptions,
     deleteItem,
     service,
+    updateServiceMutate,
+    updateServiceLoading,
   } = useServiceParameters();
 
   return (
     <main className="workspace overflow-hidden pb-8">
+      {updateServiceLoading && <LoadingSpinner blur />}
       <div className="card p-3 mb-3">
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-3 flex-wrap">
           <Link
             to={`/billing/services/details/${service.serviceID}`}
             className="btn btn_primary btn_outlined p-1 text-xs"
@@ -43,13 +48,39 @@ const ServiceParameters = () => {
           </Link>
         </div>
       </div>
-      <BilHeader
-        visible={true}
-        text={"სერვისის პარამეტრები"}
-        url={`/billing/service-parameters/create?serviceID=${service.serviceID}`}
-      />
+      <h3>ტექნიკური პარამეტრები</h3>
+      {service && <h4 className="my-3">სერვისი: "{service.name}"</h4>}
 
-      {service && <h4 className="mb-3">სერვისი: "{service.name}"</h4>}
+      <div className="card p-4 mb-3">
+        <p className="mb-2">API მისამართი</p>
+        <div className="flex justify-between flex-col md:flex-row gap-3 md:gap-0">
+          <div className="flex md:w-2/3 w-full gap-3">
+            <input
+              type="text"
+              value={urlInput}
+              onChange={(e) => setUrlInput(e.target.value)}
+              className="form-control rounded-xl"
+            />
+            <Button
+              onClick={() =>
+                updateServiceMutate({ ...service, serviceUrl: urlInput })
+              }
+              color="success"
+            >
+              შენახვა
+            </Button>
+          </div>
+          <div>
+            <Link
+              className="flex-grow"
+              to={`/billing/service-parameters/create?serviceID=${service.serviceID}`}
+            >
+              <Button>პარამეტრის დამატება</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+
       <div
         className={`card p-5 w-full overflow-x-auto relative min-h-[25rem] ${
           loading && "overflow-x-hidden"

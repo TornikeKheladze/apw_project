@@ -22,7 +22,7 @@ const SpecPrices = () => {
   return (
     <main className="workspace overflow-hidden pb-8">
       <div className="card p-3 mb-3">
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-3 flex-wrap">
           <Link
             to={`/billing/services/details/${service.serviceID}`}
             className="btn btn_primary btn_outlined p-1 text-xs"
@@ -33,7 +33,7 @@ const SpecPrices = () => {
             to={`/billing/service-parameters?serviceID=${service.serviceID}`}
             className="btn btn_primary btn_outlined p-1 text-xs"
           >
-            სერვისის პარამეტრები
+            ტექნიკური პარამეტრები
           </Link>
           <Link
             to={`/billing/service-prices?serviceID=${service.serviceID}`}

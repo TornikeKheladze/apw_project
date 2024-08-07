@@ -36,7 +36,7 @@ const ServiceParameterTypes = () => {
     <main className="workspace overflow-hidden pb-8">
       <BilHeader
         visible={true}
-        text={"სერვისის პარამეტრის ტიპები"}
+        text={"ტექნიკური პარამეტრის ტიპები"}
         url={"/billing/service-parameter-types/create"}
       />
       <div

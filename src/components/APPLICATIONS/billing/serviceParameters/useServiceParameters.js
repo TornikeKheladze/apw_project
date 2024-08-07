@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { removeEmpty } from "helpers/removeEmpty";
 import { idToName } from "helpers/idToName";
-import { getAllServices } from "services/services";
+import { getAllServices, updateService } from "services/services";
 import { filterArray } from "helpers/filterArray";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
@@ -19,13 +19,14 @@ const useServiceParameters = () => {
 
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [filter, setFilter] = useState({});
+  const [urlInput, setUrlInput] = useState("");
 
   const { mutate: deleteMutate, isLoading: deleteLoading } = useMutation({
     mutationFn: (id) => deleteServiceParameter(id),
     onSuccess: () => {
       queryClient.invalidateQueries("getServiceParameters");
       setAlert({
-        message: "სერვისის პარამეტრი წარმატებით წაიშალა",
+        message: "ტექნიკური პარამეტრი წარმატებით წაიშალა",
         type: "success",
       });
       setTimeout(() => {
@@ -33,6 +34,29 @@ const useServiceParameters = () => {
       }, 2500);
     },
   });
+  const { mutate: updateServiceMutate, isLoading: updateServiceLoading } =
+    useMutation({
+      mutationFn: updateService,
+      onSuccess: () => {
+        queryClient.invalidateQueries("getAllServices");
+        setAlert({
+          message: "API მისამართი შეიცვლალა",
+          type: "success",
+        });
+        setTimeout(() => {
+          setAlert({ message: "", type: "success" });
+        }, 2500);
+      },
+      onError: (error) => {
+        setAlert({
+          message: "API მისამართის ცვლილება ვერ მოხერხდა",
+          type: "danger",
+        });
+        setTimeout(() => {
+          setAlert({ message: "", type: "danger" });
+        }, 2500);
+      },
+    });
 
   const {
     data: serviceParametersData = [],
@@ -84,6 +108,10 @@ const useServiceParameters = () => {
   const service =
     services.find((service) => +service.serviceID === +serviceID) || {};
 
+  useEffect(() => {
+    if (service.serviceUrl) setUrlInput(service.serviceUrl);
+  }, [service.serviceUrl]);
+
   const serviceParameterTypes = serviceParameterTypesData.map((spt) => ({
     ...spt,
     id: spt.serviceParameterTypeID,
@@ -120,8 +148,12 @@ const useServiceParameters = () => {
     alert,
     filter,
     setFilter,
+    urlInput,
+    setUrlInput,
     selectOptions,
     service,
+    updateServiceMutate,
+    updateServiceLoading,
   };
 };
 

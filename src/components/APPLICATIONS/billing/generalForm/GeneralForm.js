@@ -89,7 +89,9 @@ const GeneralForm = (props) => {
                   required: "ველი აუცილებელია",
                 }}
               >
-                <option value="">{label}</option>
+                <option disabled value="">
+                  {label}
+                </option>
                 {optionsObj &&
                   optionsObj[name]?.map((item) => (
                     <option

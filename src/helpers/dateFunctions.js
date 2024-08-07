@@ -32,6 +32,29 @@ export function getDateOneMonthFromNow(dateFormat) {
   return dateFormat;
 }
 
+export const addDaysToDate = (days) => {
+  if (isNaN(days)) return;
+  const today = new Date();
+  today.setDate(today.getDate() + days);
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+export const daysDifference = (days) => {
+  const today = new Date();
+  const selectedDate = new Date(days);
+
+  if (isNaN(selectedDate)) {
+    return;
+  }
+  const differenceInMilliseconds = selectedDate - today;
+  const differenceInDays = Math.ceil(
+    differenceInMilliseconds / (1000 * 60 * 60 * 24)
+  );
+  return differenceInDays;
+};
+
 export const months = [
   { name: "იანვარი", number: 0 },
   { name: "თებერვალი", number: 1 },

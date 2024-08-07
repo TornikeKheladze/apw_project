@@ -117,12 +117,16 @@ const useServicesForm = () => {
   }, [categoryID]);
 
   const submitHandler = async (data) => {
+    const obligations = data.obligations
+      ? JSON.stringify(data.obligations.map((item) => item.name))
+      : "";
     const requestData = {
       ownerID,
       ...data,
       image: JSON.parse(localStorage.getItem("formInputData"))?.image,
       categoryID: chosenCategory.id,
       price: 0,
+      obligations,
     };
     if (!chosenCategory.id) {
       setAlert({
@@ -144,7 +148,10 @@ const useServicesForm = () => {
   //     item.name !== "categoryID" && (!ownerID || item.name !== "ownerID")
   // );
   const formFields = serviceArr.filter(
-    (item) => item.name !== "categoryID" && item.name !== "ownerID"
+    (item) =>
+      item.name !== "categoryID" &&
+      item.name !== "ownerID" &&
+      item.name !== "serviceUrl"
   );
 
   return {
