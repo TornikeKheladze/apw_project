@@ -25,11 +25,11 @@ import FilterIcon from "components/icons/FilterIcon";
 import Tippy from "@tippyjs/react";
 import AuthForm from "../authForm/AuthForm";
 import { removeEmpty } from "helpers/removeEmpty";
+import FilterOff from "components/icons/FilterOff";
 
 const Statements = () => {
   const queryClient = useQueryClient();
   const [modal, setModal] = useState(false);
-  // const [filter, setFilter] = useState({});
   const [page, setPage] = useState(1);
   const [commentInput, setCommentInput] = useState({
     show: false,
@@ -55,13 +55,16 @@ const Statements = () => {
     isLoading,
     mutate: searchMutate,
   } = useMutation({
-    mutationFn: (filterData = {}) =>
-      getStatements({
-        identify_code: IDENTIFY_CODE_SIP,
-        gov: 5,
-        status: 2,
-        ...removeEmpty(filterData),
-      }).then((res) => res.data),
+    mutationFn: (filterData = { page: 1 }) =>
+      getStatements(
+        {
+          identify_code: IDENTIFY_CODE_SIP,
+          gov: 5,
+          status: 2,
+          ...removeEmpty(filterData),
+        },
+        filterData.page
+      ).then((res) => res.data),
   });
 
   useEffect(() => {
@@ -145,8 +148,6 @@ const Statements = () => {
     return currentDate.toISOString().split("T")[0];
   }
 
-  console.log(statementData);
-
   return (
     <main className="workspace">
       <Alert color={alert.type} message={alert.message} />
@@ -207,13 +208,15 @@ const Statements = () => {
           setFilterModal((prevState) => ({ ...prevState, isOpen: false }))
         }
       >
+        <ModalHeader>ფილტრი</ModalHeader>
         <div className="p-5">
           <AuthForm
             formArray={statementFilterArr}
             isLoading={isLoading}
             submitHandler={(data) => {
               setFilterModal((prevState) => ({ ...prevState, filter: data }));
-              searchMutate(data);
+              searchMutate({ ...data, page: 1 });
+              setPage(1);
             }}
             defaultValues={filterModal.filter}
           />
@@ -222,24 +225,49 @@ const Statements = () => {
       <div className="card p-5 overflow-x-auto">
         <div className="flex justify-between mb-2">
           <h3 className="">განცხადებები</h3>
-          <Tippy
-            theme="light-border tooltip"
-            touch={["hold", 500]}
-            offset={[0, 12]}
-            interactive
-            animation="scale"
-            appendTo={document.body}
-            content="ფილტრი"
-          >
-            <button
-              onClick={() =>
-                setFilterModal((prevState) => ({ ...prevState, isOpen: true }))
-              }
-              className="btn btn-icon btn_outlined btn_secondary group"
+          <div className="flex gap-2 items-center">
+            <Tippy
+              theme="light-border tooltip"
+              touch={["hold", 500]}
+              offset={[0, 12]}
+              interactive
+              animation="scale"
+              appendTo={document.body}
+              content="ფილტრის მოხსნა"
             >
-              <FilterIcon className="w-5 h-5" />
-            </button>
-          </Tippy>
+              <button
+                onClick={() => {
+                  searchMutate();
+                  setFilterModal({ isOpen: false, filter: {} });
+                  setPage(1);
+                }}
+                className="btn btn-icon btn_outlined btn_secondary group"
+              >
+                <FilterOff className="w-6 h-6" />
+              </button>
+            </Tippy>
+            <Tippy
+              theme="light-border tooltip"
+              touch={["hold", 500]}
+              offset={[0, 12]}
+              interactive
+              animation="scale"
+              appendTo={document.body}
+              content="ფილტრი"
+            >
+              <button
+                onClick={() =>
+                  setFilterModal((prevState) => ({
+                    ...prevState,
+                    isOpen: true,
+                  }))
+                }
+                className="btn btn-icon btn_outlined btn_secondary group"
+              >
+                <FilterIcon className="w-5 h-5" />
+              </button>
+            </Tippy>
+          </div>
         </div>
         <AuthTable
           staticArr={statementArr}
@@ -267,7 +295,7 @@ const Statements = () => {
             onPageChange={(page) => {
               window.scrollTo({ top: 0, behavior: "smooth" });
               setPage(page);
-              searchMutate(filterModal.filter);
+              searchMutate({ ...filterModal.filter, page });
             }}
           />
         </div>

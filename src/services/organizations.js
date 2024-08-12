@@ -25,8 +25,8 @@ export const deleteOrganization = async (id) => {
 export const getOrganizationById = (id) =>
   instance.get(`/user/organisations/get/${id}`);
 
-export const getStatements = (data) => {
-  return instance.post("/auth-user/gov-get-auth", data);
+export const getStatements = (data, page = 1) => {
+  return instance.post(`/auth-user/gov-get-auth?page=${page}`, data);
 };
 
 export const getStatementsExpDate = (data) => {

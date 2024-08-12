@@ -456,13 +456,12 @@ const MenuDetailAuth = () => {
       queryFn: () =>
         getStatements({
           identify_code: IDENTIFY_CODE_SIP,
+          gov: 5,
+          status: 2,
         }).then((res) => res.data),
       retry: false,
     });
-  const govStatements =
-    statementData.data.data.filter(
-      (statement) => +statement.gov === 5 && +statement.status === 2
-    ) || [];
+  const govStatements = statementData.data.data;
 
   return (
     <div
