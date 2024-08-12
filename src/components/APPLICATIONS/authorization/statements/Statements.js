@@ -5,24 +5,32 @@ import LoadingSpinner from "components/icons/LoadingSpinner";
 import { IDENTIFY_CODE_SIP } from "data/applications";
 import { convertDate } from "helpers/convertDate";
 import { downloadPDF } from "helpers/downloadPDF";
-import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import { getDocumentByUUID } from "services/documents";
 import {
   firstStep,
   getStatementById,
   getStatements,
 } from "services/organizations";
+import AuthTable from "../authTable/AuthTable";
 // import StatementTable from "./StatementTable";
-// import Pagination from "components/Pagination";
-// import { useNavigate } from "react-router-dom";
-// import { statementArr } from "components/APPLICATIONS/billing/formArrays/agreementArr";
+import Pagination from "components/Pagination";
+import { useNavigate } from "react-router-dom";
+import {
+  statementArr,
+  statementFilterArr,
+} from "components/APPLICATIONS/billing/formArrays/agreementArr";
+import FilterIcon from "components/icons/FilterIcon";
+import Tippy from "@tippyjs/react";
+import AuthForm from "../authForm/AuthForm";
+import { removeEmpty } from "helpers/removeEmpty";
 
 const Statements = () => {
   const queryClient = useQueryClient();
   const [modal, setModal] = useState(false);
   // const [filter, setFilter] = useState({});
-  // const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
   const [commentInput, setCommentInput] = useState({
     show: false,
     value: "",
@@ -31,16 +39,34 @@ const Statements = () => {
   });
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [alert, setAlert] = useState({ message: "", type: "success" });
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  const { data: statementData = { data: [], request_chanel: [] }, isLoading } =
-    useQuery({
-      queryKey: "getStatements",
-      queryFn: () =>
-        getStatements({
-          identify_code: IDENTIFY_CODE_SIP,
-        }).then((res) => res.data),
-    });
+  const [filterModal, setFilterModal] = useState({ isOpen: false, filter: {} });
+
+  const {
+    data: statementData = {
+      data: {
+        data: [],
+        per_page: 30,
+        total: 0,
+      },
+      request_chanel: [],
+    },
+    isLoading,
+    mutate: searchMutate,
+  } = useMutation({
+    mutationFn: (filterData = {}) =>
+      getStatements({
+        identify_code: IDENTIFY_CODE_SIP,
+        gov: 5,
+        status: 2,
+        ...removeEmpty(filterData),
+      }).then((res) => res.data),
+  });
+
+  useEffect(() => {
+    searchMutate();
+  }, [searchMutate]);
 
   const {
     data: statement = {
@@ -111,20 +137,20 @@ const Statements = () => {
 
   const loading = statementLoading || isLoading;
 
-  const govStatements =
-    statementData.data.filter(
-      (statement) => +statement.gov === 5 && +statement.status === 2
-    ) || [];
+  const govStatements = statementData.data.data;
+
   function addMonthsToDate(months) {
     const currentDate = new Date();
     currentDate.setMonth(currentDate.getMonth() + months);
     return currentDate.toISOString().split("T")[0];
   }
 
+  console.log(statementData);
+
   return (
     <main className="workspace">
       <Alert color={alert.type} message={alert.message} />
-      <div className="card p-5">
+      <div className="card p-5 mb-3">
         <h3 className="mb-2">განცხადებები</h3>
         <table className="table table_bordered w-full mt-3 text-xs">
           <thead>
@@ -174,8 +200,48 @@ const Statements = () => {
           </tbody>
         </table>
       </div>
-      {/* <div className="card p-5 overflow-x-auto">
-        <StatementTable
+      <Modal
+        centered
+        active={filterModal.isOpen}
+        onClose={() =>
+          setFilterModal((prevState) => ({ ...prevState, isOpen: false }))
+        }
+      >
+        <div className="p-5">
+          <AuthForm
+            formArray={statementFilterArr}
+            isLoading={isLoading}
+            submitHandler={(data) => {
+              setFilterModal((prevState) => ({ ...prevState, filter: data }));
+              searchMutate(data);
+            }}
+            defaultValues={filterModal.filter}
+          />
+        </div>
+      </Modal>
+      <div className="card p-5 overflow-x-auto">
+        <div className="flex justify-between mb-2">
+          <h3 className="">განცხადებები</h3>
+          <Tippy
+            theme="light-border tooltip"
+            touch={["hold", 500]}
+            offset={[0, 12]}
+            interactive
+            animation="scale"
+            appendTo={document.body}
+            content="ფილტრი"
+          >
+            <button
+              onClick={() =>
+                setFilterModal((prevState) => ({ ...prevState, isOpen: true }))
+              }
+              className="btn btn-icon btn_outlined btn_secondary group"
+            >
+              <FilterIcon className="w-5 h-5" />
+            </button>
+          </Tippy>
+        </div>
+        <AuthTable
           staticArr={statementArr}
           fetchedArr={govStatements.map((item) => ({
             ...item,
@@ -185,30 +251,27 @@ const Statements = () => {
             )?.app_name,
             created_at: item.created_at ? convertDate(item.created_at) : "",
           }))}
-          filter={{ filter, setFilter }}
-          page={{ page, setPage }}
-          search={() => console.log(filter)}
           actions={{
             detailClick: (item) => navigate(`/agreements/details/${item.id}`),
           }}
         />
-      </div> */}
-      {/* {isLoading ? (
+      </div>
+      {isLoading ? (
         <></>
       ) : (
         <div className="mt-5">
           <Pagination
             currentPage={page}
-            totalCount={logData.total}
-            pageSize={logData.per_page}
+            totalCount={statementData.data.total}
+            pageSize={statementData.data.per_page}
             onPageChange={(page) => {
               window.scrollTo({ top: 0, behavior: "smooth" });
               setPage(page);
-              mutate(filter);
+              searchMutate(filterModal.filter);
             }}
           />
         </div>
-      )} */}
+      )}
 
       <Modal active={modal} centered onClose={() => setModal(false)}>
         <ModalHeader>განცხადება</ModalHeader>
