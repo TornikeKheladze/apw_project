@@ -58,7 +58,8 @@ const UserEditForm = () => {
         }, 2500);
       },
       onError: (data) => {
-        afterRequestHandler(data.response.data.message, "danger");
+        console.log(data.response.data);
+        afterRequestHandler(data.response.data.description, "danger");
       },
     });
   const { mutate: updateUserMutate, isLoading: updateUserLoading } =
@@ -70,7 +71,7 @@ const UserEditForm = () => {
           "success"
         ),
       onError: (data) => {
-        afterRequestHandler(data.response.data.message, "danger");
+        afterRequestHandler(data.response.data.description, "danger");
       },
     });
 
@@ -84,7 +85,8 @@ const UserEditForm = () => {
       createUserMutate({
         ...data,
         ...userData,
-        active: data?.active,
+        // active: data?.active,
+        active: 0,
         // temporary
         account_type: 0,
       });
@@ -93,8 +95,8 @@ const UserEditForm = () => {
         ...data,
         ...userData,
         id,
-        active: data?.active,
-        account_type: 0,
+        // active: data?.active,
+        active: 0,
       });
     }
   };

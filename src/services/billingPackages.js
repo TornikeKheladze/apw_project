@@ -51,3 +51,7 @@ export const createInvoiceDetails = (data) => {
 export const getInvoiceByNumber = (invoiceNumber) => {
   return instance.get(`/billing-java/invoice/${invoiceNumber}`);
 };
+
+export const getInvoices = (data = { page: 1, size: 50 }) => {
+  return instance.get(`/billing-java/invoice/${data.page}/${data.size}`);
+};

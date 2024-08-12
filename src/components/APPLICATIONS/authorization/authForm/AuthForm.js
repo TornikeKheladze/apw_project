@@ -97,9 +97,13 @@ const AuthForm = ({
                 step="any"
                 register={register}
                 defaultValue={name === "tell" ? "995" : ""}
-                rules={{
-                  required: "ველი აუცილებელია",
-                }}
+                rules={
+                  notRequired
+                    ? {}
+                    : {
+                        required: "ველი აუცილებელია",
+                      }
+                }
                 className={`${errors[name] ? "border-danger" : ""}`}
               />
             </div>

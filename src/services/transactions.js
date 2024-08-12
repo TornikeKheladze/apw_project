@@ -50,7 +50,7 @@ export const searchTransactions = ({
   // დროებით ვაყოლებ ობიექტს რო ჯავას ერორი ავირიდო
   return instance.post(
     `/billing-java/transactions/search/${page}/50/${sort}`,
-    Object.keys(data).length === 0 ? { transactionID: " " } : data
+    data
   );
 };
 
@@ -71,4 +71,20 @@ export const makeTransactionByCategory = (data) => {
 
 export const getTransactionSumAmount = (userID) => {
   return instance.get(`/billing-java/transactions/sum-amount/${userID}`);
+};
+
+export const searchBankTransactions = (
+  data = {
+    data: {},
+    page: 1,
+    size: 50,
+    sort: "transactionID,desc",
+  }
+) => {
+  return instance.post(
+    `/billing-java/bank-transactions/search/${data.page}/${data.size}${
+      data.sort ? `/${data.sort}` : ""
+    }`,
+    data.data
+  );
 };

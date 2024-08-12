@@ -7,6 +7,7 @@ const Home = () => {
   const { authorizedUser } = useSelector((store) => store.user);
   const navigate = useNavigate("/");
   useEffect(() => {
+    if (!authorizedUser.id) return;
     if (authorizedUser.superAdmin) {
       navigate("/sips");
     } else if (authorizedUser.isSip) {

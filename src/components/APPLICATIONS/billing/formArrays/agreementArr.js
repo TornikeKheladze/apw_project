@@ -181,3 +181,31 @@ export const statementArr = [
   },
   { name: "created_at", label: "თარიღი", filter: "date" },
 ];
+
+export const statementFilterArr = [
+  { name: "name", label: "იურიდიული პირი", type: "text", notRequired: true },
+  {
+    name: "user_name",
+    label: "უფლებამოსილი პირი (სახელი)",
+    type: "text",
+    notRequired: true,
+  },
+  {
+    name: "user_l_name",
+    label: "უფლებამოსილი პირი (გვარი)",
+    type: "text",
+    notRequired: true,
+  },
+  {
+    name: "start",
+    label: "თარიღი (დან)",
+    type: "date",
+    notRequired: true,
+  },
+  {
+    name: "end",
+    label: "თარიღი (მდე)",
+    type: "date",
+    notRequired: true,
+  },
+];

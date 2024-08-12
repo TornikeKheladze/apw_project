@@ -450,16 +450,17 @@ const MenuDetailAuth = () => {
   const { isOpen, hideMenuDetail } = useContext(MenuBarContext);
   const user = useSelector((state) => state.user.authorizedUser);
 
-  const { data: statementData = { data: [], request_chanel: [] } } = useQuery({
-    queryKey: "getStatements",
-    queryFn: () =>
-      getStatements({
-        identify_code: IDENTIFY_CODE_SIP,
-      }).then((res) => res.data),
-    retry: false,
-  });
+  const { data: statementData = { data: { data: [] }, request_chanel: [] } } =
+    useQuery({
+      queryKey: "getStatements",
+      queryFn: () =>
+        getStatements({
+          identify_code: IDENTIFY_CODE_SIP,
+        }).then((res) => res.data),
+      retry: false,
+    });
   const govStatements =
-    statementData.data.filter(
+    statementData.data.data.filter(
       (statement) => +statement.gov === 5 && +statement.status === 2
     ) || [];
 
