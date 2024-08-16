@@ -142,9 +142,16 @@ const Organizations = () => {
                 (item) =>
                   item.name !== "treasury_code" && item.name !== "short_name"
               )}
-              submitHandler={updateMutate}
+              submitHandler={(data) =>
+                updateMutate({ ...data, tell: `995${data?.tell}` })
+              }
               isLoading={updateLoading}
-              defaultValues={choosenOrganization}
+              defaultValues={{
+                ...choosenOrganization,
+                tell: choosenOrganization?.tell?.startsWith("995")
+                  ? choosenOrganization?.tell?.slice(3)
+                  : choosenOrganization?.tell,
+              }}
               optionsObj={{
                 type: types,
                 reseller: [
@@ -168,7 +175,9 @@ const Organizations = () => {
                 (item) =>
                   item.name !== "treasury_code" && item.name !== "short_name"
               )}
-              submitHandler={addMutate}
+              submitHandler={(data) =>
+                addMutate({ ...data, tell: `995${data?.tell}` })
+              }
               isLoading={addLoading}
               optionsObj={{
                 type: types,

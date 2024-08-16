@@ -391,6 +391,10 @@ module.exports = {
           pinterest: "#bd081c",
           whatsapp: "#25d366",
         },
+        custom: {
+          purple: "#5D509C",
+          yellow: "#E9B25F",
+        },
       },
       animation: {
         "spin-slow": "spin 3s linear infinite",

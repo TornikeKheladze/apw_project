@@ -20,12 +20,6 @@ const AuthForm = ({
     defaultValues,
   });
 
-  // const navigate = useNavigate();
-  // onSubmit={handleSubmit(async (data) => {
-  //   await submitHandler(data);
-  //   navigate(-1);
-  // })}
-
   return (
     <form
       onSubmit={handleSubmit(submitHandler)}
@@ -38,7 +32,8 @@ const AuthForm = ({
               <Label
                 className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
               >
-                {label}
+                {label}{" "}
+                {notRequired ? <></> : <span className="text-danger">*</span>}
               </Label>
               <CustomSelect
                 name={name}
@@ -66,20 +61,52 @@ const AuthForm = ({
               <Label
                 className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
               >
-                {label}
+                {label}{" "}
+                {notRequired ? <></> : <span className="text-danger">*</span>}
               </Label>
               <textarea
                 name={name}
                 step="any"
                 {...register(name, {
-                  validate: {
-                    pattern: (value) => value?.length > 0,
-                  },
+                  required: notRequired ? false : true,
                 })}
                 className={`${
                   errors[name] ? "border-danger" : ""
                 } form-control`}
               />
+            </div>
+          );
+        } else if (name === "tell") {
+          return (
+            <div key={name}>
+              <Label
+                className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
+              >
+                {label}{" "}
+                {notRequired ? <></> : <span className="text-danger">*</span>}
+              </Label>
+              <div className="flex gap-2">
+                <input
+                  className="form-control w-20"
+                  value="+995"
+                  disabled
+                  readOnly
+                />
+                <CustomInput
+                  name={name}
+                  type={type}
+                  step="any"
+                  register={register}
+                  rules={
+                    notRequired
+                      ? {}
+                      : {
+                          required: "ველი აუცილებელია",
+                        }
+                  }
+                  className={`${errors[name] ? "border-danger" : ""}`}
+                />
+              </div>
             </div>
           );
         } else {
@@ -88,7 +115,8 @@ const AuthForm = ({
               <Label
                 className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
               >
-                {label}
+                {label}{" "}
+                {notRequired ? <></> : <span className="text-danger">*</span>}
               </Label>
 
               <CustomInput

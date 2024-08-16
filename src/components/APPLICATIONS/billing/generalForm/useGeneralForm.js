@@ -1,11 +1,9 @@
-import { convertBase64 } from "helpers/convertBase64";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useLocation, useSearchParams } from "react-router-dom";
 
 const useGeneralForm = (formArray, updateDataObj) => {
   const [formData, setFormData] = useState({});
-  const [imageForDisplay, setImageForDisplay] = useState("");
 
   // eslint-disable-next-line
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,7 +15,6 @@ const useGeneralForm = (formArray, updateDataObj) => {
     formState: { errors },
     setValue,
     control,
-    ...formObject
   } = useForm({
     defaultValues: updateDataObj ? updateDataObj : {},
   });
@@ -25,10 +22,6 @@ const useGeneralForm = (formArray, updateDataObj) => {
   const serviceID = useWatch({
     control,
     name: "serviceID",
-  });
-  const has_ring_number = useWatch({
-    control,
-    name: "has_ring_number",
   });
 
   useEffect(() => {
@@ -38,20 +31,11 @@ const useGeneralForm = (formArray, updateDataObj) => {
     }
   }, [serviceID, pathname, setSearchParams]);
 
-  const handleFormChange = async (e) => {
-    if (e.target.type === "file") {
-      const base = await convertBase64(e.target.files[0]);
-      setFormData((prevData) => ({
-        ...prevData,
-        [e.target.name]: base,
-      }));
-      setImageForDisplay(base);
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [e.target.name]: e.target.value,
-      }));
-    }
+  const handleFormChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   useEffect(() => {
@@ -91,10 +75,6 @@ const useGeneralForm = (formArray, updateDataObj) => {
     errors,
     formData,
     handleFormChange,
-    setValue,
-    imageForDisplay,
-    formObject: { ...formObject, control },
-    has_ring_number,
   };
 };
 

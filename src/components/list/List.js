@@ -48,9 +48,19 @@ const List = ({
 
                 <td className="flex gap-1 items-center justify-between">
                   {toUsers && (
-                    <Link className="mr-2" to={`${toUsers}${item.id}`}>
-                      <Button className="md:px-3 px-1 py-1 md:text-sm text-xs font-light">
+                    <Link className="mr-2 " to={`${toUsers}${item.id}`}>
+                      <Button className="md:px-3 px-1 py-1 md:text-sm text-xs font-light bg-custom-yellow hover:!bg-custom-yellow hover:!bg-opacity-75 ">
                         მომხმარებლები
+                      </Button>
+                    </Link>
+                  )}
+                  {toDepartments && (
+                    <Link className="mr-2" to={`${toDepartments}${item.id}`}>
+                      <Button
+                        color="success"
+                        className="md:px-3 px-1 py-1 md:text-sm text-xs font-light "
+                      >
+                        დეპარტამენტები
                       </Button>
                     </Link>
                   )}

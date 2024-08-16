@@ -1,10 +1,10 @@
 import { userArr } from "components/APPLICATIONS/billing/formArrays/authArr";
-import GeneralForm from "components/APPLICATIONS/billing/generalForm/GeneralForm";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { createUser, getUserDetails, updateUserData } from "services/users";
 import Alert from "components/Alert";
+import UserForm from "./UserForm";
 
 const UserEditForm = () => {
   const [alert, setAlert] = useState({ message: "", type: "success" });
@@ -15,9 +15,6 @@ const UserEditForm = () => {
   const oid = searchParam.get("oid");
   const did = searchParam.get("did");
   const pid = searchParam.get("pid");
-  useEffect(() => {
-    localStorage.removeItem("formInputData");
-  }, []);
 
   const afterRequestHandler = (message, type) => {
     setAlert({
@@ -48,7 +45,6 @@ const UserEditForm = () => {
           message: "მომხმარებელი წარმატებით დაემატა",
           type: "success",
         });
-        localStorage.removeItem("formInputData");
         setTimeout(() => {
           setAlert({
             message: "",
@@ -65,17 +61,19 @@ const UserEditForm = () => {
   const { mutate: updateUserMutate, isLoading: updateUserLoading } =
     useMutation({
       mutationFn: updateUserData,
-      onSuccess: () =>
+      onSuccess: () => {
         afterRequestHandler(
           "მომხმარებლის მონაცემები წარმატებით შეიცვალა",
           "success"
-        ),
+        );
+      },
       onError: (data) => {
         afterRequestHandler(data.response.data.description, "danger");
       },
     });
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
+    const tell = `995${data?.tell}`;
     const userData = {
       oid: oid || data?.oid.id,
       did: did || data?.did.id,
@@ -85,18 +83,18 @@ const UserEditForm = () => {
       createUserMutate({
         ...data,
         ...userData,
-        // active: data?.active,
+        tell,
         active: 0,
-        // temporary
         account_type: 0,
       });
     } else {
       updateUserMutate({
+        ...fetchedUserData,
         ...data,
         ...userData,
+        tell,
         id,
-        // active: data?.active,
-        active: 0,
+        active: data?.active,
       });
     }
   };
@@ -107,7 +105,7 @@ const UserEditForm = () => {
         action === "create" ? "container card p-5 md:w-2/3 w-full" : ""
       }
     >
-      <GeneralForm
+      <UserForm
         formArray={
           action === "create"
             ? userArr.filter((item) => item.name !== "active")
@@ -130,6 +128,10 @@ const UserEditForm = () => {
           signature: [
             { name: "დიახ", id: 1 },
             { name: "არა", id: 0 },
+          ],
+          has_ring_number: [
+            { name: "გამორთვა", id: 0 },
+            { name: "ჩართვა", id: 1 },
           ],
         }}
         updateDataObj={action === "edit" ? fetchedUserData : null}

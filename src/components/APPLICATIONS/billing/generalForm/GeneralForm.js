@@ -5,8 +5,6 @@ import Label from "components/form/Label";
 import Radio from "components/form/Radio";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import useGeneralForm from "./useGeneralForm";
-import FormDropdowns from "components/APPLICATIONS/authorization/users/userForm/formDropdown/FormDropdowns";
-import { useEffect } from "react";
 
 const GeneralForm = (props) => {
   const {
@@ -15,7 +13,6 @@ const GeneralForm = (props) => {
     optionsObj,
     isLoading,
     updateDataObj = {},
-    externalFields,
   } = props;
 
   const {
@@ -25,46 +22,7 @@ const GeneralForm = (props) => {
     formData,
     handleFormChange,
     // imageForDisplay,
-    setValue,
-    formObject,
-    has_ring_number,
   } = useGeneralForm(formArray, updateDataObj);
-  // const navigate = useNavigate();
-  // onSubmit={handleSubmit(async (data) => {
-  //   await submitHandler(data);
-  //   navigate(-1);
-  // })}
-
-  // only for user editing
-  useEffect(() => {
-    if (externalFields) {
-      setValue("oid", {
-        name: externalFields?.o_name,
-        id: externalFields?.oid,
-      });
-      setValue("did", {
-        department_name: externalFields?.department_name,
-        id: externalFields?.did,
-      });
-      setValue("pid", {
-        position_name: externalFields?.position_name,
-        id: externalFields?.pid,
-      });
-    }
-  }, [setValue, externalFields]);
-
-  const fields =
-    +has_ring_number === 1
-      ? [
-          ...formArray,
-          {
-            name: "ring_number",
-            label: "მიუთითეთ შტამპის ნომერი",
-            type: "text",
-            notRequired: true,
-          },
-        ]
-      : formArray;
 
   return (
     <form
@@ -72,7 +30,7 @@ const GeneralForm = (props) => {
       onSubmit={handleSubmit(submitHandler)}
       className="flex flex-col gap-4"
     >
-      {fields.map(({ name, label, type, notRequired }) => {
+      {formArray.map(({ name, label, type, notRequired }) => {
         if (type === "select") {
           return (
             <div key={name}>
@@ -165,18 +123,8 @@ const GeneralForm = (props) => {
                 type={type}
                 step="any"
                 register={register}
-                defaultValue={name === "tell" ? "995" : ""}
                 rules={
-                  name === "tell"
-                    ? {
-                        validate: (val) => {
-                          const regex = /^995\d*/;
-                          if (!regex.test(val)) {
-                            return "არასწორი ფორმატი. (995)";
-                          }
-                        },
-                      }
-                    : notRequired
+                  notRequired
                     ? {}
                     : {
                         required: "ველი აუცილებელია",
@@ -184,50 +132,11 @@ const GeneralForm = (props) => {
                 }
                 className={`${errors[name] ? "border-danger" : ""}`}
               />
-              {name === "tell" && errors[name] && (
-                <p className="text-danger text-xs">{errors[name].message}</p>
-              )}
-
-              {/* {type === "file" && (
-                <img
-                  src={
-                    imageForDisplay ||
-                    JSON.parse(localStorage.getItem("formInputData"))?.image
-                  }
-                  alt=""
-                  className="h-32 w-auto rounded mt-2"
-                />
-              )} */}
             </div>
           );
         }
       })}
 
-      {/*  only for user editing */}
-      {externalFields && (
-        <>
-          <FormDropdowns
-            formObject={formObject}
-            setValue={setValue}
-            errors={errors}
-          />
-          <input
-            hidden
-            name="oid"
-            {...register("oid", { required: "სავალდებულო" })}
-          />
-          <input
-            hidden
-            name="did"
-            {...register("did", { required: "სავალდებულო" })}
-          />
-          <input
-            hidden
-            name="pid"
-            {...register("pid", { required: "სავალდებულო" })}
-          />
-        </>
-      )}
       <div className="flex items-center justify-between">
         <Button
           disabled={isLoading}

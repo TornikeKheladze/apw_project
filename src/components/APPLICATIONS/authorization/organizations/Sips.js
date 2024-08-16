@@ -169,9 +169,16 @@ const Sips = () => {
               formArray={orgArr.filter(
                 (item) => item.name !== "type" && item.name !== "user_quota"
               )}
-              submitHandler={updateMutate}
+              submitHandler={(data) =>
+                updateMutate({ ...data, tell: `995${data?.tell}` })
+              }
               isLoading={updateLoading}
-              defaultValues={choosenOrganization}
+              defaultValues={{
+                ...choosenOrganization,
+                tell: choosenOrganization?.tell?.startsWith("995")
+                  ? choosenOrganization?.tell?.slice(3)
+                  : choosenOrganization?.tell,
+              }}
               optionsObj={{
                 type: types,
                 reseller: [
@@ -195,7 +202,9 @@ const Sips = () => {
               formArray={orgArr.filter(
                 (item) => item.name !== "type" && item.name !== "user_quota"
               )}
-              submitHandler={addMutate}
+              submitHandler={(data) =>
+                addMutate({ ...data, tell: `995${data?.tell}` })
+              }
               isLoading={addLoading}
               optionsObj={{
                 type: types,
@@ -249,7 +258,7 @@ const Sips = () => {
                 orgTypeId: SIPTYPEID,
               })
             }
-            className="p-2 md:text-sm text-xs"
+            className="p-2 px-3 md:text-sm text-xs"
           >
             უწყების რეგისტრაცია
           </Button>

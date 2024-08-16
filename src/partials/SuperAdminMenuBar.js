@@ -522,11 +522,11 @@ const MenuDetailAuth = () => {
             <NavLink to={`/sips`} onClick={hideMenuDetail}>
               უწყებები
             </NavLink>
-            <NavLink to="/roles" onClick={hideMenuDetail}>
-              როლები
-            </NavLink>
             <NavLink to={`/sips?create=1`} onClick={hideMenuDetail}>
               უწყების რეგისტრაცია
+            </NavLink>
+            <NavLink to="/roles" onClick={hideMenuDetail}>
+              როლები
             </NavLink>
           </MenuBarCollapse>
         )}
@@ -567,7 +567,7 @@ const MenuDetailAuth = () => {
             onClick={hideMenuDetail}
           >
             {/* <AddUserIcon /> */}
-            რეგისტრაცია
+            მომხმარებლის რეგისტრაცია
           </NavLink>
           <NavLink
             to={

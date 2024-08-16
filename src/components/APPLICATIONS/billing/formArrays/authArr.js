@@ -116,12 +116,12 @@ export const userArr = [
   {
     name: "date_expiration",
     label: "უფლებამოსილების ვადის გასვლის თარიღი",
-    type: "datetime-local",
+    type: "date",
   },
   {
     name: "has_ring_number",
     label: "ელ. კვალიფიციური შტამპის ფუნქციონალით სარგებლობა",
-    type: "radio",
+    type: "select",
     notRequired: true,
   },
 ];

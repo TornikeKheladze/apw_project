@@ -5,7 +5,6 @@ import Modal, { ModalFooter, ModalHeader } from "components/Modal";
 import CheckedIcon from "components/icons/CheckedIcon";
 import ErrorIcon from "components/icons/ErrorIcon";
 import LoadingSpinner from "components/icons/LoadingSpinner";
-import PlusIcon from "components/icons/PlusIcon";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
@@ -136,15 +135,25 @@ const UserList = ({ users, isLoading, departments }) => {
       </Modal>
       <div className="flex justify-between px-2">
         <h4>მომხმარებლები</h4>
-        <Link
-          className="bg-success text-white px-2 py-2 rounded flex items-center gap-1 font-bold"
-          to={createUserUrl()}
-        >
-          <span>დამატება</span>
-          <span>
-            <PlusIcon />
-          </span>
-        </Link>
+        <div>
+          {users.length && type !== "all" && id !== "all" ? (
+            <Link className="mr-2" to="role">
+              <Button className="md:px-3 px-1 py-1 md:text-sm text-xs font-light bg-custom-purple hover:!bg-custom-purple hover:!bg-opacity-75 ">
+                როლის მინიჭება
+              </Button>
+            </Link>
+          ) : (
+            <></>
+          )}
+          <Link to={createUserUrl()}>
+            <Button
+              color="success"
+              className="md:px-3 px-1 py-1 md:text-sm text-xs font-light "
+            >
+              მომხმარებლის დამატება
+            </Button>
+          </Link>
+        </div>
       </div>
       <table className="table w-full mt-3">
         <tbody>
@@ -157,7 +166,7 @@ const UserList = ({ users, isLoading, departments }) => {
           ) : users.length && !isLoading ? (
             users.map((user, index) => (
               <tr key={user.id + user.email}>
-                <td>{index + 1}</td>
+                <td className="w-4">{index + 1}</td>
                 <td className="text-base">{`${user.name} ${user.l_name}`}</td>
                 <td className="flex-grow-1 justify-self-right  flex justify-end gap-2">
                   <Tippy
