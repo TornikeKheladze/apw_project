@@ -135,10 +135,10 @@ const UserList = ({ users, isLoading, departments }) => {
       </Modal>
       <div className="flex justify-between px-2">
         <h4>მომხმარებლები</h4>
-        <div>
+        <div className="flex md:flex-row flex-col gap-2">
           {users.length && type !== "all" && id !== "all" ? (
-            <Link className="mr-2" to="role">
-              <Button className="md:px-3 px-1 py-1 md:text-sm text-xs font-light bg-custom-purple hover:!bg-custom-purple hover:!bg-opacity-75 ">
+            <Link to="role">
+              <Button className="w-full flex justify-center md:px-3 px-1 py-1 md:text-sm text-xs font-light bg-custom-purple hover:!bg-custom-purple hover:!bg-opacity-75 ">
                 როლის მინიჭება
               </Button>
             </Link>

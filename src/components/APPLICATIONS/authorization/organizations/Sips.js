@@ -288,6 +288,7 @@ const Sips = () => {
             title={"დასახელება"}
             toUsers={"/users/organisation/"}
             toDepartments={"/departments/"}
+            toServices="/billing/services?ownerID="
           />
         ) : (
           <p>უწყებები არ მოიძებნა</p>

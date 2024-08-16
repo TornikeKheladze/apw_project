@@ -105,7 +105,7 @@ const useUsers = () => {
               </div>
             }
           >
-            <Button className="uppercase mb-6 min-w-[12rem] flex justify-between w-1/2">
+            <Button className="uppercase mb-6 min-w-[12rem] flex justify-between md:w-1/2 w-full">
               {isLoading ? (
                 <LoadingSpinner />
               ) : (

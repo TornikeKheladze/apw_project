@@ -9,10 +9,13 @@ import { useQueryClient } from "react-query";
 import { statusBadge } from "helpers/CheckStatusForBilling";
 import { getOrganizations } from "services/organizations";
 import { useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 export const useServices = () => {
   const queryClient = useQueryClient();
-  const [filter, setFilter] = useState({});
+  const [searchParams] = useSearchParams();
+  const ownerID = searchParams.get("ownerID");
+  const [filter, setFilter] = useState({ ownerID });
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [chosenCategory, setChosenCategory] = useState({});
   const { authorizedUser } = useSelector((store) => store.user);
