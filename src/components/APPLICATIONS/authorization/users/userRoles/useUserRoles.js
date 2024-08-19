@@ -39,7 +39,7 @@ const useUserRoles = () => {
   });
 
   const afterRequestHandler = (message, type) => {
-    queriClient.invalidateQueries("getSuperAdminData");
+    queriClient.invalidateQueries("getRolesData");
     setAlert({
       message: message,
       type: type,
