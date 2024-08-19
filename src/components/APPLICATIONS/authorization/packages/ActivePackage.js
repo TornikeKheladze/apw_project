@@ -33,6 +33,7 @@ import { truncateText } from "helpers/truncateText.js";
 import { useForm, useWatch } from "react-hook-form";
 import Label from "components/form/Label.js";
 import CustomSelect from "components/form/CustomSelect.js";
+import { formatDate } from "helpers/dateFunctions";
 
 const ActivePackage = () => {
   const {
@@ -279,13 +280,6 @@ const ActivePackage = () => {
 
   const today = new Date();
   const endOfYear = new Date(today.getFullYear(), 11, 31);
-
-  const formatDate = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
 
   return (
     <main className="workspace">

@@ -7,6 +7,7 @@ import FormDropdowns from "components/APPLICATIONS/authorization/users/userForm/
 import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
+import { formatDate } from "helpers/dateFunctions";
 
 const UserForm = (props) => {
   const {
@@ -83,6 +84,7 @@ const UserForm = (props) => {
         ]
       : formArray;
 
+  const today = new Date();
   return (
     <form
       onSubmit={handleSubmit(submitHandler)}
@@ -153,6 +155,30 @@ const UserForm = (props) => {
                   className={`${errors[name] ? "border-danger" : ""}`}
                 />
               </div>
+            </div>
+          );
+        } else if (type === "date") {
+          return (
+            <div key={name}>
+              <Label
+                className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
+                htmlFor={name}
+              >
+                {label} <span className="text-danger">*</span>
+              </Label>
+
+              <input
+                id={name}
+                type="date"
+                name={name}
+                min={formatDate(today)}
+                {...register(name, {
+                  required: "ველი აუცილებელია",
+                })}
+                className={`${
+                  errors[name] ? "border-danger" : ""
+                } form-control`}
+              />
             </div>
           );
         } else {

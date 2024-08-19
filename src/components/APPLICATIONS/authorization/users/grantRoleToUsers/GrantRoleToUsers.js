@@ -4,6 +4,7 @@ import Checkbox from "components/form/Checkbox";
 import CustomSelect from "components/form/CustomSelect";
 import useGrantRoleToUsers from "./useGrantRoleToUsers";
 import LoadingSpinner from "components/icons/LoadingSpinner";
+import { Link } from "react-router-dom";
 
 const GrantRoleToUsers = () => {
   const {
@@ -69,7 +70,15 @@ const GrantRoleToUsers = () => {
             ))}
           </CustomSelect>
 
-          <div className="flex items-center justify-between mt-6">
+          <div className="flex items-center gap-3 mt-6">
+            <Link to={-1}>
+              <Button
+                color="secondary"
+                className="w-max min-w-[135px] flex justify-center"
+              >
+                უკან
+              </Button>
+            </Link>
             <Button
               disabled={isNaN(selectedRole) || selectedUsers.length === 0}
               onClick={submitHandler}

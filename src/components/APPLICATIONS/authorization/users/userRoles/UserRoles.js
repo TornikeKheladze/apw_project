@@ -21,11 +21,11 @@ export default function UserRoles() {
   return (
     <div className=" relative h-max ">
       <Alert message={alert.message} color={alert.type} dismissable />
-      <h4>მომხმარებლის როლები</h4>
+      <h4>როლის მინიჭება</h4>
       {isLoading ? (
         <p className="mt-6">იტვირთება...</p>
       ) : (
-        <div className="search-select mt-5">
+        <div className="search-select mt-3">
           <Tippy
             className=" h-full"
             content={
@@ -62,39 +62,40 @@ export default function UserRoles() {
             animation="shift-toward-extreme"
             disabled={actionLoading}
           >
-            <label className="form-control-addon-within flex-row-reverse relative py-2">
+            <div className="relative">
               {actionLoading && (
                 <span className="absolute right-0 top-1/2 -translate-y-1/2">
                   <LoadingSpinner />
                 </span>
               )}
               <input
-                className="form-control ltr:pl-2 rtl:pr-2 border-none md:w-[70%] w-1/3 h-10"
-                placeholder="Search"
+                className="form-control"
+                placeholder="როლის ძიება..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <span className="flex gap-1 items-center ltr:pl-2 rtl:pr-2 md:w-[30%]  w-2/3 flex-wrap">
-                {selectedRoles.map((selectedRole) => (
-                  <span
-                    key={selectedRole.id + Math.random()}
-                    className="badge badge_primary w-max"
-                  >
-                    {selectedRole.name}
-                    {authorizedUser.superAdmin || authorizedUser.isSip ? (
-                      <button
-                        type="button"
-                        className="ltr:ml-1 rtl:mr-1 la la-times"
-                        onClick={() => removeFromSelectedRoles(selectedRole)}
-                      ></button>
-                    ) : (
-                      <></>
-                    )}
-                  </span>
-                ))}
-              </span>
-            </label>
+            </div>
           </Tippy>
+          <h4 className="mt-5 mb-2">მომხმარებლის როლები</h4>
+          <div className="flex gap-1 items-center flex-wrap">
+            {selectedRoles.map((selectedRole) => (
+              <span
+                key={selectedRole.id + Math.random()}
+                className="badge badge_primary w-max"
+              >
+                {selectedRole.name}
+                {authorizedUser.superAdmin || authorizedUser.isSip ? (
+                  <button
+                    type="button"
+                    className="ltr:ml-1 rtl:mr-1 la la-times"
+                    onClick={() => removeFromSelectedRoles(selectedRole)}
+                  ></button>
+                ) : (
+                  <></>
+                )}
+              </span>
+            ))}
+          </div>
         </div>
       )}
     </div>
