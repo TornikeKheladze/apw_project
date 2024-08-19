@@ -1,4 +1,5 @@
 import Tippy from "@tippyjs/react";
+import Button from "components/Button";
 import CheckOrNotIcon from "components/icons/CheckOrNotIcon";
 import DetailsIcon from "components/icons/DetailsIcon";
 import DownloadIcon from "components/icons/DownloadIcon";
@@ -7,6 +8,15 @@ import NewSignIcon from "components/icons/NewSignIcon";
 const AuthActions = ({ actions, row }) => {
   return (
     <div className="flex gap-2 justify-evenly">
+      {actions.statementDetails && (
+        <Button
+          color="info"
+          onClick={() => actions.statementDetails(row)}
+          className="p-1 text-xs whitespace-nowrap"
+        >
+          განცხადების ნახვა
+        </Button>
+      )}
       {actions.detailClick && (
         <Tippy
           theme="light-border tooltip"

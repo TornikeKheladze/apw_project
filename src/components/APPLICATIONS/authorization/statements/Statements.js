@@ -280,7 +280,8 @@ const Statements = () => {
             created_at: item.created_at ? convertDate(item.created_at) : "",
           }))}
           actions={{
-            detailClick: (item) => navigate(`/agreements/details/${item.id}`),
+            statementDetails: (item) =>
+              navigate(`/agreements/details/${item.id}`),
           }}
         />
       </div>

@@ -41,7 +41,7 @@ const Logs = () => {
     : JSON.parse(modal.data.request);
 
   return (
-    <main className="workspace">
+    <main className="workspace overflow-hidden">
       {isLoading ? <LoadingSpinner blur /> : <></>}
       <Modal
         active={modal.open}

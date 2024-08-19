@@ -640,6 +640,16 @@ const MenuDetailAuth = () => {
         ) : (
           <></>
         )}
+        {user.superAdmin ? (
+          <>
+            <NavLink to={"logs"} onClick={hideMenuDetail}>
+              <HeadersIcon />
+              ლოგები
+            </NavLink>
+          </>
+        ) : (
+          <></>
+        )}
 
         <hr />
       </div>

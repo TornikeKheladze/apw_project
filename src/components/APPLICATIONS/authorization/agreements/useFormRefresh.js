@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 export const useFormRefresh = ({
   setFormData,
@@ -19,21 +19,26 @@ export const useFormRefresh = ({
       }));
     }
   };
+  const formInputData = useMemo(
+    () => localStorage.getItem("agreementForm"),
+    []
+  );
+  console.log(formInputData);
 
   useEffect(() => {
     // Load form data from localStorage on component mount
-    const savedData = localStorage.getItem("agreementForm");
+    const savedData = formInputData;
     if (savedData && isGovInfoFetched) {
       const parsedData = JSON.parse(savedData);
       for (const [key, value] of Object.entries(parsedData)) {
         setValue(key, value);
       }
     }
-  }, [setValue, isGovInfoFetched]);
+  }, [setValue, isGovInfoFetched, formInputData]);
 
   useEffect(() => {
-    setFormData(JSON.parse(localStorage.getItem("agreementForm")) || {});
-  }, [setFormData]);
+    setFormData(JSON.parse(formInputData) || {});
+  }, [setFormData, formInputData]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {

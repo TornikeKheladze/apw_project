@@ -89,9 +89,9 @@ const Sips = () => {
         });
       }, 3000);
     },
-    onError: () => {
+    onError: (data) => {
       setAlert({
-        message: "დამატება ვერ მოხერხდა",
+        message: data.response.data.message,
         type: "danger",
       });
     },
@@ -118,9 +118,9 @@ const Sips = () => {
         });
       }, 3000);
     },
-    onError: () => {
+    onError: (data) => {
       setAlert({
-        message: "ცვლილება ვერ მოხერხდა",
+        message: data.response.data.message,
         type: "danger",
       });
     },
