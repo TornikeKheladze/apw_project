@@ -293,7 +293,7 @@ Switch
 
     &:checked {
       + span {
-        @apply bg-primary;
+        @apply bg-success;
 
         &:before {
           @apply border-primary;

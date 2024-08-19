@@ -2,8 +2,7 @@ import Tippy from "@tippyjs/react";
 import Alert from "components/Alert";
 import Button from "components/Button";
 import Modal, { ModalFooter, ModalHeader } from "components/Modal";
-import CheckedIcon from "components/icons/CheckedIcon";
-import ErrorIcon from "components/icons/ErrorIcon";
+import Switch from "components/form/Switch";
 import LoadingSpinner from "components/icons/LoadingSpinner";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -12,7 +11,6 @@ import { getPositionById } from "services/positions";
 import { deleteUser, updateUserData } from "services/users";
 
 const UserList = ({ users, isLoading, departments }) => {
-  const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState({ id: "" });
   const [alert, setAlert] = useState({ message: "", type: "success" });
@@ -42,14 +40,12 @@ const UserList = ({ users, isLoading, departments }) => {
     }
   };
   const afterRequestHandler = (message, type) => {
-    if (type === "success") queryClient.invalidateQueries("getUsers");
+    queryClient.invalidateQueries(["getUsers", type, id]);
     setAlert({
       message,
       type,
     });
-    setTimeout(() => {
-      setOpenModal(false);
-    }, 1600);
+
     setTimeout(() => {
       setAlert({
         message: "",
@@ -60,13 +56,7 @@ const UserList = ({ users, isLoading, departments }) => {
 
   const { isLoading: activateLoading, mutate: editMutate } = useMutation({
     mutationFn: updateUserData,
-    onSuccess: () =>
-      afterRequestHandler(
-        `მომხმარებელი ${selectedUser.name} ${
-          selectedUser.active ? "არა აქტიურია" : "აქტიურია"
-        }`,
-        "success"
-      ),
+    onSuccess: () => afterRequestHandler("Success", "success"),
     onError: (data) =>
       afterRequestHandler(data.response.data.description, "danger"),
   });
@@ -85,38 +75,7 @@ const UserList = ({ users, isLoading, departments }) => {
   return (
     <>
       <Alert message={alert.message} color={alert.type} dismissable />
-      <Modal active={openModal} centered onClose={() => setOpenModal(false)}>
-        <ModalHeader>მომხმარებლის სტატუსი</ModalHeader>
-        <div className="p-5">
-          მომხმარებელი {`${selectedUser.name} ${selectedUser.l_name}`}
-          {selectedUser.active ? (
-            <span className="text-success"> აქტიურია</span>
-          ) : (
-            <span className="text-danger"> არ არის აქტიური</span>
-          )}
-        </div>
-        <ModalFooter>
-          <Button
-            className="w-32"
-            onClick={() =>
-              editMutate({
-                ...selectedUser,
-                id: selectedUser.id,
-                active: selectedUser.active ? 0 : 1,
-              })
-            }
-            color={selectedUser.active ? "danger" : "success"}
-          >
-            {activateLoading ? (
-              <LoadingSpinner />
-            ) : selectedUser.active ? (
-              "დეაქტივაცია"
-            ) : (
-              "აქტივაცია"
-            )}
-          </Button>
-        </ModalFooter>
-      </Modal>
+      {activateLoading && <LoadingSpinner blur />}
       <Modal
         active={deleteModal}
         centered
@@ -176,6 +135,26 @@ const UserList = ({ users, isLoading, departments }) => {
                     interactive
                     animation="scale"
                     appendTo={document.body}
+                    content="სტატუსის გააქტიურება"
+                  >
+                    <Switch
+                      onChange={(e) => {
+                        editMutate({
+                          ...user,
+                          id: user.id,
+                          active: e.target.checked ? 1 : 0,
+                        });
+                      }}
+                      defaultChecked={user.active}
+                    />
+                  </Tippy>
+                  <Tippy
+                    theme="light-border tooltip"
+                    touch={["hold", 500]}
+                    offset={[0, 12]}
+                    interactive
+                    animation="scale"
+                    appendTo={document.body}
                     content="რედაქტირება"
                   >
                     <Link
@@ -184,38 +163,6 @@ const UserList = ({ users, isLoading, departments }) => {
                     >
                       <span className="la la-pen-fancy"></span>
                     </Link>
-                  </Tippy>
-
-                  <Tippy
-                    theme="light-border tooltip"
-                    touch={["hold", 500]}
-                    offset={[0, 12]}
-                    interactive
-                    animation="scale"
-                    appendTo={document.body}
-                    content={user.active ? "აქტიური" : "არააქტიური"}
-                  >
-                    {user.active ? (
-                      <button
-                        onClick={() => {
-                          setSelectedUser(user);
-                          setOpenModal(true);
-                        }}
-                        className="btn btn-icon btn_outlined btn_success p-1 text-success"
-                      >
-                        <CheckedIcon />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          setSelectedUser(user);
-                          setOpenModal(true);
-                        }}
-                        className="btn btn-icon btn_outlined btn_danger bg-danger text-danger"
-                      >
-                        <ErrorIcon />
-                      </button>
-                    )}
                   </Tippy>
                   <Tippy
                     theme="light-border tooltip"
