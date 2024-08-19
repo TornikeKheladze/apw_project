@@ -53,10 +53,11 @@ const UserEditForm = () => {
           navigate(`/user/edit/${data.data.user.id}?activeIndex=2`);
         }, 2500);
       },
-      onError: (data) => {
-        console.log(data.response.data);
-        afterRequestHandler(data.response.data.description, "danger");
-      },
+      onError: (data) =>
+        setAlert({
+          message: data.response.data.description,
+          type: "success",
+        }),
     });
   const { mutate: updateUserMutate, isLoading: updateUserLoading } =
     useMutation({
@@ -67,9 +68,11 @@ const UserEditForm = () => {
           "success"
         );
       },
-      onError: (data) => {
-        afterRequestHandler(data.response.data.description, "danger");
-      },
+      onError: (data) =>
+        setAlert({
+          message: data.response.data.description,
+          type: "success",
+        }),
     });
 
   const onSubmit = (data) => {
