@@ -46,6 +46,13 @@ const UserForm = (props) => {
           setValue("tell", updateDataObj[field.name]?.slice(3));
         } else if (field.type === "date") {
           setValue(field.name, updateDataObj[field.name]?.split(" ")[0]);
+        } else if (field.name === "has_ring_number") {
+          if (updateDataObj.ring_number) {
+            setValue("has_ring_number", 1);
+            setValue("ring_number", updateDataObj.ring_number);
+          } else {
+            setValue("has_ring_number", 0);
+          }
         } else {
           setValue(field.name, updateDataObj[field.name]);
         }
@@ -104,9 +111,13 @@ const UserForm = (props) => {
                 name={name}
                 register={register}
                 className={`${errors[name] ? "border-danger" : ""}`}
-                rules={{
-                  required: "ველი აუცილებელია",
-                }}
+                rules={
+                  notRequired
+                    ? {}
+                    : {
+                        required: "ველი აუცილებელია",
+                      }
+                }
               >
                 <option disabled value="">
                   {label}

@@ -56,7 +56,7 @@ const UserEditForm = () => {
       onError: (data) =>
         setAlert({
           message: data.response.data.description,
-          type: "success",
+          type: "danger",
         }),
     });
   const { mutate: updateUserMutate, isLoading: updateUserLoading } =
@@ -71,12 +71,13 @@ const UserEditForm = () => {
       onError: (data) =>
         setAlert({
           message: data.response.data.description,
-          type: "success",
+          type: "danger",
         }),
     });
 
   const onSubmit = (data) => {
     const tell = `995${data?.tell}`;
+    const ring_number = +data?.has_ring_number ? data?.ring_number : null;
     const userData = {
       oid: oid || data?.oid.id,
       did: did || data?.did.id,
@@ -86,6 +87,7 @@ const UserEditForm = () => {
       createUserMutate({
         ...data,
         ...userData,
+        ring_number,
         tell,
         active: 0,
         account_type: 0,
@@ -95,6 +97,7 @@ const UserEditForm = () => {
         ...fetchedUserData,
         ...data,
         ...userData,
+        ring_number,
         tell,
         id,
         active: data?.active,
