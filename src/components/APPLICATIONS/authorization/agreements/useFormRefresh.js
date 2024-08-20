@@ -23,7 +23,8 @@ export const useFormRefresh = ({
     () => localStorage.getItem("agreementForm"),
     []
   );
-  console.log(formInputData);
+
+  // console.log(formInputData);
 
   useEffect(() => {
     // Load form data from localStorage on component mount

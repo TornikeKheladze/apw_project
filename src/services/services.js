@@ -3,6 +3,9 @@ import { instance } from "./axios";
 export const getAllServices = () => {
   return instance.get("/billing-java/services");
 };
+export const getServicesByOwnerId = (ownerId) => {
+  return instance.get(`/billing-java/services/by-owner/${ownerId}`);
+};
 
 export const getServiceById = async (id) => {
   return instance.get(`/billing-java/services/get/${id}`);

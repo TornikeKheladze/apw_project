@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { getStatementById } from "services/organizations";
+import NewAgreement from "./NewAgreement";
 
 const AgreementDetails = () => {
   const { id } = useParams();
@@ -17,8 +18,8 @@ const AgreementDetails = () => {
     queryKey: ["getStatementById", id],
     queryFn: () => getStatementById(id).then((res) => res.data.data),
   });
-  console.log(statement);
-  return <div></div>;
+  // console.log(statement);
+  return <NewAgreement disableFields statement={statement} />;
 };
 
 export default AgreementDetails;

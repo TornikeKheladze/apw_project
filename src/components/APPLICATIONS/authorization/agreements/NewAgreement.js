@@ -24,7 +24,7 @@ import {
 import { BuildAvtFields, BuildFields } from "./BuildFields";
 import { uploadDocument } from "services/documents";
 
-const NewAgreement = () => {
+const NewAgreement = ({ disableFields }) => {
   const { authOrg } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
 
@@ -322,6 +322,7 @@ const NewAgreement = () => {
                   label={`მომხმარებელი:${uPackage.count}, ვადა:${uPackage.exp} თვე, ფასი: ${uPackage.price}`}
                   checked={selectedUserPackage.includes(uPackage.id)}
                   onChange={(event) => handleCheckboxChange(event, uPackage.id)}
+                  disabled={disableFields ? true : false}
                 />
               ))}
             </div>
@@ -352,6 +353,7 @@ const NewAgreement = () => {
                   onChange={(event) =>
                     handleServiceCheckboxChange(event, service.serviceID)
                   }
+                  disabled={disableFields ? true : false}
                 />
               ))}
             </div>
@@ -369,8 +371,11 @@ const NewAgreement = () => {
               register={register}
               className={`${errors.contract_exp ? "border-danger" : ""}`}
               rules={{ required: "ველი აუცილებელია" }}
+              disabled={disableFields ? true : false}
             >
-              <option value="">ხელშეკრულების ვადა</option>
+              <option value="" disabled>
+                ხელშეკრულების ვადა
+              </option>
               {contractDates?.map((item) => (
                 <option
                   className="p-3"
@@ -413,6 +418,7 @@ const NewAgreement = () => {
               register={register}
               className={`${errors.payment_period ? "border-danger" : ""}`}
               rules={{ required: "ველი აუცილებელია" }}
+              disabled={disableFields ? true : false}
             >
               <option value="">გადახდის პერიოდულობა</option>
               {govInfo.payment_period?.map((item) => (
@@ -464,6 +470,7 @@ const NewAgreement = () => {
               register={register}
               rules={{}}
               onChange={handleFileChange}
+              disabled={disableFields ? true : false}
             />
           </div>
           <div>
@@ -475,6 +482,7 @@ const NewAgreement = () => {
               step="any"
               register={register}
               rules={{}}
+              disabled={disableFields ? true : false}
             />
           </div>
           <div>
@@ -490,6 +498,7 @@ const NewAgreement = () => {
               {...register("desc")}
               className="form-control"
               maxLength={250}
+              disabled={disableFields ? true : false}
             />
           </div>
           <div className="border p-2 rounded-md">
@@ -521,6 +530,7 @@ const NewAgreement = () => {
                     register={register}
                     rules={{}}
                     className="w-4/5"
+                    disabled={disableFields ? true : false}
                   />
                   <button
                     type="button"
@@ -545,6 +555,7 @@ const NewAgreement = () => {
                 errors={errors}
                 register={register}
                 staticArr={fizikuriArr}
+                disabled={disableFields ? true : false}
               />
             </div>
             <div className="border p-2 border-gray-500 rounded-md">
@@ -554,6 +565,7 @@ const NewAgreement = () => {
                 register={register}
                 staticArr={legalUser}
                 selectOptions={legalOptions}
+                disabled={disableFields ? true : false}
               />
 
               <div className="border p-3 mt-2 rounded-md">
@@ -562,6 +574,7 @@ const NewAgreement = () => {
                   errors={errors}
                   register={register}
                   staticArr={uflebamosiliArr}
+                  disabled={disableFields ? true : false}
                 />
               </div>
             </div>
@@ -572,36 +585,48 @@ const NewAgreement = () => {
             {userFields.map((item, index) => (
               <div key={item.id} className="border p-3 mt-2 rounded-md">
                 <div className="text-right">
-                  <button
-                    onClick={() => userRemove(index)}
-                    type="button"
-                    className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
-                  >
-                    <span className="la la-trash-alt"></span>
-                  </button>
+                  {disableFields ? (
+                    <></>
+                  ) : (
+                    <button
+                      onClick={() => userRemove(index)}
+                      type="button"
+                      className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
+                    >
+                      <span className="la la-trash-alt"></span>
+                    </button>
+                  )}
                 </div>
-                <BuildAvtFields index={index} register={register} />
+                <BuildAvtFields
+                  index={index}
+                  register={register}
+                  disabled={disableFields ? true : false}
+                />
               </div>
             ))}
-            <Button
-              type="button"
-              className="p-2 my-3"
-              onClick={() =>
-                userAppend({
-                  contact_info: "",
-                  email: "",
-                  lname: "",
-                  name: "",
-                  personal_number: "",
-                  tell: "",
-                  user_date_expiration: "",
-                  comment: "",
-                })
-              }
-            >
-              ახალი წარმომადგენლის დამატება
-              <PlusIcon />
-            </Button>
+            {disableFields ? (
+              <></>
+            ) : (
+              <Button
+                type="button"
+                className="p-2 my-3"
+                onClick={() =>
+                  userAppend({
+                    contact_info: "",
+                    email: "",
+                    lname: "",
+                    name: "",
+                    personal_number: "",
+                    tell: "",
+                    user_date_expiration: "",
+                    comment: "",
+                  })
+                }
+              >
+                ახალი წარმომადგენლის დამატება
+                <PlusIcon />
+              </Button>
+            )}
 
             <div className="mt-2">
               <Label className={`block mb-1  `}>
@@ -616,6 +641,7 @@ const NewAgreement = () => {
                 {...register("auth_desc")}
                 className="form-control"
                 maxLength={250}
+                disabled={disableFields ? true : false}
               />
             </div>
             <div className="border p-2 rounded-md mt-2">
@@ -666,52 +692,83 @@ const NewAgreement = () => {
           </div>
           <div className="border p-2 rounded-md mt-2">
             <h4>დანართების დამატება</h4>
-            <Button
-              type="button"
-              className="p-2 mb-3"
-              onClick={() =>
-                danartiAppend({
-                  file: "",
-                })
-              }
-            >
-              ფაილის დამატება
-              <PlusIcon />
-            </Button>
-
             {danartiFields.map((item, index) => {
               return (
                 <div
-                  className="mb-1 flex items-center justify-between"
+                  className="mb-1 flex items-center justify-between border p-2 rounded-md border-gray-700"
                   key={item.id}
                 >
-                  <CustomInput
-                    name={`danarti.${index}.file`}
-                    type="file"
-                    step="any"
-                    register={register}
-                    rules={{}}
-                    className="w-4/5"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => danartiRemove(index)}
-                    className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
-                  >
-                    <span className="la la-trash-alt"></span>
-                  </button>
+                  <div className="w-4/5">
+                    <Label
+                      htmlFor={`danarti.${index}.name`}
+                      className={`block mb-1`}
+                    >
+                      ფაილის დასახელება
+                    </Label>
+                    <CustomInput
+                      id={`danarti.${index}.name`}
+                      name={`danarti.${index}.name`}
+                      type="text"
+                      step="any"
+                      register={register}
+                      rules={{}}
+                      className="h-11 mb-1"
+                      placeholder="ფაილის დასახელება"
+                      disabled={disableFields ? true : false}
+                    />
+                    <CustomInput
+                      name={`danarti.${index}.file`}
+                      type="file"
+                      step="any"
+                      register={register}
+                      rules={{}}
+                      disabled={disableFields ? true : false}
+                    />
+                  </div>
+                  {disableFields ? (
+                    <></>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => danartiRemove(index)}
+                      className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
+                    >
+                      <span className="la la-trash-alt"></span>
+                    </button>
+                  )}
                 </div>
               );
             })}
+            {disableFields ? (
+              <></>
+            ) : (
+              <Button
+                type="button"
+                className="p-2 mt-3"
+                onClick={() =>
+                  danartiAppend({
+                    file: "",
+                    name: "",
+                  })
+                }
+              >
+                ფაილის დამატება
+                <PlusIcon />
+              </Button>
+            )}
           </div>
-          <div className="flex gap-2">
-            <Button onClick={saveForm} type="button">
-              დამახსოვრება
-            </Button>
-            <Button color="success" type="submit">
-              დადასტურება
-            </Button>
-          </div>
+          {disableFields ? (
+            <></>
+          ) : (
+            <div className="flex gap-2">
+              <Button onClick={saveForm} type="button">
+                დამახსოვრება
+              </Button>
+              <Button color="success" type="submit">
+                დადასტურება
+              </Button>
+            </div>
+          )}
         </form>
       </div>
     </main>

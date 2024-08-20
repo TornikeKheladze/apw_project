@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { removeEmpty } from "helpers/removeEmpty";
-import { getAllServices, updateService } from "services/services";
+import { getServicesByOwnerId, updateService } from "services/services";
 import { idToName } from "helpers/idToName";
 import { filterArray } from "helpers/filterArray";
 import { useMutation, useQuery } from "react-query";
@@ -21,8 +21,10 @@ export const useServices = () => {
   const { authorizedUser } = useSelector((store) => store.user);
 
   const { data: servicesData = [{}], isLoading: servicesLoading } = useQuery({
-    queryKey: "getAllServices",
-    queryFn: () => getAllServices().then((res) => res.data),
+    queryKey: ["getServicesByOwnerId", authorizedUser.oid],
+    queryFn: () =>
+      getServicesByOwnerId(authorizedUser.oid).then((res) => res.data),
+    enabled: authorizedUser.oid ? true : false,
   });
 
   const { data: categoriesData = [{}], isLoading: categoriesLoading } =

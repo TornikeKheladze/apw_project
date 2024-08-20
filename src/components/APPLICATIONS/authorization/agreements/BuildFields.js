@@ -1,7 +1,13 @@
 import { avtorizirebuliArr } from "components/APPLICATIONS/billing/formArrays/agreementArr";
 import CustomSelect from "components/form/CustomSelect";
 
-export const BuildFields = ({ staticArr, errors, register, selectOptions }) => {
+export const BuildFields = ({
+  staticArr,
+  errors,
+  register,
+  selectOptions,
+  disabled,
+}) => {
   return staticArr.map((item) => {
     return (
       <div key={item.name}>
@@ -17,6 +23,7 @@ export const BuildFields = ({ staticArr, errors, register, selectOptions }) => {
             register={register}
             className={`${errors[item.name] ? "border-danger" : ""}`}
             rules={item.required ? { required: "ველი აუცილებელია" } : {}}
+            disabled={disabled}
           >
             {selectOptions[item.name].map((item) => (
               <option className="p-3" key={item.id + item.name} value={item.id}>
@@ -35,6 +42,7 @@ export const BuildFields = ({ staticArr, errors, register, selectOptions }) => {
             className={`form-control ${
               errors[item.name] ? "border-danger" : ""
             }`}
+            disabled={disabled}
           />
         )}
       </div>
@@ -42,7 +50,7 @@ export const BuildFields = ({ staticArr, errors, register, selectOptions }) => {
   });
 };
 
-export const BuildAvtFields = ({ register, index }) => {
+export const BuildAvtFields = ({ register, index, disabled }) => {
   const roleComment = [
     {
       name: "მენეჯერი",
@@ -63,6 +71,7 @@ export const BuildAvtFields = ({ register, index }) => {
             name={`user.${index}.comment`}
             register={register}
             rules={{ required: "ველი აუცილებელია" }}
+            disabled={disabled}
           >
             {roleComment.map((item) => (
               <option
@@ -90,6 +99,7 @@ export const BuildAvtFields = ({ register, index }) => {
             step="any"
             required={item.required || false}
             className="form-control"
+            disabled={disabled}
           />
         </div>
       );
