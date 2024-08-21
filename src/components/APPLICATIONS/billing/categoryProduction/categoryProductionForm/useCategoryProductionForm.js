@@ -31,6 +31,7 @@ export const useCategoryProductionForm = () => {
       });
     } else {
       queryClient.invalidateQueries("getCategoryProduction");
+      localStorage.removeItem("formInputData");
       setAlert({
         message: `${message} წარმატებულია`,
         type: "success",

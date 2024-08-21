@@ -31,6 +31,7 @@ export const useServicePricesForm = () => {
       }, 2500);
     } else {
       queryClient.invalidateQueries("getPrices");
+      localStorage.removeItem("formInputData");
       setAlert({
         message: `${message} წარმატებულია`,
         type: "success",

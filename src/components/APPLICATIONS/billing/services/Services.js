@@ -66,7 +66,11 @@ const Services = () => {
             optionsObj={{
               categoryID: categories,
             }}
-            actions={{ details: true, edit: true, activation }}
+            actions={{
+              details: true,
+              edit: true,
+              activation,
+            }}
           />
         )}
 

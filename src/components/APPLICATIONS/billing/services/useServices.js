@@ -47,7 +47,10 @@ export const useServices = () => {
   const { mutate: updateMutate, isLoading: updateLoading } = useMutation({
     mutationFn: (id) => updateService(id),
     onSuccess: () => {
-      queryClient.invalidateQueries("getAllServices");
+      queryClient.invalidateQueries([
+        "getServicesByOwnerId",
+        authorizedUser.oid,
+      ]);
       setAlert({ message: "სერვისი წარმატებით შეიცვალა", type: "success" });
       setTimeout(() => {
         setAlert({ message: "", type: "success" });
@@ -64,7 +67,8 @@ export const useServices = () => {
       if (!authorizedUser.isSip && !authorizedUser.superAdmin)
         return service.applicantRegistrationApi === 1;
       return service;
-    });
+    })
+    .sort((a, b) => b.id - a.id);
 
   const categories = categoriesData.map((category) => ({
     ...category,

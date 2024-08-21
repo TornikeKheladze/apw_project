@@ -32,6 +32,7 @@ export const useApiCredentialsForm = () => {
       }, 2500);
     } else {
       queryClient.invalidateQueries("getApiCredentials");
+      localStorage.removeItem("formInputData");
       setAlert({
         message: `${message} წარმატებულია`,
         type: "success",

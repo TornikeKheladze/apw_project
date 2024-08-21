@@ -38,34 +38,35 @@ const useGeneralForm = (formArray, updateDataObj) => {
     }));
   };
 
-  useEffect(() => {
-    setFormData(JSON.parse(localStorage.getItem("formInputData")) || {});
-  }, []);
+  // useEffect(() => {
+  //   setFormData(JSON.parse(localStorage.getItem("formInputData")) || {});
+  // }, []);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      localStorage.setItem("formInputData", JSON.stringify(formData));
-    }, 1000);
+  // useEffect(() => {
+  //   const timeoutId = setTimeout(() => {
+  //     localStorage.setItem("formInputData", JSON.stringify(formData));
+  //   }, 1000);
 
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [formData]);
+  //   return () => {
+  //     clearTimeout(timeoutId);
+  //   };
+  // }, [formData]);
 
   useEffect(() => {
     if (updateDataObj) {
       formArray.forEach((field) => {
         setValue(field.name, updateDataObj[field.name]);
       });
-    } else if (localStorage.getItem("formInputData")) {
-      formArray.forEach((field) => {
-        if (field.name !== "tell")
-          setValue(
-            field.name,
-            JSON.parse(localStorage.getItem("formInputData"))[field.name]
-          );
-      });
     }
+    // else if (localStorage.getItem("formInputData")) {
+    //   formArray.forEach((field) => {
+    //     if (field.name !== "tell")
+    //       setValue(
+    //         field.name,
+    //         JSON.parse(localStorage.getItem("formInputData"))[field.name]
+    //       );
+    //   });
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateDataObj]);
 

@@ -69,10 +69,12 @@ export const useSales = () => {
     }
   );
 
-  const sales = salesData.map((sale) => ({
-    ...sale,
-    id: sale.saleID,
-  }));
+  const sales = salesData
+    .map((sale) => ({
+      ...sale,
+      id: sale.saleID,
+    }))
+    .sort((a, b) => b.id - a.id);
 
   const categories = categoriesArr.map((category) => ({
     ...category,

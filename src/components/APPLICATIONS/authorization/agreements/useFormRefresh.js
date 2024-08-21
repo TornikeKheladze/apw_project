@@ -9,6 +9,7 @@ export const useFormRefresh = ({
   setSelectedUserPackage,
   setSelectedService,
   isGovInfoFetched,
+  defaultData,
 }) => {
   // ფორმის ავტომატური შევსების ლოგიკა არი ამ ჰუკში
   const handleFormChange = (e) => {
@@ -19,26 +20,24 @@ export const useFormRefresh = ({
       }));
     }
   };
-  const formInputData = useMemo(
-    () => localStorage.getItem("agreementForm"),
-    []
-  );
 
-  // console.log(formInputData);
+  const formInputData = useMemo(() => {
+    if (defaultData) return defaultData;
+    return localStorage.getItem("agreementForm")
+      ? JSON.parse(localStorage.getItem("agreementForm"))
+      : null;
+  }, [defaultData]);
 
   useEffect(() => {
-    // Load form data from localStorage on component mount
-    const savedData = formInputData;
-    if (savedData && isGovInfoFetched) {
-      const parsedData = JSON.parse(savedData);
-      for (const [key, value] of Object.entries(parsedData)) {
+    if (formInputData && isGovInfoFetched) {
+      for (const [key, value] of Object.entries(formInputData)) {
         setValue(key, value);
       }
     }
   }, [setValue, isGovInfoFetched, formInputData]);
 
   useEffect(() => {
-    setFormData(JSON.parse(formInputData) || {});
+    setFormData(formInputData || {});
   }, [setFormData, formInputData]);
 
   useEffect(() => {

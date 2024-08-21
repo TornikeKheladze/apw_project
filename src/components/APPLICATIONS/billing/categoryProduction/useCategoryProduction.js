@@ -62,16 +62,17 @@ export const useCategoryProduction = () => {
     name: cat.categoryName,
   }));
 
-  const updatedList = filterArray(categoryProduction, removeEmpty(filter))?.map(
-    (catProduction) => {
-      return {
-        ...catProduction,
-        agentID: idToName(organizations, catProduction.agentID),
-        catID: idToName(categories, catProduction.catID),
-        status: statusBadge(catProduction.status),
-      };
-    }
-  );
+  const updatedList = filterArray(
+    categoryProduction.sort((a, b) => b.id - a.id),
+    removeEmpty(filter)
+  )?.map((catProduction) => {
+    return {
+      ...catProduction,
+      agentID: idToName(organizations, catProduction.agentID),
+      catID: idToName(categories, catProduction.catID),
+      status: statusBadge(catProduction.status),
+    };
+  });
 
   const selectOptions = {
     agentID: organizations,

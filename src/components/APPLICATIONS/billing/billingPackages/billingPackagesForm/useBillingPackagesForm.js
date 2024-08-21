@@ -34,6 +34,7 @@ export const useBillingPackagesForm = () => {
       }, 2500);
     } else {
       queryClient.invalidateQueries("getBillingPackages");
+      localStorage.removeItem("formInputData");
       setAlert({
         message: `${message} წარმატებულია`,
         type: "success",

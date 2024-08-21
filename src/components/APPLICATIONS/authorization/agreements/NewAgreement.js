@@ -24,7 +24,7 @@ import {
 import { BuildAvtFields, BuildFields } from "./BuildFields";
 import { uploadDocument } from "services/documents";
 
-const NewAgreement = ({ disableFields }) => {
+const NewAgreement = ({ disableFields, defaultData }) => {
   const { authOrg } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({});
 
@@ -213,6 +213,7 @@ const NewAgreement = ({ disableFields }) => {
     setSelectedUserPackage,
     setSelectedService,
     isGovInfoFetched,
+    defaultData,
   });
 
   const handleCheckboxChange = (event, userId) => {
@@ -363,10 +364,12 @@ const NewAgreement = ({ disableFields }) => {
               className={`block mb-1  ${
                 errors.contract_exp ? "text-danger" : ""
               }`}
+              htmlFor="contract_exp"
             >
               ხელშეკრულების ვადა *
             </Label>
             <CustomSelect
+              id="contract_exp"
               name="contract_exp"
               register={register}
               className={`${errors.contract_exp ? "border-danger" : ""}`}
@@ -410,10 +413,12 @@ const NewAgreement = ({ disableFields }) => {
               className={`block mb-1  ${
                 errors.payment_period ? "text-danger" : ""
               }`}
+              htmlFor="payment_period"
             >
               გადახდის პერიოდულობა *
             </Label>
             <CustomSelect
+              id="payment_period"
               name="payment_period"
               register={register}
               className={`${errors.payment_period ? "border-danger" : ""}`}
@@ -438,10 +443,12 @@ const NewAgreement = ({ disableFields }) => {
                   className={`block mb-1  ${
                     errors.payment_methos_data ? "text-danger" : ""
                   }`}
+                  htmlFor="payment_methos_data"
                 >
                   აირჩიეთ კონკრეტული თარიღი *
                 </Label>
                 <CustomInput
+                  id="payment_methos_data"
                   name="payment_methos_data"
                   type="date"
                   step="any"
@@ -459,11 +466,12 @@ const NewAgreement = ({ disableFields }) => {
             )}
           </div>
           <div>
-            <Label className={`block mb-1  `}>
+            <Label htmlFor="conviction" className={`block mb-1  `}>
               ცნობა ნასამართლეობის შესახებ
             </Label>
             <CustomInput
               // temporary
+              id="conviction"
               name="conviction"
               type="file"
               step="any"
@@ -474,9 +482,12 @@ const NewAgreement = ({ disableFields }) => {
             />
           </div>
           <div>
-            <Label className={`block mb-1  `}>ცნობა ჯანმრთელობის შესახებ</Label>
+            <Label htmlFor="health" className={`block mb-1  `}>
+              ცნობა ჯანმრთელობის შესახებ
+            </Label>
             <CustomInput
               // temporary
+              id="health"
               name="health"
               type="file"
               step="any"
@@ -486,11 +497,12 @@ const NewAgreement = ({ disableFields }) => {
             />
           </div>
           <div>
-            <Label className={`block mb-1  `}>
+            <Label className={`block mb-1  `} htmlFor="desc">
               ინფორმაცია რომლის დამატებით მოწოდებაც საჭიროდ მიგაჩნიათ (250
               სიმბოლო)
             </Label>
             <textarea
+              id="desc"
               name="desc"
               rows="1"
               type="textarea"
@@ -629,11 +641,12 @@ const NewAgreement = ({ disableFields }) => {
             )}
 
             <div className="mt-2">
-              <Label className={`block mb-1  `}>
+              <Label className={`block mb-1  `} htmlFor="auth_desc">
                 ინფორმაცია რომლის დამატებით მოწოდებაც საჭიროდ მიგაჩნიათ (250
                 სიმბოლო)
               </Label>
               <textarea
+                id="auth_desc"
                 name="auth_desc"
                 rows="1"
                 type="textarea"

@@ -27,6 +27,7 @@ const BankRegister = () => {
         });
       }, 2500);
     } else {
+      localStorage.removeItem("formInputData");
       setAlert({
         message: `${message} წარმატებულია`,
         type: "success",

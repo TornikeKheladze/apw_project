@@ -59,10 +59,12 @@ export const useServiceProductions = () => {
     id: service.serviceID,
   }));
 
-  const productions = productionsData.map((production) => ({
-    ...production,
-    id: production.serviceProductionID,
-  }));
+  const productions = productionsData
+    .map((production) => ({
+      ...production,
+      id: production.serviceProductionID,
+    }))
+    .sort((a, b) => b.id - a.id);
 
   const updatedArr = filterArray(productions, removeEmpty(filter))?.map(
     (sProd) => {
