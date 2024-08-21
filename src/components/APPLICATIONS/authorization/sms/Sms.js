@@ -99,11 +99,6 @@ const Sms = () => {
     <main className="workspace">
       <Alert message={alert.message} color={alert.type} />
       <div className="lg:w-1/2 w-full mx-auto card mb-3 p-5">
-        <h4>
-          {authorizedUser.superAdmin
-            ? "ავტორიზირებული პირი ან უწყება"
-            : "ავტორიზირებული პირი"}
-        </h4>
         <Dropdown
           content={
             <div className="dropdown-menu min-w-[12rem]">
@@ -117,8 +112,17 @@ const Sms = () => {
             </div>
           }
         >
-          <Button className="uppercase mb-6 min-w-[12rem] flex justify-between w-1/2">
-            {truncateText(organization?.name, 40)}
+          <Button className="uppercase mb-6 min-w-[12rem] flex justify-between">
+            {organization.name ? (
+              truncateText(organization?.name, 40)
+            ) : (
+              <>
+                {authorizedUser.superAdmin
+                  ? "ავტორიზირებული პირი ან უწყება"
+                  : "ავტორიზირებული პირი"}
+              </>
+            )}
+            {/* {truncateText(organization?.name, 40)} */}
             <span className="ltr:ml-3 rtl:mr-3 la la-caret-down text-xl leading-none"></span>
           </Button>
         </Dropdown>
@@ -162,12 +166,12 @@ const Sms = () => {
               <Label htmlFor="smsText">შეტყობინება</Label>
               <Textarea
                 id="smsText"
+                className="my-3"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
               />
               <Button
                 disabled={selectedUsers.length === 0 || !text}
-                className="w-1/2"
                 onClick={sendSmsMutate}
               >
                 {sendSmsLoading ? <LoadingSpinner /> : "გაგზავნა"}

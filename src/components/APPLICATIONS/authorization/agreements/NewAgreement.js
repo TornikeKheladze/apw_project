@@ -316,7 +316,7 @@ const NewAgreement = ({ disableFields, defaultData }) => {
         >
           <div className="border p-2 rounded-md">
             <h4>მომხმარებლების სერვისები</h4>
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div className="flex flex-wrap gap-2 my-3">
               {govInfo.user_packages?.map((uPackage) => (
                 <Checkbox
                   key={uPackage.id + Math.random().toString()}
@@ -345,7 +345,7 @@ const NewAgreement = ({ disableFields, defaultData }) => {
           </div> */}
           <div className="border p-2 rounded-md">
             <h4>კატალოგის სერვისები</h4>
-            <div className="flex flex-wrap gap-2 mb-3">
+            <div className="flex flex-wrap gap-2 my-3">
               {govInfo.services?.map((service) => (
                 <Checkbox
                   key={service.serviceID + Math.random().toString()}
@@ -517,7 +517,7 @@ const NewAgreement = ({ disableFields, defaultData }) => {
             <h4>ფაილები დამატებითი ინფორმაციების საილუსტრაციოდ</h4>
             <Button
               type="button"
-              className="p-2 mb-3"
+              className="p-2 my-3"
               onClick={() =>
                 setAdditionalFiles((prevState) => [
                   ...prevState,
@@ -661,7 +661,7 @@ const NewAgreement = ({ disableFields, defaultData }) => {
               <h4>ფაილები დამატებითი ინფორმაციების საილუსტრაციოდ</h4>
               <Button
                 type="button"
-                className="p-2 mb-3"
+                className="p-2 my-3"
                 onClick={() =>
                   setAuthFiles((prevState) => [
                     ...prevState,
@@ -704,7 +704,7 @@ const NewAgreement = ({ disableFields, defaultData }) => {
             </div>
           </div>
           <div className="border p-2 rounded-md mt-2">
-            <h4>დანართების დამატება</h4>
+            <h4 className="mb-2">დანართების დამატება</h4>
             {danartiFields.map((item, index) => {
               return (
                 <div

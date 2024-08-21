@@ -10,7 +10,7 @@ export const BuildFields = ({
 }) => {
   return staticArr.map((item) => {
     return (
-      <div key={item.name}>
+      <div key={item.name} className="mb-3">
         <label
           htmlFor={item.name}
           className={`label ${errors[item.name] ? "text-danger" : ""}`}
@@ -65,7 +65,7 @@ export const BuildAvtFields = ({ register, index, disabled }) => {
   return avtorizirebuliArr.map((item) => {
     if (item.type === "select") {
       return (
-        <div key={item.name}>
+        <div key={item.name} className="mb-3">
           <label className="label">მინდობილობის როლი</label>
           <CustomSelect
             name={`user.${index}.comment`}
@@ -87,7 +87,7 @@ export const BuildAvtFields = ({ register, index, disabled }) => {
       );
     } else {
       return (
-        <div key={item.name}>
+        <div key={item.name} className="mb-3">
           <label htmlFor={`user.${index}.${item.name}`} className={"label"}>
             {item.label}
           </label>
