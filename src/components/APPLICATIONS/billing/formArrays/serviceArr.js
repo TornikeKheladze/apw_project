@@ -253,12 +253,12 @@ export const salesArr = [
   {
     name: "startDate",
     label: "დაწყების თარიღი",
-    type: "datetime-local",
+    type: "date",
   },
   {
     name: "endDate",
     label: "დასრულების თარიღი",
-    type: "datetime-local",
+    type: "date",
   },
 ];
 
@@ -381,12 +381,12 @@ export const packageProductionsArr = [
   {
     name: "startDate",
     label: "დაწყების თარიღი",
-    type: "datetime-local",
+    type: "date",
   },
   {
     name: "endDate",
     label: "დასრულების თარიღი",
-    type: "datetime-local",
+    type: "date",
   },
 ];
 

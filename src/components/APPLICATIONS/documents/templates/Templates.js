@@ -158,7 +158,7 @@ const Templates = () => {
               active: prevState.active === 0 ? 1 : 0,
             }));
           }}
-          className="p-1 text-xs"
+          className="p-2 text-xs"
         >
           {filter?.active === 0
             ? "აქტიური შაბლონების ნახვა"
@@ -188,12 +188,6 @@ const Templates = () => {
           chosenItem={chosenCategory}
           setChosenItem={setChosenCategory}
         />
-        <Button
-          onClick={() => setChosenCategory({})}
-          className="p-1 text-xs mt-2"
-        >
-          ფილტრის მოხსნა
-        </Button>
       </div>
 
       <div className="card p-5 overflow-x-auto">

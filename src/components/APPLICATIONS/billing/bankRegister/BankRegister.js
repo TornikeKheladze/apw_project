@@ -43,17 +43,17 @@ const BankRegister = () => {
     onSuccess(data) {
       mutateHandler(data, "ბანკის რეგისტრაცია");
     },
-    onError() {
+    onError(data) {
       setAlert({
-        message: `ბანკის რეგისტრაცია ვერ მოხერხდა`,
+        message: data.response.data.message,
         type: "danger",
       });
-      setTimeout(() => {
-        setAlert({
-          message: "",
-          type: "danger",
-        });
-      }, 2500);
+      // setTimeout(() => {
+      //   setAlert({
+      //     message: "",
+      //     type: "danger",
+      //   });
+      // }, 2500);
     },
   });
 

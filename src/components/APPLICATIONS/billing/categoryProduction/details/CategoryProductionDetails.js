@@ -38,7 +38,7 @@ const CategoryProductionDetails = () => {
     : organizationData.data || [];
   return (
     <DetailComponent
-      title="კარეგორიის მიწოდების"
+      title="კატეგორიის მიწოდების"
       staticArray={categoryProductionArr}
       updatedData={{
         ...categoryProduction,

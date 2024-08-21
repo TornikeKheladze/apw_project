@@ -62,7 +62,7 @@ const GrantRoleToUsers = () => {
       <div className="card p-5 lg:w-1/2 w-full mx-auto">
         <div className="mt-5">
           <CustomSelect value={selectedRole} onChange={roleChangeHandler}>
-            <option>აირჩიეთ როლი</option>
+            <option value={null}>აირჩიეთ როლი</option>
             {roles?.map((role) => (
               <option key={role.id + Math.random()} value={role.id}>
                 {role.name}

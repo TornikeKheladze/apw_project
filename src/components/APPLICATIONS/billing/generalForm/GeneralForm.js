@@ -37,15 +37,20 @@ const GeneralForm = (props) => {
               <Label
                 className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
               >
-                {label}
+                {label}{" "}
+                {notRequired ? <></> : <span className="text-danger">*</span>}
               </Label>
               <CustomSelect
                 name={name}
                 register={register}
                 className={`${errors[name] ? "border-danger" : ""}`}
-                rules={{
-                  required: "ველი აუცილებელია",
-                }}
+                rules={
+                  notRequired
+                    ? {}
+                    : {
+                        required: "ველი აუცილებელია",
+                      }
+                }
               >
                 <option disabled value="">
                   {label}
@@ -115,7 +120,8 @@ const GeneralForm = (props) => {
               <Label
                 className={`block mb-1  ${errors[name] ? "text-danger" : ""}`}
               >
-                {label}
+                {label}{" "}
+                {notRequired ? <></> : <span className="text-danger">*</span>}
               </Label>
 
               <CustomInput

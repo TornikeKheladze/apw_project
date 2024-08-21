@@ -72,7 +72,7 @@ const Table = ({
             >
               <Button className="rounded-lg w-full justify-center bg-info text-white flex gap-1 px-2 py-1 text-sm font-normal">
                 დამალვა
-                <span className="text-gray-300 dark:text-gray-700 la la-eye text-xl leading-none"></span>
+                <span className="dark:text-gray-700 la la-eye text-xl leading-none"></span>
               </Button>
             </Dropdown>
           </th>

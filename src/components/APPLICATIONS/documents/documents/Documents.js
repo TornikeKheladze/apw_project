@@ -413,12 +413,6 @@ const Documents = () => {
           chosenItem={chosenCategory}
           setChosenItem={setChosenCategory}
         />
-        <Button
-          onClick={() => setChosenCategory({})}
-          className="p-1 text-xs mt-2"
-        >
-          ფილტრის მოხსნა
-        </Button>
       </div>
 
       <div className="card p-5 overflow-x-auto">

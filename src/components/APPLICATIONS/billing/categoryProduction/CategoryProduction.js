@@ -19,7 +19,7 @@ const CategoryProduction = () => {
     <main className="workspace overflow-hidden pb-8">
       <BilHeader
         visible={true}
-        text={"კარეგორიის მიწოდება"}
+        text={"კატეგორიის მიწოდება"}
         url={"/billing/category-production/create"}
       />
       <div

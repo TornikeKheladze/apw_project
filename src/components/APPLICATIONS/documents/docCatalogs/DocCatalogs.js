@@ -95,11 +95,11 @@ const DocCatalogs = () => {
           </>
         )}
       </Modal>
-      <div className="w-full flex justify-between mb-4">
+      <div className="w-full flex gap-3 justify-between mb-4">
         <h3>კატეგორიები</h3>
-        <div className="flex gap-1">
+        <div className="flex gap-2 md:flex-row flex-col">
           <Button
-            className="p-1 text-sm"
+            className="p-2 text-sm flex items-center justify-between"
             onClick={() =>
               setOpenModal({ open: true, action: "დამატება", type: 0 })
             }
@@ -108,7 +108,7 @@ const DocCatalogs = () => {
             <FolderIcon className="ml-2 !w-4 !h-4" />
           </Button>
           <Button
-            className="p-1 text-sm"
+            className="p-2 text-sm flex items-center justify-between"
             onClick={() =>
               setOpenModal({ open: true, action: "დამატება", type: 1 })
             }

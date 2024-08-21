@@ -48,7 +48,11 @@ const CatalogTreeMenu = ({
                   pathname === "/documents/templates" ||
                   pathname === "/documents/documents"
                 ) {
-                  setChosenItem(catalog);
+                  if (chosenItem.id === catalog.id) {
+                    setChosenItem({});
+                  } else {
+                    setChosenItem(catalog);
+                  }
                 } else {
                   navigate(`/documents/categories/${catalog.id}`);
                 }
