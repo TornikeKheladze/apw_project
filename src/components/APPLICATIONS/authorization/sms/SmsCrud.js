@@ -155,8 +155,11 @@ const SmsCrud = () => {
           <h3 className="text-base sm:text-lg mb-4 text-primary">
             შეტყობინებები
           </h3>
-          <Button onClick={() => setModal({ isOpen: true, data: null })}>
-            დამატება
+          <Button
+            className="p-2 text-xs h-8"
+            onClick={() => setModal({ isOpen: true, data: null })}
+          >
+            შეტყობინების დამატება
           </Button>
         </div>
 

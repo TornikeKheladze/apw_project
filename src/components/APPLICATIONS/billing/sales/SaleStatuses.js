@@ -74,7 +74,7 @@ const SaleStatuses = () => {
           }}
           className="btn btn_primary flex items-center gap-1"
         >
-          დამატება
+          სტატუსის დამატება
           <PlusIcon />
         </Button>
       </div>

@@ -25,6 +25,7 @@ const Sales = () => {
         visible={true}
         text={"ფასდაკლებები"}
         url={"/billing/sales/create"}
+        buttonText="ფასდაკლების დამატება"
       />
       <div
         className={`card p-5 w-full mb-4 overflow-x-auto relative min-h-[25rem] ${

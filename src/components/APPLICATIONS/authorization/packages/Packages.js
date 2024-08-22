@@ -183,7 +183,7 @@ const Packages = () => {
         <Button
           onClick={() => setOpenModal({ open: true, action: "დამატება" })}
         >
-          <span>დამატება</span> <PlusIcon />
+          <span>პაკეტის დამატება</span> <PlusIcon />
         </Button>
       </div>
 

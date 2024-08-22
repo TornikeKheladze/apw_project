@@ -13,6 +13,7 @@ const ServiceCategories = () => {
         // visible={false}
         text={"სერვისის კატალოგები"}
         url={"/billing/service-categories/create"}
+        buttonText="კატალოგის დამატება"
       />
       <div
         className={`card p-5 mb-4 w-full overflow-x-auto relative ${

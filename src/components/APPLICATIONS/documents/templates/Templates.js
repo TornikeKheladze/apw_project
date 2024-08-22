@@ -147,7 +147,7 @@ const Templates = () => {
         <Button
           onClick={() => setOpenModal({ open: true, action: "დამატება" })}
         >
-          <span>დამატება</span> <PlusIcon />
+          <span>შაბლონის დამატება</span> <PlusIcon />
         </Button>
       </div>
       <div className="mb-2">

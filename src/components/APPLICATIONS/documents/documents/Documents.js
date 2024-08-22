@@ -386,7 +386,7 @@ const Documents = () => {
         <h3>დოკუმენტები</h3>
 
         <Button onClick={() => navigate("/documents/documents/create")}>
-          <span>დამატება</span> <PlusIcon />
+          <span>დოკუმენტის დამატება</span> <PlusIcon />
         </Button>
       </div>
 

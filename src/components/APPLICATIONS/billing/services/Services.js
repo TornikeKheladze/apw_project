@@ -46,6 +46,7 @@ const Services = () => {
         visible={useCheckPermission("bil_services_post_add")}
         text={"სერვისები"}
         url={"/billing/services/create"}
+        buttonText="სერვისის დამატება"
       />
       <div
         className={`card p-5 w-full overflow-x-auto relative min-h-[25rem] ${

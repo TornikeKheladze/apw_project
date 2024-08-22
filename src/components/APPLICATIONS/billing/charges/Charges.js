@@ -23,6 +23,7 @@ const Charges = () => {
         visible={true}
         text={"მოსაკრებელი"}
         url={"/billing/charges/create"}
+        buttonText="მოსაკრებლის დამატება"
       />
       <div
         className={`card p-5 w-full overflow-x-auto relative min-h-[25rem] ${
