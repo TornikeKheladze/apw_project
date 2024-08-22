@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   createTemplate,
@@ -14,6 +15,9 @@ export const useTemplates = () => {
   const [alert, setAlert] = useState({ message: "", type: "success" });
   const [openModal, setOpenModal] = useState({ open: false, action: "" });
   const [selectedTemplate, setSelectedTemplate] = useState({ id: "" });
+  const authorizedUser = useSelector((state) => state.user.authorizedUser);
+  const [filter, setFilter] = useState({ active: 1 });
+  const [chosenCategory, setChosenCategory] = useState({});
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -25,6 +29,11 @@ export const useTemplates = () => {
         setAlert({ message: "" });
         setOpenModal({ open: false });
       }, 1500);
+      if (message === "შაბლონი წარმატებით დაემატა") {
+        setTimeout(() => {
+          setFilter((prevState) => ({ ...prevState, active: 0 }));
+        }, 2000);
+      }
     };
   }
 
@@ -66,8 +75,14 @@ export const useTemplates = () => {
     catalogs,
     organizations,
     navigate,
-    states: { alert, openModal, selectedTemplate },
-    setStates: { setOpenModal, setSelectedTemplate },
+    authorizedUser,
+    states: { alert, openModal, selectedTemplate, filter, chosenCategory },
+    setStates: {
+      setOpenModal,
+      setSelectedTemplate,
+      setFilter,
+      setChosenCategory,
+    },
     mutates: { createMutate, editMutate, deleteMutate },
     loadings: { createLoading, editLoading, deleteLoading, isLoading },
   };

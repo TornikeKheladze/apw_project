@@ -12,10 +12,9 @@ import PlusIcon from "components/icons/PlusIcon";
 import { idToName } from "helpers/idToName";
 import Footer from "partials/Footer";
 import { useTemplates } from "./useTemplates";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { filterArray } from "helpers/filterArray";
 import { removeEmpty } from "helpers/removeEmpty";
-import { useSelector } from "react-redux";
 import CatalogTreeMenu from "../docCatalogs/CatalogTreeMenu";
 import { convertDate } from "helpers/convertDate";
 
@@ -25,16 +24,17 @@ const Templates = () => {
     catalogs,
     organizations,
     navigate,
-    states: { alert, openModal, selectedTemplate },
-    setStates: { setOpenModal, setSelectedTemplate },
+    authorizedUser,
+    states: { alert, openModal, selectedTemplate, chosenCategory, filter },
+    setStates: {
+      setOpenModal,
+      setSelectedTemplate,
+      setChosenCategory,
+      setFilter,
+    },
     mutates: { createMutate, editMutate, deleteMutate },
     loadings: { createLoading, editLoading, deleteLoading, isLoading },
   } = useTemplates();
-
-  const authorizedUser = useSelector((state) => state.user.authorizedUser);
-
-  const [filter, setFilter] = useState({ active: 1 });
-  const [chosenCategory, setChosenCategory] = useState({});
 
   const buildCategoryTree = (categories, parentId = 0) => {
     return categories
@@ -56,7 +56,7 @@ const Templates = () => {
 
   useEffect(() => {
     setFilter((prevState) => ({ ...prevState, cat_id: chosenCategory.id }));
-  }, [chosenCategory]);
+  }, [chosenCategory, setFilter]);
 
   return (
     <main className="workspace overflow-hidden">
