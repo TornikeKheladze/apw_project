@@ -33,6 +33,7 @@ export function convertGeorgianToEnglish(input = "") {
     ხ: "kh",
     ჯ: "j",
     ჰ: "h",
+    " ": "_",
   };
   let result = "";
   for (let char of input) {

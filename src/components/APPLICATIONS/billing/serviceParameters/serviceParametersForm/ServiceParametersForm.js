@@ -1,8 +1,8 @@
 import Alert from "components/Alert";
 import LoadingSpinner from "components/icons/LoadingSpinner";
-import GeneralForm from "../../generalForm/GeneralForm";
 import { serviceParametersArr } from "../../formArrays/serviceArr";
 import { useServiceParametersForm } from "./useServiceParametersForm";
+import ParameterForm from "./ParameterForm";
 
 const ServiceParametersForm = () => {
   const {
@@ -30,7 +30,7 @@ const ServiceParametersForm = () => {
             იტვირთება... <LoadingSpinner />
           </div>
         ) : (
-          <GeneralForm
+          <ParameterForm
             submitHandler={submitHandler}
             optionsObj={{
               parameterTypeID: types.map((type) => {

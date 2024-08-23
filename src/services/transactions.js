@@ -47,7 +47,6 @@ export const searchTransactions = ({
   page,
   sort = "transactionID,desc",
 }) => {
-  // დროებით ვაყოლებ ობიექტს რო ჯავას ერორი ავირიდო
   return instance.post(
     `/billing-java/transactions/search/${page}/50/${sort}`,
     data
