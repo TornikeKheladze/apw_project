@@ -461,7 +461,6 @@ const MenuDetailAuth = () => {
         }).then((res) => res.data),
       retry: false,
     });
-  const govStatements = statementData.data.data;
 
   return (
     <div
@@ -476,7 +475,7 @@ const MenuDetailAuth = () => {
             <p className="relative">
               განცხადებები
               <span className="absolute -top-2 -right-6 rounded-full !text-white !bg-danger !text-[14px] px-[3px]">
-                {govStatements.length !== 0 && govStatements.length}
+                {statementData.data.total}
               </span>
             </p>
           </NavLink>

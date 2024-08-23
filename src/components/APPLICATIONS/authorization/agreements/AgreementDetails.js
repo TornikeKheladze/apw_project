@@ -17,17 +17,19 @@ const AgreementDetails = () => {
     queryKey: ["getStatementById", id],
     queryFn: () => getStatementById(id).then((res) => res.data.data),
   });
+
   const formObject = {
+    // იურიდიული პირი
     legal_name: statement.auth_user.name,
     legal_identifi_number: statement.auth_user.identify_code,
-    // name: data.legal_name || data.user_name,
-    // identifi_number: data.legal_identifi_number || data.user_personal_number,
-    // lagel_addres: data.legal_lagel_addres,
-    // type: data.legal_type,
-    // sip: data.legal_sip,
-    // status: data.status,
+    legal_type: statement.auth_user.type,
+    legal_sip: statement.auth_user.sip,
+    legal_lagel_addres: statement.auth_user.address,
+    legal_tell: statement.auth_user.tell,
+    legal_email: statement.auth_user.email,
+    legal_contact_info: statement.auth_user.contact_info,
+    //
   };
-  // console.log(statement);
   return <NewAgreement disableFields defaultData={formObject} />;
 };
 
