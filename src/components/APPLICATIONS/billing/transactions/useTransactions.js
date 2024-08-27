@@ -14,6 +14,7 @@ import { useSearchParams } from "react-router-dom";
 import { getOrganizations } from "services/organizations";
 import { checkStatus } from "helpers/CheckStatusForBilling";
 import { getOrganizationsTypes } from "services/organization-type";
+import { useSelector } from "react-redux";
 
 export const useTransactions = () => {
   const [searchParam, setSearchParam] = useSearchParams();
@@ -21,6 +22,7 @@ export const useTransactions = () => {
   const [transactions, setTransactions] = useState([]);
   const [filter, setFilter] = useState({});
   const page = searchParam.get("page") || 1;
+  const { authorizedUser } = useSelector((store) => store.user);
 
   const {
     data: transactionsData = { content: [{}] },
@@ -37,7 +39,11 @@ export const useTransactions = () => {
 
   const { mutate: searchMutate, isLoading: searchLoading } = useMutation({
     mutationFn: (searchObj) =>
-      searchTransactions(searchObj).then((res) => res.data),
+      searchTransactions({
+        data: { ...searchObj.data, ownerID: authorizedUser?.id },
+        page: searchObj.page,
+        sort: searchObj.sort,
+      }).then((res) => res.data),
     onSuccess: (data) => {
       setTransactions(data.content);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -102,6 +108,15 @@ export const useTransactions = () => {
     },
     [setSearchParam, searchMutate]
   );
+
+  useEffect(() => {
+    searchMutate({
+      data: removeEmpty(filter),
+      page: 0,
+    });
+
+    // eslint-disable-next-line
+  }, []);
 
   const fetchAllTransactions = async () => {
     const res = await filterTransactionsWithoutPage(removeEmpty(filter));

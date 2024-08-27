@@ -91,7 +91,7 @@ const Sips = () => {
     },
     onError: (data) => {
       setAlert({
-        message: data.response.data.message,
+        message: data.response.data.description,
         type: "danger",
       });
     },
@@ -120,7 +120,7 @@ const Sips = () => {
     },
     onError: (data) => {
       setAlert({
-        message: data.response.data.message,
+        message: data.response.data.description,
         type: "danger",
       });
     },

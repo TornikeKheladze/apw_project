@@ -51,8 +51,6 @@ const NewAgreement = ({ disableFields, defaultData }) => {
     },
   });
   const [alert, setAlert] = useState({ message: "", type: "success" });
-  const [additionalFiles, setAdditionalFiles] = useState([]);
-  const [authFiles, setAuthFiles] = useState([]);
   const payment_period = useWatch({
     control,
     name: "payment_period",
@@ -195,6 +193,7 @@ const NewAgreement = ({ disableFields, defaultData }) => {
     control,
     name: "user",
   });
+
   const {
     fields: danartiFields,
     append: danartiAppend,
@@ -202,6 +201,24 @@ const NewAgreement = ({ disableFields, defaultData }) => {
   } = useFieldArray({
     control,
     name: "danarti",
+  });
+
+  const {
+    fields: additionalFields,
+    append: additionalAppend,
+    remove: additionalRemove,
+  } = useFieldArray({
+    control,
+    name: "additional",
+  });
+
+  const {
+    fields: authFileFields,
+    append: authFileAppend,
+    remove: authFileRemove,
+  } = useFieldArray({
+    control,
+    name: "authFile",
   });
 
   const { handleFormChange } = useFormRefresh({
@@ -259,7 +276,6 @@ const NewAgreement = ({ disableFields, defaultData }) => {
     const fileFormData = new FormData();
     fileFormData.append("file", file);
     uploadDocumentMutate(fileFormData);
-    // setAdditionalFiles((prevState) => [...prevState, file]);
   };
 
   // temporary
@@ -514,50 +530,73 @@ const NewAgreement = ({ disableFields, defaultData }) => {
             />
           </div>
           <div className="border p-2 rounded-md">
-            <h4>ფაილები დამატებითი ინფორმაციების საილუსტრაციოდ</h4>
-            <Button
-              type="button"
-              className="p-2 my-3"
-              onClick={() =>
-                setAdditionalFiles((prevState) => [
-                  ...prevState,
-                  prevState.length + 1,
-                ])
-              }
-            >
-              ფაილის დამატება
-              <PlusIcon />
-            </Button>
-            {additionalFiles.map((item) => {
+            <h4 className="mb-2">
+              ფაილები დამატებითი ინფორმაციების საილუსტრაციოდ
+            </h4>
+            {additionalFields.map((item, index) => {
               return (
                 <div
-                  className="mb-1 flex items-center justify-between"
-                  key={item}
+                  className="mb-1 flex items-center justify-between border p-2 rounded-md border-gray-700"
+                  key={item.id}
                 >
-                  <CustomInput
-                    // temporary
-                    name={`${item}-file`}
-                    type="file"
-                    step="any"
-                    register={register}
-                    rules={{}}
-                    className="w-4/5"
-                    disabled={disableFields ? true : false}
-                  />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setAdditionalFiles((prevState) =>
-                        prevState.filter((i) => i !== item)
-                      )
-                    }
-                    className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
-                  >
-                    <span className="la la-trash-alt"></span>
-                  </button>
+                  <div className="w-4/5 flex flex-col gap-2">
+                    <Label
+                      htmlFor={`additional.${index}.name`}
+                      className={`block mb-1`}
+                    >
+                      ფაილის დასახელება
+                    </Label>
+                    <CustomInput
+                      id={`additional.${index}.name`}
+                      name={`additional.${index}.name`}
+                      type="text"
+                      step="any"
+                      register={register}
+                      rules={{}}
+                      className="h-11 mb-1"
+                      placeholder="ფაილის დასახელება"
+                      disabled={disableFields ? true : false}
+                    />
+                    <CustomInput
+                      name={`additional.${index}.file`}
+                      type="file"
+                      step="any"
+                      register={register}
+                      rules={{}}
+                      disabled={disableFields ? true : false}
+                    />
+                  </div>
+                  {disableFields ? (
+                    <></>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => additionalRemove(index)}
+                      className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
+                    >
+                      <span className="la la-trash-alt"></span>
+                    </button>
+                  )}
                 </div>
               );
             })}
+            {disableFields ? (
+              <></>
+            ) : (
+              <Button
+                type="button"
+                className="p-2 mt-3"
+                onClick={() =>
+                  additionalAppend({
+                    file: "",
+                    name: "",
+                  })
+                }
+              >
+                ფაილის დამატება
+                <PlusIcon />
+              </Button>
+            )}
           </div>
           <div className="border border-gray-700 p-2 rounded-md">
             <h4 className="mb-2">ინფორმაცია განმცხადებლის შესახებ</h4>
@@ -658,49 +697,73 @@ const NewAgreement = ({ disableFields, defaultData }) => {
               />
             </div>
             <div className="border p-2 rounded-md mt-2">
-              <h4>ფაილები დამატებითი ინფორმაციების საილუსტრაციოდ</h4>
-              <Button
-                type="button"
-                className="p-2 my-3"
-                onClick={() =>
-                  setAuthFiles((prevState) => [
-                    ...prevState,
-                    prevState.length + 1,
-                  ])
-                }
-              >
-                ფაილის დამატება
-                <PlusIcon />
-              </Button>
-              {authFiles.map((item) => {
+              <h4 className="mb-2">
+                ფაილები დამატებითი ინფორმაციების საილუსტრაციოდ
+              </h4>
+              {authFileFields.map((item, index) => {
                 return (
                   <div
-                    className="mb-1 flex items-center justify-between"
-                    key={item}
+                    className="mb-1 flex items-center justify-between border p-2 rounded-md border-gray-700"
+                    key={item.id}
                   >
-                    <CustomInput
-                      // temporary
-                      name={`${item}-file-auth`}
-                      type="file"
-                      step="any"
-                      register={register}
-                      rules={{}}
-                      className="w-4/5"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setAuthFiles((prevState) =>
-                          prevState.filter((i) => i !== item)
-                        )
-                      }
-                      className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
-                    >
-                      <span className="la la-trash-alt"></span>
-                    </button>
+                    <div className="w-4/5 flex flex-col gap-2">
+                      <Label
+                        htmlFor={`authFile.${index}.name`}
+                        className={`block mb-1`}
+                      >
+                        ფაილის დასახელება
+                      </Label>
+                      <CustomInput
+                        id={`authFile.${index}.name`}
+                        name={`authFile.${index}.name`}
+                        type="text"
+                        step="any"
+                        register={register}
+                        rules={{}}
+                        className="h-11 mb-1"
+                        placeholder="ფაილის დასახელება"
+                        disabled={disableFields ? true : false}
+                      />
+                      <CustomInput
+                        name={`authFile.${index}.file`}
+                        type="file"
+                        step="any"
+                        register={register}
+                        rules={{}}
+                        disabled={disableFields ? true : false}
+                      />
+                    </div>
+                    {disableFields ? (
+                      <></>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => authFileRemove(index)}
+                        className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
+                      >
+                        <span className="la la-trash-alt"></span>
+                      </button>
+                    )}
                   </div>
                 );
               })}
+              {disableFields ? (
+                <></>
+              ) : (
+                <Button
+                  type="button"
+                  className="p-2 mt-3"
+                  onClick={() =>
+                    authFileAppend({
+                      file: "",
+                      name: "",
+                    })
+                  }
+                >
+                  ფაილის დამატება
+                  <PlusIcon />
+                </Button>
+              )}
             </div>
           </div>
           <div className="border p-2 rounded-md mt-2">
@@ -711,7 +774,7 @@ const NewAgreement = ({ disableFields, defaultData }) => {
                   className="mb-1 flex items-center justify-between border p-2 rounded-md border-gray-700"
                   key={item.id}
                 >
-                  <div className="w-4/5">
+                  <div className="w-4/5 flex flex-col gap-2">
                     <Label
                       htmlFor={`danarti.${index}.name`}
                       className={`block mb-1`}
