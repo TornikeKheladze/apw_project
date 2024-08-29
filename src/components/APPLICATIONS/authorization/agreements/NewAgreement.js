@@ -23,6 +23,8 @@ import {
 } from "components/APPLICATIONS/billing/formArrays/agreementArr";
 import { BuildAvtFields, BuildFields } from "./BuildFields";
 import { uploadDocument } from "services/documents";
+import FileDownload from "./FileDownload";
+import FileAddition from "./FileAddition";
 
 const NewAgreement = ({ disableFields, defaultData }) => {
   const { authOrg } = useSelector((state) => state.user);
@@ -320,6 +322,8 @@ const NewAgreement = ({ disableFields, defaultData }) => {
     legal_type: govInfo.types || [],
   };
 
+  // console.log(defaultData);
+
   return (
     <main className="workspace">
       <Alert color={alert.type} message={alert.message} />
@@ -482,35 +486,61 @@ const NewAgreement = ({ disableFields, defaultData }) => {
             )}
           </div>
           <div>
-            <Label htmlFor="conviction" className={`block mb-1  `}>
-              ცნობა ნასამართლეობის შესახებ
-            </Label>
-            <CustomInput
-              // temporary
-              id="conviction"
-              name="conviction"
-              type="file"
-              step="any"
-              register={register}
-              rules={{}}
-              onChange={handleFileChange}
-              disabled={disableFields ? true : false}
-            />
+            {defaultData && disableFields ? (
+              <FileDownload
+                name={"ცნობა ნასამართლეობის შესახებ"}
+                docId={
+                  defaultData.documents.find(
+                    (doc) => doc.doc_name === "ცნობა ნასამართლეობის შესახებ"
+                  )?.doc_id
+                }
+              />
+            ) : (
+              <>
+                <Label htmlFor="conviction" className={`block mb-1  `}>
+                  ცნობა ნასამართლეობის შესახებ
+                </Label>
+                <CustomInput
+                  // temporary
+                  id="conviction"
+                  name="conviction"
+                  type="file"
+                  step="any"
+                  register={register}
+                  rules={{}}
+                  onChange={handleFileChange}
+                  disabled={disableFields ? true : false}
+                />
+              </>
+            )}
           </div>
           <div>
-            <Label htmlFor="health" className={`block mb-1  `}>
-              ცნობა ჯანმრთელობის შესახებ
-            </Label>
-            <CustomInput
-              // temporary
-              id="health"
-              name="health"
-              type="file"
-              step="any"
-              register={register}
-              rules={{}}
-              disabled={disableFields ? true : false}
-            />
+            {defaultData && disableFields ? (
+              <FileDownload
+                name={"ცნობა ჯანმრთელობის შესახებ"}
+                docId={
+                  defaultData.documents.find(
+                    (doc) => doc.doc_name === "ცნობა ჯანმრთელობის შესახებ"
+                  )?.doc_id
+                }
+              />
+            ) : (
+              <>
+                <Label htmlFor="health" className={`block mb-1  `}>
+                  ცნობა ჯანმრთელობის შესახებ
+                </Label>
+                <CustomInput
+                  // temporary
+                  id="health"
+                  name="health"
+                  type="file"
+                  step="any"
+                  register={register}
+                  rules={{}}
+                  disabled={disableFields ? true : false}
+                />
+              </>
+            )}
           </div>
           <div>
             <Label className={`block mb-1  `} htmlFor="desc">
@@ -529,75 +559,24 @@ const NewAgreement = ({ disableFields, defaultData }) => {
               disabled={disableFields ? true : false}
             />
           </div>
-          <div className="border p-2 rounded-md">
-            <h4 className="mb-2">
-              ფაილები დამატებითი ინფორმაციების საილუსტრაციოდ
-            </h4>
-            {additionalFields.map((item, index) => {
-              return (
-                <div
-                  className="mb-1 flex items-center justify-between border p-2 rounded-md border-gray-700"
-                  key={item.id}
-                >
-                  <div className="w-4/5 flex flex-col gap-2">
-                    <Label
-                      htmlFor={`additional.${index}.name`}
-                      className={`block mb-1`}
-                    >
-                      ფაილის დასახელება
-                    </Label>
-                    <CustomInput
-                      id={`additional.${index}.name`}
-                      name={`additional.${index}.name`}
-                      type="text"
-                      step="any"
-                      register={register}
-                      rules={{}}
-                      className="h-11 mb-1"
-                      placeholder="ფაილის დასახელება"
-                      disabled={disableFields ? true : false}
-                    />
-                    <CustomInput
-                      name={`additional.${index}.file`}
-                      type="file"
-                      step="any"
-                      register={register}
-                      rules={{}}
-                      disabled={disableFields ? true : false}
-                    />
-                  </div>
-                  {disableFields ? (
-                    <></>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => additionalRemove(index)}
-                      className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
-                    >
-                      <span className="la la-trash-alt"></span>
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-            {disableFields ? (
-              <></>
-            ) : (
-              <Button
-                type="button"
-                className="p-2 mt-3"
-                onClick={() =>
-                  additionalAppend({
-                    file: "",
-                    name: "",
-                  })
-                }
-              >
-                ფაილის დამატება
-                <PlusIcon />
-              </Button>
-            )}
-          </div>
+          <FileAddition
+            disableFields={disableFields}
+            documentList={
+              defaultData?.documents
+                ? defaultData?.documents.filter(
+                    (item) =>
+                      item.doc_name !== "ცნობა ჯანმრთელობის შესახებ" &&
+                      item.doc_name !== "ცნობა ნასამართლეობის შესახებ"
+                  )
+                : null
+            }
+            fieldName="additional"
+            label="ფაილები დამატებითი ინფორმაციების საილუსტრაციოდ"
+            register={register}
+            remove={additionalRemove}
+            append={additionalAppend}
+            fieldArray={additionalFields}
+          />
           <div className="border border-gray-700 p-2 rounded-md">
             <h4 className="mb-2">ინფორმაცია განმცხადებლის შესახებ</h4>
             <div className="border p-2 mb-2 rounded-md">
@@ -696,143 +675,43 @@ const NewAgreement = ({ disableFields, defaultData }) => {
                 disabled={disableFields ? true : false}
               />
             </div>
-            <div className="border p-2 rounded-md mt-2">
-              <h4 className="mb-2">
-                ფაილები დამატებითი ინფორმაციების საილუსტრაციოდ
-              </h4>
-              {authFileFields.map((item, index) => {
-                return (
-                  <div
-                    className="mb-1 flex items-center justify-between border p-2 rounded-md border-gray-700"
-                    key={item.id}
-                  >
-                    <div className="w-4/5 flex flex-col gap-2">
-                      <Label
-                        htmlFor={`authFile.${index}.name`}
-                        className={`block mb-1`}
-                      >
-                        ფაილის დასახელება
-                      </Label>
-                      <CustomInput
-                        id={`authFile.${index}.name`}
-                        name={`authFile.${index}.name`}
-                        type="text"
-                        step="any"
-                        register={register}
-                        rules={{}}
-                        className="h-11 mb-1"
-                        placeholder="ფაილის დასახელება"
-                        disabled={disableFields ? true : false}
-                      />
-                      <CustomInput
-                        name={`authFile.${index}.file`}
-                        type="file"
-                        step="any"
-                        register={register}
-                        rules={{}}
-                        disabled={disableFields ? true : false}
-                      />
-                    </div>
-                    {disableFields ? (
-                      <></>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => authFileRemove(index)}
-                        className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
-                      >
-                        <span className="la la-trash-alt"></span>
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-              {disableFields ? (
-                <></>
-              ) : (
-                <Button
-                  type="button"
-                  className="p-2 mt-3"
-                  onClick={() =>
-                    authFileAppend({
-                      file: "",
-                      name: "",
-                    })
-                  }
-                >
-                  ფაილის დამატება
-                  <PlusIcon />
-                </Button>
-              )}
-            </div>
+            <FileAddition
+              disableFields={disableFields}
+              documentList={
+                defaultData?.documents
+                  ? defaultData?.documents.filter(
+                      (item) =>
+                        item.doc_name !== "ცნობა ჯანმრთელობის შესახებ" &&
+                        item.doc_name !== "ცნობა ნასამართლეობის შესახებ"
+                    )
+                  : null
+              }
+              fieldName="authFile"
+              label="ფაილები დამატებითი ინფორმაციების საილუსტრაციოდ"
+              register={register}
+              remove={authFileRemove}
+              append={authFileAppend}
+              fieldArray={authFileFields}
+            />
           </div>
-          <div className="border p-2 rounded-md mt-2">
-            <h4 className="mb-2">დანართების დამატება</h4>
-            {danartiFields.map((item, index) => {
-              return (
-                <div
-                  className="mb-1 flex items-center justify-between border p-2 rounded-md border-gray-700"
-                  key={item.id}
-                >
-                  <div className="w-4/5 flex flex-col gap-2">
-                    <Label
-                      htmlFor={`danarti.${index}.name`}
-                      className={`block mb-1`}
-                    >
-                      ფაილის დასახელება
-                    </Label>
-                    <CustomInput
-                      id={`danarti.${index}.name`}
-                      name={`danarti.${index}.name`}
-                      type="text"
-                      step="any"
-                      register={register}
-                      rules={{}}
-                      className="h-11 mb-1"
-                      placeholder="ფაილის დასახელება"
-                      disabled={disableFields ? true : false}
-                    />
-                    <CustomInput
-                      name={`danarti.${index}.file`}
-                      type="file"
-                      step="any"
-                      register={register}
-                      rules={{}}
-                      disabled={disableFields ? true : false}
-                    />
-                  </div>
-                  {disableFields ? (
-                    <></>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => danartiRemove(index)}
-                      className="btn btn-icon btn_outlined btn_danger ltr:ml-2 rtl:mr-2"
-                    >
-                      <span className="la la-trash-alt"></span>
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-            {disableFields ? (
-              <></>
-            ) : (
-              <Button
-                type="button"
-                className="p-2 mt-3"
-                onClick={() =>
-                  danartiAppend({
-                    file: "",
-                    name: "",
-                  })
-                }
-              >
-                ფაილის დამატება
-                <PlusIcon />
-              </Button>
-            )}
-          </div>
+          <FileAddition
+            disableFields={disableFields}
+            documentList={
+              defaultData?.documents
+                ? defaultData?.documents.filter(
+                    (item) =>
+                      item.doc_name !== "ცნობა ჯანმრთელობის შესახებ" &&
+                      item.doc_name !== "ცნობა ნასამართლეობის შესახებ"
+                  )
+                : null
+            }
+            fieldName="danarti"
+            label="დანართების დამატება"
+            register={register}
+            remove={danartiRemove}
+            append={danartiAppend}
+            fieldArray={danartiFields}
+          />
           {disableFields ? (
             <></>
           ) : (

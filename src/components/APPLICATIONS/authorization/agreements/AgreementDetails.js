@@ -29,8 +29,9 @@ const AgreementDetails = () => {
     legal_email: statement.auth_user.email,
     legal_contact_info: statement.auth_user.contact_info,
     //
+    documents: statement.document,
   };
-  console.log(statement);
+  // console.log(statement);
   return <NewAgreement disableFields defaultData={formObject} />;
 };
 
